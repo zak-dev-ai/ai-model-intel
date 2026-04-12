@@ -2,8 +2,8 @@ name: Scrape AI Model Pricing
 
 on:
 schedule:
-- cron: '0 */6 * * *' # Every 6 hours
-workflow_dispatch # Manual trigger
+- cron: '0 */6 * * *'
+workflow_dispatch:
 
 jobs:
 scrape-and-deploy:
