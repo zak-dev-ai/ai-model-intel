@@ -1,0 +1,2 @@
+# No Python deps needed — Node.js handles everything
+# (keeping this file for completeness)
