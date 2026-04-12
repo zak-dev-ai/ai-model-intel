@@ -131,8 +131,10 @@ return new Response(JSON.stringify({ error: err.message }), { status: 500, heade
 }
 }
 
-addEventListener('fetch', event => {
-event.respondWith(handleRequest(event.request, env));
-});
+export default {
+  async fetch(request, env, ctx) {
+    return handleRequest(request, env);
+  },
+};
 
 
