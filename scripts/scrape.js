@@ -80,7 +80,8 @@ function calculateEfficiency(inputCost) {
 
   const score = Math.log(1 / inputCost) * 20;
 
-  return Number(Math.max(0, score).toFixed(2));
+  // keep values between 5 and 100
+  return Number(Math.max(5, score).toFixed(2));
 }
 
 // --------------------------------------------
