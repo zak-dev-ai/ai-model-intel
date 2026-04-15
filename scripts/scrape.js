@@ -77,7 +77,10 @@ function calculateCostPerContext(inputCost, contextWindow) {
 
 function calculateEfficiency(inputCost) {
   if (inputCost === 0) return 0;
-  return Math.min(Number((100 / inputCost).toFixed(2)), 100);
+
+  const score = Math.log(1 / inputCost) * 20;
+
+  return Number(Math.max(0, score).toFixed(2));
 }
 
 // --------------------------------------------
