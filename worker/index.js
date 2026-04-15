@@ -4,9 +4,6 @@ export default {
       const url = new URL(request.url);
       const pathname = url.pathname;
 
-      // -----------------------------------
-      // GET DATA FROM KV
-      // -----------------------------------
       const data = await env.AI_MODELS_KV.get("pricing_data", "json");
 
       if (!data || !data.models) {
@@ -16,11 +13,17 @@ export default {
         );
       }
 
+      const models = data.models;
+
       // -----------------------------------
-      // ROOT → ALL MODELS
+      // ROOT → ALL MODELS (sorted cheapest)
       // -----------------------------------
       if (pathname === "/") {
-        return new Response(JSON.stringify(data.models), {
+        const sorted = [...models].sort(
+          (a, b) => a.input_cost_per_mtok - b.input_cost_per_mtok
+        );
+
+        return new Response(JSON.stringify(sorted), {
           headers: { "Content-Type": "application/json" },
         });
       }
@@ -38,10 +41,30 @@ export default {
           );
         }
 
-        const requestedModels = modelsParam.split(",");
+        const requested = modelsParam
+          .split(",")
+          .map(m => m.trim().toLowerCase());
 
-        const filtered = data.models.filter(m =>
-          requestedModels.includes(m.model)
+        const filtered = models.filter(m =>
+          requested.includes(m.model.toLowerCase())
+        );
+
+        // 🔥 sort by BEST efficiency
+        filtered.sort((a, b) => b.reasoning_efficiency - a.reasoning_efficiency);
+
+        return new Response(JSON.stringify(filtered), {
+          headers: { "Content-Type": "application/json" },
+        });
+      }
+
+      // -----------------------------------
+      // PROVIDER → /models/openai
+      // -----------------------------------
+      if (pathname.startsWith("/models/")) {
+        const provider = pathname.split("/")[2];
+
+        const filtered = models.filter(
+          m => m.provider.toLowerCase() === provider.toLowerCase()
         );
 
         return new Response(JSON.stringify(filtered), {
@@ -50,13 +73,60 @@ export default {
       }
 
       // -----------------------------------
-      // HEALTH → /health
+      // CHEAPEST → /cheapest?tier=mini
+      // -----------------------------------
+      if (pathname === "/cheapest") {
+        const tier = url.searchParams.get("tier");
+
+        if (!tier) {
+          return new Response(
+            JSON.stringify({ error: "Missing tier param" }),
+            { status: 400 }
+          );
+        }
+
+        const filtered = models.filter(m =>
+          m.model.toLowerCase().includes(tier.toLowerCase())
+        );
+
+        if (!filtered.length) {
+          return new Response(
+            JSON.stringify({ error: "No models found" }),
+            { status: 404 }
+          );
+        }
+
+        const cheapest = filtered.reduce((a, b) =>
+          a.input_cost_per_mtok < b.input_cost_per_mtok ? a : b
+        );
+
+        return new Response(JSON.stringify(cheapest), {
+          headers: { "Content-Type": "application/json" },
+        });
+      }
+
+      // -----------------------------------
+      // BEST VALUE → 🔥 YOUR UNIQUE FEATURE
+      // /best
+      // -----------------------------------
+      if (pathname === "/best") {
+        const sorted = [...models].sort(
+          (a, b) => b.reasoning_efficiency - a.reasoning_efficiency
+        );
+
+        return new Response(JSON.stringify(sorted.slice(0, 5)), {
+          headers: { "Content-Type": "application/json" },
+        });
+      }
+
+      // -----------------------------------
+      // HEALTH
       // -----------------------------------
       if (pathname === "/health") {
         return new Response(
           JSON.stringify({
             status: "ok",
-            total_models: data.models.length,
+            total_models: models.length,
             last_updated: data.updated_at,
           }),
           { headers: { "Content-Type": "application/json" } }
@@ -67,7 +137,17 @@ export default {
       // NOT FOUND
       // -----------------------------------
       return new Response(
-        JSON.stringify({ error: "Route not found" }),
+        JSON.stringify({
+          error: "Route not found",
+          endpoints: [
+            "/",
+            "/compare?models=a,b",
+            "/models/{provider}",
+            "/cheapest?tier=mini",
+            "/best",
+            "/health",
+          ],
+        }),
         { status: 404 }
       );
 
