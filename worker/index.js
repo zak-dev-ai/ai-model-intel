@@ -1,59 +1,81 @@
 export default {
   async fetch(request, env) {
-    const url = new URL(request.url);
-    const path = url.pathname;
+    try {
+      const url = new URL(request.url);
+      const pathname = url.pathname;
 
-    const data = await env.AI_MODELS.get("pricing_data", { type: "json" });
+      // -----------------------------------
+      // GET DATA FROM KV
+      // -----------------------------------
+      const data = await env.AI_MODELS_KV.get("pricing_data", "json");
 
-    if (!data) {
-      return new Response("No data", { status: 500 });
-    }
-
-    const models = data.models;
-
-    // -------------------------------
-    // ROOT
-    // -------------------------------
-    if (path === "/") {
-      return Response.json({
-        name: "AI Model Intel API",
-        version: "v1",
-        endpoints: [
-          "/models",
-          "/compare?models=gpt-4o,claude-3.5-sonnet"
-        ]
-      });
-    }
-
-    // -------------------------------
-    // ALL MODELS
-    // -------------------------------
-    if (path === "/models") {
-      return Response.json(models);
-    }
-
-    // -------------------------------
-    // COMPARE
-    // -------------------------------
-    if (path === "/compare") {
-      const query = url.searchParams.get("models");
-
-      if (!query) {
-        return new Response("Missing models param", { status: 400 });
+      if (!data || !data.models) {
+        return new Response(
+          JSON.stringify({ error: "No data available" }),
+          { status: 500 }
+        );
       }
 
-      const requested = query.split(",");
+      // -----------------------------------
+      // ROOT → ALL MODELS
+      // -----------------------------------
+      if (pathname === "/") {
+        return new Response(JSON.stringify(data.models), {
+          headers: { "Content-Type": "application/json" },
+        });
+      }
 
-      const result = models.filter(m =>
-        requested.includes(m.model)
+      // -----------------------------------
+      // COMPARE → /compare?models=gpt-4o,claude-3.5-sonnet
+      // -----------------------------------
+      if (pathname === "/compare") {
+        const modelsParam = url.searchParams.get("models");
+
+        if (!modelsParam) {
+          return new Response(
+            JSON.stringify({ error: "Missing models query param" }),
+            { status: 400 }
+          );
+        }
+
+        const requestedModels = modelsParam.split(",");
+
+        const filtered = data.models.filter(m =>
+          requestedModels.includes(m.model)
+        );
+
+        return new Response(JSON.stringify(filtered), {
+          headers: { "Content-Type": "application/json" },
+        });
+      }
+
+      // -----------------------------------
+      // HEALTH → /health
+      // -----------------------------------
+      if (pathname === "/health") {
+        return new Response(
+          JSON.stringify({
+            status: "ok",
+            total_models: data.models.length,
+            last_updated: data.updated_at,
+          }),
+          { headers: { "Content-Type": "application/json" } }
+        );
+      }
+
+      // -----------------------------------
+      // NOT FOUND
+      // -----------------------------------
+      return new Response(
+        JSON.stringify({ error: "Route not found" }),
+        { status: 404 }
       );
 
-      return Response.json(result);
+    } catch (err) {
+      return new Response(
+        JSON.stringify({ error: err.message }),
+        { status: 500 }
+      );
     }
-
-    // -------------------------------
-    // NOT FOUND
-    // -------------------------------
-    return new Response("Not found", { status: 404 });
-  }
+  },
 };
