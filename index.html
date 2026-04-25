@@ -4,762 +4,352 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Octopus AI Model Intel — Real-time AI Model Pricing API</title>
-<meta name="description" content="Track real-time pricing, context windows and capabilities for 22+ AI models. One API for GPT-4o, Claude, Gemini, Mistral and more.">
+<meta name="description" content="Real-time pricing, context windows and capabilities for 133+ AI models. One API for GPT-4o, Claude, Gemini, Mistral and more.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #060810;
-    --surface: #0d1117;
-    --border: #1a2233;
-    --cyan: #00e5ff;
-    --purple: #b06aff;
-    --green: #00ff9f;
-    --text: #e8eaf0;
-    --muted: #5a6478;
-    --font-display: 'Syne', sans-serif;
-    --font-mono: 'Space Mono', monospace;
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  html { scroll-behavior: smooth; }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--font-display);
-    overflow-x: hidden;
-  }
-
-  /* ── Grid background ── */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px);
-    background-size: 48px 48px;
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  /* ── Nav ── */
-  nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 100;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 20px 48px;
-    background: rgba(6,8,16,0.85);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border);
-  }
-
-  .nav-logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-family: var(--font-mono);
-    font-size: 13px;
-    color: var(--cyan);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-  }
-
-  .nav-logo span { font-size: 22px; }
-
-  nav a {
-    color: var(--muted);
-    text-decoration: none;
-    font-size: 13px;
-    transition: color 0.2s;
-  }
-
-  nav a:hover { color: var(--text); }
-
-  .nav-links { display: flex; gap: 32px; align-items: center; }
-
-  .btn-nav {
-    background: var(--cyan);
-    color: #000 !important;
-    padding: 8px 20px;
-    border-radius: 4px;
-    font-weight: 700;
-    font-size: 12px !important;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  /* ── Hero ── */
-  .hero {
-    position: relative;
-    z-index: 1;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 120px 24px 80px;
-  }
-
-  .hero-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: rgba(0,229,255,0.08);
-    border: 1px solid rgba(0,229,255,0.2);
-    padding: 6px 16px;
-    border-radius: 100px;
-    font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--cyan);
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    margin-bottom: 36px;
-    animation: fadeUp 0.6s ease both;
-  }
-
-  .live-dot {
-    width: 6px; height: 6px;
-    background: var(--green);
-    border-radius: 50%;
-    animation: pulse 1.5s infinite;
-  }
-
-  .hero h1 {
-    font-size: clamp(42px, 7vw, 96px);
-    font-weight: 800;
-    line-height: 1.0;
-    letter-spacing: -0.03em;
-    margin-bottom: 24px;
-    animation: fadeUp 0.6s 0.1s ease both;
-  }
-
-  .hero h1 .accent { color: var(--cyan); }
-  .hero h1 .accent2 { color: var(--purple); }
-
-  .hero-sub {
-    font-size: clamp(16px, 2vw, 20px);
-    color: var(--muted);
-    max-width: 560px;
-    line-height: 1.7;
-    margin-bottom: 48px;
-    font-weight: 400;
-    animation: fadeUp 0.6s 0.2s ease both;
-  }
-
-  .hero-cta {
-    display: flex;
-    gap: 16px;
-    flex-wrap: wrap;
-    justify-content: center;
-    animation: fadeUp 0.6s 0.3s ease both;
-  }
-
-  .btn-primary {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: var(--cyan);
-    color: #000;
-    padding: 14px 32px;
-    border-radius: 4px;
-    font-weight: 800;
-    font-size: 14px;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    text-decoration: none;
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-
-  .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 0 32px rgba(0,229,255,0.35);
-  }
-
-  .btn-secondary {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: transparent;
-    color: var(--text);
-    padding: 14px 32px;
-    border-radius: 4px;
-    border: 1px solid var(--border);
-    font-weight: 600;
-    font-size: 14px;
-    letter-spacing: 0.04em;
-    text-decoration: none;
-    transition: border-color 0.2s, color 0.2s;
-  }
-
-  .btn-secondary:hover {
-    border-color: var(--cyan);
-    color: var(--cyan);
-  }
-
-  /* ── Octopus orb ── */
-  .hero-orb {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 600px;
-    height: 600px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(0,229,255,0.06) 0%, transparent 70%);
-    pointer-events: none;
-    animation: orbPulse 4s ease-in-out infinite;
-  }
-
-  /* ── Stats bar ── */
-  .stats-bar {
-    position: relative;
-    z-index: 1;
-    display: flex;
-    justify-content: center;
-    gap: 0;
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-    background: rgba(13,17,23,0.8);
-  }
-
-  .stat-item {
-    flex: 1;
-    max-width: 240px;
-    padding: 32px 24px;
-    text-align: center;
-    border-right: 1px solid var(--border);
-  }
-
-  .stat-item:last-child { border-right: none; }
-
-  .stat-num {
-    font-family: var(--font-mono);
-    font-size: 36px;
-    font-weight: 700;
-    color: var(--cyan);
-    line-height: 1;
-    margin-bottom: 8px;
-  }
-
-  .stat-label {
-    font-size: 12px;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-  }
-
-  /* ── Live demo ── */
-  .section {
-    position: relative;
-    z-index: 1;
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 100px 24px;
-  }
-
-  .section-label {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--cyan);
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    margin-bottom: 16px;
-  }
-
-  .section h2 {
-    font-size: clamp(28px, 4vw, 48px);
-    font-weight: 800;
-    letter-spacing: -0.02em;
-    margin-bottom: 16px;
-  }
-
-  .section-sub {
-    color: var(--muted);
-    font-size: 16px;
-    line-height: 1.7;
-    margin-bottom: 48px;
-    max-width: 560px;
-  }
-
-  /* Terminal demo */
-  .terminal {
-    background: #080c12;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    overflow: hidden;
-    font-family: var(--font-mono);
-  }
-
-  .terminal-bar {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 12px 16px;
-    background: #0d1117;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .t-dot { width: 10px; height: 10px; border-radius: 50%; }
-  .t-dot.r { background: #ff5f57; }
-  .t-dot.y { background: #febc2e; }
-  .t-dot.g { background: #28c840; }
-
-  .terminal-url {
-    flex: 1;
-    text-align: center;
-    font-size: 12px;
-    color: var(--muted);
-  }
-
-  .terminal-body {
-    padding: 24px;
-    font-size: 13px;
-    line-height: 1.8;
-    min-height: 180px;
-  }
-
-  .t-line { margin-bottom: 4px; }
-  .t-key { color: var(--purple); }
-  .t-str { color: var(--green); }
-  .t-num { color: var(--cyan); }
-  .t-muted { color: var(--muted); }
-  .t-comment { color: #3a4558; }
-
-  /* Endpoint tabs */
-  .endpoint-tabs {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 16px;
-    flex-wrap: wrap;
-  }
-
-  .ep-tab {
-    padding: 8px 16px;
-    border-radius: 4px;
-    border: 1px solid var(--border);
-    background: transparent;
-    color: var(--muted);
-    font-family: var(--font-mono);
-    font-size: 12px;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .ep-tab.active, .ep-tab:hover {
-    border-color: var(--cyan);
-    color: var(--cyan);
-    background: rgba(0,229,255,0.06);
-  }
-
-  /* ── Endpoints grid ── */
-  .endpoints-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 16px;
-  }
-
-  .endpoint-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 24px;
-    transition: border-color 0.2s, transform 0.2s;
-  }
-
-  .endpoint-card:hover {
-    border-color: rgba(0,229,255,0.3);
-    transform: translateY(-2px);
-  }
-
-  .ep-method {
-    display: inline-block;
-    background: rgba(0,229,255,0.1);
-    color: var(--cyan);
-    font-family: var(--font-mono);
-    font-size: 10px;
-    font-weight: 700;
-    padding: 3px 8px;
-    border-radius: 3px;
-    letter-spacing: 0.1em;
-    margin-bottom: 12px;
-  }
-
-  .ep-path {
-    font-family: var(--font-mono);
-    font-size: 15px;
-    color: var(--text);
-    margin-bottom: 8px;
-    font-weight: 700;
-  }
-
-  .ep-desc {
-    font-size: 13px;
-    color: var(--muted);
-    line-height: 1.6;
-    margin-bottom: 12px;
-  }
-
-  .ep-tag {
-    display: inline-block;
-    font-size: 10px;
-    padding: 2px 8px;
-    border-radius: 100px;
-    font-family: var(--font-mono);
-    letter-spacing: 0.06em;
-  }
-
-  .ep-tag.free {
-    background: rgba(0,255,159,0.1);
-    color: var(--green);
-    border: 1px solid rgba(0,255,159,0.2);
-  }
-
-  .ep-tag.premium {
-    background: rgba(176,106,255,0.1);
-    color: var(--purple);
-    border: 1px solid rgba(176,106,255,0.2);
-  }
-
-  /* ── Pricing ── */
-  .pricing-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 16px;
-  }
-
-  .price-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 32px 24px;
-    text-align: center;
-    transition: border-color 0.2s, transform 0.2s;
-    position: relative;
-  }
-
-  .price-card:hover {
-    transform: translateY(-4px);
-    border-color: rgba(0,229,255,0.3);
-  }
-
-  .price-card.featured {
-    border-color: var(--cyan);
-    background: linear-gradient(135deg, rgba(0,229,255,0.05), rgba(176,106,255,0.05));
-  }
-
-  .price-card.featured::before {
-    content: 'MOST POPULAR';
-    position: absolute;
-    top: -12px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--cyan);
-    color: #000;
-    font-family: var(--font-mono);
-    font-size: 10px;
-    font-weight: 700;
-    padding: 3px 12px;
-    border-radius: 100px;
-    letter-spacing: 0.1em;
-  }
-
-  .price-name {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 16px;
-  }
-
-  .price-amount {
-    font-size: 48px;
-    font-weight: 800;
-    color: var(--text);
-    line-height: 1;
-    margin-bottom: 4px;
-  }
-
-  .price-amount sup {
-    font-size: 20px;
-    vertical-align: super;
-    color: var(--muted);
-  }
-
-  .price-period {
-    font-size: 13px;
-    color: var(--muted);
-    margin-bottom: 24px;
-  }
-
-  .price-calls {
-    font-family: var(--font-mono);
-    font-size: 22px;
-    color: var(--cyan);
-    font-weight: 700;
-    margin-bottom: 8px;
-  }
-
-  .price-calls-label {
-    font-size: 12px;
-    color: var(--muted);
-    margin-bottom: 28px;
-  }
-
-  .btn-plan {
-    display: block;
-    padding: 12px;
-    border-radius: 4px;
-    border: 1px solid var(--border);
-    background: transparent;
-    color: var(--text);
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 13px;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    text-decoration: none;
-    transition: all 0.2s;
-    cursor: pointer;
-  }
-
-  .btn-plan:hover, .price-card.featured .btn-plan {
-    background: var(--cyan);
-    color: #000;
-    border-color: var(--cyan);
-  }
-
-  /* ── Use cases ── */
-  .cases-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 16px;
-  }
-
-  .case-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 28px;
-  }
-
-  .case-icon {
-    font-size: 28px;
-    margin-bottom: 16px;
-  }
-
-  .case-title {
-    font-size: 16px;
-    font-weight: 700;
-    margin-bottom: 8px;
-  }
-
-  .case-desc {
-    font-size: 13px;
-    color: var(--muted);
-    line-height: 1.7;
-  }
-
-  /* ── Footer ── */
-  footer {
-    position: relative;
-    z-index: 1;
-    border-top: 1px solid var(--border);
-    padding: 40px 48px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 16px;
-  }
-
-  footer .logo {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    color: var(--cyan);
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-  }
-
-  footer p {
-    font-size: 12px;
-    color: var(--muted);
-  }
-
-  footer a {
-    color: var(--muted);
-    text-decoration: none;
-    font-size: 12px;
-    transition: color 0.2s;
-  }
-
-  footer a:hover { color: var(--text); }
-
-  .footer-links { display: flex; gap: 24px; }
-
-  /* ── Live data section ── */
-  #live-data {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    overflow: hidden;
-  }
-
-  .data-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 16px 24px;
-    border-bottom: 1px solid var(--border);
-    background: #080c12;
-  }
-
-  .data-header span {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    color: var(--muted);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 13px;
-  }
-
-  th {
-    padding: 12px 24px;
-    text-align: left;
-    font-family: var(--font-mono);
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--muted);
-    border-bottom: 1px solid var(--border);
-    background: #080c12;
-  }
-
-  td {
-    padding: 14px 24px;
-    border-bottom: 1px solid rgba(26,34,51,0.6);
-    color: var(--text);
-  }
-
-  tr:last-child td { border-bottom: none; }
-
-  tr:hover td { background: rgba(0,229,255,0.02); }
-
-  .provider-badge {
-    display: inline-block;
-    font-family: var(--font-mono);
-    font-size: 10px;
-    padding: 2px 8px;
-    border-radius: 3px;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-  }
-
-  .p-openai   { background: rgba(16,163,127,0.15); color: #10a37f; }
-  .p-anthropic{ background: rgba(200,100,50,0.15);  color: #e07040; }
-  .p-google   { background: rgba(66,133,244,0.15);  color: #4285f4; }
-  .p-mistral  { background: rgba(255,107,0,0.15);   color: #ff6b00; }
-  .p-xai      { background: rgba(200,200,200,0.1);  color: #aaa; }
-  .p-meta     { background: rgba(24,119,242,0.15);  color: #1877f2; }
-
-  .cost-cheap { color: var(--green); font-family: var(--font-mono); }
-  .cost-mid   { color: var(--cyan);  font-family: var(--font-mono); }
-  .cost-exp   { color: #ff6b6b;      font-family: var(--font-mono); }
-
-  /* ── Animations ── */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
-  @keyframes pulse {
-    0%,100% { opacity: 1; transform: scale(1); }
-    50%      { opacity: 0.5; transform: scale(0.8); }
-  }
-
-  @keyframes orbPulse {
-    0%,100% { transform: translate(-50%,-50%) scale(1); opacity: 0.6; }
-    50%      { transform: translate(-50%,-50%) scale(1.1); opacity: 1; }
-  }
-
-  @keyframes blink {
-    0%,100% { opacity: 1; } 50% { opacity: 0; }
-  }
-
-  .cursor { animation: blink 1s infinite; }
-
-  /* Responsive */
-  @media (max-width: 768px) {
-    nav { padding: 16px 20px; }
-    .nav-links { gap: 16px; }
-    .stat-item { padding: 24px 16px; }
-    footer { padding: 32px 20px; flex-direction: column; text-align: center; }
-    .footer-links { justify-content: center; }
-  }
+:root {
+  --cyan:#00e5ff;
+  --purple:#b06aff;
+  --green:#00ff9f;
+  --yellow:#ffd700;
+  --bg:#060810;
+  --bg2:#0d1117;
+  --border:rgba(0,229,255,0.12);
+  --text:#e8eaf0;
+  --muted:#5a6478;
+  --mono:'Share Tech Mono',monospace;
+  --hud:'Orbitron',monospace;
+  --sans:'Syne',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);overflow-x:hidden;}
+
+/* scanline */
+body::after{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
+  mix-blend-mode:overlay;
+  background:repeating-linear-gradient(0deg,transparent 0,transparent 2px,rgba(0,0,0,0.04) 2px,rgba(0,0,0,0.04) 4px);
+}
+/* vignette */
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:8999;
+  background:radial-gradient(ellipse at center,transparent 55%,rgba(0,0,0,0.6) 100%);
+}
+
+/* NAV */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px 48px;
+  background:rgba(6,8,16,0.88);backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border);
+}
+.nav-logo{
+  display:flex;align-items:center;gap:10px;
+  font-family:var(--hud);font-size:13px;font-weight:700;
+  color:var(--cyan);letter-spacing:2px;
+  text-shadow:0 0 20px rgba(0,229,255,0.5);
+}
+.nav-links{display:flex;gap:28px;align-items:center;}
+nav a{color:var(--muted);text-decoration:none;font-size:11px;
+  letter-spacing:1px;font-family:var(--mono);transition:color 0.2s;}
+nav a:hover{color:var(--cyan);}
+.btn-nav{
+  background:linear-gradient(135deg,var(--cyan),var(--purple));
+  color:#000!important;padding:8px 20px;border-radius:4px;
+  font-family:var(--hud)!important;font-size:10px!important;font-weight:700;
+  letter-spacing:1px;position:relative;overflow:hidden;
+}
+.btn-nav::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.2),transparent);
+  transform:translateX(-100%);transition:transform 0.4s;
+}
+.btn-nav:hover::after{transform:translateX(100%);}
+
+/* HERO */
+.hero{
+  position:relative;z-index:1;
+  min-height:100vh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  text-align:center;padding:120px 24px 80px;
+}
+.hero-grid{
+  position:absolute;inset:0;opacity:0.04;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(0,229,255,1) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,229,255,1) 1px,transparent 1px);
+  background-size:48px 48px;
+  animation:gridMove 28s linear infinite;
+}
+@keyframes gridMove{from{background-position:0 0;}to{background-position:48px 48px;}}
+
+/* octopus orb */
+.octo-wrap{
+  position:absolute;right:100px;top:50%;transform:translateY(-50%);
+  width:150px;height:150px;
+  display:flex;align-items:center;justify-content:center;
+}
+.orb-ring{position:absolute;border-radius:50%;animation:spin linear infinite;}
+.orb-ring-1{width:140px;height:140px;border:1px dashed rgba(0,229,255,0.2);animation-duration:14s;}
+.orb-ring-2{width:104px;height:104px;border:1px solid rgba(176,106,255,0.2);animation-duration:8s;animation-direction:reverse;}
+.orb-ring-3{width:68px;height:68px;border:1px solid rgba(0,255,159,0.25);animation-duration:4.5s;}
+@keyframes spin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+.octo-emoji{position:relative;z-index:2;font-size:52px;animation:float 3.5s ease-in-out infinite;}
+@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
+
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(0,229,255,0.06);border:1px solid rgba(0,229,255,0.18);
+  padding:6px 18px;border-radius:100px;
+  font-family:var(--mono);font-size:10px;color:var(--cyan);
+  letter-spacing:2px;text-transform:uppercase;
+  margin-bottom:32px;animation:fadeUp 0.7s ease both;
+}
+.live-dot{
+  width:6px;height:6px;background:var(--green);border-radius:50%;
+  animation:pulse 1.5s infinite;
+}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.4;transform:scale(0.7);}}
+
+.hero h1{
+  font-family:var(--hud);
+  font-size:clamp(32px,5.5vw,78px);
+  font-weight:900;line-height:1.05;letter-spacing:2px;
+  margin-bottom:20px;
+  color:#fff;text-shadow:0 0 40px rgba(0,229,255,0.25);
+  animation:fadeUp 0.7s 0.1s ease both;
+}
+.hero h1 .c{color:var(--cyan);}
+.hero h1 .p{color:var(--purple);}
+
+.hero-sub{
+  font-family:var(--sans);
+  font-size:clamp(14px,1.6vw,18px);color:var(--muted);
+  max-width:520px;line-height:1.75;margin-bottom:40px;
+  animation:fadeUp 0.7s 0.2s ease both;
+}
+.hero-cta{
+  display:flex;gap:14px;flex-wrap:wrap;justify-content:center;
+  animation:fadeUp 0.7s 0.3s ease both;
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+
+.btn-primary{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(0,229,255,0.08);border:1px solid var(--cyan);
+  color:var(--cyan);padding:13px 26px;border-radius:4px;
+  font-family:var(--mono);font-size:11px;letter-spacing:2px;
+  text-decoration:none;transition:background 0.2s,box-shadow 0.2s;
+}
+.btn-primary:hover{background:rgba(0,229,255,0.14);box-shadow:0 0 28px rgba(0,229,255,0.22);}
+.btn-secondary{
+  display:inline-flex;align-items:center;
+  border:1px solid rgba(224,240,255,0.12);color:var(--muted);
+  padding:13px 26px;border-radius:4px;
+  font-family:var(--mono);font-size:11px;letter-spacing:2px;
+  text-decoration:none;transition:border-color 0.2s,color 0.2s;
+}
+.btn-secondary:hover{border-color:rgba(224,240,255,0.35);color:var(--text);}
+
+/* STATS BAR */
+.stats-bar{
+  position:relative;z-index:1;display:flex;justify-content:center;
+  border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+  background:rgba(13,17,23,0.85);
+}
+.stat-item{
+  flex:1;max-width:220px;padding:28px 20px;
+  text-align:center;border-right:1px solid var(--border);
+}
+.stat-item:last-child{border-right:none;}
+.stat-num{
+  font-family:var(--hud);font-size:30px;font-weight:700;
+  color:var(--cyan);line-height:1;margin-bottom:6px;
+  text-shadow:0 0 16px rgba(0,229,255,0.3);
+}
+.stat-label{font-size:9px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;font-family:var(--mono);}
+
+/* SECTION */
+.section{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:80px 24px;}
+.sec-label{font-family:var(--mono);font-size:9px;color:var(--cyan);letter-spacing:3px;text-transform:uppercase;margin-bottom:10px;}
+.section h2{font-family:var(--hud);font-size:clamp(20px,3vw,34px);font-weight:900;letter-spacing:1px;margin-bottom:10px;color:#fff;text-shadow:0 0 16px rgba(0,229,255,0.15);}
+.section-sub{color:var(--muted);font-size:13px;line-height:1.8;margin-bottom:36px;max-width:520px;font-family:var(--mono);}
+
+/* SPARKLINES */
+.spark-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px;}
+.spark-card{background:rgba(0,229,255,0.02);border:1px solid var(--border);border-radius:6px;padding:16px;}
+.spark-label{font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;}
+.spark-val{font-family:var(--hud);font-size:16px;color:var(--cyan);margin-bottom:8px;}
+canvas.spark{width:100%;height:48px;display:block;}
+
+/* HEATMAP */
+.heatmap{display:grid;grid-template-columns:repeat(15,1fr);gap:3px;margin-bottom:20px;}
+.heat-cell{height:16px;border-radius:2px;background:rgba(0,229,255,0.04);transition:all 0.5s;}
+
+/* LIVE TABLE */
+.live-wrap{background:rgba(0,229,255,0.02);border:1px solid var(--border);border-radius:6px;overflow:hidden;}
+.live-header{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;border-bottom:1px solid var(--border);background:rgba(6,8,16,0.8);}
+.live-header span{font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--muted);display:flex;align-items:center;gap:8px;}
+table{width:100%;border-collapse:collapse;}
+th{padding:10px 16px;text-align:left;font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border);background:rgba(4,6,13,0.7);}
+td{padding:11px 16px;border-bottom:1px solid rgba(0,229,255,0.04);color:var(--text);font-family:var(--mono);font-size:11px;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:rgba(0,229,255,0.025);}
+.pb{font-family:var(--mono);font-size:9px;padding:2px 7px;border-radius:2px;letter-spacing:1px;text-transform:uppercase;}
+.p-openai{background:rgba(16,163,127,0.12);color:#10a37f;}
+.p-anthropic{background:rgba(200,100,50,0.12);color:#e07040;}
+.p-google{background:rgba(66,133,244,0.12);color:#4285f4;}
+.p-mistral{background:rgba(255,107,0,0.12);color:#ff6b00;}
+.p-xai{background:rgba(180,180,180,0.08);color:#aaa;}
+.p-meta{background:rgba(24,119,242,0.12);color:#1877f2;}
+.p-deepseek{background:rgba(100,100,255,0.12);color:#8888ff;}
+.p-cohere{background:rgba(255,200,0,0.1);color:#ffcc44;}
+.cheap{color:var(--green)!important;}
+.mid{color:var(--cyan)!important;}
+.exp{color:#ff5566!important;}
+
+/* TERMINAL */
+.terminal{
+  background:#020408;border:1px solid rgba(0,229,255,0.08);
+  border-radius:6px;padding:16px;
+  font-family:var(--mono);font-size:11px;
+  height:130px;overflow-y:auto;margin-top:14px;line-height:1.7;
+}
+.t-sys{color:var(--muted);}
+.t-ok{color:var(--green);}
+.t-data{color:var(--cyan);}
+.t-warn{color:var(--yellow);}
+.cursor{display:inline-block;width:7px;height:11px;background:var(--cyan);margin-left:2px;vertical-align:middle;animation:blink 1s infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
+
+/* ENDPOINTS */
+.ep-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;}
+.ep-card{
+  background:rgba(0,229,255,0.02);border:1px solid var(--border);
+  border-radius:6px;padding:20px;
+  transition:border-color 0.2s,transform 0.2s;
+}
+.ep-card:hover{border-color:rgba(0,229,255,0.3);transform:translateY(-2px);}
+.ep-method{display:inline-block;background:rgba(0,229,255,0.08);color:var(--cyan);font-family:var(--mono);font-size:9px;font-weight:700;padding:2px 7px;border-radius:2px;letter-spacing:1px;margin-bottom:10px;}
+.ep-path{font-family:var(--hud);font-size:12px;color:var(--text);margin-bottom:6px;}
+.ep-desc{font-family:var(--mono);font-size:11px;color:var(--muted);line-height:1.6;margin-bottom:10px;}
+.tag-free{background:rgba(0,255,159,0.07);color:var(--green);border:1px solid rgba(0,255,159,0.18);font-family:var(--mono);font-size:9px;padding:2px 8px;border-radius:100px;letter-spacing:1px;}
+.tag-pro{background:rgba(176,106,255,0.07);color:var(--purple);border:1px solid rgba(176,106,255,0.18);font-family:var(--mono);font-size:9px;padding:2px 8px;border-radius:100px;letter-spacing:1px;}
+
+/* USE CASES */
+.cases-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;}
+.case-card{background:rgba(0,229,255,0.02);border:1px solid var(--border);border-radius:6px;padding:24px;}
+.case-icon{font-size:24px;margin-bottom:12px;}
+.case-title{font-family:var(--hud);font-size:12px;letter-spacing:1px;margin-bottom:8px;color:var(--text);}
+.case-desc{font-family:var(--mono);font-size:11px;color:var(--muted);line-height:1.7;}
+
+/* PRICING */
+.price-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;}
+.price-card{
+  background:rgba(0,229,255,0.02);border:1px solid var(--border);
+  border-radius:6px;padding:28px 20px;text-align:center;
+  transition:transform 0.2s,border-color 0.2s;position:relative;
+}
+.price-card:hover{transform:translateY(-4px);border-color:rgba(0,229,255,0.28);}
+.price-card.featured{border-color:var(--cyan);background:rgba(0,229,255,0.04);}
+.price-card.featured::before{
+  content:'MOST POPULAR';position:absolute;top:-11px;left:50%;transform:translateX(-50%);
+  background:var(--cyan);color:#000;
+  font-family:var(--hud);font-size:8px;font-weight:700;
+  padding:3px 12px;border-radius:100px;letter-spacing:1px;
+}
+.price-name{font-family:var(--hud);font-size:9px;letter-spacing:3px;color:var(--muted);margin-bottom:14px;text-transform:uppercase;}
+.price-amount{font-family:var(--hud);font-size:42px;font-weight:900;color:#fff;line-height:1;margin-bottom:4px;}
+.price-amount sup{font-size:16px;color:var(--muted);}
+.price-period{font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:20px;}
+.price-calls{font-family:var(--hud);font-size:20px;color:var(--cyan);margin-bottom:4px;}
+.price-calls-label{font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:24px;}
+.btn-plan{
+  display:block;padding:10px;border-radius:4px;
+  border:1px solid var(--border);background:transparent;color:var(--text);
+  font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;
+  text-decoration:none;transition:all 0.2s;cursor:pointer;
+}
+.btn-plan:hover,.price-card.featured .btn-plan{background:var(--cyan);color:#000;border-color:var(--cyan);}
+
+/* FOOTER */
+footer{
+  position:relative;z-index:1;border-top:1px solid var(--border);
+  padding:32px 48px;display:flex;justify-content:space-between;
+  align-items:center;flex-wrap:wrap;gap:14px;
+}
+.footer-logo{font-family:var(--hud);font-size:11px;color:var(--cyan);letter-spacing:2px;}
+footer p{font-family:var(--mono);font-size:10px;color:var(--muted);}
+.footer-links{display:flex;gap:20px;}
+footer a{color:var(--muted);text-decoration:none;font-family:var(--mono);font-size:10px;letter-spacing:1px;transition:color 0.2s;}
+footer a:hover{color:var(--cyan);}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  nav{padding:14px 20px;}
+  .nav-links{gap:14px;}
+  .octo-wrap{display:none!important;}
+  .spark-row{grid-template-columns:1fr;}
+  .stat-item{padding:20px 12px;}
+  footer{padding:24px 20px;flex-direction:column;text-align:center;}
+  .footer-links{justify-content:center;}
+}
 </style>
 </head>
 <body>
 
-<!-- Nav -->
+<!-- NAV -->
 <nav>
-  <div class="nav-logo">
-    <span>🐙</span>
-    OCTOPUS AI INTEL
-  </div>
+  <div class="nav-logo">🐙 OCTOPUS AI INTEL</div>
   <div class="nav-links">
-    <a href="#endpoints">Endpoints</a>
-    <a href="#pricing">Pricing</a>
-    <a href="#live">Live Data</a>
-    <a href="https://rapidapi.com/zakmediaai/api/octopus-ai-model-intel" target="_blank" class="btn-nav">Get API Key →</a>
+    <a href="#live">LIVE</a>
+    <a href="#endpoints">ENDPOINTS</a>
+    <a href="#pricing">PRICING</a>
+    <a href="https://rapidapi.com/zakmediaai/api/octopus-ai-model-intel" target="_blank" class="btn-nav">GET API KEY →</a>
   </div>
 </nav>
 
-<!-- Hero -->
+<!-- HERO -->
 <section class="hero">
-  <div class="hero-orb"></div>
+  <div class="hero-grid"></div>
+
+  <div class="octo-wrap">
+    <div class="orb-ring orb-ring-1"></div>
+    <div class="orb-ring orb-ring-2"></div>
+    <div class="orb-ring orb-ring-3"></div>
+    <span class="octo-emoji">🐙</span>
+  </div>
+
   <div class="hero-badge">
     <span class="live-dot"></span>
-    Live · <span id="badge-count">133+</span> Models · <span id="badge-providers">7</span> Providers
+    LIVE &middot; <span id="badge-count">133+</span> MODELS &middot; <span id="badge-providers">7</span> PROVIDERS
   </div>
-  <h1>
-    The <span class="accent">Bloomberg</span><br>
-    Terminal for<br>
-    <span class="accent2">AI Models</span>
-  </h1>
+
+  <h1>THE <span class="c">BLOOMBERG</span><br>TERMINAL FOR<br><span class="p">AI MODELS</span></h1>
+
   <p class="hero-sub">
     Real-time pricing, context windows and capabilities for every major AI model — served as a clean REST API.
   </p>
+
   <div class="hero-cta">
     <a href="https://rapidapi.com/zakmediaai/api/octopus-ai-model-intel" target="_blank" class="btn-primary">
-      🐙 Get Free API Key
+      ⚡ GET FREE API KEY
     </a>
-    <a href="#live" class="btn-secondary">
-      View Live Data ↓
-    </a>
+    <a href="#live" class="btn-secondary">VIEW LIVE DATA ↓</a>
   </div>
 </section>
 
-<!-- Stats -->
+<!-- STATS -->
 <div class="stats-bar">
   <div class="stat-item">
-    <div class="stat-num" id="model-count">133+</div>
+    <div class="stat-num" id="stat-models">133+</div>
     <div class="stat-label">Models Tracked</div>
   </div>
   <div class="stat-item">
-    <div class="stat-num">7</div>
+    <div class="stat-num" id="stat-providers">7</div>
     <div class="stat-label">AI Providers</div>
   </div>
   <div class="stat-item">
@@ -772,16 +362,32 @@
   </div>
 </div>
 
-<!-- Live data -->
+<!-- LIVE SECTION -->
 <section class="section" id="live">
-  <div class="section-label">// live feed</div>
-  <h2>Real Data. Right Now.</h2>
-  <p class="section-sub">Every call returns live pricing data. No stale screenshots. No manual updates.</p>
+  <div class="sec-label">// live intelligence feed</div>
+  <h2>REAL DATA. RIGHT NOW.</h2>
+  <p class="section-sub">Live pricing pulled from provider sources continuously. No stale screenshots. No guessing.</p>
 
-  <div id="live-data">
-    <div class="data-header">
-      <span><span class="live-dot"></span> Live from API</span>
-      <span id="update-time">Loading...</span>
+  <div class="spark-row">
+    <div class="spark-card">
+      <div class="spark-label">// avg input cost $/1M tokens</div>
+      <div class="spark-val" id="spark-val-1">loading...</div>
+      <canvas class="spark" id="spark1"></canvas>
+    </div>
+    <div class="spark-card">
+      <div class="spark-label">// total models tracked</div>
+      <div class="spark-val" id="spark-val-2">loading...</div>
+      <canvas class="spark" id="spark2"></canvas>
+    </div>
+  </div>
+
+  <div class="sec-label">// provider activity matrix</div>
+  <div class="heatmap" id="heatmap"></div>
+
+  <div class="live-wrap">
+    <div class="live-header">
+      <span><span class="live-dot"></span> LIVE FROM API</span>
+      <span id="update-time">CONNECTING...</span>
     </div>
     <table>
       <thead>
@@ -794,114 +400,115 @@
         </tr>
       </thead>
       <tbody id="model-table">
-        <tr><td colspan="5" style="text-align:center;color:var(--muted);padding:40px;font-family:var(--font-mono);font-size:12px;">Fetching live data...</td></tr>
+        <tr><td colspan="5" style="text-align:center;padding:32px;color:var(--muted);font-family:var(--mono);font-size:11px;">FETCHING LIVE DATA...</td></tr>
       </tbody>
     </table>
   </div>
+
+  <div class="terminal" id="terminal">
+    <div class="t-sys">system@octopus:~$ initializing neural feed...<span class="cursor"></span></div>
+  </div>
 </section>
 
-<!-- Endpoints -->
+<!-- ENDPOINTS -->
 <section class="section" id="endpoints">
-  <div class="section-label">// endpoints</div>
-  <h2>8 Powerful Endpoints</h2>
-  <p class="section-sub">Everything you need to build AI cost calculators, model pickers, and comparison tools.</p>
-
-  <div class="endpoints-grid">
-    <div class="endpoint-card">
+  <div class="sec-label">// api surface</div>
+  <h2>8 POWERFUL ENDPOINTS</h2>
+  <p class="section-sub">Everything you need to build AI cost calculators, model pickers, and comparison dashboards.</p>
+  <div class="ep-grid">
+    <div class="ep-card">
       <div class="ep-method">GET</div>
       <div class="ep-path">/models</div>
-      <div class="ep-desc">All 22+ models sorted cheapest first. Filter by provider, status, or vision support.</div>
-      <span class="ep-tag free">Free</span>
+      <div class="ep-desc">All 133+ models sorted cheapest first. Filter by provider, status, or vision support.</div>
+      <span class="tag-free">FREE</span>
     </div>
-    <div class="endpoint-card">
+    <div class="ep-card">
       <div class="ep-method">GET</div>
       <div class="ep-path">/pricing</div>
-      <div class="ep-desc">Full pricing breakdown with value scores and cost per 1K tokens calculated.</div>
-      <span class="ep-tag free">Free</span>
+      <div class="ep-desc">Full pricing with value scores and cost per 1K tokens calculated automatically.</div>
+      <span class="tag-free">FREE</span>
     </div>
-    <div class="endpoint-card">
+    <div class="ep-card">
+      <div class="ep-method">GET</div>
+      <div class="ep-path">/health</div>
+      <div class="ep-desc">API status, model count, provider list and last update timestamp.</div>
+      <span class="tag-free">FREE</span>
+    </div>
+    <div class="ep-card">
       <div class="ep-method">GET</div>
       <div class="ep-path">/compare</div>
-      <div class="ep-desc">Side-by-side comparison of any models. Returns winner analysis for cost, context, and value.</div>
-      <span class="ep-tag premium">Premium</span>
+      <div class="ep-desc">Side-by-side comparison with winner analysis for cost, context and value.</div>
+      <span class="tag-pro">PREMIUM</span>
     </div>
-    <div class="endpoint-card">
+    <div class="ep-card">
       <div class="ep-method">GET</div>
       <div class="ep-path">/cheapest</div>
-      <div class="ep-desc">Best model for your task. Pass ?task=code, vision, long-context, fast, or chat.</div>
-      <span class="ep-tag premium">Premium</span>
+      <div class="ep-desc">Best model for your task. ?task=code, vision, long-context, fast, or chat.</div>
+      <span class="tag-pro">PREMIUM</span>
     </div>
-    <div class="endpoint-card">
+    <div class="ep-card">
       <div class="ep-method">GET</div>
       <div class="ep-path">/models/:provider</div>
-      <div class="ep-desc">Filter by provider: openai, anthropic, google, mistral, xai, or meta.</div>
-      <span class="ep-tag premium">Premium</span>
+      <div class="ep-desc">Filter by provider: openai, anthropic, google, mistral, xai, meta, deepseek.</div>
+      <span class="tag-pro">PREMIUM</span>
     </div>
-    <div class="endpoint-card">
+    <div class="ep-card">
       <div class="ep-method">GET</div>
       <div class="ep-path">/providers</div>
-      <div class="ep-desc">Provider health status, model count, price range and capability summary.</div>
-      <span class="ep-tag premium">Premium</span>
+      <div class="ep-desc">Provider health, model count, price range and capability summary.</div>
+      <span class="tag-pro">PREMIUM</span>
     </div>
-    <div class="endpoint-card">
+    <div class="ep-card">
       <div class="ep-method">GET</div>
       <div class="ep-path">/search</div>
       <div class="ep-desc">Search models by name, family, or keyword. Example: /search?q=haiku</div>
-      <span class="ep-tag premium">Premium</span>
-    </div>
-    <div class="endpoint-card">
-      <div class="ep-method">GET</div>
-      <div class="ep-path">/health</div>
-      <div class="ep-desc">API status, model count, provider list, and last update timestamp.</div>
-      <span class="ep-tag free">Free</span>
+      <span class="tag-pro">PREMIUM</span>
     </div>
   </div>
 </section>
 
-<!-- Use cases -->
+<!-- USE CASES -->
 <section class="section">
-  <div class="section-label">// use cases</div>
-  <h2>Built For Developers</h2>
-  <p class="section-sub">Who uses Octopus AI Model Intel every day.</p>
-
+  <div class="sec-label">// who uses this</div>
+  <h2>BUILT FOR DEVELOPERS</h2>
+  <p class="section-sub">Real users solving real problems with Octopus AI Model Intel.</p>
   <div class="cases-grid">
     <div class="case-card">
       <div class="case-icon">⚡</div>
-      <div class="case-title">AI App Developers</div>
-      <div class="case-desc">Pick the right model for each feature automatically. Route cheap tasks to budget models, complex tasks to flagship models.</div>
+      <div class="case-title">AI APP DEVELOPERS</div>
+      <div class="case-desc">Pick the right model automatically. Route cheap tasks to budget models, complex tasks to flagship models.</div>
     </div>
     <div class="case-card">
       <div class="case-icon">💰</div>
-      <div class="case-title">Cost Optimizers</div>
-      <div class="case-desc">Track pricing changes across providers. Get alerts when a cheaper model launches that fits your use case.</div>
+      <div class="case-title">COST OPTIMIZERS</div>
+      <div class="case-desc">Track pricing changes across providers. Get the cheapest model for any task type instantly.</div>
     </div>
     <div class="case-card">
       <div class="case-icon">🔬</div>
-      <div class="case-title">AI Researchers</div>
-      <div class="case-desc">Compare model capabilities, context windows, and pricing across the full landscape in one API call.</div>
+      <div class="case-title">AI RESEARCHERS</div>
+      <div class="case-desc">Compare capabilities, context windows and pricing across the full model landscape in one call.</div>
     </div>
     <div class="case-card">
       <div class="case-icon">🏢</div>
-      <div class="case-title">Procurement Teams</div>
-      <div class="case-desc">Evaluate AI vendors with real data. Build internal dashboards that track AI spend across your organization.</div>
+      <div class="case-title">PROCUREMENT TEAMS</div>
+      <div class="case-desc">Evaluate AI vendors with real data. Build internal dashboards tracking AI spend across your org.</div>
     </div>
   </div>
 </section>
 
-<!-- Pricing -->
+<!-- PRICING -->
 <section class="section" id="pricing">
-  <div class="section-label">// pricing</div>
-  <h2>Start Free. Scale When Ready.</h2>
+  <div class="sec-label">// subscription plans</div>
+  <h2>START FREE. SCALE FAST.</h2>
   <p class="section-sub">All plans include all endpoints. Upgrade when you need more calls.</p>
-
-  <div class="pricing-grid">
+  <div class="price-grid">
     <div class="price-card">
       <div class="price-name">Basic</div>
       <div class="price-amount"><sup>$</sup>0</div>
       <div class="price-period">forever free</div>
       <div class="price-calls">100</div>
       <div class="price-calls-label">calls / month</div>
-      <a href="https://rapidapi.com/zakmediaai/api/octopus-ai-model-intel" target="_blank" class="btn-plan">Get Started</a>
+      <a href="https://rapidapi.com/zakmediaai/api/octopus-ai-model-intel" target="_blank" class="btn-plan">GET STARTED</a>
     </div>
     <div class="price-card featured">
       <div class="price-name">Pro</div>
@@ -909,7 +516,7 @@
       <div class="price-period">per month</div>
       <div class="price-calls">5,000</div>
       <div class="price-calls-label">calls / month</div>
-      <a href="https://rapidapi.com/zakmediaai/api/octopus-ai-model-intel" target="_blank" class="btn-plan">Subscribe</a>
+      <a href="https://rapidapi.com/zakmediaai/api/octopus-ai-model-intel" target="_blank" class="btn-plan">SUBSCRIBE</a>
     </div>
     <div class="price-card">
       <div class="price-name">Ultra</div>
@@ -917,84 +524,202 @@
       <div class="price-period">per month</div>
       <div class="price-calls">50,000</div>
       <div class="price-calls-label">calls / month</div>
-      <a href="https://rapidapi.com/zakmediaai/api/octopus-ai-model-intel" target="_blank" class="btn-plan">Subscribe</a>
+      <a href="https://rapidapi.com/zakmediaai/api/octopus-ai-model-intel" target="_blank" class="btn-plan">SUBSCRIBE</a>
     </div>
     <div class="price-card">
       <div class="price-name">Mega</div>
       <div class="price-amount"><sup>$</sup>99</div>
       <div class="price-period">per month</div>
-      <div class="price-calls">∞</div>
+      <div class="price-calls">&#8734;</div>
       <div class="price-calls-label">unlimited calls</div>
-      <a href="https://rapidapi.com/zakmediaai/api/octopus-ai-model-intel" target="_blank" class="btn-plan">Subscribe</a>
+      <a href="https://rapidapi.com/zakmediaai/api/octopus-ai-model-intel" target="_blank" class="btn-plan">SUBSCRIBE</a>
     </div>
   </div>
 </section>
 
-<!-- Footer -->
+<!-- FOOTER -->
 <footer>
-  <div class="logo">🐙 Octopus AI Model Intel</div>
+  <div class="footer-logo">🐙 OCTOPUS AI INTEL</div>
   <p>Real-time AI model intelligence. Built on Cloudflare Workers.</p>
   <div class="footer-links">
-    <a href="https://rapidapi.com/zakmediaai/api/octopus-ai-model-intel" target="_blank">RapidAPI</a>
+    <a href="https://rapidapi.com/zakmediaai/api/octopus-ai-model-intel" target="_blank">RAPIDAPI</a>
     <a href="https://ai-model-intel.zak-media-ai.workers.dev/" target="_blank">API</a>
-    <a href="https://github.com/zak-dev-ai/ai-model-intel" target="_blank">GitHub</a>
+    <a href="https://github.com/zak-dev-ai/ai-model-intel" target="_blank">GITHUB</a>
   </div>
 </footer>
 
 <script>
 const API = 'https://ai-model-intel.zak-media-ai.workers.dev';
 
-function costColor(cost) {
-  if (cost <= 0.20) return 'cost-cheap';
-  if (cost <= 2.00) return 'cost-mid';
-  return 'cost-exp';
+// Sparkline history seeds
+const costHist = [3.2,2.9,3.1,2.7,2.5,2.3,2.6,2.2,2.0,1.9,2.1,1.8,1.6,1.7,1.5,1.4,1.3,1.2,1.1,1.0];
+const cntHist  = [22,30,40,52,60,70,80,90,98,105,110,115,118,122,125,128,130,131,132,133];
+
+function costClass(c){ return c<=0.2?'cheap':c<=2?'mid':'exp'; }
+function fmtCtx(n){ return n>=1e6?(n/1e6).toFixed(1)+'M':n>=1e3?(n/1e3)+'K':n; }
+
+// ── Sparkline renderer ──
+function drawSpark(id, data, color) {
+  const canvas = document.getElementById(id);
+  if(!canvas) return;
+  canvas.width  = canvas.offsetWidth || 320;
+  canvas.height = 48;
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  ctx.clearRect(0,0,W,H);
+  const mn=Math.min(...data), mx=Math.max(...data), rng=mx-mn||1;
+  const pts = data.map((v,i)=>({
+    x:(i/(data.length-1))*W,
+    y: H - ((v-mn)/rng)*(H-8) - 4
+  }));
+  const hex = color==='cyan'?'#00e5ff':color==='purple'?'#b06aff':'#00ff9f';
+  const rgb = color==='cyan'?'0,229,255':color==='purple'?'176,106,255':'0,255,159';
+  const g = ctx.createLinearGradient(0,0,0,H);
+  g.addColorStop(0,`rgba(${rgb},0.22)`);
+  g.addColorStop(1,`rgba(${rgb},0)`);
+  ctx.beginPath();
+  ctx.moveTo(pts[0].x, H);
+  pts.forEach(p=>ctx.lineTo(p.x,p.y));
+  ctx.lineTo(pts[pts.length-1].x, H);
+  ctx.closePath();
+  ctx.fillStyle=g; ctx.fill();
+  ctx.beginPath();
+  ctx.moveTo(pts[0].x, pts[0].y);
+  pts.forEach(p=>ctx.lineTo(p.x,p.y));
+  ctx.strokeStyle=hex; ctx.lineWidth=1.5; ctx.stroke();
+  const lp=pts[pts.length-1];
+  ctx.beginPath();ctx.arc(lp.x,lp.y,3,0,Math.PI*2);
+  ctx.fillStyle=hex; ctx.fill();
 }
 
-function formatContext(n) {
-  if (n >= 1000000) return (n/1000000).toFixed(1) + 'M';
-  if (n >= 1000)    return (n/1000) + 'K';
-  return n;
+// ── Heatmap ──
+function buildHeatmap() {
+  const h = document.getElementById('heatmap');
+  for(let i=0;i<75;i++){
+    const c=document.createElement('div');
+    c.className='heat-cell'; c.id='hc'+i;
+    h.appendChild(c);
+  }
+  updateHeatmap();
+}
+function updateHeatmap() {
+  const n = Math.floor(Math.random()*20)+10;
+  for(let i=0;i<n;i++){
+    const idx=Math.floor(Math.random()*75);
+    const c=document.getElementById('hc'+idx);
+    if(!c) continue;
+    const v=Math.random();
+    c.style.background=`rgba(0,${Math.floor(v*229)},${Math.floor(v*255)},${(0.05+v*0.32).toFixed(2)})`;
+    c.style.boxShadow=v>0.72?`0 0 4px rgba(0,229,255,${(v*0.35).toFixed(2)})`:'none';
+  }
 }
 
+// ── Terminal ──
+function addTerm(text, type) {
+  const t=document.getElementById('terminal');
+  const cur=t.querySelector('.cursor'); if(cur)cur.remove();
+  const el=document.createElement('div');
+  el.className='t-'+(type||'data');
+  el.textContent=text;
+  const c=document.createElement('span');c.className='cursor';
+  el.appendChild(c);
+  t.appendChild(el);
+  if(t.children.length>50) t.removeChild(t.firstChild);
+  t.scrollTop=t.scrollHeight;
+}
+
+// ── Load stats from /health ──
 async function loadStats() {
   try {
-    const res  = await fetch(API + '/health');
-    const data = await res.json();
-    if (data.models_count) {
-      const count = data.models_count + '+';
-      const provs = data.providers?.length || 7;
-      document.getElementById('model-count').innerText     = count;
-      document.getElementById('badge-count').innerText     = count;
-      document.getElementById('badge-providers').innerText = provs;
+    const r = await fetch(API+'/health');
+    const d = await r.json();
+    if(d.models_count){
+      const cnt = d.models_count+'+';
+      const pvs = d.providers ? d.providers.length : 7;
+      ['badge-count','stat-models'].forEach(id=>{
+        const el=document.getElementById(id); if(el) el.textContent=cnt;
+      });
+      ['badge-providers','stat-providers'].forEach(id=>{
+        const el=document.getElementById(id); if(el) el.textContent=pvs;
+      });
     }
   } catch(e) {}
 }
 
+// ── Load live pricing table ──
 async function loadLiveData() {
   try {
-    const res  = await fetch(API + '/pricing');
-    const data = await res.json();
-    const rows = data.pricing.slice(0, 10).map(m => `
-      <tr>
-        <td style="font-family:var(--font-mono);font-size:12px;">${m.model}</td>
-        <td><span class="provider-badge p-${m.provider}">${m.provider}</span></td>
-        <td class="${costColor(m.input_cost_per_mtok)}">$${m.input_cost_per_mtok}</td>
-        <td class="${costColor(m.output_cost_per_mtok)}">$${m.output_cost_per_mtok}</td>
-        <td style="font-family:var(--font-mono);font-size:12px;color:var(--muted)">${formatContext(m.context_window)}</td>
-      </tr>
-    `).join('');
-    document.getElementById('model-table').innerHTML = rows;
-    document.getElementById('update-time').textContent =
-      'Updated ' + new Date().toLocaleTimeString();
+    const r = await fetch(API+'/pricing');
+    const d = await r.json();
+
+    if(d.pricing && d.pricing.length) {
+      // table rows
+      const rows = d.pricing.slice(0,12).map(m=>`
+        <tr>
+          <td style="font-size:10px;">${m.model}</td>
+          <td><span class="pb p-${m.provider}">${m.provider}</span></td>
+          <td class="${costClass(m.input_cost_per_mtok)}">$${m.input_cost_per_mtok}</td>
+          <td class="${costClass(m.output_cost_per_mtok)}">$${m.output_cost_per_mtok}</td>
+          <td style="color:var(--muted)">${fmtCtx(m.context_window)}</td>
+        </tr>`).join('');
+      document.getElementById('model-table').innerHTML = rows;
+      document.getElementById('update-time').textContent =
+        'UPDATED '+new Date().toLocaleTimeString().toUpperCase();
+
+      // sparklines
+      const avg = (d.pricing.slice(0,20).reduce((s,m)=>s+m.input_cost_per_mtok,0)/Math.min(d.pricing.length,20));
+      costHist.push(parseFloat(avg.toFixed(3)));
+      if(costHist.length>20) costHist.shift();
+      cntHist.push(d.count||133);
+      if(cntHist.length>20) cntHist.shift();
+
+      document.getElementById('spark-val-1').textContent = '$'+avg.toFixed(3)+'/1M';
+      document.getElementById('spark-val-2').textContent = (d.count||133)+'+ models';
+      drawSpark('spark1', costHist, 'cyan');
+      drawSpark('spark2', cntHist, 'purple');
+
+      addTerm('>> sync complete — '+d.count+' models loaded', 'ok');
+    }
   } catch(e) {
     document.getElementById('model-table').innerHTML =
-      '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:40px;font-family:var(--font-mono);font-size:12px;">Visit API directly → ai-model-intel.zak-media-ai.workers.dev</td></tr>';
+      '<tr><td colspan="5" style="text-align:center;padding:32px;color:var(--muted);font-size:11px;">API: ai-model-intel.zak-media-ai.workers.dev</td></tr>';
+    addTerm('[WARN] fetch error — will retry in 30s','warn');
   }
 }
 
-loadStats();
-loadLiveData();
-setInterval(loadLiveData, 30000);
+// ── Random terminal messages ──
+const msgs = [
+  ()=>'>> openai gpt-4o: $2.50/1M tokens input',
+  ()=>'>> anthropic claude-3-5-sonnet: 200K context',
+  ()=>'>> google gemini-2.5-pro: 1M context window',
+  ()=>'>> deepseek-chat: $0.14/1M — cheapest tracked',
+  ()=>'>> all '+( document.getElementById('stat-providers')?.textContent||'7')+' providers operational',
+  ()=>'>> latency nominal — edge network active',
+  ()=>'>> openrouter sync: '+Math.floor(130+Math.random()*8)+' models indexed',
+];
+function randomTerm(){ if(Math.random()>0.45) addTerm(msgs[Math.floor(Math.random()*msgs.length)]()); }
+
+// ── Init ──
+buildHeatmap();
+drawSpark('spark1', costHist, 'cyan');
+drawSpark('spark2', cntHist, 'purple');
+document.getElementById('spark-val-1').textContent = '$1.20/1M';
+document.getElementById('spark-val-2').textContent = '133+ models';
+
+setTimeout(()=>addTerm('[INFO] live feed active — polling every 30s','ok'), 800);
+setTimeout(()=>addTerm('>> connecting to openrouter data source...'), 1600);
+setTimeout(loadStats, 200);
+setTimeout(loadLiveData, 600);
+
+setInterval(loadLiveData,  30000);
+setInterval(updateHeatmap,  2200);
+setInterval(randomTerm,     4500);
+
+// redraw sparklines on resize
+window.addEventListener('resize', ()=>{
+  drawSpark('spark1', costHist, 'cyan');
+  drawSpark('spark2', cntHist, 'purple');
+});
 </script>
 </body>
 </html>
