@@ -674,41 +674,23 @@ async function loadStats() {
 // ── Load live pricing table ──
 async function loadLiveData() {
   try {
-    const r = await fetch(API+'/pricing', {
-      method: 'GET',
-      headers: { 'Accept': 'application/json' },
-      mode: 'cors',
-    });
+    const r = await fetch(API+'/pricing');
     const d = await r.json();
+
     if(d.pricing && d.pricing.length) {
+      // table rows
       const rows = d.pricing.slice(0,12).map(m=>`
         <tr>
           <td style="font-size:14px;">${m.model}</td>
           <td><span class="pb p-${m.provider}">${m.provider}</span></td>
-          <td class="${costClass(m.input_cost_per_mtok)}">${m.input_cost_per_mtok ? '$'+m.input_cost_per_mtok : 'Free'}</td>
-          <td class="${costClass(m.output_cost_per_mtok)}">${m.output_cost_per_mtok ? '$'+m.output_cost_per_mtok : 'Free'}</td>
+          <td class="${costClass(m.input_cost_per_mtok)}">$${m.input_cost_per_mtok}</td>
+          <td class="${costClass(m.output_cost_per_mtok)}">$${m.output_cost_per_mtok}</td>
           <td style="color:var(--muted)">${fmtCtx(m.context_window)}</td>
         </tr>`).join('');
       document.getElementById('model-table').innerHTML = rows;
       document.getElementById('update-time').textContent =
         'UPDATED '+new Date().toLocaleTimeString().toUpperCase();
-      const avg=(d.pricing.slice(0,20).reduce((s,m)=>s+m.input_cost_per_mtok,0)/20).toFixed(3);
-      costHist.push(parseFloat(avg));
-      if(costHist.length>20) costHist.shift();
-      cntHist.push(d.count||137);
-      if(cntHist.length>20) cntHist.shift();
-      document.getElementById('spark-val-1').textContent='$'+avg+'/1M';
-      document.getElementById('spark-val-2').textContent=(d.count||137)+'+ models';
-      drawSpark('spark1',costHist,'cyan');
-      drawSpark('spark2',cntHist,'purple');
-      addTerm('>> sync complete — '+(d.count||137)+' models loaded','ok');
-    }
-  } catch(e) {
-    document.getElementById('model-table').innerHTML=
-      '<tr><td colspan="5" style="text-align:center;padding:32px;color:var(--muted);font-size:13px;">VISIT DIRECTLY: ai-model-intel.zak-media-ai.workers.dev</td></tr>';
-    addTerm('[WARN] fetch error — '+e.message,'warn');
-  }
-}
+
       // sparklines
       const avg = (d.pricing.slice(0,20).reduce((s,m)=>s+m.input_cost_per_mtok,0)/Math.min(d.pricing.length,20));
       costHist.push(parseFloat(avg.toFixed(3)));
