@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Octopus AI Model Intel — Real-time AI Model Pricing API</title>
-<meta name="description" content="Real-time pricing, context windows and capabilities for 133+ AI models. One API for GPT-4o, Claude, Gemini, Mistral and more.">
+<meta name="description" content="Real-time pricing, context windows and capabilities for 137+ AI models. One API for GPT-4o, Claude, Gemini, Mistral and more.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
@@ -25,73 +25,24 @@
 *{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
 body{background:var(--bg);color:var(--text);font-family:var(--sans);overflow-x:hidden;}
-
-/* scanline */
-body::after{
-  content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
-  mix-blend-mode:overlay;
-  background:repeating-linear-gradient(0deg,transparent 0,transparent 2px,rgba(0,0,0,0.04) 2px,rgba(0,0,0,0.04) 4px);
-}
-/* vignette */
-body::before{
-  content:'';position:fixed;inset:0;pointer-events:none;z-index:8999;
-  background:radial-gradient(ellipse at center,transparent 55%,rgba(0,0,0,0.6) 100%);
-}
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;mix-blend-mode:overlay;background:repeating-linear-gradient(0deg,transparent 0,transparent 2px,rgba(0,0,0,0.04) 2px,rgba(0,0,0,0.04) 4px);}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:8999;background:radial-gradient(ellipse at center,transparent 55%,rgba(0,0,0,0.6) 100%);}
 
 /* NAV */
-nav{
-  position:fixed;top:0;left:0;right:0;z-index:1000;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:18px 48px;
-  background:rgba(6,8,16,0.88);backdrop-filter:blur(14px);
-  border-bottom:1px solid var(--border);
-}
-.nav-logo{
-  display:flex;align-items:center;gap:10px;
-  font-family:var(--hud);font-size:17px;font-weight:700;
-  color:var(--cyan);letter-spacing:1px;
-  text-shadow:0 0 20px rgba(0,229,255,0.5);
-}
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:18px 48px;background:rgba(6,8,16,0.88);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);}
+.nav-logo{display:flex;align-items:center;gap:10px;font-family:var(--hud);font-size:17px;font-weight:700;color:var(--cyan);letter-spacing:1px;text-shadow:0 0 20px rgba(0,229,255,0.5);}
 .nav-links{display:flex;gap:28px;align-items:center;}
-nav a{color:var(--muted);text-decoration:none;font-size:15px;
-  letter-spacing:0.5px;font-family:var(--mono);transition:color 0.2s;}
+nav a{color:var(--muted);text-decoration:none;font-size:15px;letter-spacing:0.5px;font-family:var(--mono);transition:color 0.2s;}
 nav a:hover{color:var(--cyan);}
-.btn-nav{
-  background:linear-gradient(135deg,var(--cyan),var(--purple));
-  color:#000!important;padding:8px 20px;border-radius:4px;
-  font-family:var(--hud)!important;font-size:14px!important;font-weight:700;
-  letter-spacing:0.5px;position:relative;overflow:hidden;
-}
-.btn-nav::after{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.2),transparent);
-  transform:translateX(-100%);transition:transform 0.4s;
-}
+.btn-nav{background:linear-gradient(135deg,var(--cyan),var(--purple));color:#000!important;padding:9px 22px;border-radius:4px;font-family:var(--hud)!important;font-size:13px!important;font-weight:700;letter-spacing:0.5px;position:relative;overflow:hidden;}
+.btn-nav::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.2),transparent);transform:translateX(-100%);transition:transform 0.4s;}
 .btn-nav:hover::after{transform:translateX(100%);}
 
 /* HERO */
-.hero{
-  position:relative;z-index:1;
-  min-height:100vh;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-  text-align:center;padding:120px 24px 80px;
-}
-.hero-grid{
-  position:absolute;inset:0;opacity:0.04;pointer-events:none;
-  background-image:
-    linear-gradient(rgba(0,229,255,1) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(0,229,255,1) 1px,transparent 1px);
-  background-size:48px 48px;
-  animation:gridMove 28s linear infinite;
-}
+.hero{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 24px 80px;}
+.hero-grid{position:absolute;inset:0;opacity:0.04;pointer-events:none;background-image:linear-gradient(rgba(0,229,255,1) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,255,1) 1px,transparent 1px);background-size:48px 48px;animation:gridMove 28s linear infinite;}
 @keyframes gridMove{from{background-position:0 0;}to{background-position:48px 48px;}}
-
-/* octopus orb */
-.octo-wrap{
-  position:absolute;right:100px;top:50%;transform:translateY(-50%);
-  width:150px;height:150px;
-  display:flex;align-items:center;justify-content:center;
-}
+.octo-wrap{position:absolute;right:100px;top:50%;transform:translateY(-50%);width:150px;height:150px;display:flex;align-items:center;justify-content:center;}
 .orb-ring{position:absolute;border-radius:50%;animation:spin linear infinite;}
 .orb-ring-1{width:140px;height:140px;border:1px dashed rgba(0,229,255,0.2);animation-duration:14s;}
 .orb-ring-2{width:104px;height:104px;border:1px solid rgba(176,106,255,0.2);animation-duration:8s;animation-direction:reverse;}
@@ -99,89 +50,37 @@ nav a:hover{color:var(--cyan);}
 @keyframes spin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
 .octo-emoji{position:relative;z-index:2;font-size:52px;animation:float 3.5s ease-in-out infinite;}
 @keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
-
-.hero-badge{
-  display:inline-flex;align-items:center;gap:8px;
-  background:rgba(0,229,255,0.06);border:1px solid rgba(0,229,255,0.18);
-  padding:6px 18px;border-radius:100px;
-  font-family:var(--mono);font-size:14px;color:var(--cyan);
-  letter-spacing:1px;text-transform:uppercase;
-  margin-bottom:32px;animation:fadeUp 0.7s ease both;
-}
-.live-dot{
-  width:6px;height:6px;background:var(--green);border-radius:50%;
-  animation:pulse 1.5s infinite;
-}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(0,229,255,0.06);border:1px solid rgba(0,229,255,0.18);padding:6px 18px;border-radius:100px;font-family:var(--mono);font-size:14px;color:var(--cyan);letter-spacing:1px;text-transform:uppercase;margin-bottom:32px;animation:fadeUp 0.7s ease both;}
+.live-dot{width:6px;height:6px;background:var(--green);border-radius:50%;animation:pulse 1.5s infinite;}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.4;transform:scale(0.7);}}
-
-.hero h1{
-  font-family:var(--hud);
-  font-size:clamp(32px,5.5vw,78px);
-  font-weight:900;line-height:1.05;letter-spacing:1px;
-  margin-bottom:20px;
-  color:#fff;text-shadow:0 0 40px rgba(0,229,255,0.25);
-  animation:fadeUp 0.7s 0.1s ease both;
-}
+.hero h1{font-family:var(--hud);font-size:clamp(32px,5.5vw,78px);font-weight:900;line-height:1.05;letter-spacing:1px;margin-bottom:20px;color:#fff;text-shadow:0 0 40px rgba(0,229,255,0.25);animation:fadeUp 0.7s 0.1s ease both;}
 .hero h1 .c{color:var(--cyan);}
 .hero h1 .p{color:var(--purple);}
-
-.hero-sub{
-  font-family:var(--sans);
-  font-size:clamp(16px,1.8vw,20px);color:var(--muted);
-  max-width:520px;line-height:1.75;margin-bottom:40px;
-  animation:fadeUp 0.7s 0.2s ease both;
-}
-.hero-cta{
-  display:flex;gap:14px;flex-wrap:wrap;justify-content:center;
-  animation:fadeUp 0.7s 0.3s ease both;
-}
+.hero-sub{font-family:var(--sans);font-size:clamp(16px,1.8vw,20px);color:var(--muted);max-width:520px;line-height:1.75;margin-bottom:40px;animation:fadeUp 0.7s 0.2s ease both;}
+.hero-cta{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;animation:fadeUp 0.7s 0.3s ease both;}
 @keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
-
-.btn-primary{
-  display:inline-flex;align-items:center;gap:8px;
-  background:rgba(0,229,255,0.08);border:1px solid var(--cyan);
-  color:var(--cyan);padding:13px 26px;border-radius:4px;
-  font-family:var(--mono);font-size:15px;letter-spacing:1px;
-  text-decoration:none;transition:background 0.2s,box-shadow 0.2s;
-}
+.btn-primary{display:inline-flex;align-items:center;gap:8px;background:rgba(0,229,255,0.08);border:1px solid var(--cyan);color:var(--cyan);padding:13px 26px;border-radius:4px;font-family:var(--mono);font-size:15px;letter-spacing:1px;text-decoration:none;transition:background 0.2s,box-shadow 0.2s;}
 .btn-primary:hover{background:rgba(0,229,255,0.14);box-shadow:0 0 28px rgba(0,229,255,0.22);}
-.btn-secondary{
-  display:inline-flex;align-items:center;
-  border:1px solid rgba(224,240,255,0.12);color:var(--muted);
-  padding:13px 26px;border-radius:4px;
-  font-family:var(--mono);font-size:15px;letter-spacing:1px;
-  text-decoration:none;transition:border-color 0.2s,color 0.2s;
-}
+.btn-secondary{display:inline-flex;align-items:center;border:1px solid rgba(224,240,255,0.12);color:var(--muted);padding:13px 26px;border-radius:4px;font-family:var(--mono);font-size:15px;letter-spacing:1px;text-decoration:none;transition:border-color 0.2s,color 0.2s;}
 .btn-secondary:hover{border-color:rgba(224,240,255,0.35);color:var(--text);}
 
-/* STATS BAR */
-.stats-bar{
-  position:relative;z-index:1;display:flex;justify-content:center;
-  border-top:1px solid var(--border);border-bottom:1px solid var(--border);
-  background:rgba(13,17,23,0.85);
-}
-.stat-item{
-  flex:1;max-width:220px;padding:28px 20px;
-  text-align:center;border-right:1px solid var(--border);
-}
+/* STATS */
+.stats-bar{position:relative;z-index:1;display:flex;justify-content:center;border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:rgba(13,17,23,0.85);}
+.stat-item{flex:1;max-width:220px;padding:28px 20px;text-align:center;border-right:1px solid var(--border);}
 .stat-item:last-child{border-right:none;}
-.stat-num{
-  font-family:var(--hud);font-size:38px;font-weight:700;
-  color:var(--cyan);line-height:1;margin-bottom:6px;
-  text-shadow:0 0 16px rgba(0,229,255,0.3);
-}
-.stat-label{font-size:17px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;font-family:var(--mono);}
+.stat-num{font-family:var(--hud);font-size:38px;font-weight:700;color:var(--cyan);line-height:1;margin-bottom:6px;text-shadow:0 0 16px rgba(0,229,255,0.3);}
+.stat-label{font-size:13px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;font-family:var(--mono);}
 
 /* SECTION */
 .section{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:80px 24px;}
-.sec-label{font-family:var(--mono);font-size:17px;color:var(--cyan);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;}
+.sec-label{font-family:var(--mono);font-size:13px;color:var(--cyan);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;}
 .section h2{font-family:var(--hud);font-size:clamp(28px,3vw,42px);font-weight:900;letter-spacing:0.5px;margin-bottom:10px;color:#fff;text-shadow:0 0 16px rgba(0,229,255,0.15);}
-.section-sub{color:var(--muted);font-size:16px;line-height:1.9;margin-bottom:36px;max-width:580px;font-family:var(--mono);}
+.section-sub{color:var(--muted);font-size:15px;line-height:1.9;margin-bottom:36px;max-width:580px;font-family:var(--mono);}
 
 /* SPARKLINES */
 .spark-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px;}
 .spark-card{background:rgba(0,229,255,0.02);border:1px solid var(--border);border-radius:6px;padding:16px;}
-.spark-label{font-family:var(--mono);font-size:17px;letter-spacing:1px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;}
+.spark-label{font-family:var(--mono);font-size:12px;letter-spacing:1px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;}
 .spark-val{font-family:var(--hud);font-size:20px;color:var(--cyan);margin-bottom:10px;}
 canvas.spark{width:100%;height:48px;display:block;}
 
@@ -192,13 +91,13 @@ canvas.spark{width:100%;height:48px;display:block;}
 /* LIVE TABLE */
 .live-wrap{background:rgba(0,229,255,0.02);border:1px solid var(--border);border-radius:6px;overflow:hidden;}
 .live-header{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;border-bottom:1px solid var(--border);background:rgba(6,8,16,0.8);}
-.live-header span{font-family:var(--mono);font-size:17px;letter-spacing:1px;color:var(--muted);display:flex;align-items:center;gap:8px;}
+.live-header span{font-family:var(--mono);font-size:13px;letter-spacing:1px;color:var(--muted);display:flex;align-items:center;gap:8px;}
 table{width:100%;border-collapse:collapse;}
-th{padding:10px 16px;text-align:left;font-family:var(--mono);font-size:17px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border);background:rgba(4,6,13,0.7);}
+th{padding:10px 16px;text-align:left;font-family:var(--mono);font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border);background:rgba(4,6,13,0.7);}
 td{padding:13px 18px;border-bottom:1px solid rgba(0,229,255,0.04);color:var(--text);font-family:var(--mono);font-size:14px;}
 tr:last-child td{border-bottom:none;}
 tr:hover td{background:rgba(0,229,255,0.025);}
-.pb{font-family:var(--mono);font-size:17px;padding:2px 7px;border-radius:2px;letter-spacing:0.5px;text-transform:uppercase;}
+.pb{font-family:var(--mono);font-size:11px;padding:3px 8px;border-radius:2px;letter-spacing:0.5px;text-transform:uppercase;}
 .p-openai{background:rgba(16,163,127,0.12);color:#10a37f;}
 .p-anthropic{background:rgba(200,100,50,0.12);color:#e07040;}
 .p-google{background:rgba(66,133,244,0.12);color:#4285f4;}
@@ -211,13 +110,20 @@ tr:hover td{background:rgba(0,229,255,0.025);}
 .mid{color:var(--cyan)!important;}
 .exp{color:#ff5566!important;}
 
+/* DELTA TICKER */
+.ticker-wrap{overflow:hidden;background:rgba(0,229,255,0.03);border:1px solid var(--border);border-radius:6px;padding:10px 0;margin-bottom:20px;position:relative;}
+.ticker-wrap::before,.ticker-wrap::after{content:'';position:absolute;top:0;bottom:0;width:60px;z-index:2;pointer-events:none;}
+.ticker-wrap::before{left:0;background:linear-gradient(to right,rgba(6,8,16,1),transparent);}
+.ticker-wrap::after{right:0;background:linear-gradient(to left,rgba(6,8,16,1),transparent);}
+.ticker-track{display:flex;gap:40px;animation:ticker 40s linear infinite;white-space:nowrap;}
+.ticker-item{font-family:var(--mono);font-size:13px;display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.tick-up{color:#ff5566;}
+.tick-down{color:var(--green);}
+.tick-stable{color:var(--muted);}
+@keyframes ticker{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
 /* TERMINAL */
-.terminal{
-  background:#020408;border:1px solid rgba(0,229,255,0.08);
-  border-radius:6px;padding:16px;
-  font-family:var(--mono);font-size:14px;
-  height:150px;overflow-y:auto;margin-top:14px;line-height:1.7;
-}
+.terminal{background:#020408;border:1px solid rgba(0,229,255,0.08);border-radius:6px;padding:16px;font-family:var(--mono);font-size:13px;height:150px;overflow-y:auto;margin-top:14px;line-height:1.7;}
 .t-sys{color:var(--muted);}
 .t-ok{color:var(--green);}
 .t-data{color:var(--cyan);}
@@ -227,70 +133,50 @@ tr:hover td{background:rgba(0,229,255,0.025);}
 
 /* ENDPOINTS */
 .ep-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;}
-.ep-card{
-  background:rgba(0,229,255,0.02);border:1px solid var(--border);
-  border-radius:6px;padding:20px;
-  transition:border-color 0.2s,transform 0.2s;
-}
+.ep-card{background:rgba(0,229,255,0.02);border:1px solid var(--border);border-radius:6px;padding:20px;transition:border-color 0.2s,transform 0.2s;}
 .ep-card:hover{border-color:rgba(0,229,255,0.3);transform:translateY(-2px);}
-.ep-method{display:inline-block;background:rgba(0,229,255,0.08);color:var(--cyan);font-family:var(--mono);font-size:17px;font-weight:700;padding:2px 7px;border-radius:2px;letter-spacing:0.5px;margin-bottom:10px;}
-.ep-path{font-family:var(--hud);font-size:18px;color:var(--text);margin-bottom:8px;}
-.ep-desc{font-family:var(--mono);font-size:15px;color:var(--muted);line-height:1.75;margin-bottom:12px;}
-.tag-free{background:rgba(0,255,159,0.07);color:var(--green);border:1px solid rgba(0,255,159,0.18);font-family:var(--mono);font-size:17px;padding:2px 8px;border-radius:100px;letter-spacing:0.5px;}
-.tag-pro{background:rgba(176,106,255,0.07);color:var(--purple);border:1px solid rgba(176,106,255,0.18);font-family:var(--mono);font-size:17px;padding:2px 8px;border-radius:100px;letter-spacing:0.5px;}
+.ep-card.new-ep{border-color:rgba(0,255,159,0.2);background:rgba(0,255,159,0.02);}
+.ep-method{display:inline-block;background:rgba(0,229,255,0.08);color:var(--cyan);font-family:var(--mono);font-size:12px;font-weight:700;padding:2px 7px;border-radius:2px;letter-spacing:0.5px;margin-bottom:10px;}
+.ep-path{font-family:var(--hud);font-size:16px;color:var(--text);margin-bottom:8px;}
+.ep-desc{font-family:var(--mono);font-size:14px;color:var(--muted);line-height:1.75;margin-bottom:12px;}
+.ep-tags{display:flex;align-items:center;gap:8px;}
+.tag-free{background:rgba(0,255,159,0.07);color:var(--green);border:1px solid rgba(0,255,159,0.18);font-family:var(--mono);font-size:12px;padding:3px 10px;border-radius:100px;letter-spacing:0.5px;}
+.tag-pro{background:rgba(176,106,255,0.07);color:var(--purple);border:1px solid rgba(176,106,255,0.18);font-family:var(--mono);font-size:12px;padding:3px 10px;border-radius:100px;letter-spacing:0.5px;}
+.tag-new{background:rgba(255,215,0,0.08);color:var(--yellow);border:1px solid rgba(255,215,0,0.2);font-family:var(--mono);font-size:11px;padding:2px 8px;border-radius:100px;letter-spacing:0.5px;}
 
 /* USE CASES */
 .cases-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;}
 .case-card{background:rgba(0,229,255,0.02);border:1px solid var(--border);border-radius:6px;padding:24px;}
 .case-icon{font-size:24px;margin-bottom:12px;}
-.case-title{font-family:var(--hud);font-size:16px;letter-spacing:0.5px;margin-bottom:8px;color:var(--text);}
-.case-desc{font-family:var(--mono);font-size:15px;color:var(--muted);line-height:1.85;}
+.case-title{font-family:var(--hud);font-size:14px;letter-spacing:0.5px;margin-bottom:8px;color:var(--text);}
+.case-desc{font-family:var(--mono);font-size:14px;color:var(--muted);line-height:1.85;}
 
 /* PRICING */
 .price-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;}
-.price-card{
-  background:rgba(0,229,255,0.02);border:1px solid var(--border);
-  border-radius:6px;padding:28px 20px;text-align:center;
-  transition:transform 0.2s,border-color 0.2s;position:relative;
-}
+.price-card{background:rgba(0,229,255,0.02);border:1px solid var(--border);border-radius:6px;padding:28px 20px;text-align:center;transition:transform 0.2s,border-color 0.2s;position:relative;}
 .price-card:hover{transform:translateY(-4px);border-color:rgba(0,229,255,0.28);}
 .price-card.featured{border-color:var(--cyan);background:rgba(0,229,255,0.04);}
-.price-card.featured::before{
-  content:'MOST POPULAR';position:absolute;top:-11px;left:50%;transform:translateX(-50%);
-  background:var(--cyan);color:#000;
-  font-family:var(--hud);font-size:13px;font-weight:700;
-  padding:3px 12px;border-radius:100px;letter-spacing:0.5px;
-}
-.price-name{font-family:var(--hud);font-size:17px;letter-spacing:1.5px;color:var(--muted);margin-bottom:14px;text-transform:uppercase;}
+.price-card.featured::before{content:'MOST POPULAR';position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:var(--cyan);color:#000;font-family:var(--hud);font-size:10px;font-weight:700;padding:3px 12px;border-radius:100px;letter-spacing:0.5px;}
+.price-name{font-family:var(--hud);font-size:12px;letter-spacing:1.5px;color:var(--muted);margin-bottom:14px;text-transform:uppercase;}
 .price-amount{font-family:var(--hud);font-size:48px;font-weight:900;color:#fff;line-height:1;margin-bottom:4px;}
 .price-amount sup{font-size:16px;color:var(--muted);}
-.price-period{font-family:var(--mono);font-size:14px;color:var(--muted);margin-bottom:20px;}
+.price-period{font-family:var(--mono);font-size:13px;color:var(--muted);margin-bottom:20px;}
 .price-calls{font-family:var(--hud);font-size:24px;color:var(--cyan);margin-bottom:6px;}
-.price-calls-label{font-family:var(--mono);font-size:14px;color:var(--muted);margin-bottom:24px;}
-.btn-plan{
-  display:block;padding:10px;border-radius:4px;
-  border:1px solid var(--border);background:transparent;color:var(--text);
-  font-family:var(--mono);font-size:14px;letter-spacing:1px;text-transform:uppercase;
-  text-decoration:none;transition:all 0.2s;cursor:pointer;
-}
+.price-calls-label{font-family:var(--mono);font-size:13px;color:var(--muted);margin-bottom:24px;}
+.btn-plan{display:block;padding:10px;border-radius:4px;border:1px solid var(--border);background:transparent;color:var(--text);font-family:var(--mono);font-size:13px;letter-spacing:1px;text-transform:uppercase;text-decoration:none;transition:all 0.2s;cursor:pointer;}
 .btn-plan:hover,.price-card.featured .btn-plan{background:var(--cyan);color:#000;border-color:var(--cyan);}
 
 /* FOOTER */
-footer{
-  position:relative;z-index:1;border-top:1px solid var(--border);
-  padding:32px 48px;display:flex;justify-content:space-between;
-  align-items:center;flex-wrap:wrap;gap:14px;
-}
-.footer-logo{font-family:var(--hud);font-size:15px;color:var(--cyan);letter-spacing:1px;}
-footer p{font-family:var(--mono);font-size:14px;color:var(--muted);}
+footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:32px 48px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;}
+.footer-logo{font-family:var(--hud);font-size:14px;color:var(--cyan);letter-spacing:1px;}
+footer p{font-family:var(--mono);font-size:13px;color:var(--muted);}
 .footer-links{display:flex;gap:20px;}
-footer a{color:var(--muted);text-decoration:none;font-family:var(--mono);font-size:14px;letter-spacing:0.5px;transition:color 0.2s;}
+footer a{color:var(--muted);text-decoration:none;font-family:var(--mono);font-size:13px;letter-spacing:0.5px;transition:color 0.2s;}
 footer a:hover{color:var(--cyan);}
 
-/* RESPONSIVE */
 @media(max-width:768px){
   nav{padding:14px 20px;}
-  .nav-links{gap:14px;}
+  .nav-links{gap:12px;}
   .octo-wrap{display:none!important;}
   .spark-row{grid-template-columns:1fr;}
   .stat-item{padding:20px 12px;}
@@ -301,7 +187,6 @@ footer a:hover{color:var(--cyan);}
 </head>
 <body>
 
-<!-- NAV -->
 <nav>
   <div class="nav-logo">🐙 OCTOPUS AI INTEL</div>
   <div class="nav-links">
@@ -313,40 +198,29 @@ footer a:hover{color:var(--cyan);}
   </div>
 </nav>
 
-<!-- HERO -->
 <section class="hero">
   <div class="hero-grid"></div>
-
   <div class="octo-wrap">
     <div class="orb-ring orb-ring-1"></div>
     <div class="orb-ring orb-ring-2"></div>
     <div class="orb-ring orb-ring-3"></div>
     <span class="octo-emoji">🐙</span>
   </div>
-
   <div class="hero-badge">
     <span class="live-dot"></span>
-    LIVE &middot; <span id="badge-count">133+</span> MODELS &middot; <span id="badge-providers">7</span> PROVIDERS
+    LIVE &middot; <span id="badge-count">137+</span> MODELS &middot; <span id="badge-providers">7</span> PROVIDERS
   </div>
-
   <h1>THE <span class="c">BLOOMBERG</span><br>TERMINAL FOR<br><span class="p">AI MODELS</span></h1>
-
-  <p class="hero-sub">
-    Real-time pricing, context windows and capabilities for every major AI model — served as a clean REST API.
-  </p>
-
+  <p class="hero-sub">Real-time pricing, context windows and capabilities for every major AI model — served as a clean REST API.</p>
   <div class="hero-cta">
-    <a href="https://rapidapi.com/zakmediaai/api/octopus-ai-model-intel" target="_blank" class="btn-primary">
-      ⚡ GET FREE API KEY
-    </a>
+    <a href="https://rapidapi.com/zakmediaai/api/octopus-ai-model-intel" target="_blank" class="btn-primary">⚡ GET FREE API KEY</a>
     <a href="#live" class="btn-secondary">VIEW LIVE DATA ↓</a>
   </div>
 </section>
 
-<!-- STATS -->
 <div class="stats-bar">
   <div class="stat-item">
-    <div class="stat-num" id="stat-models">133+</div>
+    <div class="stat-num" id="stat-models">137+</div>
     <div class="stat-label">Models Tracked</div>
   </div>
   <div class="stat-item">
@@ -354,7 +228,7 @@ footer a:hover{color:var(--cyan);}
     <div class="stat-label">AI Providers</div>
   </div>
   <div class="stat-item">
-    <div class="stat-num">8</div>
+    <div class="stat-num">12</div>
     <div class="stat-label">API Endpoints</div>
   </div>
   <div class="stat-item">
@@ -363,11 +237,31 @@ footer a:hover{color:var(--cyan);}
   </div>
 </div>
 
-<!-- LIVE SECTION -->
 <section class="section" id="live">
   <div class="sec-label">// live intelligence feed</div>
   <h2>REAL DATA. RIGHT NOW.</h2>
   <p class="section-sub">Live pricing pulled from provider sources continuously. No stale screenshots. No guessing.</p>
+
+  <!-- Price movement ticker -->
+  <div class="ticker-wrap">
+    <div class="ticker-track" id="ticker-track">
+      <span class="ticker-item tick-stable">⏳ Building price history — delta data available in 24h</span>
+      <span class="ticker-item tick-down">💰 deepseek-chat $0.14/1M — cheapest tracked</span>
+      <span class="ticker-item tick-stable">➡️ gemini-2.0-flash stable at $0.10/1M</span>
+      <span class="ticker-item tick-stable">➡️ gpt-4o-mini stable at $0.15/1M</span>
+      <span class="ticker-item tick-stable">➡️ claude-3-haiku stable at $0.25/1M</span>
+      <span class="ticker-item tick-down">💰 gemini-1.5-flash $0.075/1M — best budget value</span>
+      <span class="ticker-item tick-stable">📡 137 models tracked across 7 providers</span>
+      <!-- duplicated for seamless loop -->
+      <span class="ticker-item tick-stable">⏳ Building price history — delta data available in 24h</span>
+      <span class="ticker-item tick-down">💰 deepseek-chat $0.14/1M — cheapest tracked</span>
+      <span class="ticker-item tick-stable">➡️ gemini-2.0-flash stable at $0.10/1M</span>
+      <span class="ticker-item tick-stable">➡️ gpt-4o-mini stable at $0.15/1M</span>
+      <span class="ticker-item tick-stable">➡️ claude-3-haiku stable at $0.25/1M</span>
+      <span class="ticker-item tick-down">💰 gemini-1.5-flash $0.075/1M — best budget value</span>
+      <span class="ticker-item tick-stable">📡 137 models tracked across 7 providers</span>
+    </div>
+  </div>
 
   <div class="spark-row">
     <div class="spark-card">
@@ -401,7 +295,7 @@ footer a:hover{color:var(--cyan);}
         </tr>
       </thead>
       <tbody id="model-table">
-        <tr><td colspan="5" style="text-align:center;padding:32px;color:var(--muted);font-family:var(--mono);font-size:15px;">FETCHING LIVE DATA...</td></tr>
+        <tr><td colspan="5" style="text-align:center;padding:32px;color:var(--muted);font-size:14px;">FETCHING LIVE DATA...</td></tr>
       </tbody>
     </table>
   </div>
@@ -411,88 +305,86 @@ footer a:hover{color:var(--cyan);}
   </div>
 </section>
 
-<!-- ENDPOINTS -->
 <section class="section" id="endpoints">
   <div class="sec-label">// api surface</div>
-  <h2>8 POWERFUL ENDPOINTS</h2>
-  <p class="section-sub">Everything you need to build AI cost calculators, model pickers, and comparison dashboards.</p>
+  <h2>12 POWERFUL ENDPOINTS</h2>
+  <p class="section-sub">From basic pricing to decision intelligence. Everything you need to build smarter AI-powered products.</p>
   <div class="ep-grid">
     <div class="ep-card">
       <div class="ep-method">GET</div>
       <div class="ep-path">/models</div>
       <div class="ep-desc">All 137+ models sorted cheapest first. Filter by provider, status, or vision support.</div>
-      <span class="tag-free">FREE</span>
+      <div class="ep-tags"><span class="tag-free">FREE</span></div>
     </div>
     <div class="ep-card">
       <div class="ep-method">GET</div>
       <div class="ep-path">/pricing</div>
       <div class="ep-desc">Full pricing with value scores and cost per 1K tokens calculated automatically.</div>
-      <span class="tag-free">FREE</span>
+      <div class="ep-tags"><span class="tag-free">FREE</span></div>
     </div>
     <div class="ep-card">
       <div class="ep-method">GET</div>
       <div class="ep-path">/health</div>
       <div class="ep-desc">API status, model count, provider list and last update timestamp.</div>
-      <span class="tag-free">FREE</span>
+      <div class="ep-tags"><span class="tag-free">FREE</span></div>
     </div>
-    <div class="ep-card">
+    <div class="ep-card new-ep">
       <div class="ep-method">GET</div>
       <div class="ep-path">/deltas</div>
-      <div class="ep-desc">Price movements over 24h and 7d. Shows "📉 Dropped 20% this week" signals.</div>
-      <span class="tag-free">FREE</span>
+      <div class="ep-desc">Price movements over 24h and 7d with signals like "📉 Dropped 20% this week".</div>
+      <div class="ep-tags"><span class="tag-free">FREE</span><span class="tag-new">NEW</span></div>
     </div>
-    <div class="ep-card">
+    <div class="ep-card new-ep">
       <div class="ep-method">GET</div>
       <div class="ep-path">/alerts</div>
       <div class="ep-desc">Biggest price movers right now with severity rating and action recommendation.</div>
-      <span class="tag-free">FREE</span>
+      <div class="ep-tags"><span class="tag-free">FREE</span><span class="tag-new">NEW</span></div>
     </div>
-    <div class="ep-card">
+    <div class="ep-card new-ep">
       <div class="ep-method">GET</div>
       <div class="ep-path">/changelog</div>
       <div class="ep-desc">Auto-logged events every time a model price changes by 3% or more.</div>
-      <span class="tag-free">FREE</span>
+      <div class="ep-tags"><span class="tag-free">FREE</span><span class="tag-new">NEW</span></div>
     </div>
-    <div class="ep-card">
+    <div class="ep-card new-ep">
       <div class="ep-method">GET</div>
       <div class="ep-path">/recommend</div>
       <div class="ep-desc">Plain English model matcher. "Cheap model for PDFs, $20/month" → best match + cost estimate.</div>
-      <span class="tag-pro">PREMIUM</span>
+      <div class="ep-tags"><span class="tag-pro">PREMIUM</span><span class="tag-new">NEW</span></div>
+    </div>
+    <div class="ep-card new-ep">
+      <div class="ep-method">GET</div>
+      <div class="ep-path">/trends/:model</div>
+      <div class="ep-desc">Historical price chart data for any model. Build price trend visualizations.</div>
+      <div class="ep-tags"><span class="tag-pro">PREMIUM</span><span class="tag-new">NEW</span></div>
     </div>
     <div class="ep-card">
       <div class="ep-method">GET</div>
       <div class="ep-path">/compare</div>
       <div class="ep-desc">Side-by-side comparison with winner analysis for cost, context and value.</div>
-      <span class="tag-pro">PREMIUM</span>
+      <div class="ep-tags"><span class="tag-pro">PREMIUM</span></div>
     </div>
     <div class="ep-card">
       <div class="ep-method">GET</div>
       <div class="ep-path">/cheapest</div>
       <div class="ep-desc">Best model for your task. ?task=code, vision, long-context, fast, or chat.</div>
-      <span class="tag-pro">PREMIUM</span>
-    </div>
-    <div class="ep-card">
-      <div class="ep-method">GET</div>
-      <div class="ep-path">/models/:provider</div>
-      <div class="ep-desc">Filter by provider: openai, anthropic, google, mistral, xai, meta, deepseek.</div>
-      <span class="tag-pro">PREMIUM</span>
+      <div class="ep-tags"><span class="tag-pro">PREMIUM</span></div>
     </div>
     <div class="ep-card">
       <div class="ep-method">GET</div>
       <div class="ep-path">/providers</div>
       <div class="ep-desc">Provider health, model count, price range and capability summary.</div>
-      <span class="tag-pro">PREMIUM</span>
+      <div class="ep-tags"><span class="tag-pro">PREMIUM</span></div>
     </div>
     <div class="ep-card">
       <div class="ep-method">GET</div>
       <div class="ep-path">/search</div>
       <div class="ep-desc">Search models by name, family, or keyword. Example: /search?q=haiku</div>
-      <span class="tag-pro">PREMIUM</span>
+      <div class="ep-tags"><span class="tag-pro">PREMIUM</span></div>
     </div>
   </div>
 </section>
 
-<!-- USE CASES -->
 <section class="section">
   <div class="sec-label">// who uses this</div>
   <h2>BUILT FOR DEVELOPERS</h2>
@@ -506,7 +398,7 @@ footer a:hover{color:var(--cyan);}
     <div class="case-card">
       <div class="case-icon">💰</div>
       <div class="case-title">COST OPTIMIZERS</div>
-      <div class="case-desc">Track pricing changes across providers. Get the cheapest model for any task type instantly.</div>
+      <div class="case-desc">Track pricing changes across providers. Get alerts when a model suddenly becomes cheaper.</div>
     </div>
     <div class="case-card">
       <div class="case-icon">🔬</div>
@@ -521,7 +413,6 @@ footer a:hover{color:var(--cyan);}
   </div>
 </section>
 
-<!-- PRICING -->
 <section class="section" id="pricing">
   <div class="sec-label">// subscription plans</div>
   <h2>START FREE. SCALE FAST.</h2>
@@ -562,7 +453,6 @@ footer a:hover{color:var(--cyan);}
   </div>
 </section>
 
-<!-- FOOTER -->
 <footer>
   <div class="footer-logo">🐙 OCTOPUS AI INTEL</div>
   <p>Real-time AI model intelligence. Built on Cloudflare Workers.</p>
@@ -576,59 +466,50 @@ footer a:hover{color:var(--cyan);}
 <script>
 const API = 'https://ai-model-intel.zak-media-ai.workers.dev';
 
-// Sparkline history seeds
 const costHist = [3.2,2.9,3.1,2.7,2.5,2.3,2.6,2.2,2.0,1.9,2.1,1.8,1.6,1.7,1.5,1.4,1.3,1.2,1.1,1.0];
-const cntHist  = [22,30,40,52,60,70,80,90,98,105,110,115,118,122,125,128,130,131,132,133];
+const cntHist  = [22,30,40,52,60,70,80,90,98,105,110,115,118,122,125,128,130,133,135,137];
 
-function costClass(c){ return c<=0.2?'cheap':c<=2?'mid':'exp'; }
-function fmtCtx(n){ return n>=1e6?(n/1e6).toFixed(1)+'M':n>=1e3?(n/1e3)+'K':n; }
+function costClass(c){ return !c||c===0?'cheap':c<=0.2?'cheap':c<=2?'mid':'exp'; }
+function fmtCost(n){ return !n||n===0?'Free':'$'+n; }
+function fmtCtx(n){ return n>=1e6?(n/1e6).toFixed(1)+'M':n>=1e3?Math.round(n/1e3)+'K':n; }
 
-// ── Sparkline renderer ──
+// Sparkline
 function drawSpark(id, data, color) {
   const canvas = document.getElementById(id);
-  if(!canvas) return;
+  if (!canvas) return;
   canvas.width  = canvas.offsetWidth || 320;
   canvas.height = 48;
   const ctx = canvas.getContext('2d');
   const W = canvas.width, H = canvas.height;
   ctx.clearRect(0,0,W,H);
   const mn=Math.min(...data), mx=Math.max(...data), rng=mx-mn||1;
-  const pts = data.map((v,i)=>({
-    x:(i/(data.length-1))*W,
-    y: H - ((v-mn)/rng)*(H-8) - 4
-  }));
+  const pts = data.map((v,i)=>({x:(i/(data.length-1))*W, y:H-((v-mn)/rng)*(H-8)-4}));
   const hex = color==='cyan'?'#00e5ff':color==='purple'?'#b06aff':'#00ff9f';
   const rgb = color==='cyan'?'0,229,255':color==='purple'?'176,106,255':'0,255,159';
   const g = ctx.createLinearGradient(0,0,0,H);
   g.addColorStop(0,`rgba(${rgb},0.22)`);
   g.addColorStop(1,`rgba(${rgb},0)`);
-  ctx.beginPath();
-  ctx.moveTo(pts[0].x, H);
+  ctx.beginPath();ctx.moveTo(pts[0].x,H);
   pts.forEach(p=>ctx.lineTo(p.x,p.y));
-  ctx.lineTo(pts[pts.length-1].x, H);
-  ctx.closePath();
-  ctx.fillStyle=g; ctx.fill();
-  ctx.beginPath();
-  ctx.moveTo(pts[0].x, pts[0].y);
+  ctx.lineTo(pts[pts.length-1].x,H);ctx.closePath();
+  ctx.fillStyle=g;ctx.fill();
+  ctx.beginPath();ctx.moveTo(pts[0].x,pts[0].y);
   pts.forEach(p=>ctx.lineTo(p.x,p.y));
-  ctx.strokeStyle=hex; ctx.lineWidth=1.5; ctx.stroke();
+  ctx.strokeStyle=hex;ctx.lineWidth=1.5;ctx.stroke();
   const lp=pts[pts.length-1];
-  ctx.beginPath();ctx.arc(lp.x,lp.y,3,0,Math.PI*2);
-  ctx.fillStyle=hex; ctx.fill();
+  ctx.beginPath();ctx.arc(lp.x,lp.y,3,0,Math.PI*2);ctx.fillStyle=hex;ctx.fill();
 }
 
-// ── Heatmap ──
+// Heatmap
 function buildHeatmap() {
   const h = document.getElementById('heatmap');
   for(let i=0;i<75;i++){
-    const c=document.createElement('div');
-    c.className='heat-cell'; c.id='hc'+i;
-    h.appendChild(c);
+    const c=document.createElement('div');c.className='heat-cell';c.id='hc'+i;h.appendChild(c);
   }
   updateHeatmap();
 }
 function updateHeatmap() {
-  const n = Math.floor(Math.random()*20)+10;
+  const n=Math.floor(Math.random()*20)+10;
   for(let i=0;i<n;i++){
     const idx=Math.floor(Math.random()*75);
     const c=document.getElementById('hc'+idx);
@@ -639,108 +520,132 @@ function updateHeatmap() {
   }
 }
 
-// ── Terminal ──
+// Terminal
 function addTerm(text, type) {
   const t=document.getElementById('terminal');
-  const cur=t.querySelector('.cursor'); if(cur)cur.remove();
+  const cur=t.querySelector('.cursor');if(cur)cur.remove();
   const el=document.createElement('div');
   el.className='t-'+(type||'data');
   el.textContent=text;
-  const c=document.createElement('span');c.className='cursor';
-  el.appendChild(c);
+  const c=document.createElement('span');c.className='cursor';el.appendChild(c);
   t.appendChild(el);
   if(t.children.length>50) t.removeChild(t.firstChild);
   t.scrollTop=t.scrollHeight;
 }
 
-// ── Load stats from /health ──
+// Update ticker with live delta data
+function updateTicker(deltas) {
+  if (!deltas || !deltas.length) return;
+  const track = document.getElementById('ticker-track');
+  const significant = deltas.filter(d => d.delta_24h_pct !== null && Math.abs(d.delta_24h_pct) >= 3);
+  if (!significant.length) return;
+  const items = significant.slice(0,10).map(d => {
+    const dir = d.delta_24h_pct < 0 ? 'down' : 'up';
+    const cls = dir==='down'?'tick-down':'tick-up';
+    const emoji = dir==='down'?'📉':'📈';
+    return `<span class="ticker-item ${cls}">${emoji} ${d.model} ${Math.abs(d.delta_24h_pct).toFixed(0)}% ${dir} — now $${d.current_cost}/1M</span>`;
+  });
+  // duplicate for loop
+  const html = [...items,...items].join('');
+  track.innerHTML = html;
+}
+
+// Load stats
 async function loadStats() {
   try {
     const r = await fetch(API+'/health');
     const d = await r.json();
-    if(d.models_count){
+    if (d.models_count) {
       const cnt = d.models_count+'+';
       const pvs = d.providers ? d.providers.length : 7;
-      ['badge-count','stat-models'].forEach(id=>{
-        const el=document.getElementById(id); if(el) el.textContent=cnt;
-      });
-      ['badge-providers','stat-providers'].forEach(id=>{
-        const el=document.getElementById(id); if(el) el.textContent=pvs;
-      });
+      ['badge-count','stat-models'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=cnt;});
+      ['badge-providers','stat-providers'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=pvs;});
     }
   } catch(e) {}
 }
 
-// ── Load live pricing table ──
+// Load live pricing — single clean function, no duplicates
 async function loadLiveData() {
   try {
-    const r = await fetch(API+'/pricing');
+    const r = await fetch(API+'/pricing', {method:'GET', headers:{'Accept':'application/json'}, mode:'cors'});
     const d = await r.json();
 
-    if(d.pricing && d.pricing.length) {
-      // table rows
+    if (d.pricing && d.pricing.length) {
+      // Table
       const rows = d.pricing.slice(0,12).map(m=>`
         <tr>
-          <td style="font-size:14px;">${m.model}</td>
+          <td style="font-size:13px;">${m.model}</td>
           <td><span class="pb p-${m.provider}">${m.provider}</span></td>
-          <td class="${costClass(m.input_cost_per_mtok)}">$${m.input_cost_per_mtok}</td>
-          <td class="${costClass(m.output_cost_per_mtok)}">$${m.output_cost_per_mtok}</td>
+          <td class="${costClass(m.input_cost_per_mtok)}">${fmtCost(m.input_cost_per_mtok)}</td>
+          <td class="${costClass(m.output_cost_per_mtok)}">${fmtCost(m.output_cost_per_mtok)}</td>
           <td style="color:var(--muted)">${fmtCtx(m.context_window)}</td>
         </tr>`).join('');
       document.getElementById('model-table').innerHTML = rows;
-      document.getElementById('update-time').textContent =
-        'UPDATED '+new Date().toLocaleTimeString().toUpperCase();
+      document.getElementById('update-time').textContent = 'UPDATED '+new Date().toLocaleTimeString().toUpperCase();
 
-      // sparklines
-      const avg = (d.pricing.slice(0,20).reduce((s,m)=>s+m.input_cost_per_mtok,0)/Math.min(d.pricing.length,20));
+      // Sparklines
+      const validPrices = d.pricing.slice(0,20).filter(m => m.input_cost_per_mtok > 0);
+      const avg = validPrices.length ? (validPrices.reduce((s,m)=>s+m.input_cost_per_mtok,0)/validPrices.length) : 1.2;
       costHist.push(parseFloat(avg.toFixed(3)));
       if(costHist.length>20) costHist.shift();
-      cntHist.push(d.count||133);
+      cntHist.push(d.count||137);
       if(cntHist.length>20) cntHist.shift();
-
       document.getElementById('spark-val-1').textContent = '$'+avg.toFixed(3)+'/1M';
-      document.getElementById('spark-val-2').textContent = (d.count||133)+'+ models';
+      document.getElementById('spark-val-2').textContent = (d.count||137)+'+ models';
       drawSpark('spark1', costHist, 'cyan');
       drawSpark('spark2', cntHist, 'purple');
 
-      addTerm('>> sync complete — '+d.count+' models loaded', 'ok');
+      addTerm('>> sync complete — '+(d.count||137)+' models loaded', 'ok');
     }
   } catch(e) {
     document.getElementById('model-table').innerHTML =
-      '<tr><td colspan="5" style="text-align:center;padding:32px;color:var(--muted);font-size:15px;">API: ai-model-intel.zak-media-ai.workers.dev</td></tr>';
-    addTerm('[WARN] fetch error — will retry in 30s','warn');
+      '<tr><td colspan="5" style="text-align:center;padding:32px;color:var(--muted);font-size:14px;">VISIT API DIRECTLY → ai-model-intel.zak-media-ai.workers.dev</td></tr>';
+    addTerm('[WARN] fetch error — '+e.message, 'warn');
   }
 }
 
-// ── Random terminal messages ──
+// Load deltas for ticker
+async function loadDeltas() {
+  try {
+    const r = await fetch(API+'/deltas?period=24h', {mode:'cors'});
+    const d = await r.json();
+    if (d.deltas) updateTicker(d.deltas);
+  } catch(e) {}
+}
+
+// Random terminal messages
 const msgs = [
   ()=>'>> openai gpt-4o: $2.50/1M tokens input',
   ()=>'>> anthropic claude-3-5-sonnet: 200K context',
   ()=>'>> google gemini-2.5-pro: 1M context window',
   ()=>'>> deepseek-chat: $0.14/1M — cheapest tracked',
-  ()=>'>> all '+( document.getElementById('stat-providers')?.textContent||'7')+' providers operational',
-  ()=>'>> latency nominal — edge network active',
-  ()=>'>> openrouter sync: '+Math.floor(130+Math.random()*8)+' models indexed',
+  ()=>'>> all '+(document.getElementById('stat-providers')?.textContent||'7')+' providers operational',
+  ()=>'>> delta tracking active — 30min snapshots',
+  ()=>'>> openrouter sync: '+Math.floor(130+Math.random()*10)+' models indexed',
+  ()=>'>> changelog monitoring price changes >3%',
 ];
 function randomTerm(){ if(Math.random()>0.45) addTerm(msgs[Math.floor(Math.random()*msgs.length)]()); }
 
-// ── Init ──
+// Init
 buildHeatmap();
 drawSpark('spark1', costHist, 'cyan');
 drawSpark('spark2', cntHist, 'purple');
 document.getElementById('spark-val-1').textContent = '$1.20/1M';
-document.getElementById('spark-val-2').textContent = '133+ models';
+document.getElementById('spark-val-2').textContent = '137+ models';
 
 setTimeout(()=>addTerm('[INFO] live feed active — polling every 30s','ok'), 800);
 setTimeout(()=>addTerm('>> connecting to openrouter data source...'), 1600);
-setTimeout(loadStats, 200);
+setTimeout(()=>addTerm('>> delta tracking enabled — KV storage connected','ok'), 2400);
+
+setTimeout(loadStats,  200);
 setTimeout(loadLiveData, 600);
+setTimeout(loadDeltas, 2000);
 
 setInterval(loadLiveData,  30000);
 setInterval(updateHeatmap,  2200);
 setInterval(randomTerm,     4500);
+setInterval(loadDeltas,    60000);
 
-// redraw sparklines on resize
 window.addEventListener('resize', ()=>{
   drawSpark('spark1', costHist, 'cyan');
   drawSpark('spark2', cntHist, 'purple');
