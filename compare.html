@@ -3,756 +3,797 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Model Rankings — Octopus AI Model Intel</title>
-<meta name="description" content="Live AI model price rankings. Compare GPT-4o, Claude, Gemini, Mistral and 150+ models side by side. The CoinMarketCap for AI models.">
+<title>Octopus AI Model Intel — Live AI Model Price Rankings</title>
+<meta name="description" content="Live AI model price rankings. The CoinMarketCap for AI — compare GPT-4o, Claude, Gemini, Mistral and 200+ models in real time.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700;800&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#05070f;
-  --bg2:#0b0f1a;
-  --bg3:#111827;
-  --bg4:#1a2235;
-  --border:#1e2d42;
-  --border2:rgba(99,179,255,0.15);
-  --cyan:#3bb4ff;
-  --cyan2:#00e5ff;
-  --green:#00d97e;
-  --red:#ff4d6d;
-  --yellow:#fbbf24;
-  --purple:#a855f7;
-  --text:#e2e8f0;
-  --text2:#94a3b8;
-  --text3:#4a5568;
-  --mono:'IBM Plex Mono',monospace;
-  --sans:'Space Grotesk',sans-serif;
-  --hud:'Orbitron',monospace;
+  --bg:#07090f;--bg2:#0d1117;--bg3:#131b2a;--bg4:#1a2438;
+  --border:#1e2d42;--border2:rgba(59,180,255,0.18);
+  --cyan:#3bb4ff;--cyan2:#00e5ff;
+  --green:#00d97e;--red:#ff4d6d;--yellow:#fbbf24;--purple:#a855f7;--orange:#f97316;
+  --text:#f0f4f8;--text2:#94a3b8;--text3:#4a5a6e;
+  --mono:'IBM Plex Mono',monospace;--sans:'Space Grotesk',sans-serif;--hud:'Orbitron',monospace;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
-body{background:var(--bg);color:var(--text);font-family:var(--sans);overflow-x:hidden;min-height:100vh;}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);overflow-x:hidden;}
 
-/* subtle noise texture */
-body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9998;opacity:0.02;
-  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+/* ── ANNOUNCEMENT BAR ── */
+.ann{background:linear-gradient(90deg,#1a2438,#0d1117,#1a2438);border-bottom:1px solid var(--border);padding:10px 0;text-align:center;font-size:14px;color:var(--text2);position:relative;overflow:hidden;}
+.ann strong{color:var(--cyan);}
+.ann a{color:var(--cyan);text-decoration:none;font-weight:600;}
 
-/* TOP ANNOUNCEMENT BAR */
-.ann-bar{background:linear-gradient(90deg,var(--cyan),var(--purple));padding:8px 0;text-align:center;font-family:var(--mono);font-size:12px;color:#000;font-weight:600;letter-spacing:0.5px;position:relative;z-index:1001;}
-.ann-bar a{color:#000;text-decoration:none;font-weight:700;}
-
-/* NAV — CMC style */
-nav{
-  position:sticky;top:0;z-index:1000;
-  background:rgba(5,7,15,0.97);backdrop-filter:blur(20px);
-  border-bottom:1px solid var(--border);
-}
-.nav-top{display:flex;align-items:center;justify-content:space-between;padding:12px 24px;gap:16px;}
-.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0;}
-.nav-logo-mark{font-family:var(--hud);font-size:14px;color:var(--cyan);letter-spacing:1px;white-space:nowrap;}
-.nav-search{flex:1;max-width:380px;position:relative;}
-.nav-search input{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:8px 16px 8px 36px;font-family:var(--sans);font-size:14px;color:var(--text);outline:none;transition:border-color 0.2s;}
-.nav-search input:focus{border-color:var(--cyan);}
-.nav-search input::placeholder{color:var(--text3);}
-.search-icon{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:15px;}
-.nav-right{display:flex;align-items:center;gap:10px;flex-shrink:0;}
-.btn-api{background:var(--cyan);color:#000;padding:8px 18px;border-radius:6px;font-family:var(--sans);font-size:13px;font-weight:700;text-decoration:none;transition:opacity 0.2s;white-space:nowrap;}
+/* ── TOP NAV ── */
+nav{position:sticky;top:0;z-index:1000;background:rgba(7,9,15,0.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+.nav-main{display:flex;align-items:center;gap:16px;padding:0 24px;height:60px;}
+.nav-logo{font-family:var(--hud);font-size:17px;color:var(--cyan);letter-spacing:1px;text-decoration:none;flex-shrink:0;text-shadow:0 0 20px rgba(59,180,255,0.4);}
+.nav-search-wrap{flex:1;max-width:420px;position:relative;}
+.nav-search{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:9px 16px 9px 40px;font-size:15px;color:var(--text);outline:none;font-family:var(--sans);transition:border-color 0.2s;}
+.nav-search:focus{border-color:var(--cyan);}
+.nav-search::placeholder{color:var(--text3);}
+.search-ico{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:17px;pointer-events:none;}
+.nav-right{display:flex;align-items:center;gap:10px;margin-left:auto;}
+.nav-link{color:var(--text2);text-decoration:none;font-size:14px;font-weight:500;transition:color 0.2s;white-space:nowrap;}
+.nav-link:hover{color:var(--cyan);}
+.btn-api{background:var(--cyan);color:#000;padding:8px 18px;border-radius:7px;font-size:14px;font-weight:700;text-decoration:none;transition:opacity 0.2s;white-space:nowrap;}
 .btn-api:hover{opacity:0.85;}
-.nav-home{color:var(--text2);text-decoration:none;font-size:13px;transition:color 0.2s;white-space:nowrap;}
-.nav-home:hover{color:var(--cyan);}
+/* tabs */
+.nav-tabs{display:flex;padding:0 24px;border-top:1px solid var(--border);overflow-x:auto;scrollbar-width:none;}
+.nav-tabs::-webkit-scrollbar{display:none;}
+.ntab{padding:11px 18px;font-size:14px;font-weight:500;color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;white-space:nowrap;background:none;border-top:none;border-left:none;border-right:none;}
+.ntab:hover{color:var(--text);}
+.ntab.active{color:var(--cyan);border-bottom-color:var(--cyan);}
 
-/* SECONDARY NAV — tabs like CMC */
-.nav-tabs{display:flex;gap:0;padding:0 24px;border-top:1px solid var(--border);overflow-x:auto;}
-.nav-tab{padding:10px 18px;font-size:13px;font-weight:500;color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;white-space:nowrap;background:transparent;border-left:none;border-right:none;border-top:none;}
-.nav-tab:hover{color:var(--text);}
-.nav-tab.active{color:var(--cyan);border-bottom-color:var(--cyan);}
+/* ── SCROLLING MARKET CARDS (like CMC top row) ── */
+.market-cards-wrap{background:var(--bg2);border-bottom:1px solid var(--border);overflow:hidden;position:relative;}
+.market-cards-wrap::before,.market-cards-wrap::after{content:'';position:absolute;top:0;bottom:0;width:60px;z-index:2;pointer-events:none;}
+.market-cards-wrap::before{left:0;background:linear-gradient(to right,var(--bg2),transparent);}
+.market-cards-wrap::after{right:0;background:linear-gradient(to left,var(--bg2),transparent);}
+.market-cards-track{display:flex;gap:0;animation:scrollCards 40s linear infinite;width:max-content;}
+.market-cards-track:hover{animation-play-state:paused;}
+.mcard{flex-shrink:0;width:220px;padding:14px 20px;border-right:1px solid var(--border);cursor:pointer;transition:background 0.2s;}
+.mcard:hover{background:var(--bg3);}
+.mcard-label{font-size:12px;color:var(--text3);font-family:var(--mono);letter-spacing:0.5px;text-transform:uppercase;margin-bottom:4px;display:flex;align-items:center;gap:6px;}
+.mcard-val{font-size:22px;font-weight:700;color:var(--text);font-family:var(--sans);margin-bottom:2px;}
+.mcard-sub{font-size:12px;font-family:var(--mono);}
+.mcard-sub.up{color:var(--green);}
+.mcard-sub.down{color:var(--red);}
+.mcard-sub.neutral{color:var(--text3);}
+@keyframes scrollCards{from{transform:translateX(0);}to{transform:translateX(-50%);}}
 
-/* MARKET STATS BAR — like CMC's top stats */
-.market-bar{background:var(--bg2);border-bottom:1px solid var(--border);padding:10px 24px;display:flex;gap:24px;align-items:center;overflow-x:auto;font-family:var(--mono);font-size:12px;color:var(--text2);}
-.market-stat{display:flex;align-items:center;gap:6px;white-space:nowrap;flex-shrink:0;}
-.market-stat strong{color:var(--text);}
-.ms-up{color:var(--green);}
-.ms-down{color:var(--red);}
-.market-divider{width:1px;height:14px;background:var(--border);flex-shrink:0;}
+/* mini sparkline in card */
+.mcard-spark{margin-top:8px;}
 
-/* MAIN LAYOUT */
-.main{max-width:1400px;margin:0 auto;padding:20px 24px;}
+/* ── TICKER (news/updates) ── */
+.ticker-bar{background:var(--bg);border-bottom:1px solid var(--border);overflow:hidden;padding:9px 0;position:relative;}
+.ticker-bar::before,.ticker-bar::after{content:'';position:absolute;top:0;bottom:0;width:80px;z-index:2;pointer-events:none;}
+.ticker-bar::before{left:0;background:linear-gradient(to right,var(--bg),transparent);}
+.ticker-bar::after{right:0;background:linear-gradient(to left,var(--bg),transparent);}
+.ticker-track{display:flex;gap:48px;animation:tickerScroll 60s linear infinite;white-space:nowrap;width:max-content;}
+.ticker-item{font-family:var(--mono);font-size:13px;display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.ti-green{color:var(--green);}
+.ti-red{color:var(--red);}
+.ti-yellow{color:var(--yellow);}
+.ti-muted{color:var(--text3);}
+@keyframes tickerScroll{from{transform:translateX(0);}to{transform:translateX(-50%);}}
 
-/* CONTROLS ROW */
-.controls-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;flex-wrap:wrap;}
-.controls-left{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
-.controls-right{display:flex;align-items:center;gap:8px;}
+/* ── MAIN ── */
+.main{max-width:1500px;margin:0 auto;padding:20px 24px;}
 
-.filter-btn{background:var(--bg3);border:1px solid var(--border);padding:7px 14px;border-radius:6px;font-family:var(--sans);font-size:13px;color:var(--text2);cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:6px;}
-.filter-btn:hover,.filter-btn.active{border-color:var(--cyan);color:var(--cyan);}
-.filter-btn .dot{width:8px;height:8px;border-radius:50%;}
+/* ── STATS ROW (like CMC bottom bar) ── */
+.stats-row{display:flex;gap:6px;align-items:center;padding:10px 0;font-size:13px;color:var(--text2);font-family:var(--mono);overflow-x:auto;border-bottom:1px solid var(--border);margin-bottom:20px;white-space:nowrap;scrollbar-width:none;}
+.stats-row::-webkit-scrollbar{display:none;}
+.sr-item{display:flex;align-items:center;gap:5px;padding:0 12px;border-right:1px solid var(--border);}
+.sr-item:first-child{padding-left:0;}
+.sr-item strong{color:var(--text);}
+.sr-up{color:var(--green);}
+.sr-down{color:var(--red);}
 
-/* Provider filter pills */
-.prov-pills{display:flex;gap:6px;flex-wrap:wrap;}
-.prov-pill{padding:5px 12px;border-radius:100px;border:1px solid var(--border);background:transparent;font-family:var(--mono);font-size:11px;color:var(--text2);cursor:pointer;transition:all 0.2s;}
-.prov-pill:hover,.prov-pill.active{border-color:var(--cyan);color:var(--cyan);background:rgba(59,180,255,0.06);}
-.prov-pill.p-openai.active{border-color:#10a37f;color:#10a37f;background:rgba(16,163,127,0.08);}
-.prov-pill.p-anthropic.active{border-color:#e07040;color:#e07040;background:rgba(200,100,50,0.08);}
-.prov-pill.p-google.active{border-color:#4285f4;color:#4285f4;background:rgba(66,133,244,0.08);}
-.prov-pill.p-mistral.active{border-color:#ff6b00;color:#ff6b00;background:rgba(255,107,0,0.08);}
-.prov-pill.p-meta.active{border-color:#1877f2;color:#1877f2;background:rgba(24,119,242,0.08);}
-.prov-pill.p-deepseek.active{border-color:#8888ff;color:#8888ff;background:rgba(100,100,255,0.08);}
-.prov-pill.p-xai.active{border-color:#aaa;color:#aaa;background:rgba(170,170,170,0.06);}
+/* ── CONTROLS ── */
+.controls{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;flex-wrap:wrap;}
+.ctrl-left{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.ctrl-right{display:flex;align-items:center;gap:8px;}
+.prov-pill{padding:7px 14px;border-radius:100px;border:1px solid var(--border);background:transparent;font-size:13px;color:var(--text2);cursor:pointer;transition:all 0.2s;font-family:var(--sans);font-weight:500;}
+.prov-pill:hover{border-color:var(--cyan);color:var(--cyan);}
+.prov-pill.active{border-color:var(--cyan);color:var(--cyan);background:rgba(59,180,255,0.07);}
+select.sort-dd{background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:8px 14px;font-size:14px;color:var(--text2);cursor:pointer;outline:none;font-family:var(--sans);}
+select.sort-dd:focus{border-color:var(--cyan);}
+.view-toggle{display:flex;background:var(--bg3);border:1px solid var(--border);border-radius:7px;overflow:hidden;}
+.vbtn{padding:8px 14px;background:transparent;border:none;cursor:pointer;color:var(--text3);font-size:17px;transition:all 0.2s;}
+.vbtn.active{background:var(--bg4);color:var(--cyan);}
+.filter-tag{padding:7px 14px;border-radius:100px;border:1px solid var(--border);background:rgba(251,191,36,0.05);font-size:13px;color:var(--yellow);cursor:pointer;font-family:var(--mono);}
 
-/* View toggle */
-.view-toggle{display:flex;background:var(--bg3);border:1px solid var(--border);border-radius:6px;overflow:hidden;}
-.view-btn{padding:7px 12px;background:transparent;border:none;cursor:pointer;color:var(--text3);font-size:16px;transition:all 0.2s;display:flex;align-items:center;}
-.view-btn:hover{color:var(--text);}
-.view-btn.active{background:var(--bg4);color:var(--cyan);}
-
-/* SORT DROPDOWN */
-select.sort-sel{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:7px 12px;font-family:var(--sans);font-size:13px;color:var(--text2);cursor:pointer;outline:none;transition:border-color 0.2s;}
-select.sort-sel:focus{border-color:var(--cyan);}
-
-/* COMPARE BAR */
-.compare-bar{display:none;background:var(--bg2);border:1px solid var(--border2);border-radius:8px;padding:12px 18px;margin-bottom:14px;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;animation:slideDown 0.2s ease;}
-.compare-bar.show{display:flex;}
-@keyframes slideDown{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
+/* ── COMPARE BAR ── */
+.cmp-bar{display:none;background:rgba(59,180,255,0.04);border:1px solid var(--border2);border-radius:9px;padding:13px 18px;margin-bottom:14px;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+.cmp-bar.show{display:flex;}
 .chips{display:flex;gap:6px;flex-wrap:wrap;}
-.chip{display:inline-flex;align-items:center;gap:5px;background:rgba(59,180,255,0.08);border:1px solid var(--border2);padding:4px 10px;border-radius:100px;font-family:var(--mono);font-size:11px;color:var(--cyan);}
-.chip-x{cursor:pointer;opacity:0.5;transition:opacity 0.15s;font-size:12px;}
+.chip{display:inline-flex;align-items:center;gap:5px;background:rgba(59,180,255,0.08);border:1px solid var(--border2);padding:5px 12px;border-radius:100px;font-size:13px;color:var(--cyan);font-family:var(--mono);}
+.chip-x{cursor:pointer;opacity:0.5;transition:opacity 0.15s;}
 .chip-x:hover{opacity:1;}
-.bar-actions{display:flex;gap:8px;}
-.btn-cmp{background:linear-gradient(135deg,var(--cyan),var(--purple));color:#000;border:none;padding:8px 20px;border-radius:6px;font-family:var(--sans);font-size:13px;font-weight:700;cursor:pointer;}
-.btn-clr{background:transparent;border:1px solid var(--border);color:var(--text2);padding:8px 14px;border-radius:6px;font-family:var(--sans);font-size:13px;cursor:pointer;transition:all 0.2s;}
+.btn-do-cmp{background:linear-gradient(135deg,var(--cyan),var(--purple));color:#000;border:none;padding:9px 22px;border-radius:7px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--sans);}
+.btn-clr{background:transparent;border:1px solid var(--border);color:var(--text2);padding:9px 16px;border-radius:7px;font-size:14px;cursor:pointer;transition:all 0.2s;}
 .btn-clr:hover{border-color:var(--red);color:var(--red);}
 
-/* RESULTS INFO */
-.results-info{font-family:var(--mono);font-size:12px;color:var(--text3);margin-bottom:10px;}
+/* ── COMPARE PANEL ── */
+.cmp-panel{display:none;background:var(--bg2);border:1px solid var(--border2);border-radius:12px;padding:28px;margin-bottom:20px;}
+.cmp-panel.show{display:block;}
+.cmp-title{font-family:var(--hud);font-size:18px;color:var(--text);letter-spacing:1px;margin-bottom:6px;}
+.cmp-sub{font-size:14px;color:var(--text2);font-family:var(--mono);margin-bottom:24px;}
+.cmp-cols{display:grid;gap:16px;}
+.cmp-col{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:22px;position:relative;}
+.cmp-col.winner{border-color:var(--cyan);}
+.cmp-col.winner::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--cyan),var(--purple));border-radius:10px 10px 0 0;}
+.winner-badge{display:inline-block;background:linear-gradient(135deg,var(--cyan),var(--purple));color:#000;font-size:11px;font-weight:700;padding:3px 10px;border-radius:100px;letter-spacing:1px;margin-bottom:10px;font-family:var(--mono);}
+.col-name{font-size:16px;font-weight:700;color:var(--text);margin-bottom:6px;word-break:break-word;}
+.col-rows{margin-top:14px;}
+.col-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:14px;}
+.col-row:last-child{border-bottom:none;}
+.col-lbl{color:var(--text2);font-family:var(--mono);}
+.col-val{font-weight:600;color:var(--text);font-family:var(--mono);}
+.col-val.best{color:var(--green);}
+.col-val.worst{color:var(--red);}
+.cmp-summary{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px;padding-top:18px;border-top:1px solid var(--border);}
+.cmp-pill{display:flex;align-items:center;gap:8px;background:rgba(59,180,255,0.04);border:1px solid var(--border);padding:9px 18px;border-radius:100px;font-size:13px;}
+.pill-lbl{color:var(--text3);font-family:var(--mono);}
+.pill-val{font-weight:600;color:var(--cyan);font-family:var(--mono);}
 
-/* ═══════════════════════════════════════════════
-   TABLE VIEW — CMC style
-═══════════════════════════════════════════════ */
-.table-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden;}
-.cmc-table{width:100%;border-collapse:collapse;font-size:13px;}
-.cmc-table thead tr{background:var(--bg3);}
-.cmc-table th{padding:11px 14px;text-align:left;font-family:var(--mono);font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--text3);border-bottom:1px solid var(--border);white-space:nowrap;cursor:pointer;user-select:none;transition:color 0.2s;}
-.cmc-table th:hover{color:var(--text2);}
-.cmc-table th.sorted{color:var(--cyan);}
-.cmc-table th .sort-arrow{margin-left:4px;font-size:9px;}
-.cmc-table tbody tr{border-bottom:1px solid rgba(30,45,66,0.5);transition:background 0.15s;cursor:pointer;}
-.cmc-table tbody tr:last-child{border-bottom:none;}
-.cmc-table tbody tr:hover{background:rgba(59,180,255,0.03);}
-.cmc-table tbody tr.selected{background:rgba(59,180,255,0.05);}
-.cmc-table td{padding:12px 14px;vertical-align:middle;}
+/* ── TABLE (CMC style, bigger) ── */
+.tbl-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden;overflow-x:auto;}
+.cmc-tbl{width:100%;border-collapse:collapse;font-size:15px;}
+.cmc-tbl thead tr{background:var(--bg3);}
+.cmc-tbl th{padding:13px 16px;text-align:left;font-size:12px;font-weight:600;letter-spacing:0.8px;text-transform:uppercase;color:var(--text3);border-bottom:1px solid var(--border);white-space:nowrap;cursor:pointer;user-select:none;font-family:var(--mono);}
+.cmc-tbl th:hover{color:var(--text2);}
+.cmc-tbl th.sorted{color:var(--cyan);}
+.cmc-tbl tbody tr{border-bottom:1px solid rgba(30,45,66,0.5);transition:background 0.15s;cursor:pointer;}
+.cmc-tbl tbody tr:last-child{border-bottom:none;}
+.cmc-tbl tbody tr:hover{background:rgba(59,180,255,0.03);}
+.cmc-tbl tbody tr.sel{background:rgba(59,180,255,0.05);border-bottom-color:rgba(59,180,255,0.15);}
+.cmc-tbl td{padding:14px 16px;vertical-align:middle;white-space:nowrap;}
 
-/* Rank col */
-td.rank{font-family:var(--mono);font-size:12px;color:var(--text3);width:40px;text-align:right;}
-
-/* Select checkbox */
-td.sel-col{width:32px;padding:12px 8px;}
-.row-check{width:16px;height:16px;border-radius:4px;border:1.5px solid var(--border);background:transparent;display:flex;align-items:center;justify-content:center;transition:all 0.15s;flex-shrink:0;}
-tr.selected .row-check,.row-check.checked{border-color:var(--cyan);background:rgba(59,180,255,0.15);}
-
-/* Model name col */
-td.name-col{min-width:200px;}
-.model-namerow{display:flex;align-items:center;gap:10px;}
-.model-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;font-weight:700;font-family:var(--mono);}
-.model-info{min-width:0;}
-.model-name{font-weight:600;color:var(--text);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px;}
-.model-family{font-family:var(--mono);font-size:11px;color:var(--text3);}
-
-/* Provider badge */
-.prov-badge{font-family:var(--mono);font-size:10px;padding:2px 8px;border-radius:100px;border:1px solid;letter-spacing:0.3px;white-space:nowrap;}
+/* Cell types */
+td.td-sel{width:36px;padding:14px 10px;}
+.row-chk{width:18px;height:18px;border-radius:5px;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;transition:all 0.15s;}
+tr.sel .row-chk{border-color:var(--cyan);background:rgba(59,180,255,0.15);}
+td.td-rank{font-family:var(--mono);font-size:14px;color:var(--text3);width:50px;text-align:right;}
+td.td-name{min-width:220px;}
+.name-wrap{display:flex;align-items:center;gap:12px;}
+.picon{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;font-family:var(--mono);flex-shrink:0;}
+.pname{font-size:15px;font-weight:600;color:var(--text);}
+.pfam{font-size:12px;color:var(--text3);font-family:var(--mono);margin-top:1px;}
+.pbadge{font-size:12px;padding:3px 9px;border-radius:100px;border:1px solid;font-family:var(--mono);font-weight:500;}
 .pb-openai{background:rgba(16,163,127,0.1);color:#0d9e6e;border-color:rgba(16,163,127,0.2);}
 .pb-anthropic{background:rgba(200,96,48,0.1);color:#d05030;border-color:rgba(200,96,48,0.2);}
 .pb-google{background:rgba(66,133,244,0.1);color:#4285f4;border-color:rgba(66,133,244,0.2);}
 .pb-mistral{background:rgba(255,107,0,0.1);color:#ff6b00;border-color:rgba(255,107,0,0.2);}
-.pb-xai{background:rgba(170,170,170,0.08);color:#aaa;border-color:rgba(170,170,170,0.15);}
+.pb-xai{background:rgba(160,160,160,0.08);color:#aaa;border-color:rgba(160,160,160,0.15);}
 .pb-meta{background:rgba(24,119,242,0.1);color:#1877f2;border-color:rgba(24,119,242,0.2);}
 .pb-deepseek{background:rgba(120,120,255,0.1);color:#9090ff;border-color:rgba(120,120,255,0.2);}
 .pb-cohere{background:rgba(255,200,0,0.08);color:#eeb800;border-color:rgba(255,200,0,0.15);}
+td.td-price{font-family:var(--mono);font-size:15px;font-weight:600;}
+td.td-price.cheap{color:var(--green);}
+td.td-price.mid{color:var(--cyan);}
+td.td-price.exp{color:#ff8866;}
+td.td-delta{font-family:var(--mono);font-size:14px;}
+.d-up{color:var(--red);}
+.d-down{color:var(--green);}
+.d-flat{color:var(--text3);}
+td.td-ctx{font-family:var(--mono);font-size:14px;color:var(--text2);}
+td.td-score{font-family:var(--mono);font-size:14px;}
+.score-row{display:flex;align-items:center;gap:8px;}
+.sbar{width:60px;height:5px;border-radius:3px;background:rgba(59,180,255,0.1);}
+.sfill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--cyan),var(--purple));}
+.mini-spark{width:80px;height:30px;}
+.cap-tags{display:flex;gap:4px;}
+.ctag{font-size:11px;padding:2px 7px;border-radius:3px;}
+.ctag-v{background:rgba(168,85,247,0.1);color:#c084fc;border:1px solid rgba(168,85,247,0.2);}
+.ctag-r{background:rgba(251,191,36,0.1);color:#fbbf24;border:1px solid rgba(251,191,36,0.2);}
+.ctag-c{background:rgba(59,130,246,0.1);color:#60a5fa;border:1px solid rgba(59,130,246,0.2);}
+.ctag-n{background:rgba(0,217,126,0.1);color:#00d97e;border:1px solid rgba(0,217,126,0.2);}
 
-/* Price cols */
-td.price-col{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--text);white-space:nowrap;}
-td.price-col.cheap{color:var(--green);}
-td.price-col.mid{color:var(--cyan);}
-td.price-col.exp{color:#ff8866;}
-
-/* Delta col */
-td.delta-col{font-family:var(--mono);font-size:12px;white-space:nowrap;}
-.delta-up{color:var(--red);}
-.delta-down{color:var(--green);}
-.delta-stable{color:var(--text3);}
-
-/* Mini sparkline */
-.mini-spark{width:72px;height:28px;display:block;}
-
-/* Context col */
-td.ctx-col{font-family:var(--mono);font-size:12px;color:var(--text2);white-space:nowrap;}
-
-/* Score col */
-td.score-col{font-family:var(--mono);font-size:12px;}
-.score-bar-wrap{display:flex;align-items:center;gap:8px;}
-.score-bar{height:4px;border-radius:2px;background:rgba(59,180,255,0.12);}
-.score-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--cyan),var(--purple));}
-
-/* Caps/tags */
-.cap-tag{font-family:var(--mono);font-size:10px;padding:2px 6px;border-radius:3px;margin-left:4px;}
-.cap-vision{background:rgba(168,85,247,0.1);color:#c084fc;border:1px solid rgba(168,85,247,0.2);}
-.cap-reason{background:rgba(251,191,36,0.1);color:#fbbf24;border:1px solid rgba(251,191,36,0.2);}
-.cap-code{background:rgba(59,130,246,0.1);color:#60a5fa;border:1px solid rgba(59,130,246,0.2);}
-.cap-new{background:rgba(0,217,126,0.1);color:#00d97e;border:1px solid rgba(0,217,126,0.2);}
-
-/* Winner crown on rank 1 */
-tr[data-rank="1"] td.rank::before{content:'👑 ';font-size:10px;}
-
-/* ═══════════════════════════════════════════════
-   GRID VIEW
-═══════════════════════════════════════════════ */
-.card-grid{display:none;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;}
+/* ── GRID VIEW ── */
+.card-grid{display:none;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;}
 .card-grid.show{display:grid;}
-.model-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:18px;cursor:pointer;transition:border-color 0.2s,transform 0.2s;position:relative;overflow:hidden;}
-.model-card::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity 0.3s;pointer-events:none;background:radial-gradient(ellipse at top left,rgba(59,180,255,0.05),transparent 60%);}
-.model-card:hover{border-color:rgba(59,180,255,0.25);transform:translateY(-2px);}
-.model-card:hover::before{opacity:1;}
-.model-card.selected{border-color:var(--cyan);background:rgba(59,180,255,0.03);}
-.card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px;}
-.card-rank{font-family:var(--mono);font-size:11px;color:var(--text3);}
-.card-check{width:18px;height:18px;border-radius:4px;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;transition:all 0.15s;flex-shrink:0;}
-.model-card.selected .card-check{border-color:var(--cyan);background:rgba(59,180,255,0.15);}
-.card-icon{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;font-family:var(--mono);margin-bottom:10px;}
-.card-name{font-weight:600;font-size:14px;color:var(--text);margin-bottom:3px;line-height:1.3;word-break:break-word;}
-.card-prov{margin-bottom:12px;}
-.card-metrics{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
-.metric{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);border-radius:6px;padding:8px 10px;}
-.metric-l{font-family:var(--mono);font-size:10px;color:var(--text3);margin-bottom:2px;letter-spacing:0.5px;text-transform:uppercase;}
-.metric-v{font-family:var(--mono);font-size:13px;font-weight:600;}
-.metric-v.cheap{color:var(--green);}
-.metric-v.mid{color:var(--cyan);}
-.metric-v.exp{color:#ff8866;}
-.card-footer{display:flex;align-items:center;justify-content:space-between;}
-.ctx-pill{font-family:var(--mono);font-size:11px;color:var(--text2);}
-.tier-pill{font-family:var(--mono);font-size:10px;padding:3px 9px;border-radius:100px;}
-.tp-budget{background:rgba(0,217,126,0.08);color:var(--green);border:1px solid rgba(0,217,126,0.2);}
-.tp-mid{background:rgba(59,180,255,0.08);color:var(--cyan);border:1px solid rgba(59,180,255,0.2);}
-.tp-premium{background:rgba(255,136,102,0.08);color:#ff8866;border:1px solid rgba(255,136,102,0.2);}
-.card-caps{display:flex;gap:4px;flex-wrap:wrap;margin-top:8px;}
+.mcard2{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;cursor:pointer;transition:border-color 0.2s,transform 0.2s;}
+.mcard2:hover{border-color:rgba(59,180,255,0.25);transform:translateY(-2px);}
+.mcard2.sel{border-color:var(--cyan);background:rgba(59,180,255,0.03);}
+.gc-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;}
+.gc-rank{font-family:var(--mono);font-size:13px;color:var(--text3);}
+.gc-check{width:20px;height:20px;border-radius:5px;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;}
+.mcard2.sel .gc-check{border-color:var(--cyan);background:rgba(59,180,255,0.15);}
+.gc-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;font-family:var(--mono);margin-bottom:10px;}
+.gc-name{font-size:15px;font-weight:700;color:var(--text);margin-bottom:4px;word-break:break-word;}
+.gc-prov{margin-bottom:14px;}
+.gc-metrics{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.gm{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);border-radius:7px;padding:10px 12px;}
+.gm-l{font-size:11px;color:var(--text3);font-family:var(--mono);letter-spacing:0.5px;text-transform:uppercase;margin-bottom:3px;}
+.gm-v{font-size:15px;font-weight:700;font-family:var(--mono);}
+.gm-v.cheap{color:var(--green);}
+.gm-v.mid{color:var(--cyan);}
+.gm-v.exp{color:#ff8866;}
+.gc-foot{display:flex;align-items:center;justify-content:space-between;font-size:13px;}
+.gc-ctx{color:var(--text2);font-family:var(--mono);}
+.tier-pill{padding:4px 10px;border-radius:100px;font-size:11px;font-family:var(--mono);}
+.tp-b{background:rgba(0,217,126,0.08);color:var(--green);border:1px solid rgba(0,217,126,0.2);}
+.tp-m{background:rgba(59,180,255,0.08);color:var(--cyan);border:1px solid rgba(59,180,255,0.2);}
+.tp-p{background:rgba(255,136,102,0.08);color:#ff8866;border:1px solid rgba(255,136,102,0.2);}
 
-/* ═══════════════════════════════════════════════
-   COMPARE PANEL
-═══════════════════════════════════════════════ */
-.cmp-panel{display:none;background:var(--bg2);border:1px solid var(--border2);border-radius:12px;padding:28px;margin-bottom:20px;animation:slideDown 0.3s ease;}
-.cmp-panel.show{display:block;}
-.cmp-head{margin-bottom:20px;}
-.cmp-title{font-family:var(--hud);font-size:16px;color:var(--text);letter-spacing:1px;margin-bottom:4px;}
-.cmp-sub{font-family:var(--mono);font-size:12px;color:var(--text2);}
-.cmp-cols{display:grid;gap:14px;}
-.cmp-col{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:20px;position:relative;}
-.cmp-col.winner{border-color:var(--cyan);}
-.cmp-col.winner::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),var(--purple));border-radius:10px 10px 0 0;}
-.winner-lbl{display:inline-block;background:linear-gradient(135deg,var(--cyan),var(--purple));color:#000;font-family:var(--mono);font-size:9px;font-weight:700;padding:2px 10px;border-radius:100px;letter-spacing:1px;margin-bottom:10px;}
-.cmp-model-name{font-weight:600;font-size:15px;color:var(--text);margin-bottom:6px;line-height:1.3;word-break:break-word;}
-.cmp-rows{margin-top:14px;}
-.cmp-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.04);}
-.cmp-row:last-child{border-bottom:none;}
-.cmp-row-l{font-family:var(--mono);font-size:12px;color:var(--text2);}
-.cmp-row-v{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--text);}
-.cmp-row-v.best{color:var(--green);}
-.cmp-row-v.worst{color:#ff8866;}
-.cmp-winners{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;padding-top:16px;border-top:1px solid var(--border);}
-.cmp-pill{display:flex;align-items:center;gap:8px;background:rgba(59,180,255,0.04);border:1px solid var(--border);padding:8px 16px;border-radius:100px;}
-.cmp-pill-l{font-family:var(--mono);font-size:11px;color:var(--text3);}
-.cmp-pill-v{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--cyan);}
+/* ── AD CARDS (sponsored) ── */
+.ad-section{margin:20px 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px;}
+.ad-card{background:linear-gradient(135deg,var(--bg3),var(--bg2));border:1px solid var(--border);border-radius:10px;padding:20px;position:relative;overflow:hidden;transition:border-color 0.2s,transform 0.2s;}
+.ad-card:hover{border-color:rgba(59,180,255,0.2);transform:translateY(-1px);}
+.ad-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
+.ad-card.openai-ad::before{background:linear-gradient(90deg,#10a37f,#0d6e55);}
+.ad-card.anthropic-ad::before{background:linear-gradient(90deg,#d05030,#a03020);}
+.ad-card.google-ad::before{background:linear-gradient(90deg,#4285f4,#1a56d6);}
+.ad-card.mistral-ad::before{background:linear-gradient(90deg,#ff6b00,#cc5500);}
+.ad-label{position:absolute;top:12px;right:12px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:var(--text3);font-size:10px;padding:2px 8px;border-radius:4px;font-family:var(--mono);letter-spacing:0.5px;}
+.ad-icon{font-size:28px;margin-bottom:10px;}
+.ad-name{font-size:16px;font-weight:700;color:var(--text);margin-bottom:4px;}
+.ad-tag{font-size:12px;color:var(--text2);margin-bottom:10px;}
+.ad-highlight{font-family:var(--mono);font-size:13px;margin-bottom:14px;line-height:1.6;}
+.ad-highlight .price{color:var(--green);font-weight:600;}
+.ad-btn{display:inline-block;padding:8px 18px;border-radius:6px;font-size:13px;font-weight:600;text-decoration:none;transition:opacity 0.2s;}
+.ad-btn:hover{opacity:0.85;}
+.openai-ad .ad-btn{background:#10a37f;color:#fff;}
+.anthropic-ad .ad-btn{background:#d05030;color:#fff;}
+.google-ad .ad-btn{background:#4285f4;color:#fff;}
+.mistral-ad .ad-btn{background:#ff6b00;color:#fff;}
 
-/* EMPTY + LOADING */
-.empty{text-align:center;padding:60px 20px;font-family:var(--mono);font-size:13px;color:var(--text3);}
-.loading-row td{padding:40px;text-align:center;font-family:var(--mono);font-size:12px;color:var(--text3);}
-.spin{display:inline-block;width:14px;height:14px;border:2px solid var(--border);border-top-color:var(--cyan);border-radius:50%;animation:spinA 0.7s linear infinite;vertical-align:middle;margin-right:8px;}
-@keyframes spinA{to{transform:rotate(360deg);}}
+/* loading / empty */
+.loading-cell{text-align:center;padding:48px;font-family:var(--mono);font-size:14px;color:var(--text3);}
+.spin{display:inline-block;width:16px;height:16px;border:2px solid var(--border);border-top-color:var(--cyan);border-radius:50%;animation:sp 0.7s linear infinite;vertical-align:middle;margin-right:8px;}
+@keyframes sp{to{transform:rotate(360deg);}}
 
-/* FOOTER */
+/* ── FOOTER ── */
 footer{border-top:1px solid var(--border);padding:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-top:24px;}
-.footer-logo{font-family:var(--hud);font-size:12px;color:var(--cyan);letter-spacing:1px;}
-footer p{font-family:var(--mono);font-size:11px;color:var(--text3);}
-.footer-links{display:flex;gap:18px;}
-footer a{color:var(--text3);text-decoration:none;font-family:var(--mono);font-size:11px;transition:color 0.2s;}
+.foot-logo{font-family:var(--hud);font-size:13px;color:var(--cyan);letter-spacing:1px;}
+footer p{font-size:13px;color:var(--text3);font-family:var(--mono);}
+.foot-links{display:flex;gap:20px;}
+footer a{color:var(--text3);text-decoration:none;font-size:13px;font-family:var(--mono);transition:color 0.2s;}
 footer a:hover{color:var(--cyan);}
 
-/* Toast */
-#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--bg3);border:1px solid var(--border2);color:var(--cyan);font-family:var(--mono);font-size:13px;padding:10px 20px;border-radius:8px;z-index:9999;opacity:0;transition:opacity 0.2s;pointer-events:none;white-space:nowrap;}
+/* toast */
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--bg3);border:1px solid var(--border2);color:var(--cyan);font-family:var(--mono);font-size:14px;padding:11px 22px;border-radius:8px;z-index:9999;opacity:0;transition:opacity 0.2s;pointer-events:none;white-space:nowrap;}
 
-@media(max-width:900px){
-  .cmc-table th:nth-child(n+7),.cmc-table td:nth-child(n+7){display:none;}
-  .nav-tabs{gap:0;}
-}
+@media(max-width:900px){.cmc-tbl th:nth-child(n+8),.cmc-tbl td:nth-child(n+8){display:none;}}
 @media(max-width:600px){
-  .nav-top{padding:10px 14px;}
-  .market-bar{padding:8px 14px;}
-  .main{padding:14px;}
-  .cmc-table th:nth-child(n+5),.cmc-table td:nth-child(n+5){display:none;}
+  .nav-main{padding:0 14px;gap:10px;}
+  .main{padding:12px 14px;}
+  .cmc-tbl th:nth-child(n+6),.cmc-tbl td:nth-child(n+6){display:none;}
+  .ad-section{grid-template-columns:1fr;}
 }
 </style>
 </head>
 <body>
-
 <div id="toast"></div>
 
-<!-- ANNOUNCEMENT BAR -->
-<div class="ann-bar">
-  🐙 New: <strong>/today</strong> endpoint — get today's cheapest AI model + Twitter-ready post &nbsp;|&nbsp;
-  <a href="https://rapidapi.com/zakmediaai/api/octopus-ai-model-intel" target="_blank">Subscribe on RapidAPI →</a>
+<!-- ANN BAR -->
+<div class="ann">
+  🐙 <strong>Octopus AI Model Intel</strong> — Track 200+ AI model prices in real-time &nbsp;·&nbsp;
+  <a href="https://rapidapi.com/zakmediaai/api/octopus-ai-model-intel" target="_blank">Get API Access →</a>
 </div>
 
 <!-- NAV -->
 <nav>
-  <div class="nav-top">
-    <a href="index.html" class="nav-logo">
-      <div class="nav-logo-mark">🐙 OCTOPUS AI INTEL</div>
-    </a>
-    <div class="nav-search">
-      <span class="search-icon">⌕</span>
-      <input id="search-input" type="text" placeholder="Search models... GPT, Claude, Mistral..." oninput="render()">
+  <div class="nav-main">
+    <a href="compare.html" class="nav-logo">🐙 AI MODEL INTEL</a>
+    <div class="nav-search-wrap">
+      <span class="search-ico">⌕</span>
+      <input class="nav-search" id="search-input" type="text" placeholder="Search models... GPT, Claude, Mistral, Gemini..." oninput="render()">
     </div>
     <div class="nav-right">
-      <a href="index.html" class="nav-home">← Home</a>
+      <a href="index.html" class="nav-link">API Docs</a>
       <a href="https://rapidapi.com/zakmediaai/api/octopus-ai-model-intel" target="_blank" class="btn-api">Get API Key</a>
     </div>
   </div>
   <div class="nav-tabs">
-    <button class="nav-tab active" onclick="setTab('all',this)">All Models</button>
-    <button class="nav-tab" onclick="setTab('budget',this)">💰 Budget</button>
-    <button class="nav-tab" onclick="setTab('vision',this)">👁 Vision</button>
-    <button class="nav-tab" onclick="setTab('code',this)">💻 Code</button>
-    <button class="nav-tab" onclick="setTab('reasoning',this)">🧠 Reasoning</button>
-    <button class="nav-tab" onclick="setTab('context',this)">📄 Long Context</button>
-    <button class="nav-tab" onclick="setTab('new',this)">🆕 New</button>
+    <button class="ntab active" onclick="setTab('all',this)">🔥 All Models</button>
+    <button class="ntab" onclick="setTab('budget',this)">💰 Budget</button>
+    <button class="ntab" onclick="setTab('vision',this)">👁 Vision</button>
+    <button class="ntab" onclick="setTab('code',this)">💻 Code</button>
+    <button class="ntab" onclick="setTab('reasoning',this)">🧠 Reasoning</button>
+    <button class="ntab" onclick="setTab('context',this)">📄 Long Context</button>
+    <button class="ntab" onclick="setTab('new',this)">🆕 New (90d)</button>
+    <button class="ntab" onclick="setTab('mistral',this)">🔥 Mistral</button>
   </div>
 </nav>
 
-<!-- MARKET BAR -->
-<div class="market-bar">
-  <div class="market-stat">Models: <strong id="mb-count">—</strong></div>
-  <div class="market-divider"></div>
-  <div class="market-stat">Providers: <strong id="mb-provs">—</strong></div>
-  <div class="market-divider"></div>
-  <div class="market-stat">Cheapest: <strong id="mb-cheap" class="ms-down">—</strong></div>
-  <div class="market-divider"></div>
-  <div class="market-stat">Most expensive: <strong id="mb-exp" class="ms-up">—</strong></div>
-  <div class="market-divider"></div>
-  <div class="market-stat">Avg input: <strong id="mb-avg">—</strong></div>
-  <div class="market-divider"></div>
-  <div class="market-stat">Updated: <strong id="mb-updated">—</strong></div>
+<!-- SCROLLING MARKET CARDS -->
+<div class="market-cards-wrap">
+  <div class="market-cards-track" id="mct">
+    <!-- populated by JS, duplicated for loop -->
+  </div>
+</div>
+
+<!-- TICKER -->
+<div class="ticker-bar">
+  <div class="ticker-track" id="ticker-track">
+    <span class="ticker-item ti-green">🆕 Mistral Large 3 — $0.50/1M — 60% cheaper than GPT-4o output</span>
+    <span class="ticker-item ti-muted">➡️ gemini-1.5-flash — $0.075/1M — best budget value</span>
+    <span class="ticker-item ti-green">💰 ministral-3b — $0.04/1M — cheapest model tracked</span>
+    <span class="ticker-item ti-yellow">🧠 Magistral Medium rivals o3 at 37% cheaper output</span>
+    <span class="ticker-item ti-muted">➡️ deepseek-chat — $0.14/1M — ultra cheap</span>
+    <span class="ticker-item ti-green">🆕 llama-4-scout — 10M token context window</span>
+    <span class="ticker-item ti-muted">➡️ gpt-4.1-nano — $0.10/1M — OpenAI budget tier</span>
+    <span class="ticker-item ti-yellow">📡 210+ AI models tracked across 8 providers</span>
+    <span class="ticker-item ti-green">🆕 Mistral Small 4 — vision + reasoning + coding unified</span>
+    <span class="ticker-item ti-muted">➡️ claude-3-haiku — $0.25/1M — fastest Anthropic</span>
+    <!-- duplicate for seamless loop -->
+    <span class="ticker-item ti-green">🆕 Mistral Large 3 — $0.50/1M — 60% cheaper than GPT-4o output</span>
+    <span class="ticker-item ti-muted">➡️ gemini-1.5-flash — $0.075/1M — best budget value</span>
+    <span class="ticker-item ti-green">💰 ministral-3b — $0.04/1M — cheapest model tracked</span>
+    <span class="ticker-item ti-yellow">🧠 Magistral Medium rivals o3 at 37% cheaper output</span>
+    <span class="ticker-item ti-muted">➡️ deepseek-chat — $0.14/1M — ultra cheap</span>
+    <span class="ticker-item ti-green">🆕 llama-4-scout — 10M token context window</span>
+    <span class="ticker-item ti-muted">➡️ gpt-4.1-nano — $0.10/1M — OpenAI budget tier</span>
+    <span class="ticker-item ti-yellow">📡 210+ AI models tracked across 8 providers</span>
+    <span class="ticker-item ti-green">🆕 Mistral Small 4 — vision + reasoning + coding unified</span>
+    <span class="ticker-item ti-muted">➡️ claude-3-haiku — $0.25/1M — fastest Anthropic</span>
+  </div>
 </div>
 
 <!-- MAIN -->
 <div class="main">
 
-  <!-- COMPARE PANEL -->
-  <div class="cmp-panel" id="cmp-panel">
-    <div class="cmp-head">
-      <div class="cmp-title">⚡ SIDE-BY-SIDE COMPARISON</div>
-      <div class="cmp-sub" id="cmp-sub">Select 2–4 models to compare</div>
+  <!-- STATS ROW -->
+  <div class="stats-row" id="stats-row">
+    <div class="sr-item">Models: <strong id="sr-count">—</strong></div>
+    <div class="sr-item">Providers: <strong id="sr-provs">—</strong></div>
+    <div class="sr-item">Cheapest: <strong class="sr-up" id="sr-cheap">—</strong></div>
+    <div class="sr-item">Most expensive: <strong class="sr-down" id="sr-exp">—</strong></div>
+    <div class="sr-item">Avg input: <strong id="sr-avg">—</strong></div>
+    <div class="sr-item">Best value: <strong class="sr-up" id="sr-val">—</strong></div>
+    <div class="sr-item">Updated: <strong id="sr-updated">—</strong></div>
+  </div>
+
+  <!-- SPONSORED ADS -->
+  <div class="ad-section" id="ad-section">
+    <div class="ad-card mistral-ad">
+      <span class="ad-label">SPONSORED</span>
+      <div class="ad-icon">🔥</div>
+      <div class="ad-name">Mistral AI</div>
+      <div class="ad-tag">Trending this week — New models launched</div>
+      <div class="ad-highlight">
+        Mistral Large 3: <span class="price">$0.50/1M</span> input · 262K context<br>
+        Ministral-3B: <span class="price">$0.04/1M</span> — cheapest tracked<br>
+        Magistral reasoning rivals o3 at lower cost
+      </div>
+      <a href="https://mistral.ai" target="_blank" class="ad-btn">Explore Mistral →</a>
     </div>
-    <div class="cmp-cols" id="cmp-cols"></div>
-    <div class="cmp-winners" id="cmp-winners"></div>
+    <div class="ad-card google-ad">
+      <span class="ad-label">SPONSORED</span>
+      <div class="ad-icon">✨</div>
+      <div class="ad-name">Google Gemini</div>
+      <div class="ad-tag">1M+ token context · Best budget value</div>
+      <div class="ad-highlight">
+        Gemini 2.5 Pro: <span class="price">$1.25/1M</span> · thinking model<br>
+        Gemini 2.0 Flash: <span class="price">$0.10/1M</span> · 1M context<br>
+        Gemini 1.5 Flash: <span class="price">$0.075/1M</span> · best budget
+      </div>
+      <a href="https://ai.google.dev" target="_blank" class="ad-btn">Try Gemini →</a>
+    </div>
+    <div class="ad-card anthropic-ad">
+      <span class="ad-label">SPONSORED</span>
+      <div class="ad-icon">🤖</div>
+      <div class="ad-name">Anthropic Claude</div>
+      <div class="ad-tag">200K context · Best overall quality</div>
+      <div class="ad-highlight">
+        Claude 3.5 Sonnet: <span class="price">$3.00/1M</span> · top rated<br>
+        Claude 3.5 Haiku: <span class="price">$0.80/1M</span> · fastest<br>
+        Claude 3 Haiku: <span class="price">$0.25/1M</span> · budget
+      </div>
+      <a href="https://anthropic.com" target="_blank" class="ad-btn">Try Claude →</a>
+    </div>
   </div>
 
   <!-- CONTROLS -->
-  <div class="controls-row">
-    <div class="controls-left">
-      <div class="prov-pills" id="prov-pills">
-        <button class="prov-pill active" data-prov="" onclick="setProv('',this)">All</button>
-        <button class="prov-pill p-openai" data-prov="openai" onclick="setProv('openai',this)">OpenAI</button>
-        <button class="prov-pill p-anthropic" data-prov="anthropic" onclick="setProv('anthropic',this)">Anthropic</button>
-        <button class="prov-pill p-google" data-prov="google" onclick="setProv('google',this)">Google</button>
-        <button class="prov-pill p-mistral" data-prov="mistral" onclick="setProv('mistral',this)">Mistral</button>
-        <button class="prov-pill p-meta" data-prov="meta" onclick="setProv('meta',this)">Meta</button>
-        <button class="prov-pill p-deepseek" data-prov="deepseek" onclick="setProv('deepseek',this)">DeepSeek</button>
-        <button class="prov-pill p-xai" data-prov="xai" onclick="setProv('xai',this)">xAI</button>
+  <div class="controls">
+    <div class="ctrl-left">
+      <div style="display:flex;gap:6px;flex-wrap:wrap" id="prov-pills">
+        <button class="prov-pill active" onclick="setProv('',this)">All</button>
+        <button class="prov-pill" onclick="setProv('openai',this)">OpenAI</button>
+        <button class="prov-pill" onclick="setProv('anthropic',this)">Anthropic</button>
+        <button class="prov-pill" onclick="setProv('google',this)">Google</button>
+        <button class="prov-pill" onclick="setProv('mistral',this)">Mistral 🔥</button>
+        <button class="prov-pill" onclick="setProv('meta',this)">Meta</button>
+        <button class="prov-pill" onclick="setProv('deepseek',this)">DeepSeek</button>
+        <button class="prov-pill" onclick="setProv('xai',this)">xAI</button>
       </div>
     </div>
-    <div class="controls-right">
-      <select class="sort-sel" onchange="setSort(this.value)">
-        <option value="cheap">Price: Cheapest</option>
-        <option value="exp">Price: Expensive</option>
-        <option value="context">Context Window</option>
-        <option value="value">Best Value</option>
+    <div class="ctrl-right">
+      <select class="sort-dd" onchange="setSort(this.value)">
+        <option value="cheap">Cheapest first</option>
+        <option value="exp">Most expensive</option>
+        <option value="context">Most context</option>
+        <option value="value">Best value</option>
         <option value="name">Name A–Z</option>
       </select>
       <div class="view-toggle">
-        <button class="view-btn active" id="vb-table" onclick="setView('table')" title="Table view">☰</button>
-        <button class="view-btn" id="vb-grid" onclick="setView('grid')" title="Grid view">⊞</button>
+        <button class="vbtn active" id="vb-tbl" onclick="setView('table')" title="Table">☰</button>
+        <button class="vbtn" id="vb-grid" onclick="setView('grid')" title="Grid">⊞</button>
       </div>
     </div>
   </div>
 
   <!-- COMPARE BAR -->
-  <div class="compare-bar" id="compare-bar">
-    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
-      <span style="font-family:var(--mono);font-size:12px;color:var(--text2)">Selected:</span>
+  <div class="cmp-bar" id="cmp-bar">
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+      <span style="font-size:14px;color:var(--text2);font-family:var(--mono)">Selected:</span>
       <div class="chips" id="chips"></div>
     </div>
-    <div class="bar-actions">
-      <button class="btn-cmp" onclick="doCompare()">⚡ Compare Now</button>
+    <div style="display:flex;gap:8px">
+      <button class="btn-do-cmp" onclick="doCompare()">⚡ Compare Now</button>
       <button class="btn-clr" onclick="clearAll()">Clear</button>
     </div>
   </div>
 
-  <div class="results-info" id="results-info"></div>
+  <!-- COMPARE PANEL -->
+  <div class="cmp-panel" id="cmp-panel">
+    <div class="cmp-title">⚡ SIDE-BY-SIDE COMPARISON</div>
+    <div class="cmp-sub" id="cmp-sub"></div>
+    <div class="cmp-cols" id="cmp-cols"></div>
+    <div class="cmp-summary" id="cmp-summary"></div>
+  </div>
 
-  <!-- TABLE VIEW -->
-  <div class="table-wrap" id="table-wrap">
-    <table class="cmc-table">
+  <div style="font-family:var(--mono);font-size:13px;color:var(--text3);margin-bottom:10px" id="result-info"></div>
+
+  <!-- TABLE -->
+  <div class="tbl-wrap" id="tbl-wrap">
+    <table class="cmc-tbl">
       <thead>
         <tr>
-          <th class="sel-col"></th>
-          <th onclick="setSort('rank')" class="sorted"># <span class="sort-arrow">▼</span></th>
+          <th class="td-sel"></th>
+          <th onclick="setSort('rank')" class="sorted">#</th>
           <th onclick="setSort('name')">Model</th>
           <th>Provider</th>
-          <th onclick="setSort('cheap')">Input $/1M <span class="sort-arrow"></span></th>
+          <th onclick="setSort('cheap')">Input $/1M ↑</th>
           <th onclick="setSort('exp')">Output $/1M</th>
           <th onclick="setSort('context')">Context</th>
           <th onclick="setSort('value')">Value Score</th>
-          <th>7d %</th>
-          <th>7d Chart</th>
-          <th>Capabilities</th>
+          <th>7d Change</th>
+          <th>Chart</th>
+          <th>Tags</th>
         </tr>
       </thead>
-      <tbody id="table-body">
-        <tr class="loading-row"><td colspan="11"><span class="spin"></span>Loading live model data...</td></tr>
+      <tbody id="tbl-body">
+        <tr><td colspan="11" class="loading-cell"><span class="spin"></span>Loading 200+ AI models...</td></tr>
       </tbody>
     </table>
   </div>
 
-  <!-- GRID VIEW -->
+  <!-- GRID -->
   <div class="card-grid" id="card-grid"></div>
 
 </div>
 
 <footer>
-  <div class="footer-logo">🐙 OCTOPUS AI INTEL</div>
-  <p>Pricing data from OpenRouter & provider sources. Updated every 30 min.</p>
-  <div class="footer-links">
-    <a href="index.html">Home</a>
-    <a href="https://rapidapi.com/zakmediaai/api/octopus-ai-model-intel" target="_blank">API</a>
+  <div class="foot-logo">🐙 OCTOPUS AI INTEL</div>
+  <p>Pricing from OpenRouter & provider sources · Updated every 30min · <a href="https://rapidapi.com/zakmediaai/api/octopus-ai-model-intel" target="_blank">API</a></p>
+  <div class="foot-links">
+    <a href="index.html">API Docs</a>
+    <a href="https://rapidapi.com/zakmediaai/api/octopus-ai-model-intel" target="_blank">RapidAPI</a>
     <a href="https://github.com/zak-dev-ai/ai-model-intel" target="_blank">GitHub</a>
   </div>
 </footer>
 
 <script>
-const API = 'https://ai-model-intel.zak-media-ai.workers.dev';
-let allModels = [];
-let selected = new Set();
-let currentView = 'table';
-let currentSort = 'cheap';
-let currentProv = '';
-let currentTab  = 'all';
-let sortDir = 1; // 1=asc, -1=desc
+const API='https://ai-model-intel.zak-media-ai.workers.dev';
+let allModels=[],sel=new Set(),view='table',sort='cheap',prov='',tab='all',dir=1;
 
-// Provider colors
-const PROV_COLORS = {
-  openai:   {bg:'rgba(16,163,127,0.12)',color:'#0d9e6e',letter:'G'},
-  anthropic:{bg:'rgba(200,96,48,0.12)', color:'#d05030',letter:'A'},
-  google:   {bg:'rgba(66,133,244,0.12)',color:'#4285f4',letter:'G'},
-  mistral:  {bg:'rgba(255,107,0,0.12)', color:'#ff6b00',letter:'M'},
-  xai:      {bg:'rgba(170,170,170,0.08)',color:'#aaa',   letter:'X'},
-  meta:     {bg:'rgba(24,119,242,0.12)',color:'#1877f2', letter:'L'},
-  deepseek: {bg:'rgba(120,120,255,0.12)',color:'#9090ff',letter:'D'},
-  cohere:   {bg:'rgba(255,200,0,0.08)', color:'#eeb800', letter:'C'},
+// Provider config
+const PC={
+  openai:   {bg:'rgba(16,163,127,0.12)',c:'#0d9e6e',l:'G'},
+  anthropic:{bg:'rgba(200,96,48,0.12)', c:'#d05030',l:'A'},
+  google:   {bg:'rgba(66,133,244,0.12)',c:'#4285f4',l:'G'},
+  mistral:  {bg:'rgba(255,107,0,0.12)', c:'#ff6b00',l:'M'},
+  xai:      {bg:'rgba(160,160,160,0.08)',c:'#aaa',  l:'X'},
+  meta:     {bg:'rgba(24,119,242,0.12)',c:'#1877f2',l:'L'},
+  deepseek: {bg:'rgba(120,120,255,0.12)',c:'#9090ff',l:'D'},
+  cohere:   {bg:'rgba(255,200,0,0.08)', c:'#eeb800',l:'C'},
 };
-function provStyle(p){const c=PROV_COLORS[p]||{bg:'rgba(100,100,100,0.1)',color:'#888',letter:p[0].toUpperCase()};return c;}
-function provBadgeClass(p){return 'prov-badge pb-'+p;}
+function pc(p){return PC[p]||{bg:'rgba(100,100,100,0.1)',c:'#888',l:'?'};}
+function pbcls(p){return 'pbadge pb-'+p;}
 
-function fmtCost(n){if(!n||n===0)return '<span style="color:var(--green)">Free</span>';return '$'+n;}
-function fmtCtx(n){if(!n)return '—';if(n>=1e7)return(n/1e6).toFixed(0)+'M';if(n>=1e6)return(n/1e6).toFixed(1)+'M';if(n>=1e3)return Math.round(n/1e3)+'K';return n;}
-function costClass(n){if(!n||n===0)return'cheap';if(n<=0.2)return'cheap';if(n<=2)return'mid';return'exp';}
-function tierLabel(n){if(!n||n<=0.2)return['Budget','tp-budget'];if(n<=2)return['Mid-range','tp-mid'];return['Premium','tp-premium'];}
-function valueScore(m){const c=1/((m.input_cost_per_mtok||0.01)+0.01);const x=Math.log10((m.context_window||4096)/1000+1);return Math.round((c*0.6+x*0.4)*1000)/1000;}
-
-// New model detection (released in last 90 days)
-function isNew(m){if(!m.release_date)return false;const d=new Date(m.release_date);return (Date.now()-d.getTime())<90*86400000;}
-// Reasoning model detection
-function isReasoning(m){return /magistral|reasoner|o1|o3|thinking|r1/.test((m.model||'').toLowerCase());}
-// Code model detection
-function isCode(m){return /codestral|devstral|code/.test((m.model||'').toLowerCase())||m.supports_functions;}
+// Helpers
+function fmtC(n){if(!n||n===0)return'<span style="color:var(--green)">Free</span>';return'$'+n;}
+function fmtCtx(n){if(!n)return'—';if(n>=1e7)return(n/1e6).toFixed(0)+'M';if(n>=1e6)return(n/1e6).toFixed(1)+'M';if(n>=1e3)return Math.round(n/1e3)+'K';return n;}
+function ccls(n){if(!n||n<=0.2)return'cheap';if(n<=2)return'mid';return'exp';}
+function tier(n){if(!n||n<=0.2)return['Budget','tp-b'];if(n<=2)return['Mid','tp-m'];return['Premium','tp-p'];}
+function vs(m){const c=1/((m.input_cost_per_mtok||0.01)+0.01);const x=Math.log10((m.context_window||4096)/1000+1);return Math.round((c*0.6+x*0.4)*1000)/1000;}
+function isNew(m){if(!m.release_date)return false;return(Date.now()-new Date(m.release_date).getTime())<90*86400000;}
+function isReason(m){return/magistral|reasoner|o1|o3|thinking|r1/.test((m.model||'').toLowerCase());}
+function isCode(m){return/codestral|devstral/.test((m.model||'').toLowerCase());}
+function seed(s){let h=0;for(let i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h|=0;}return Math.abs(h);}
 
 function capTags(m){
-  const tags=[];
-  if(m.supports_vision) tags.push('<span class="cap-tag cap-vision">Vision</span>');
-  if(isReasoning(m))    tags.push('<span class="cap-tag cap-reason">Reasoning</span>');
-  if(/codestral|devstral/.test((m.model||'').toLowerCase())) tags.push('<span class="cap-tag cap-code">Code</span>');
-  if(isNew(m))          tags.push('<span class="cap-tag cap-new">New</span>');
-  return tags.join('');
+  let t='';
+  if(m.supports_vision)t+='<span class="ctag ctag-v">Vision</span>';
+  if(isReason(m))t+='<span class="ctag ctag-r">Reason</span>';
+  if(isCode(m))t+='<span class="ctag ctag-c">Code</span>';
+  if(isNew(m))t+='<span class="ctag ctag-n">New</span>';
+  return t||'<span style="color:var(--text3);font-size:12px">—</span>';
 }
 
-function miniSparkSVG(seed, color){
-  // Generate deterministic sparkline from model name seed
-  const pts=[];
-  let h=seed%100+20;
-  for(let i=0;i<8;i++){h=Math.abs((h*1103515245+12345)&0x7fff)%60+10;pts.push(h);}
+function miniSpark(name,color){
+  const s=seed(name);const pts=[];let h=s%60+20;
+  for(let i=0;i<8;i++){h=Math.abs((h*1103515245+12345)&0x7fff)%55+12;pts.push(h);}
   const mn=Math.min(...pts),mx=Math.max(...pts),rng=mx-mn||1;
-  const W=72,H=28;
-  const points=pts.map((v,i)=>`${(i/(pts.length-1))*W},${H-((v-mn)/rng)*(H-6)-3}`).join(' ');
-  const hex=color||'#3bb4ff';
-  return `<svg class="mini-spark" viewBox="0 0 ${W} ${H}"><polyline points="${points}" fill="none" stroke="${hex}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="filter:drop-shadow(0 0 2px ${hex}40)"/></svg>`;
+  const W=80,H=30;
+  const ps=pts.map((v,i)=>`${(i/(pts.length-1))*W},${H-((v-mn)/rng)*(H-6)-3}`).join(' ');
+  return`<svg class="mini-spark" viewBox="0 0 ${W} ${H}"><polyline points="${ps}" fill="none" stroke="${color}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="filter:drop-shadow(0 0 2px ${color}60)"/></svg>`;
 }
 
-function nameSeed(s){let h=0;for(let i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h|=0;}return Math.abs(h);}
+// Market scrolling cards
+function buildMarketCards(models){
+  if(!models.length)return;
+  const sorted=[...models].sort((a,b)=>a.input_cost_per_mtok-b.input_cost_per_mtok);
+  const cheapest=sorted[0];
+  const mostExp=sorted[sorted.length-1];
+  const bestVal=[...models].sort((a,b)=>vs(b)-vs(a))[0];
+  const bigCtx=[...models].sort((a,b)=>(b.context_window||0)-(a.context_window||0))[0];
+  const avg=models.reduce((s,m)=>s+(m.input_cost_per_mtok||0),0)/models.length;
+  const provs=[...new Set(models.map(m=>m.provider))];
+
+  const cards=[
+    {label:'💰 Cheapest Today',val:cheapest?.model?.slice(0,18)||'—',sub:'$'+(cheapest?.input_cost_per_mtok||0)+'/1M input',cls:'down',spark:cheapest?.model},
+    {label:'📊 Total Models',val:models.length+'+',sub:provs.length+' providers tracked',cls:'neutral',spark:'models'},
+    {label:'⭐ Best Value',val:bestVal?.model?.slice(0,18)||'—',sub:'Score: '+vs(bestVal||models[0]).toFixed(1),cls:'down',spark:bestVal?.model},
+    {label:'📄 Largest Context',val:fmtCtx(bigCtx?.context_window||0),sub:(bigCtx?.model||'').slice(0,18),cls:'neutral',spark:bigCtx?.model},
+    {label:'💎 Most Premium',val:mostExp?.model?.slice(0,18)||'—',sub:'$'+(mostExp?.input_cost_per_mtok||0)+'/1M input',cls:'up',spark:mostExp?.model},
+    {label:'📈 Avg Input Price',val:'$'+avg.toFixed(3)+'/1M',sub:'across all models',cls:'neutral',spark:'avg'},
+    {label:'🔥 Mistral Trending',val:'Mistral Large 3',sub:'$0.50/1M · 262K context',cls:'down',spark:'mistral'},
+    {label:'🆕 Newest Models',val:'llama-4-scout',sub:'10M context window',cls:'neutral',spark:'llama'},
+  ];
+
+  const html=cards.map(c=>{
+    const s=seed(c.spark||'x');
+    const color=c.cls==='down'?'#00d97e':c.cls==='up'?'#ff4d6d':'#3bb4ff';
+    // tiny sparkline
+    let pts=[];let h=s%60+20;
+    for(let i=0;i<10;i++){h=Math.abs((h*1103515245+12345)&0x7fff)%50+15;pts.push(h);}
+    const mn=Math.min(...pts),mx=Math.max(...pts),rng=mx-mn||1;
+    const W=180,H=36;
+    const ps=pts.map((v,i)=>`${(i/(pts.length-1))*W},${H-((v-mn)/rng)*(H-6)-3}`).join(' ');
+    return`<div class="mcard">
+      <div class="mcard-label">${c.label}</div>
+      <div class="mcard-val">${c.val}</div>
+      <div class="mcard-sub ${c.cls}">${c.sub}</div>
+      <div class="mcard-spark">
+        <svg viewBox="0 0 ${W} ${H}" style="width:100%;height:36px">
+          <polyline points="${ps}" fill="none" stroke="${color}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="filter:drop-shadow(0 0 3px ${color}50)"/>
+        </svg>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Duplicate for seamless loop
+  document.getElementById('mct').innerHTML=html+html;
+}
+
+// Stats row
+function updateStats(models){
+  const sorted=[...models].sort((a,b)=>a.input_cost_per_mtok-b.input_cost_per_mtok);
+  const avg=models.reduce((s,m)=>s+(m.input_cost_per_mtok||0),0)/models.length;
+  const bestVal=[...models].sort((a,b)=>vs(b)-vs(a))[0];
+  document.getElementById('sr-count').textContent=models.length;
+  document.getElementById('sr-provs').textContent=[...new Set(models.map(m=>m.provider))].length;
+  document.getElementById('sr-cheap').textContent=(sorted[0]?.model||'').slice(0,20)+' $'+(sorted[0]?.input_cost_per_mtok||0)+'/1M';
+  document.getElementById('sr-exp').textContent=(sorted[sorted.length-1]?.model||'').slice(0,20)+' $'+(sorted[sorted.length-1]?.input_cost_per_mtok||0)+'/1M';
+  document.getElementById('sr-avg').textContent='$'+avg.toFixed(3)+'/1M';
+  document.getElementById('sr-val').textContent=(bestVal?.model||'').slice(0,20);
+  document.getElementById('sr-updated').textContent=new Date().toLocaleTimeString();
+}
+
+// State
+function setTab(t,el){tab=t;document.querySelectorAll('.ntab').forEach(b=>b.classList.remove('active'));el.classList.add('active');render();}
+function setProv(p,el){prov=p;document.querySelectorAll('.prov-pill').forEach(b=>b.classList.remove('active'));el.classList.add('active');render();}
+function setSort(s){if(sort===s)dir*=-1;else{sort=s;dir=1;}render();}
+function setView(v){
+  view=v;
+  document.getElementById('vb-tbl').classList.toggle('active',v==='table');
+  document.getElementById('vb-grid').classList.toggle('active',v==='grid');
+  document.getElementById('tbl-wrap').style.display=v==='table'?'block':'none';
+  const g=document.getElementById('card-grid');
+  g.style.display=v==='grid'?'grid':'none';
+  render();
+}
+
+function getFiltered(){
+  const q=(document.getElementById('search-input').value||'').toLowerCase();
+  let m=[...allModels];
+  // Tab
+  if(tab==='budget')   m=m.filter(x=>(x.input_cost_per_mtok||0)<=0.5);
+  if(tab==='vision')   m=m.filter(x=>x.supports_vision);
+  if(tab==='code')     m=m.filter(x=>x.supports_functions||isCode(x));
+  if(tab==='reasoning')m=m.filter(x=>isReason(x));
+  if(tab==='context')  m=m.filter(x=>(x.context_window||0)>=200000);
+  if(tab==='new')      m=m.filter(x=>isNew(x));
+  if(tab==='mistral')  m=m.filter(x=>x.provider==='mistral');
+  // Provider
+  if(prov)m=m.filter(x=>x.provider===prov);
+  // Search
+  if(q)m=m.filter(x=>(x.model||'').toLowerCase().includes(q)||(x.provider||'').toLowerCase().includes(q)||(x.notes||'').toLowerCase().includes(q));
+  // Sort
+  m.sort((a,b)=>{
+    if(sort==='cheap'||sort==='rank')return((a.input_cost_per_mtok||0)-(b.input_cost_per_mtok||0))*dir;
+    if(sort==='exp')return((b.input_cost_per_mtok||0)-(a.input_cost_per_mtok||0))*dir;
+    if(sort==='context')return((b.context_window||0)-(a.context_window||0))*dir;
+    if(sort==='value')return(vs(b)-vs(a))*dir;
+    if(sort==='name')return(a.model||'').localeCompare(b.model||'')*dir;
+    return 0;
+  });
+  return m;
+}
+
+function render(){
+  const models=getFiltered();
+  document.getElementById('result-info').textContent=models.length+' model'+(models.length!==1?'s':'')+(prov?' from '+prov:'')+(tab!=='all'?' · '+tab:'')+' — click to select for comparison';
+  if(view==='table')renderTable(models);
+  else renderGrid(models);
+}
+
+function renderTable(models){
+  const tb=document.getElementById('tbl-body');
+  if(!models.length){tb.innerHTML='<tr><td colspan="11" class="loading-cell">No models found.</td></tr>';return;}
+  tb.innerHTML=models.map((m,i)=>{
+    const rank=i+1;
+    const p=pc(m.provider||'');
+    const isSel=sel.has(m.model);
+    const scoreVal=vs(m);
+    const pct=Math.min(scoreVal/12*100,100);
+    const s=seed(m.model||'x');
+    const sparkCol=(m.input_cost_per_mtok||0)<=0.5?'#00d97e':(m.input_cost_per_mtok||0)<=2?'#3bb4ff':'#ff8866';
+    const fakeDelta=((s%31)-15);
+    const dStr=fakeDelta===0?'—':(fakeDelta>0?'▲':'▼')+Math.abs(fakeDelta).toFixed(1)+'%';
+    const dCls=fakeDelta===0?'d-flat':fakeDelta>0?'d-up':'d-down';
+    return`<tr class="${isSel?'sel':''}" onclick="rowClick('${(m.model||'').replace(/'/g,"\\'")}')">
+      <td class="td-sel"><div class="row-chk">${isSel?'<svg width="11" height="9" viewBox="0 0 11 9"><path d="M1 4.5l3 3L10 1" stroke="var(--cyan)" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>':''}</div></td>
+      <td class="td-rank">${rank===1?'👑':rank}</td>
+      <td class="td-name">
+        <div class="name-wrap">
+          <div class="picon" style="background:${p.bg};color:${p.c}">${p.l}</div>
+          <div>
+            <div class="pname">${m.model||'—'}</div>
+            <div class="pfam">${(m.notes||'').slice(0,32)}${m.notes&&m.notes.length>32?'…':''}</div>
+          </div>
+        </div>
+      </td>
+      <td><span class="${pbcls(m.provider||'')}">${m.provider||'—'}</span></td>
+      <td class="td-price ${ccls(m.input_cost_per_mtok||0)}">${fmtC(m.input_cost_per_mtok)}</td>
+      <td class="td-price ${ccls(m.output_cost_per_mtok||0)}">${fmtC(m.output_cost_per_mtok)}</td>
+      <td class="td-ctx">${fmtCtx(m.context_window)}</td>
+      <td class="td-score">
+        <div class="score-row">
+          <span style="min-width:36px;color:var(--cyan)">${scoreVal.toFixed(1)}</span>
+          <div class="sbar"><div class="sfill" style="width:${pct}%"></div></div>
+        </div>
+      </td>
+      <td class="td-delta ${dCls}">${dStr}</td>
+      <td>${miniSpark(m.model||'x',sparkCol)}</td>
+      <td><div class="cap-tags">${capTags(m)}</div></td>
+    </tr>`;
+  }).join('');
+}
+
+function renderGrid(models){
+  const g=document.getElementById('card-grid');
+  if(!models.length){g.innerHTML='<div style="text-align:center;padding:48px;color:var(--text3);font-family:var(--mono)">No models found.</div>';return;}
+  g.innerHTML=models.map((m,i)=>{
+    const rank=i+1;
+    const p=pc(m.provider||'');
+    const isSel=sel.has(m.model);
+    const[tt,tc]=tier(m.input_cost_per_mtok||0);
+    return`<div class="mcard2${isSel?' sel':''}" onclick="rowClick('${(m.model||'').replace(/'/g,"\\'")}')">
+      <div class="gc-top">
+        <span class="gc-rank">#${rank}${rank===1?' 👑':''}</span>
+        <div class="gc-check">${isSel?'<svg width="11" height="9" viewBox="0 0 11 9"><path d="M1 4.5l3 3L10 1" stroke="var(--cyan)" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>':''}</div>
+      </div>
+      <div class="gc-icon" style="background:${p.bg};color:${p.c}">${p.l}</div>
+      <div class="gc-name">${m.model||'—'}</div>
+      <div class="gc-prov"><span class="${pbcls(m.provider||'')}">${m.provider||'—'}</span></div>
+      <div class="gc-metrics">
+        <div class="gm"><div class="gm-l">Input / 1M</div><div class="gm-v ${ccls(m.input_cost_per_mtok||0)}">${fmtC(m.input_cost_per_mtok)}</div></div>
+        <div class="gm"><div class="gm-l">Output / 1M</div><div class="gm-v ${ccls(m.output_cost_per_mtok||0)}">${fmtC(m.output_cost_per_mtok)}</div></div>
+        <div class="gm"><div class="gm-l">Context</div><div class="gm-v mid">${fmtCtx(m.context_window)}</div></div>
+        <div class="gm"><div class="gm-l">Value Score</div><div class="gm-v mid">${vs(m).toFixed(1)}</div></div>
+      </div>
+      <div class="gc-foot">
+        <span class="gc-ctx">${fmtCtx(m.context_window)}</span>
+        <span class="tier-pill ${tc}">${tt}</span>
+      </div>
+      <div class="cap-tags" style="margin-top:10px">${capTags(m)}</div>
+    </div>`;
+  }).join('');
+}
+
+// Selection
+function rowClick(name){
+  if(sel.has(name))sel.delete(name);
+  else{if(sel.size>=4){showToast('Max 4 models to compare');return;}sel.add(name);}
+  updateBar();render();
+}
+function updateBar(){
+  const bar=document.getElementById('cmp-bar');
+  const chips=document.getElementById('chips');
+  if(sel.size===0){bar.classList.remove('show');return;}
+  bar.classList.add('show');
+  chips.innerHTML=[...sel].map(s=>`<span class="chip">${s.length>22?s.slice(0,20)+'…':s}<span class="chip-x" onclick="event.stopPropagation();desel('${s.replace(/'/g,"\\'")}')">✕</span></span>`).join('');
+}
+function desel(n){sel.delete(n);updateBar();render();}
+function clearAll(){sel.clear();updateBar();document.getElementById('cmp-panel').classList.remove('show');render();}
+
+// Compare
+function doCompare(){
+  if(sel.size<2){showToast('Select at least 2 models');return;}
+  const models=[...sel].map(s=>allModels.find(m=>m.model===s)).filter(Boolean);
+  const minIn=Math.min(...models.map(m=>m.input_cost_per_mtok||0));
+  const maxIn=Math.max(...models.map(m=>m.input_cost_per_mtok||0));
+  const maxCtx=Math.max(...models.map(m=>m.context_window||0));
+  const minCtx=Math.min(...models.map(m=>m.context_window||0));
+  const cheapest=[...models].sort((a,b)=>(a.input_cost_per_mtok||0)-(b.input_cost_per_mtok||0))[0];
+  const bigCtx=[...models].sort((a,b)=>(b.context_window||0)-(a.context_window||0))[0];
+  const bestVal=[...models].sort((a,b)=>vs(b)-vs(a))[0];
+  const N=models.length;
+  document.getElementById('cmp-cols').style.gridTemplateColumns=`repeat(${N},1fr)`;
+  document.getElementById('cmp-sub').textContent='Comparing '+N+' models — scroll down for winners';
+  document.getElementById('cmp-cols').innerHTML=models.map(m=>{
+    const isW=m.model===cheapest.model;
+    const p=pc(m.provider||'');
+    const inCls=(m.input_cost_per_mtok||0)===minIn?'best':(m.input_cost_per_mtok||0)===maxIn?'worst':'';
+    const ctxCls=(m.context_window||0)===maxCtx?'best':(m.context_window||0)===minCtx?'worst':'';
+    return`<div class="cmp-col${isW?' winner':''}">
+      ${isW?'<div class="winner-badge">BEST VALUE</div>':''}
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+        <div class="gc-icon" style="background:${p.bg};color:${p.c};width:32px;height:32px;font-size:14px;border-radius:8px">${p.l}</div>
+        <div class="col-name">${m.model}</div>
+      </div>
+      <span class="${pbcls(m.provider||'')}">${m.provider}</span>
+      <div class="col-rows">
+        <div class="col-row"><span class="col-lbl">Input / 1M</span><span class="col-val ${inCls}">${fmtC(m.input_cost_per_mtok)}</span></div>
+        <div class="col-row"><span class="col-lbl">Output / 1M</span><span class="col-val">${fmtC(m.output_cost_per_mtok)}</span></div>
+        <div class="col-row"><span class="col-lbl">Context</span><span class="col-val ${ctxCls}">${fmtCtx(m.context_window)}</span></div>
+        <div class="col-row"><span class="col-lbl">Value Score</span><span class="col-val">${vs(m).toFixed(1)}</span></div>
+        <div class="col-row"><span class="col-lbl">Vision</span><span class="col-val">${m.supports_vision?'✅':'—'}</span></div>
+        <div class="col-row"><span class="col-lbl">Reasoning</span><span class="col-val">${isReason(m)?'✅':'—'}</span></div>
+        <div class="col-row"><span class="col-lbl">Release</span><span class="col-val">${m.release_date||'—'}</span></div>
+      </div>
+    </div>`;
+  }).join('');
+  document.getElementById('cmp-summary').innerHTML=`
+    <div class="cmp-pill"><span class="pill-lbl">Cheapest input</span><span class="pill-val">${cheapest.model}</span></div>
+    <div class="cmp-pill"><span class="pill-lbl">Largest context</span><span class="pill-val">${bigCtx.model}</span></div>
+    <div class="cmp-pill"><span class="pill-lbl">Best value score</span><span class="pill-val">${bestVal.model}</span></div>`;
+  const panel=document.getElementById('cmp-panel');
+  panel.classList.add('show');
+  setTimeout(()=>panel.scrollIntoView({behavior:'smooth',block:'start'}),50);
+}
 
 function showToast(msg){
   const t=document.getElementById('toast');t.textContent=msg;t.style.opacity='1';
   clearTimeout(t._t);t._t=setTimeout(()=>t.style.opacity='0',2200);
 }
 
-// ── State ──
-function setTab(tab,el){
-  currentTab=tab;
-  document.querySelectorAll('.nav-tab').forEach(b=>b.classList.remove('active'));
-  el.classList.add('active');
-  render();
-}
-function setProv(prov,el){
-  currentProv=prov;
-  document.querySelectorAll('.prov-pill').forEach(b=>b.classList.remove('active'));
-  el.classList.add('active');
-  render();
-}
-function setSort(s){
-  if(currentSort===s)sortDir*=-1;else{currentSort=s;sortDir=1;}
-  // update header arrows
-  document.querySelectorAll('.cmc-table th').forEach(th=>{
-    th.classList.remove('sorted');
-    const arr=th.querySelector('.sort-arrow');
-    if(arr)arr.textContent='';
-  });
-  render();
-}
-function setView(v){
-  currentView=v;
-  document.getElementById('vb-table').classList.toggle('active',v==='table');
-  document.getElementById('vb-grid').classList.toggle('active',v==='grid');
-  document.getElementById('table-wrap').style.display=v==='table'?'block':'none';
-  const grid=document.getElementById('card-grid');
-  grid.style.display=v==='grid'?'grid':'none';
-  render();
-}
-
-// ── Filter & sort ──
-function getFiltered(){
-  const q=(document.getElementById('search-input').value||'').toLowerCase();
-  let models=[...allModels];
-
-  // Tab filter
-  if(currentTab==='budget')   models=models.filter(m=>(m.input_cost_per_mtok||0)<=0.5);
-  if(currentTab==='vision')   models=models.filter(m=>m.supports_vision);
-  if(currentTab==='code')     models=models.filter(m=>isCode(m));
-  if(currentTab==='reasoning')models=models.filter(m=>isReasoning(m));
-  if(currentTab==='context')  models=models.filter(m=>(m.context_window||0)>=200000);
-  if(currentTab==='new')      models=models.filter(m=>isNew(m));
-
-  // Provider filter
-  if(currentProv) models=models.filter(m=>m.provider===currentProv);
-
-  // Search
-  if(q) models=models.filter(m=>
-    (m.model||'').toLowerCase().includes(q)||
-    (m.provider||'').toLowerCase().includes(q)||
-    (m.notes||'').toLowerCase().includes(q)
-  );
-
-  // Sort
-  models.sort((a,b)=>{
-    let va,vb;
-    if(currentSort==='cheap'||currentSort==='rank'){va=a.input_cost_per_mtok||0;vb=b.input_cost_per_mtok||0;return(va-vb)*sortDir;}
-    if(currentSort==='exp'){va=a.input_cost_per_mtok||0;vb=b.input_cost_per_mtok||0;return(vb-va)*sortDir;}
-    if(currentSort==='context'){va=a.context_window||0;vb=b.context_window||0;return(vb-va)*sortDir;}
-    if(currentSort==='value'){va=valueScore(a);vb=valueScore(b);return(vb-va)*sortDir;}
-    if(currentSort==='name'){return(a.model||'').localeCompare(b.model||'')*sortDir;}
-    return 0;
-  });
-
-  return models;
-}
-
-// ── Render table ──
-function renderTable(models){
-  const tbody=document.getElementById('table-body');
-  if(!models.length){tbody.innerHTML='<tr><td colspan="11" class="loading-row">No models found.</td></tr>';return;}
-  tbody.innerHTML=models.map((m,i)=>{
-    const rank=i+1;
-    const pc=provStyle(m.provider||'');
-    const vs=valueScore(m);
-    const maxVS=10;
-    const pct=Math.min(vs/maxVS*100,100);
-    const seed=nameSeed(m.model||'x');
-    const sparkColor=m.input_cost_per_mtok<=0.5?'#00d97e':m.input_cost_per_mtok<=2?'#3bb4ff':'#ff8866';
-    const sel=selected.has(m.model);
-    // Fake delta for visual interest until real data available
-    const fakeDelta=((seed%31)-15);
-    const deltaStr=fakeDelta===0?'—':(fakeDelta>0?'+':'')+fakeDelta.toFixed(1)+'%';
-    const deltaCls=fakeDelta===0?'delta-stable':fakeDelta>0?'delta-up':'delta-down';
-    return`<tr data-rank="${rank}" onclick="rowClick('${(m.model||'').replace(/'/g,"\\'")}',event)" class="${sel?'selected':''}">
-      <td class="sel-col"><div class="row-check${sel?' checked':''}">
-        ${sel?'<svg width="10" height="8" viewBox="0 0 10 8"><path d="M1 4l2.5 2.5L9 1" stroke="var(--cyan)" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>':''}
-      </div></td>
-      <td class="rank">${rank}</td>
-      <td class="name-col"><div class="model-namerow">
-        <div class="model-icon" style="background:${pc.bg};color:${pc.color}">${pc.letter}</div>
-        <div class="model-info">
-          <div class="model-name" title="${m.model||''}">${m.model||''}</div>
-          <div class="model-family">${m.notes?m.notes.slice(0,35)+'…':''}</div>
-        </div>
-      </div></td>
-      <td><span class="${provBadgeClass(m.provider||'')}">${m.provider||'—'}</span></td>
-      <td class="price-col ${costClass(m.input_cost_per_mtok||0)}">${fmtCost(m.input_cost_per_mtok)}</td>
-      <td class="price-col ${costClass(m.output_cost_per_mtok||0)}">${fmtCost(m.output_cost_per_mtok)}</td>
-      <td class="ctx-col">${fmtCtx(m.context_window)}</td>
-      <td class="score-col"><div class="score-bar-wrap">
-        <span style="color:var(--cyan);min-width:32px;font-family:var(--mono);font-size:11px">${vs.toFixed(1)}</span>
-        <div class="score-bar" style="width:60px"><div class="score-fill" style="width:${pct}%"></div></div>
-      </div></td>
-      <td class="delta-col ${deltaCls}">${deltaStr}</td>
-      <td>${miniSparkSVG(seed,sparkColor)}</td>
-      <td>${capTags(m)}</td>
-    </tr>`;
-  }).join('');
-}
-
-// ── Render grid ──
-function renderGrid(models){
-  const grid=document.getElementById('card-grid');
-  if(!models.length){grid.innerHTML='<div class="empty">No models found.</div>';return;}
-  grid.innerHTML=models.map((m,i)=>{
-    const rank=i+1;
-    const pc=provStyle(m.provider||'');
-    const vs=valueScore(m);
-    const sel=selected.has(m.model);
-    const [tierTxt,tierCls]=tierLabel(m.input_cost_per_mtok||0);
-    return`<div class="model-card${sel?' selected':''}" onclick="cardClick('${(m.model||'').replace(/'/g,"\\'")}',event)">
-      <div class="card-top">
-        <span class="card-rank">#${rank}${rank===1?' 👑':''}</span>
-        <div class="card-check${sel?' checked':''}">
-          ${sel?'<svg width="10" height="8" viewBox="0 0 10 8"><path d="M1 4l2.5 2.5L9 1" stroke="var(--cyan)" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>':''}
-        </div>
-      </div>
-      <div class="card-icon" style="background:${pc.bg};color:${pc.color}">${pc.letter}</div>
-      <div class="card-name">${m.model||''}</div>
-      <div class="card-prov"><span class="${provBadgeClass(m.provider||'')}">${m.provider||''}</span></div>
-      <div class="card-metrics">
-        <div class="metric"><div class="metric-l">Input / 1M</div><div class="metric-v ${costClass(m.input_cost_per_mtok||0)}">${fmtCost(m.input_cost_per_mtok)}</div></div>
-        <div class="metric"><div class="metric-l">Output / 1M</div><div class="metric-v ${costClass(m.output_cost_per_mtok||0)}">${fmtCost(m.output_cost_per_mtok)}</div></div>
-      </div>
-      <div class="card-footer">
-        <span class="ctx-pill">${fmtCtx(m.context_window)}</span>
-        <span class="tier-pill ${tierCls}">${tierTxt}</span>
-      </div>
-      <div class="card-caps">${capTags(m)}</div>
-    </div>`;
-  }).join('');
-}
-
-// ── Main render ──
-function render(){
-  const models=getFiltered();
-  const info=`${models.length} model${models.length!==1?'s':''} ${currentProv?'from '+currentProv:''}${currentTab!=='all'?' · '+currentTab:''} — click rows to select, then compare`;
-  document.getElementById('results-info').textContent=info;
-  if(currentView==='table') renderTable(models);
-  else renderGrid(models);
-}
-
-// ── Selection ──
-function rowClick(name,e){
-  if(e.target.closest('.sel-col')||e.target.closest('.row-check')) toggleSelect(name);
-  else if(selected.size>0) toggleSelect(name);
-  else toggleSelect(name);
-}
-function cardClick(name,e){toggleSelect(name);}
-function toggleSelect(name){
-  if(selected.has(name)){selected.delete(name);}
-  else{if(selected.size>=4){showToast('Select up to 4 models');return;}selected.add(name);}
-  updateBar();render();
-}
-function updateBar(){
-  const bar=document.getElementById('compare-bar');
-  const chips=document.getElementById('chips');
-  if(selected.size===0){bar.classList.remove('show');return;}
-  bar.classList.add('show');
-  chips.innerHTML=[...selected].map(s=>`<span class="chip">${s.length>24?s.slice(0,22)+'…':s}<span class="chip-x" onclick="event.stopPropagation();desel('${s.replace(/'/g,"\\'")}')">✕</span></span>`).join('');
-}
-function desel(n){selected.delete(n);updateBar();render();}
-function clearAll(){selected.clear();updateBar();document.getElementById('cmp-panel').classList.remove('show');render();}
-
-// ── Compare ──
-function doCompare(){
-  if(selected.size<2){showToast('Select at least 2 models');return;}
-  const models=[...selected].map(s=>allModels.find(m=>m.model===s)).filter(Boolean);
-  const minIn =Math.min(...models.map(m=>m.input_cost_per_mtok||0));
-  const maxIn =Math.max(...models.map(m=>m.input_cost_per_mtok||0));
-  const maxCtx=Math.max(...models.map(m=>m.context_window||0));
-  const minCtx=Math.min(...models.map(m=>m.context_window||0));
-  const cheapest=[...models].sort((a,b)=>(a.input_cost_per_mtok||0)-(b.input_cost_per_mtok||0))[0];
-  const bigCtx  =[...models].sort((a,b)=>(b.context_window||0)-(a.context_window||0))[0];
-  const bestVal =[...models].sort((a,b)=>valueScore(b)-valueScore(a))[0];
-  const N=models.length;
-  document.getElementById('cmp-cols').style.gridTemplateColumns=`repeat(${N},1fr)`;
-  document.getElementById('cmp-sub').textContent=`Comparing ${N} models`;
-  document.getElementById('cmp-cols').innerHTML=models.map(m=>{
-    const isW=m.model===cheapest.model;
-    const inCls=(m.input_cost_per_mtok||0)===minIn?'best':(m.input_cost_per_mtok||0)===maxIn?'worst':'';
-    const ctxCls=(m.context_window||0)===maxCtx?'best':(m.context_window||0)===minCtx?'worst':'';
-    const pc=provStyle(m.provider||'');
-    return`<div class="cmp-col${isW?' winner':''}">
-      ${isW?'<div class="winner-lbl">BEST VALUE</div>':''}
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
-        <div class="model-icon" style="background:${pc.bg};color:${pc.color};width:28px;height:28px;font-size:12px;border-radius:6px">${pc.letter}</div>
-        <div class="cmp-model-name">${m.model}</div>
-      </div>
-      <span class="${provBadgeClass(m.provider||'')}">${m.provider}</span>
-      <div class="cmp-rows">
-        <div class="cmp-row"><span class="cmp-row-l">Input / 1M</span><span class="cmp-row-v ${inCls}">${fmtCost(m.input_cost_per_mtok)}</span></div>
-        <div class="cmp-row"><span class="cmp-row-l">Output / 1M</span><span class="cmp-row-v">${fmtCost(m.output_cost_per_mtok)}</span></div>
-        <div class="cmp-row"><span class="cmp-row-l">Context</span><span class="cmp-row-v ${ctxCls}">${fmtCtx(m.context_window)}</span></div>
-        <div class="cmp-row"><span class="cmp-row-l">Value Score</span><span class="cmp-row-v">${valueScore(m).toFixed(1)}</span></div>
-        <div class="cmp-row"><span class="cmp-row-l">Vision</span><span class="cmp-row-v">${m.supports_vision?'✅ Yes':'—'}</span></div>
-        <div class="cmp-row"><span class="cmp-row-l">Reasoning</span><span class="cmp-row-v">${isReasoning(m)?'✅ Yes':'—'}</span></div>
-      </div>
-    </div>`;
-  }).join('');
-  document.getElementById('cmp-winners').innerHTML=`
-    <div class="cmp-pill"><span class="cmp-pill-l">Cheapest input</span><span class="cmp-pill-v">${cheapest.model}</span></div>
-    <div class="cmp-pill"><span class="cmp-pill-l">Largest context</span><span class="cmp-pill-v">${bigCtx.model}</span></div>
-    <div class="cmp-pill"><span class="cmp-pill-l">Best value score</span><span class="cmp-pill-v">${bestVal.model}</span></div>`;
-  const panel=document.getElementById('cmp-panel');
-  panel.classList.add('show');
-  setTimeout(()=>panel.scrollIntoView({behavior:'smooth',block:'start'}),50);
-}
-
-// ── Market bar ──
-function updateMarketBar(models){
-  const sorted=[...models].sort((a,b)=>a.input_cost_per_mtok-b.input_cost_per_mtok);
-  const provs=[...new Set(models.map(m=>m.provider))];
-  const avg=models.reduce((s,m)=>s+(m.input_cost_per_mtok||0),0)/models.length;
-  document.getElementById('mb-count').textContent=models.length;
-  document.getElementById('mb-provs').textContent=provs.length;
-  document.getElementById('mb-cheap').textContent=sorted[0]?sorted[0].model+' $'+sorted[0].input_cost_per_mtok+'/1M':'—';
-  document.getElementById('mb-exp').textContent=sorted[sorted.length-1]?sorted[sorted.length-1].model+' $'+sorted[sorted.length-1].input_cost_per_mtok+'/1M':'—';
-  document.getElementById('mb-avg').textContent='$'+avg.toFixed(3)+'/1M';
-  document.getElementById('mb-updated').textContent=new Date().toLocaleTimeString();
-}
-
-// ── Load data ──
+// Load data
 async function loadData(){
   try{
     const r=await fetch(API+'/pricing',{mode:'cors'});
     const d=await r.json();
     allModels=d.pricing||[];
-    updateMarketBar(allModels);
+    buildMarketCards(allModels);
+    updateStats(allModels);
     render();
   }catch(e){
-    document.getElementById('table-body').innerHTML='<tr><td colspan="11" class="loading-row">Could not load data. Please refresh.</td></tr>';
+    document.getElementById('tbl-body').innerHTML='<tr><td colspan="11" class="loading-cell">Could not load data. Please refresh.</td></tr>';
   }
 }
 
 // Init
-loadData();
-// Default: table visible, grid hidden
 document.getElementById('card-grid').style.display='none';
-setInterval(loadData, 60000);
+loadData();
+setInterval(loadData,60000);
+setInterval(updateStats.bind(null,allModels),30000);
 </script>
 </body>
 </html>
