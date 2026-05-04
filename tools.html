@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Tools Directory — Octopus AI Model Intel</title>
+<meta name="description" content="Discover 500+ AI tools ranked by category. Find the best AI tools for image generation, video, coding, writing, and more. Submit your AI tool free.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700;800&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#07090f;--bg2:#0d1117;--bg3:#131b2a;--bg4:#1a2438;
+  --border:#1e2d42;--border2:rgba(59,180,255,0.18);
+  --cyan:#3bb4ff;--green:#00d97e;--red:#ff4d6d;
+  --yellow:#fbbf24;--purple:#a855f7;--orange:#f97316;
+  --text:#f0f4f8;--text2:#94a3b8;--text3:#4a5a6e;
+  --mono:'IBM Plex Mono',monospace;--sans:'Space Grotesk',sans-serif;--hud:'Orbitron',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);overflow-x:hidden;}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:1000;background:rgba(7,9,15,0.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+.nav-main{display:flex;align-items:center;gap:16px;padding:0 24px;height:60px;}
+.nav-logo{font-family:var(--hud);font-size:16px;color:var(--cyan);letter-spacing:1px;text-decoration:none;flex-shrink:0;}
+.nav-search-wrap{flex:1;max-width:480px;position:relative;}
+.nav-search{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 16px 10px 42px;font-size:15px;color:var(--text);outline:none;font-family:var(--sans);transition:border-color 0.2s;}
+.nav-search:focus{border-color:var(--cyan);}
+.nav-search::placeholder{color:var(--text3);}
+.sico{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:17px;}
+.nav-right{display:flex;align-items:center;gap:10px;margin-left:auto;}
+.nav-link{color:var(--text2);text-decoration:none;font-size:14px;font-weight:500;transition:color 0.2s;white-space:nowrap;}
+.nav-link:hover,.nav-link.active{color:var(--cyan);}
+.btn-submit{background:var(--green);color:#000;padding:9px 20px;border-radius:7px;font-size:14px;font-weight:700;text-decoration:none;white-space:nowrap;}
+.btn-submit:hover{opacity:0.85;}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,var(--bg),#0a1020,var(--bg));border-bottom:1px solid var(--border);padding:60px 24px 48px;text-align:center;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 100%,rgba(59,180,255,0.06),transparent 60%);pointer-events:none;}
+.hero h1{font-family:var(--hud);font-size:clamp(28px,5vw,52px);font-weight:900;color:#fff;letter-spacing:1px;margin-bottom:14px;position:relative;}
+.hero h1 span{color:var(--cyan);}
+.hero p{font-size:17px;color:var(--text2);max-width:560px;margin:0 auto 28px;line-height:1.7;position:relative;}
+.hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;position:relative;}
+.btn-primary{background:var(--cyan);color:#000;padding:13px 28px;border-radius:8px;font-size:15px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:8px;}
+.btn-primary:hover{opacity:0.88;}
+.btn-outline{background:transparent;border:1px solid var(--border2);color:var(--cyan);padding:13px 28px;border-radius:8px;font-size:15px;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:8px;}
+.btn-outline:hover{background:rgba(59,180,255,0.06);}
+.hero-stats{display:flex;gap:32px;justify-content:center;margin-top:32px;flex-wrap:wrap;}
+.hstat{text-align:center;}
+.hstat-num{font-family:var(--hud);font-size:28px;font-weight:900;color:var(--cyan);}
+.hstat-label{font-size:13px;color:var(--text3);font-family:var(--mono);}
+
+/* SPOTLIGHT CAROUSEL */
+.spotlight-wrap{background:var(--bg2);border-bottom:1px solid var(--border);padding:20px 0;overflow:hidden;position:relative;}
+.spotlight-wrap::before,.spotlight-wrap::after{content:'';position:absolute;top:0;bottom:0;width:80px;z-index:2;pointer-events:none;}
+.spotlight-wrap::before{left:0;background:linear-gradient(to right,var(--bg2),transparent);}
+.spotlight-wrap::after{right:0;background:linear-gradient(to left,var(--bg2),transparent);}
+.spotlight-label{text-align:center;font-family:var(--mono);font-size:11px;color:var(--yellow);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;justify-content:center;gap:8px;}
+.spotlight-track{display:flex;gap:12px;animation:scrollSpot 35s linear infinite;width:max-content;padding:0 24px;}
+.spotlight-track:hover{animation-play-state:paused;}
+.scard{flex-shrink:0;width:240px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:16px;cursor:pointer;transition:border-color 0.2s,transform 0.2s;text-decoration:none;display:block;position:relative;overflow:hidden;}
+.scard::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
+.scard.spot-paid::before{background:linear-gradient(90deg,var(--yellow),var(--orange));}
+.scard:hover{border-color:rgba(59,180,255,0.25);transform:translateY(-2px);}
+.scard-badge{position:absolute;top:10px;right:10px;background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.2);color:var(--yellow);font-size:10px;padding:2px 7px;border-radius:4px;font-family:var(--mono);}
+.scard-icon{font-size:24px;margin-bottom:8px;}
+.scard-name{font-size:14px;font-weight:700;color:var(--text);margin-bottom:3px;}
+.scard-cat{font-size:11px;color:var(--text3);font-family:var(--mono);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px;}
+.scard-desc{font-size:12px;color:var(--text2);line-height:1.5;margin-bottom:10px;}
+.scard-tag{display:inline-block;font-size:10px;padding:2px 8px;border-radius:100px;background:rgba(0,217,126,0.08);color:var(--green);border:1px solid rgba(0,217,126,0.2);font-family:var(--mono);}
+@keyframes scrollSpot{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+/* TICKER */
+.ticker{background:var(--bg);border-bottom:1px solid var(--border);overflow:hidden;padding:9px 0;position:relative;}
+.ticker::before,.ticker::after{content:'';position:absolute;top:0;bottom:0;width:60px;z-index:2;pointer-events:none;}
+.ticker::before{left:0;background:linear-gradient(to right,var(--bg),transparent);}
+.ticker::after{right:0;background:linear-gradient(to left,var(--bg),transparent);}
+.t-track{display:flex;gap:48px;animation:tickerA 55s linear infinite;white-space:nowrap;width:max-content;}
+.t-item{font-family:var(--mono);font-size:13px;display:flex;align-items:center;gap:8px;}
+.ti-g{color:var(--green);}.ti-y{color:var(--yellow);}.ti-m{color:var(--text3);}
+@keyframes tickerA{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+/* MAIN */
+.main{max-width:1400px;margin:0 auto;padding:24px;}
+
+/* CATEGORIES SIDEBAR + GRID */
+.layout{display:grid;grid-template-columns:220px 1fr;gap:24px;align-items:start;}
+@media(max-width:900px){.layout{grid-template-columns:1fr;}}
+
+/* SIDEBAR */
+.sidebar{position:sticky;top:80px;}
+.sidebar-section{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:12px;}
+.sidebar-title{font-family:var(--mono);font-size:11px;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px;}
+.cat-btn{display:flex;align-items:center;gap:10px;width:100%;padding:9px 12px;border-radius:7px;border:none;background:transparent;color:var(--text2);font-size:14px;cursor:pointer;transition:all 0.2s;text-align:left;font-family:var(--sans);}
+.cat-btn:hover{background:var(--bg3);color:var(--text);}
+.cat-btn.active{background:rgba(59,180,255,0.08);color:var(--cyan);border:1px solid rgba(59,180,255,0.15);}
+.cat-count{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--text3);}
+.cat-btn.active .cat-count{color:var(--cyan);}
+
+/* TOOLS GRID */
+.content-area{}
+.toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;flex-wrap:wrap;}
+.tool-count{font-family:var(--mono);font-size:13px;color:var(--text2);}
+.sort-row{display:flex;gap:8px;align-items:center;}
+select.dd{background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:8px 14px;font-size:14px;color:var(--text2);cursor:pointer;outline:none;font-family:var(--sans);}
+.vt{display:flex;background:var(--bg3);border:1px solid var(--border);border-radius:7px;overflow:hidden;}
+.vtbtn{padding:8px 14px;background:transparent;border:none;cursor:pointer;color:var(--text3);font-size:16px;transition:all 0.2s;}
+.vtbtn.active{background:var(--bg4);color:var(--cyan);}
+
+/* TOOL CARDS — grid default */
+.tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;}
+.tools-grid.list-view{grid-template-columns:1fr;}
+.tool-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden;transition:border-color 0.2s,transform 0.2s;cursor:pointer;text-decoration:none;display:block;position:relative;}
+.tool-card:hover{border-color:rgba(59,180,255,0.25);transform:translateY(-2px);}
+.tool-card.featured{border-color:rgba(251,191,36,0.3);}
+.tool-card.featured::before{content:'⭐ FEATURED';position:absolute;top:10px;right:10px;background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.25);color:var(--yellow);font-size:10px;padding:3px 8px;border-radius:4px;font-family:var(--mono);letter-spacing:0.5px;z-index:1;}
+.card-thumb{width:100%;height:140px;display:flex;align-items:center;justify-content:center;font-size:48px;position:relative;}
+.card-body{padding:16px;}
+.card-name{font-size:16px;font-weight:700;color:var(--text);margin-bottom:4px;}
+.card-tagline{font-size:13px;color:var(--text2);margin-bottom:10px;line-height:1.5;}
+.card-meta{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;}
+.card-cat{font-size:11px;font-family:var(--mono);padding:3px 9px;border-radius:100px;letter-spacing:0.3px;}
+.pricing-free{background:rgba(0,217,126,0.08);color:var(--green);border:1px solid rgba(0,217,126,0.2);}
+.pricing-freemium{background:rgba(59,180,255,0.08);color:var(--cyan);border:1px solid rgba(59,180,255,0.2);}
+.pricing-paid{background:rgba(255,77,109,0.08);color:var(--red);border:1px solid rgba(255,77,109,0.2);}
+.card-votes{display:flex;align-items:center;gap:4px;font-size:13px;color:var(--text2);font-family:var(--mono);}
+.vote-btn{background:transparent;border:1px solid var(--border);border-radius:5px;padding:4px 8px;cursor:pointer;color:var(--text2);font-size:13px;transition:all 0.2s;display:flex;align-items:center;gap:4px;}
+.vote-btn:hover{border-color:var(--green);color:var(--green);}
+/* List view */
+.tools-grid.list-view .tool-card{display:flex;align-items:center;gap:16px;}
+.tools-grid.list-view .card-thumb{width:64px;height:64px;flex-shrink:0;font-size:28px;border-radius:10px;}
+.tools-grid.list-view .tool-card.featured::before{top:50%;transform:translateY(-50%);right:12px;}
+
+/* NEW badge */
+.new-badge{display:inline-block;background:rgba(0,217,126,0.1);border:1px solid rgba(0,217,126,0.25);color:var(--green);font-size:10px;padding:2px 7px;border-radius:4px;font-family:var(--mono);margin-left:6px;vertical-align:middle;}
+
+/* SUBMIT SECTION */
+.submit-section{background:linear-gradient(135deg,var(--bg3),var(--bg2));border:1px solid var(--border2);border-radius:12px;padding:32px;margin-bottom:24px;position:relative;overflow:hidden;}
+.submit-section::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),var(--purple),var(--green));}
+.submit-title{font-family:var(--hud);font-size:20px;color:var(--text);margin-bottom:6px;letter-spacing:0.5px;}
+.submit-sub{font-size:15px;color:var(--text2);margin-bottom:24px;}
+
+/* SUBMIT FORM */
+.submit-form{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+@media(max-width:600px){.submit-form{grid-template-columns:1fr;}}
+.form-group{display:flex;flex-direction:column;gap:6px;}
+.form-group.full{grid-column:1/-1;}
+.form-label{font-size:13px;font-weight:600;color:var(--text2);font-family:var(--mono);}
+.form-input,.form-textarea,.form-select{background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:11px 14px;font-size:15px;color:var(--text);outline:none;font-family:var(--sans);transition:border-color 0.2s;width:100%;}
+.form-input:focus,.form-textarea:focus,.form-select:focus{border-color:var(--cyan);}
+.form-input::placeholder,.form-textarea::placeholder{color:var(--text3);}
+.form-textarea{resize:vertical;min-height:90px;}
+.form-select option{background:var(--bg2);}
+
+/* PRICING TIERS in submit */
+.pricing-tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;grid-column:1/-1;}
+@media(max-width:500px){.pricing-tiers{grid-template-columns:1fr;}}
+.tier-opt{border:2px solid var(--border);border-radius:8px;padding:14px;cursor:pointer;transition:all 0.2s;text-align:center;position:relative;}
+.tier-opt:hover{border-color:rgba(59,180,255,0.3);}
+.tier-opt.selected{border-color:var(--cyan);background:rgba(59,180,255,0.04);}
+.tier-opt input{position:absolute;opacity:0;width:0;height:0;}
+.tier-name{font-weight:700;font-size:15px;color:var(--text);margin-bottom:4px;}
+.tier-price{font-family:var(--hud);font-size:22px;color:var(--cyan);margin-bottom:6px;}
+.tier-price span{font-size:13px;color:var(--text3);}
+.tier-features{font-size:12px;color:var(--text2);line-height:1.6;font-family:var(--mono);}
+.tier-popular::before{content:'MOST POPULAR';position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--cyan);color:#000;font-size:9px;font-weight:700;padding:2px 10px;border-radius:100px;font-family:var(--mono);letter-spacing:0.5px;white-space:nowrap;}
+
+.btn-submit-form{grid-column:1/-1;background:linear-gradient(135deg,var(--cyan),var(--purple));color:#000;border:none;padding:14px 28px;border-radius:8px;font-size:16px;font-weight:700;cursor:pointer;font-family:var(--sans);transition:opacity 0.2s;}
+.btn-submit-form:hover{opacity:0.9;}
+
+/* SCAM NOTICE */
+.scam-notice{display:flex;gap:10px;align-items:flex-start;background:rgba(251,191,36,0.05);border:1px solid rgba(251,191,36,0.15);border-radius:8px;padding:14px;font-size:13px;color:var(--text2);font-family:var(--mono);line-height:1.6;grid-column:1/-1;}
+.scam-icon{font-size:18px;flex-shrink:0;}
+
+/* AD PLACEMENT SECTION */
+.ad-placement{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:24px;margin-bottom:24px;}
+.ap-title{font-family:var(--hud);font-size:16px;color:var(--text);margin-bottom:6px;letter-spacing:0.5px;}
+.ap-sub{font-size:14px;color:var(--text2);margin-bottom:20px;}
+.ad-plans{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+@media(max-width:600px){.ad-plans{grid-template-columns:1fr;}}
+.aplan{border:1px solid var(--border);border-radius:8px;padding:18px;text-align:center;transition:border-color 0.2s;}
+.aplan:hover{border-color:rgba(59,180,255,0.25);}
+.aplan.popular{border-color:var(--cyan);background:rgba(59,180,255,0.03);}
+.aplan-name{font-size:13px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:1px;font-family:var(--mono);margin-bottom:8px;}
+.aplan-price{font-family:var(--hud);font-size:30px;font-weight:900;color:var(--cyan);margin-bottom:4px;}
+.aplan-period{font-size:12px;color:var(--text3);font-family:var(--mono);margin-bottom:14px;}
+.aplan-features{font-size:13px;color:var(--text2);line-height:1.8;margin-bottom:16px;}
+.btn-aplan{background:var(--cyan);color:#000;border:none;padding:10px 20px;border-radius:7px;font-size:14px;font-weight:700;cursor:pointer;width:100%;font-family:var(--sans);}
+.btn-aplan:hover{opacity:0.85;}
+
+/* SUCCESS */
+.success-msg{display:none;background:rgba(0,217,126,0.06);border:1px solid rgba(0,217,126,0.2);border-radius:8px;padding:20px;text-align:center;font-size:15px;color:var(--green);grid-column:1/-1;}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-top:24px;}
+.foot-logo{font-family:var(--hud);font-size:12px;color:var(--cyan);letter-spacing:1px;}
+footer p{font-size:12px;color:var(--text3);font-family:var(--mono);}
+.foot-links{display:flex;gap:18px;}
+footer a{color:var(--text3);text-decoration:none;font-size:12px;font-family:var(--mono);transition:color 0.2s;}
+footer a:hover{color:var(--cyan);}
+
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--bg3);border:1px solid var(--border2);color:var(--cyan);font-family:var(--mono);font-size:14px;padding:11px 22px;border-radius:8px;z-index:9999;opacity:0;transition:opacity 0.2s;pointer-events:none;white-space:nowrap;}
+</style>
+</head>
+<body>
+<div id="toast"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-main">
+    <a href="compare.html" class="nav-logo">🐙 AI INTEL</a>
+    <div class="nav-search-wrap">
+      <span class="sico">⌕</span>
+      <input class="nav-search" id="search-input" type="text" placeholder="Search AI tools... image, video, coding, writing..." oninput="renderTools()">
+    </div>
+    <div class="nav-right">
+      <a href="compare.html" class="nav-link">Model Prices</a>
+      <a href="index.html" class="nav-link">API Docs</a>
+      <a href="#submit" class="btn-submit">+ Submit Tool</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>The <span>AI Tools</span> Directory</h1>
+  <p>Discover, compare and track the best AI tools. Ranked by community votes. Updated daily. Completely free to list.</p>
+  <div class="hero-btns">
+    <a href="#submit" class="btn-primary">🚀 Submit Your Tool Free</a>
+    <a href="compare.html" class="btn-outline">📊 Model Prices →</a>
+  </div>
+  <div class="hero-stats">
+    <div class="hstat"><div class="hstat-num" id="hs-tools">500+</div><div class="hstat-label">AI Tools Listed</div></div>
+    <div class="hstat"><div class="hstat-num">12</div><div class="hstat-label">Categories</div></div>
+    <div class="hstat"><div class="hstat-num">Free</div><div class="hstat-label">Basic Listing</div></div>
+    <div class="hstat"><div class="hstat-num">24h</div><div class="hstat-label">Review Time</div></div>
+  </div>
+</div>
+
+<!-- SPOTLIGHT CAROUSEL (featured/paid) -->
+<div class="spotlight-wrap">
+  <div class="spotlight-label">⭐ FEATURED TOOLS — <span style="color:var(--text3)">Sponsored</span></div>
+  <div class="spotlight-track" id="spotlight-track">
+    <!-- populated by JS -->
+  </div>
+</div>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="t-track">
+    <span class="t-item ti-g">🆕 Just listed: Runway Gen-4 — AI video generation</span>
+    <span class="t-item ti-y">⭐ Trending: Cursor AI — coding assistant with 50K+ votes</span>
+    <span class="t-item ti-m">📊 500+ tools listed across 12 categories</span>
+    <span class="t-item ti-g">🆕 Just listed: Sora by OpenAI — text to video</span>
+    <span class="t-item ti-y">⭐ Trending: Midjourney v7 — image generation</span>
+    <span class="t-item ti-m">🔥 Mistral models now tracked — compare prices</span>
+    <span class="t-item ti-g">🆕 Just listed: Claude for coding — Anthropic</span>
+    <span class="t-item ti-g">🆕 Just listed: Runway Gen-4 — AI video generation</span>
+    <span class="t-item ti-y">⭐ Trending: Cursor AI — coding assistant with 50K+ votes</span>
+    <span class="t-item ti-m">📊 500+ tools listed across 12 categories</span>
+    <span class="t-item ti-g">🆕 Just listed: Sora by OpenAI — text to video</span>
+    <span class="t-item ti-y">⭐ Trending: Midjourney v7 — image generation</span>
+    <span class="t-item ti-m">🔥 Mistral models now tracked — compare prices</span>
+    <span class="t-item ti-g">🆕 Just listed: Claude for coding — Anthropic</span>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- AD PLACEMENT INFO -->
+  <div class="ad-placement" id="advertise">
+    <div class="ap-title">📣 Feature Your AI Tool</div>
+    <div class="ap-sub">Get your AI tool in front of developers, founders and AI enthusiasts. Pay once, run automatically. No account needed.</div>
+    <div class="ad-plans">
+      <div class="aplan">
+        <div class="aplan-name">Starter</div>
+        <div class="aplan-price">$29<span>/7 days</span></div>
+        <div class="aplan-period">One-time · Auto-expires</div>
+        <div class="aplan-features">Featured badge on listing<br>Category page placement<br>Ticker mention<br>Links to your website</div>
+        <button class="btn-aplan" onclick="startPayment('starter')">Get Featured</button>
+      </div>
+      <div class="aplan popular">
+        <div class="aplan-name">Growth</div>
+        <div class="aplan-price">$79<span>/30 days</span></div>
+        <div class="aplan-period">One-time · Auto-expires · Most popular</div>
+        <div class="aplan-features">Homepage spotlight carousel<br>Featured badge on listing<br>Ticker + announcement bar<br>Priority category placement</div>
+        <button class="btn-aplan" onclick="startPayment('growth')">Get Spotlighted</button>
+      </div>
+      <div class="aplan">
+        <div class="aplan-name">Premium</div>
+        <div class="aplan-price">$149<span>/30 days</span></div>
+        <div class="aplan-period">One-time · Auto-expires</div>
+        <div class="aplan-features">Top of ALL category pages<br>Homepage hero carousel<br>Newsletter mention (if launched)<br>API Intel cross-promo</div>
+        <button class="btn-aplan" onclick="startPayment('premium')">Go Premium</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- LAYOUT: SIDEBAR + GRID -->
+  <div class="layout">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-title">Categories</div>
+        <button class="cat-btn active" onclick="setCat('all',this)">🔥 All Tools <span class="cat-count" id="cc-all">—</span></button>
+        <button class="cat-btn" onclick="setCat('image',this)">🎨 Image AI <span class="cat-count" id="cc-image">—</span></button>
+        <button class="cat-btn" onclick="setCat('video',this)">🎬 Video AI <span class="cat-count" id="cc-video">—</span></button>
+        <button class="cat-btn" onclick="setCat('coding',this)">💻 Coding AI <span class="cat-count" id="cc-coding">—</span></button>
+        <button class="cat-btn" onclick="setCat('writing',this)">✍️ Writing AI <span class="cat-count" id="cc-writing">—</span></button>
+        <button class="cat-btn" onclick="setCat('chat',this)">💬 Chat & Assistants <span class="cat-count" id="cc-chat">—</span></button>
+        <button class="cat-btn" onclick="setCat('audio',this)">🎵 Audio & Voice <span class="cat-count" id="cc-audio">—</span></button>
+        <button class="cat-btn" onclick="setCat('research',this)">🔬 Research <span class="cat-count" id="cc-research">—</span></button>
+        <button class="cat-btn" onclick="setCat('productivity',this)">⚡ Productivity <span class="cat-count" id="cc-productivity">—</span></button>
+        <button class="cat-btn" onclick="setCat('data',this)">📊 Data & Analytics <span class="cat-count" id="cc-data">—</span></button>
+        <button class="cat-btn" onclick="setCat('design',this)">🖌️ Design <span class="cat-count" id="cc-design">—</span></button>
+        <button class="cat-btn" onclick="setCat('marketing',this)">📢 Marketing <span class="cat-count" id="cc-marketing">—</span></button>
+        <button class="cat-btn" onclick="setCat('new',this)">🆕 New This Week <span class="cat-count" id="cc-new">—</span></button>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-title">Pricing</div>
+        <button class="cat-btn" onclick="setPricing('all2',this)">All Pricing</button>
+        <button class="cat-btn" onclick="setPricing('free',this)">🆓 Free</button>
+        <button class="cat-btn" onclick="setPricing('freemium',this)">🔓 Freemium</button>
+        <button class="cat-btn" onclick="setPricing('paid',this)">💳 Paid</button>
+      </div>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="content-area">
+
+      <!-- SUBMIT SECTION -->
+      <div class="submit-section" id="submit">
+        <div class="submit-title">🚀 Submit Your AI Tool</div>
+        <div class="submit-sub">List your tool free in under 2 minutes. Auto-reviewed in 24h. Scam filter applied automatically.</div>
+        <div class="submit-form" id="submit-form">
+          <div class="form-group">
+            <label class="form-label">Tool Name *</label>
+            <input class="form-input" id="f-name" type="text" placeholder="My AI Tool" maxlength="60">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Website URL *</label>
+            <input class="form-input" id="f-url" type="url" placeholder="https://mytool.com">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Category *</label>
+            <select class="form-select" id="f-cat">
+              <option value="">Select category...</option>
+              <option value="image">🎨 Image AI</option>
+              <option value="video">🎬 Video AI</option>
+              <option value="coding">💻 Coding AI</option>
+              <option value="writing">✍️ Writing AI</option>
+              <option value="chat">💬 Chat & Assistants</option>
+              <option value="audio">🎵 Audio & Voice</option>
+              <option value="research">🔬 Research</option>
+              <option value="productivity">⚡ Productivity</option>
+              <option value="data">📊 Data & Analytics</option>
+              <option value="design">🖌️ Design</option>
+              <option value="marketing">📢 Marketing</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Pricing Model *</label>
+            <select class="form-select" id="f-pricing">
+              <option value="">Select pricing...</option>
+              <option value="free">Free</option>
+              <option value="freemium">Freemium</option>
+              <option value="paid">Paid</option>
+            </select>
+          </div>
+          <div class="form-group full">
+            <label class="form-label">Short Description * (max 120 chars)</label>
+            <input class="form-input" id="f-desc" type="text" placeholder="One sentence that explains what your tool does..." maxlength="120">
+          </div>
+          <div class="form-group full">
+            <label class="form-label">Full Description</label>
+            <textarea class="form-textarea" id="f-fulldesc" placeholder="Tell users what makes your tool unique, who it's for, and what problems it solves..."></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Your Email * (for listing updates)</label>
+            <input class="form-input" id="f-email" type="email" placeholder="founder@mytool.com">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Emoji / Icon</label>
+            <input class="form-input" id="f-emoji" type="text" placeholder="🤖" maxlength="4">
+          </div>
+
+          <!-- Pricing tiers -->
+          <div class="form-group full" style="margin-top:8px">
+            <label class="form-label" style="margin-bottom:10px">Launch Option</label>
+            <div class="pricing-tiers">
+              <label class="tier-opt selected" id="tier-free" onclick="selectTier('free',this)">
+                <input type="radio" name="tier" value="free" checked>
+                <div class="tier-name">Free Listing</div>
+                <div class="tier-price">$0<span>/forever</span></div>
+                <div class="tier-features">Basic listing<br>Category page<br>24h review</div>
+              </label>
+              <label class="tier-opt tier-popular" id="tier-featured" onclick="selectTier('featured',this)">
+                <input type="radio" name="tier" value="featured">
+                <div class="tier-name">Featured 30 Days</div>
+                <div class="tier-price">$79<span>/month</span></div>
+                <div class="tier-features">Homepage carousel<br>Featured badge<br>Priority review (2h)<br>Ticker mention</div>
+              </label>
+              <label class="tier-opt" id="tier-premium" onclick="selectTier('premium',this)">
+                <input type="radio" name="tier" value="premium">
+                <div class="tier-name">Premium Spotlight</div>
+                <div class="tier-price">$149<span>/month</span></div>
+                <div class="tier-features">Top of all categories<br>Hero carousel placement<br>API Intel cross-promo<br>Immediate review (1h)</div>
+              </label>
+            </div>
+          </div>
+
+          <div class="scam-notice">
+            <span class="scam-icon">🛡️</span>
+            <span>Auto-scam filter applied on submission. We check: valid domain, HTTPS, no redirect farms, no crypto scams, no adult content. Listings rejected automatically if flagged. Paid listings refunded if rejected.</span>
+          </div>
+
+          <div class="success-msg" id="success-msg">
+            ✅ Your tool has been submitted! We'll review it within 24 hours and email you when it's live. Thank you for listing with Octopus AI Intel! 🐙
+          </div>
+
+          <button class="btn-submit-form" onclick="submitTool()">Submit Tool →</button>
+        </div>
+      </div>
+
+      <!-- TOOLBAR -->
+      <div class="toolbar">
+        <div class="tool-count" id="tool-count">Loading tools...</div>
+        <div class="sort-row">
+          <select class="dd" onchange="setToolSort(this.value)">
+            <option value="votes">Most Voted</option>
+            <option value="new">Newest First</option>
+            <option value="name">Name A–Z</option>
+            <option value="featured">Featured First</option>
+          </select>
+          <div class="vt">
+            <button class="vtbtn active" id="vt-grid" onclick="setToolView('grid')" title="Grid">⊞</button>
+            <button class="vtbtn" id="vt-list" onclick="setToolView('list')" title="List">☰</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TOOLS GRID -->
+      <div class="tools-grid" id="tools-grid">
+        <div style="grid-column:1/-1;text-align:center;padding:48px;color:var(--text3);font-family:var(--mono);font-size:14px">
+          Loading AI tools...
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="foot-logo">🐙 OCTOPUS AI INTEL</div>
+  <p>AI Tools Directory + Model Price Intelligence</p>
+  <div class="foot-links">
+    <a href="compare.html">Model Prices</a>
+    <a href="index.html">API Docs</a>
+    <a href="https://rapidapi.com/zakmediaai/api/octopus-ai-model-intel" target="_blank">RapidAPI</a>
+    <a href="https://github.com/zak-dev-ai/ai-model-intel" target="_blank">GitHub</a>
+  </div>
+</footer>
+
+<script>
+// ── Seed tool database ─────────────────────────────────────────────────
+// In production this would come from KV/DB. For now seeded with real tools.
+const TOOLS = [
+  {id:1,name:'Midjourney',emoji:'🎨',cat:'image',pricing:'paid',tagline:'AI image generation that creates stunning, artistic visuals from text prompts.',votes:2847,featured:true,url:'https://midjourney.com',daysAgo:120},
+  {id:2,name:'ChatGPT',emoji:'💬',cat:'chat',pricing:'freemium',tagline:'OpenAI\'s conversational AI assistant for writing, coding, analysis and more.',votes:5230,featured:true,url:'https://chat.openai.com',daysAgo:180},
+  {id:3,name:'Cursor',emoji:'💻',cat:'coding',pricing:'freemium',tagline:'AI-powered code editor that understands your entire codebase.',votes:1923,featured:true,url:'https://cursor.sh',daysAgo:60},
+  {id:4,name:'Claude',emoji:'🤖',cat:'chat',pricing:'freemium',tagline:'Anthropic\'s AI assistant for analysis, writing and complex reasoning.',votes:1654,featured:false,url:'https://claude.ai',daysAgo:90},
+  {id:5,name:'Runway Gen-4',emoji:'🎬',cat:'video',pricing:'freemium',tagline:'State-of-the-art AI video generation from text or image prompts.',votes:1432,featured:true,url:'https://runwayml.com',daysAgo:14},
+  {id:6,name:'Gemini',emoji:'✨',cat:'chat',pricing:'freemium',tagline:'Google\'s multimodal AI with 1M token context window.',votes:1287,featured:false,url:'https://gemini.google.com',daysAgo:95},
+  {id:7,name:'GitHub Copilot',emoji:'🐙',cat:'coding',pricing:'paid',tagline:'AI pair programmer that suggests code completions in real time.',votes:3102,featured:false,url:'https://github.com/features/copilot',daysAgo:200},
+  {id:8,name:'ElevenLabs',emoji:'🎵',cat:'audio',pricing:'freemium',tagline:'Ultra-realistic AI voice cloning and text-to-speech synthesis.',votes:1876,featured:false,url:'https://elevenlabs.io',daysAgo:150},
+  {id:9,name:'Perplexity AI',emoji:'🔬',cat:'research',pricing:'freemium',tagline:'AI-powered search engine that cites its sources.',votes:2341,featured:false,url:'https://perplexity.ai',daysAgo:130},
+  {id:10,name:'Notion AI',emoji:'⚡',cat:'productivity',pricing:'freemium',tagline:'AI writing and thinking assistant built into Notion workspace.',votes:1543,featured:false,url:'https://notion.so',daysAgo:110},
+  {id:11,name:'DALL-E 3',emoji:'🖼️',cat:'image',pricing:'freemium',tagline:'OpenAI\'s image generation model, accessible via ChatGPT Plus.',votes:987,featured:false,url:'https://openai.com/dall-e-3',daysAgo:140},
+  {id:12,name:'Stable Diffusion',emoji:'🎭',cat:'image',pricing:'free',tagline:'Open source image generation model you can run locally or in the cloud.',votes:2654,featured:false,url:'https://stability.ai',daysAgo:220},
+  {id:13,name:'Jasper AI',emoji:'✍️',cat:'writing',pricing:'paid',tagline:'AI marketing copy and content writing for brands and agencies.',votes:876,featured:false,url:'https://jasper.ai',daysAgo:160},
+  {id:14,name:'Copy.ai',emoji:'📝',cat:'writing',pricing:'freemium',tagline:'AI writing tool for marketing copy, blog posts and sales content.',votes:654,featured:false,url:'https://copy.ai',daysAgo:180},
+  {id:15,name:'Tableau AI',emoji:'📊',cat:'data',pricing:'paid',tagline:'AI-powered data visualization and analytics platform.',votes:432,featured:false,url:'https://tableau.com',daysAgo:90},
+  {id:16,name:'Figma AI',emoji:'🖌️',cat:'design',pricing:'freemium',tagline:'AI design features built into the world\'s most popular design tool.',votes:1234,featured:false,url:'https://figma.com',daysAgo:45},
+  {id:17,name:'HubSpot AI',emoji:'📢',cat:'marketing',pricing:'freemium',tagline:'AI marketing automation and content generation for growth teams.',votes:543,featured:false,url:'https://hubspot.com',daysAgo:70},
+  {id:18,name:'Sora',emoji:'🎥',cat:'video',pricing:'freemium',tagline:'OpenAI\'s text-to-video AI model — create videos from text descriptions.',votes:2109,featured:true,url:'https://openai.com/sora',daysAgo:7},
+  {id:19,name:'Whisper AI',emoji:'🎙️',cat:'audio',pricing:'free',tagline:'OpenAI\'s open source speech recognition model, highly accurate.',votes:876,featured:false,url:'https://openai.com/research/whisper',daysAgo:200},
+  {id:20,name:'Devin AI',emoji:'🤖',cat:'coding',pricing:'paid',tagline:'The world\'s first fully autonomous AI software engineer.',votes:1432,featured:false,url:'https://devin.ai',daysAgo:30},
+  {id:21,name:'Mistral Chat',emoji:'🔥',cat:'chat',pricing:'free',tagline:'Chat interface for Mistral\'s powerful open-weight models.',votes:654,featured:false,url:'https://chat.mistral.ai',daysAgo:20},
+  {id:22,name:'DeepSeek Chat',emoji:'🔍',cat:'chat',pricing:'free',tagline:'DeepSeek\'s ultra-cheap AI chat — $0.14/1M tokens via API.',votes:1876,featured:false,url:'https://chat.deepseek.com',daysAgo:25},
+];
+
+let toolSort='votes',toolCat='all',toolPricing='all2',toolView='grid';
+let selectedTier='free';
+const CATS={all:'cc-all',image:'cc-image',video:'cc-video',coding:'cc-coding',writing:'cc-writing',chat:'cc-chat',audio:'cc-audio',research:'cc-research',productivity:'cc-productivity',data:'cc-data',design:'cc-design',marketing:'cc-marketing'};
+
+// Cat counts
+function updateCounts(tools){
+  Object.keys(CATS).forEach(cat=>{
+    const el=document.getElementById(CATS[cat]);
+    if(el)el.textContent=cat==='all'?tools.length:tools.filter(t=>t.cat===cat).length;
+  });
+  const newEl=document.getElementById('cc-new');
+  if(newEl)newEl.textContent=tools.filter(t=>t.daysAgo<=7).length;
+}
+
+function setCat(cat,el){
+  toolCat=cat;
+  document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  renderTools();
+}
+function setPricing(p,el){
+  toolPricing=p;
+  document.querySelectorAll('.cat-btn').forEach(b=>{
+    if(['free','freemium','paid','all2'].some(x=>b.getAttribute('onclick')?.includes(x)))b.classList.remove('active');
+  });
+  el.classList.add('active');
+  renderTools();
+}
+function setToolSort(s){toolSort=s;renderTools();}
+function setToolView(v){
+  toolView=v;
+  document.getElementById('vt-grid').classList.toggle('active',v==='grid');
+  document.getElementById('vt-list').classList.toggle('active',v==='list');
+  const g=document.getElementById('tools-grid');
+  g.classList.toggle('list-view',v==='list');
+  renderTools();
+}
+
+function getFilteredTools(){
+  const q=(document.getElementById('search-input').value||'').toLowerCase();
+  let tools=[...TOOLS];
+  if(toolCat==='new')tools=tools.filter(t=>t.daysAgo<=7);
+  else if(toolCat!=='all')tools=tools.filter(t=>t.cat===toolCat);
+  if(toolPricing!=='all2')tools=tools.filter(t=>t.pricing===toolPricing);
+  if(q)tools=tools.filter(t=>t.name.toLowerCase().includes(q)||t.tagline.toLowerCase().includes(q)||t.cat.toLowerCase().includes(q));
+  if(toolSort==='votes')tools.sort((a,b)=>b.votes-a.votes);
+  else if(toolSort==='new')tools.sort((a,b)=>a.daysAgo-b.daysAgo);
+  else if(toolSort==='name')tools.sort((a,b)=>a.name.localeCompare(b.name));
+  else if(toolSort==='featured')tools.sort((a,b)=>(b.featured?1:0)-(a.featured?1:0));
+  return tools;
+}
+
+function pricingCls(p){return p==='free'?'pricing-free':p==='freemium'?'pricing-freemium':'pricing-paid';}
+function pricingLabel(p){return p==='free'?'Free':p==='freemium'?'Freemium':'Paid';}
+
+function catBg(cat){
+  const map={image:'linear-gradient(135deg,#1a0a2e,#2d1b69)',video:'linear-gradient(135deg,#0a1a2e,#1b3269)',coding:'linear-gradient(135deg,#0a2e1a,#1b6934)',writing:'linear-gradient(135deg,#2e1a0a,#694b1b)',chat:'linear-gradient(135deg,#0a2e2e,#1b6969)',audio:'linear-gradient(135deg,#2e0a2e,#691b69)',research:'linear-gradient(135deg,#1a2e0a,#496934)',productivity:'linear-gradient(135deg,#2e2a0a,#696234)',data:'linear-gradient(135deg,#0a1e2e,#1b4869)',design:'linear-gradient(135deg,#2e0a1a,#692e4b)',marketing:'linear-gradient(135deg,#2e1a0a,#694b1b)'};
+  return map[cat]||'linear-gradient(135deg,#1a1a2e,#16213e)';
+}
+
+function renderTools(){
+  const tools=getFilteredTools();
+  updateCounts(TOOLS);
+  document.getElementById('tool-count').textContent=tools.length+' AI tool'+(tools.length!==1?'s':'');
+  const grid=document.getElementById('tools-grid');
+  if(!tools.length){grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:48px;color:var(--text3);font-family:var(--mono);font-size:14px">No tools found. Try a different search or category.</div>';return;}
+  grid.innerHTML=tools.map(t=>`
+    <a href="${t.url}" target="_blank" rel="noopener" class="tool-card${t.featured?' featured':''}">
+      <div class="card-thumb" style="background:${catBg(t.cat)}">${t.emoji}</div>
+      <div class="card-body">
+        <div class="card-name">${t.name}${t.daysAgo<=7?'<span class="new-badge">NEW</span>':''}</div>
+        <div class="card-tagline">${t.tagline}</div>
+        <div class="card-meta">
+          <span class="card-cat ${pricingCls(t.pricing)}">${pricingLabel(t.pricing)}</span>
+          <div class="card-votes">
+            <button class="vote-btn" onclick="event.preventDefault();vote(${t.id},this)">▲ ${t.votes.toLocaleString()}</button>
+          </div>
+        </div>
+      </div>
+    </a>`).join('');
+}
+
+function vote(id,btn){
+  const tool=TOOLS.find(t=>t.id===id);
+  if(!tool)return;
+  tool.votes++;
+  btn.textContent='▲ '+tool.votes.toLocaleString();
+  btn.style.borderColor='var(--green)';
+  btn.style.color='var(--green)';
+  showToast('Voted for '+tool.name+' 🎉');
+}
+
+// Build spotlight carousel
+function buildSpotlight(){
+  const featured=TOOLS.filter(t=>t.featured);
+  const html=featured.map(t=>`
+    <a href="${t.url}" target="_blank" rel="noopener" class="scard spot-paid">
+      <span class="scard-badge">FEATURED</span>
+      <div class="scard-icon">${t.emoji}</div>
+      <div class="scard-name">${t.name}</div>
+      <div class="scard-cat">${t.cat}</div>
+      <div class="scard-desc">${t.tagline.slice(0,80)}${t.tagline.length>80?'…':''}</div>
+      <span class="scard-tag">${pricingLabel(t.pricing)}</span>
+    </a>`).join('');
+  const track=document.getElementById('spotlight-track');
+  track.innerHTML=html+html; // duplicate for loop
+}
+
+// Tier selection
+function selectTier(tier,el){
+  selectedTier=tier;
+  document.querySelectorAll('.tier-opt').forEach(t=>t.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+// Auto scam check (basic validation)
+function scamCheck(name,url,desc){
+  const suspicious=['free money','earn $','crypto','nft','mlm','pyramid','click here to win','guaranteed income'];
+  const combined=(name+' '+url+' '+desc).toLowerCase();
+  return suspicious.some(s=>combined.includes(s));
+}
+
+function submitTool(){
+  const name=document.getElementById('f-name').value.trim();
+  const url=document.getElementById('f-url').value.trim();
+  const cat=document.getElementById('f-cat').value;
+  const pricing=document.getElementById('f-pricing').value;
+  const desc=document.getElementById('f-desc').value.trim();
+  const email=document.getElementById('f-email').value.trim();
+  const emoji=document.getElementById('f-emoji').value.trim()||'🤖';
+
+  if(!name||!url||!cat||!pricing||!desc||!email){showToast('Please fill in all required fields');return;}
+  if(!url.startsWith('http')){showToast('Please enter a valid URL starting with https://');return;}
+  if(!email.includes('@')){showToast('Please enter a valid email');return;}
+  if(scamCheck(name,url,desc)){showToast('⚠️ Your submission was flagged. Please review our guidelines.');return;}
+
+  // If paid tier, would redirect to payment (Stripe/LemonSqueezy)
+  if(selectedTier==='featured'||selectedTier==='premium'){
+    const price=selectedTier==='featured'?'$79':'$149';
+    showToast('Redirecting to payment page ('+price+')...');
+    // In production: window.location.href = 'https://buy.stripe.com/YOUR_LINK?prefilled_email='+encodeURIComponent(email);
+    setTimeout(()=>showSuccessMsg(name),1500);
+    return;
+  }
+
+  // Free submission — add to local list and show success
+  const newTool={
+    id:TOOLS.length+1,
+    name,emoji,cat,pricing,
+    tagline:desc,votes:0,
+    featured:false,
+    url,daysAgo:0
+  };
+  TOOLS.unshift(newTool);
+  showSuccessMsg(name);
+  renderTools();
+}
+
+function showSuccessMsg(name){
+  document.getElementById('success-msg').style.display='block';
+  document.getElementById('success-msg').textContent='✅ "'+name+'" submitted! We\'ll review within 24 hours and email you when it\'s live. 🐙';
+  document.querySelector('.btn-submit-form').style.display='none';
+}
+
+function startPayment(plan){
+  const prices={starter:'$29/7 days',growth:'$79/30 days',premium:'$149/30 days'};
+  showToast('Starting checkout for '+prices[plan]+' — redirecting to payment...');
+  // In production: window.open('https://buy.stripe.com/YOUR_'+plan+'_LINK','_blank');
+}
+
+function showToast(msg){
+  const t=document.getElementById('toast');t.textContent=msg;t.style.opacity='1';
+  clearTimeout(t._t);t._t=setTimeout(()=>t.style.opacity='0',2500);
+}
+
+// Init
+buildSpotlight();
+renderTools();
+</script>
+</body>
+</html>
