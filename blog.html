@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Model Intelligence Blog — Octopus AI Intel</title>
-<meta name="description" content="Daily AI model pricing analysis, new model launches, cost comparisons and AI tool reviews. Updated automatically.">
+<title>AI Blog — aimodelranks.live</title>
+<meta name="description" content="Daily AI model pricing analysis, new model launches, cost comparisons and AI tool reviews. The AI intelligence blog.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700;800&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#07090f;--bg2:#0d1117;--bg3:#131b2a;--bg4:#1a2438;
+  --bg:#07090f;--bg2:#0d1117;--bg3:#131b2a;
   --border:#1e2d42;--border2:rgba(59,180,255,0.18);
   --cyan:#3bb4ff;--green:#00d97e;--red:#ff4d6d;
   --yellow:#fbbf24;--purple:#a855f7;
@@ -22,110 +22,126 @@
 html{scroll-behavior:smooth;}
 body{background:var(--bg);color:var(--text);font-family:var(--sans);overflow-x:hidden;}
 
-nav{position:sticky;top:0;z-index:1000;background:rgba(7,9,15,0.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:58px;}
-.nav-logo{font-family:var(--hud);font-size:15px;color:var(--cyan);letter-spacing:1px;text-decoration:none;}
-.nav-links{display:flex;gap:8px;align-items:center;}
-.nav-link{color:var(--text2);text-decoration:none;font-size:14px;padding:6px 10px;transition:color 0.2s;}
-.nav-link:hover{color:var(--cyan);}
-.btn-api{background:var(--cyan);color:#000;padding:8px 16px;border-radius:7px;font-size:13px;font-weight:700;text-decoration:none;}
+nav{position:sticky;top:0;z-index:1000;background:rgba(7,9,15,0.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+.nav-inner{display:flex;align-items:center;gap:12px;padding:0 24px;height:58px;}
+.nav-logo{font-family:var(--hud);font-size:15px;color:var(--cyan);letter-spacing:1px;text-decoration:none;flex-shrink:0;}
+.nav-links{display:flex;align-items:center;gap:4px;margin-left:auto;}
+.nav-link{color:var(--text2);text-decoration:none;font-size:14px;font-weight:500;padding:7px 12px;border-radius:6px;transition:all 0.2s;white-space:nowrap;}
+.nav-link:hover{color:var(--text);background:rgba(255,255,255,0.04);}
+.nav-link.active{color:var(--cyan);}
+.btn-api{background:var(--cyan);color:#000;padding:8px 16px;border-radius:7px;font-size:14px;font-weight:700;text-decoration:none;}
 
-/* HERO */
-.blog-hero{padding:48px 24px 32px;background:linear-gradient(180deg,var(--bg3),var(--bg));border-bottom:1px solid var(--border);text-align:center;}
-.blog-hero h1{font-family:var(--hud);font-size:clamp(22px,4vw,40px);color:#fff;letter-spacing:1px;margin-bottom:10px;}
-.blog-hero h1 span{color:var(--cyan);}
-.blog-hero p{font-size:16px;color:var(--text2);max-width:520px;margin:0 auto;line-height:1.7;}
-
-/* TICKER */
 .ticker{background:var(--bg2);border-bottom:1px solid var(--border);overflow:hidden;padding:9px 0;position:relative;}
 .ticker::before,.ticker::after{content:'';position:absolute;top:0;bottom:0;width:60px;z-index:2;pointer-events:none;}
 .ticker::before{left:0;background:linear-gradient(to right,var(--bg2),transparent);}
 .ticker::after{right:0;background:linear-gradient(to left,var(--bg2),transparent);}
 .t-track{display:flex;gap:48px;animation:tScroll 50s linear infinite;white-space:nowrap;width:max-content;}
-.ti{font-family:var(--mono);font-size:13px;color:var(--text2);}
+.ti{font-family:var(--mono);font-size:13px;color:var(--text3);}
 .ti-g{color:var(--green);}
 @keyframes tScroll{from{transform:translateX(0);}to{transform:translateX(-50%);}}
 
-/* MAIN */
-.main{max-width:1200px;margin:0 auto;padding:32px 24px;}
-.blog-layout{display:grid;grid-template-columns:1fr 300px;gap:32px;align-items:start;}
+.hero{padding:40px 24px 28px;background:radial-gradient(ellipse at 50% 0%,rgba(59,180,255,0.06),transparent 60%);border-bottom:1px solid var(--border);text-align:center;}
+.hero h1{font-family:var(--hud);font-size:clamp(20px,4vw,38px);color:#fff;letter-spacing:1px;margin-bottom:8px;}
+.hero h1 span{color:var(--cyan);}
+.hero p{font-size:15px;color:var(--text2);max-width:500px;margin:0 auto;}
+
+.main{max-width:1200px;margin:0 auto;padding:28px 24px;}
+.blog-layout{display:grid;grid-template-columns:1fr 290px;gap:28px;align-items:start;}
 @media(max-width:900px){.blog-layout{grid-template-columns:1fr;}}
 
-/* CATEGORY FILTER */
-.cat-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;}
+/* CAT BAR */
+.cat-bar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px;}
 .cat-pill{padding:7px 16px;border-radius:100px;border:1px solid var(--border);background:transparent;font-size:13px;color:var(--text2);cursor:pointer;transition:all 0.2s;font-family:var(--sans);font-weight:500;}
 .cat-pill:hover{border-color:var(--cyan);color:var(--cyan);}
 .cat-pill.active{border-color:var(--cyan);color:var(--cyan);background:rgba(59,180,255,0.07);}
 
-/* FEATURED ARTICLE (top big card) */
-.featured-article{background:var(--bg2);border:1px solid var(--border2);border-radius:12px;overflow:hidden;margin-bottom:24px;cursor:pointer;transition:border-color 0.2s,transform 0.2s;text-decoration:none;display:block;}
-.featured-article:hover{border-color:rgba(59,180,255,0.35);transform:translateY(-2px);}
-.fa-thumb{width:100%;height:220px;display:flex;align-items:center;justify-content:center;font-size:64px;position:relative;}
+.ai-gen{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;color:var(--purple);margin-bottom:16px;}
+.ai-dot{width:7px;height:7px;border-radius:50%;background:var(--purple);animation:aiP 1s infinite;}
+@keyframes aiP{0%,100%{opacity:1;}50%{opacity:0.3;}}
+
+/* FEATURED ARTICLE */
+.fa{background:var(--bg2);border:1px solid var(--border2);border-radius:12px;overflow:hidden;margin-bottom:20px;cursor:pointer;text-decoration:none;display:block;transition:border-color 0.2s,transform 0.2s;}
+.fa:hover{border-color:rgba(59,180,255,0.35);transform:translateY(-2px);}
+.fa-thumb{width:100%;height:200px;display:flex;align-items:center;justify-content:center;font-size:60px;position:relative;}
 .fa-thumb::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(13,17,23,0.9),transparent 50%);}
-.fa-badge{position:absolute;bottom:16px;left:16px;z-index:1;background:linear-gradient(135deg,var(--cyan),var(--purple));color:#000;font-family:var(--mono);font-size:10px;font-weight:700;padding:4px 12px;border-radius:100px;letter-spacing:1px;}
-.fa-body{padding:20px;}
-.fa-tag{font-family:var(--mono);font-size:11px;color:var(--cyan);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;}
-.fa-title{font-size:20px;font-weight:800;color:var(--text);margin-bottom:8px;line-height:1.35;}
-.fa-excerpt{font-size:14px;color:var(--text2);line-height:1.7;margin-bottom:14px;}
+.fa-badge{position:absolute;bottom:14px;left:14px;z-index:1;background:linear-gradient(135deg,var(--cyan),var(--purple));color:#000;font-family:var(--mono);font-size:10px;font-weight:700;padding:3px 10px;border-radius:100px;letter-spacing:1px;}
+.fa-body{padding:18px;}
+.fa-tag{font-family:var(--mono);font-size:11px;color:var(--cyan);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px;}
+.fa-title{font-size:19px;font-weight:800;color:var(--text);margin-bottom:7px;line-height:1.35;}
+.fa-excerpt{font-size:14px;color:var(--text2);line-height:1.7;margin-bottom:12px;}
 .fa-meta{display:flex;align-items:center;justify-content:space-between;font-size:12px;font-family:var(--mono);color:var(--text3);}
 
 /* ARTICLE GRID */
-.articles-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;margin-bottom:24px;}
-.art-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden;cursor:pointer;transition:border-color 0.2s,transform 0.2s;text-decoration:none;display:block;}
-.art-card:hover{border-color:rgba(59,180,255,0.25);transform:translateY(-2px);}
-.art-card.featured-card{border-color:rgba(251,191,36,0.25);}
-.art-thumb{width:100%;height:140px;display:flex;align-items:center;justify-content:center;font-size:44px;}
-.art-body{padding:16px;}
-.art-tag{font-family:var(--mono);font-size:10px;color:var(--cyan);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px;}
-.art-title{font-size:15px;font-weight:700;color:var(--text);margin-bottom:6px;line-height:1.4;}
-.art-excerpt{font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:12px;}
-.art-meta{display:flex;align-items:center;justify-content:space-between;font-size:11px;font-family:var(--mono);color:var(--text3);}
-.art-read{color:var(--cyan);}
-.new-badge{display:inline-block;background:rgba(0,217,126,0.1);border:1px solid rgba(0,217,126,0.25);color:var(--green);font-size:10px;padding:2px 7px;border-radius:4px;font-family:var(--mono);margin-left:6px;vertical-align:middle;}
-.ai-badge{background:rgba(168,85,247,0.1);border:1px solid rgba(168,85,247,0.2);color:var(--purple);font-size:10px;padding:2px 7px;border-radius:4px;font-family:var(--mono);display:inline-block;margin-left:6px;vertical-align:middle;}
+.art-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;}
+.ac{background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden;cursor:pointer;text-decoration:none;display:block;transition:border-color 0.2s,transform 0.2s;}
+.ac:hover{border-color:rgba(59,180,255,0.25);transform:translateY(-2px);}
+.ac-thumb{width:100%;height:130px;display:flex;align-items:center;justify-content:center;font-size:40px;}
+.ac-body{padding:14px;}
+.ac-tag{font-family:var(--mono);font-size:10px;color:var(--cyan);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:5px;}
+.ac-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:5px;line-height:1.4;}
+.ac-excerpt{font-size:12px;color:var(--text2);line-height:1.6;margin-bottom:10px;}
+.ac-meta{display:flex;align-items:center;justify-content:space-between;font-size:11px;font-family:var(--mono);color:var(--text3);}
+.ac-read{color:var(--cyan);}
+.nbadge{background:rgba(0,217,126,0.1);border:1px solid rgba(0,217,126,0.2);color:var(--green);font-size:10px;padding:1px 6px;border-radius:3px;font-family:var(--mono);margin-left:5px;}
+.aibadge{background:rgba(168,85,247,0.1);border:1px solid rgba(168,85,247,0.2);color:var(--purple);font-size:10px;padding:1px 6px;border-radius:3px;font-family:var(--mono);margin-left:5px;}
+
+/* ARTICLE MODAL */
+.art-modal{display:none;position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,0.85);backdrop-filter:blur(8px);overflow-y:auto;padding:24px;}
+.art-modal.open{display:flex;align-items:flex-start;justify-content:center;}
+.art-modal-inner{background:var(--bg2);border:1px solid var(--border2);border-radius:12px;max-width:780px;width:100%;padding:32px;position:relative;margin:auto;}
+.art-modal-close{position:absolute;top:16px;right:16px;background:var(--bg3);border:1px solid var(--border);color:var(--text2);width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all 0.2s;}
+.art-modal-close:hover{border-color:var(--red);color:var(--red);}
+.art-modal-thumb{width:100%;height:180px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:64px;margin-bottom:20px;}
+.art-modal-tag{font-family:var(--mono);font-size:11px;color:var(--cyan);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;}
+.art-modal-title{font-family:var(--hud);font-size:clamp(18px,3vw,26px);color:#fff;margin-bottom:10px;line-height:1.3;letter-spacing:0.5px;}
+.art-modal-meta{font-family:var(--mono);font-size:12px;color:var(--text3);margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--border);}
+.art-modal-body{font-size:15px;color:var(--text2);line-height:1.85;}
+.art-modal-body h2{font-family:var(--hud);font-size:16px;color:var(--text);margin:24px 0 10px;letter-spacing:0.5px;}
+.art-modal-body p{margin-bottom:14px;}
+.art-modal-body .highlight{background:rgba(59,180,255,0.06);border-left:3px solid var(--cyan);padding:12px 16px;border-radius:0 6px 6px 0;margin:16px 0;font-family:var(--mono);font-size:13px;color:var(--text);}
+.art-modal-body .price-table{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:16px;margin:16px 0;}
+.art-modal-body .price-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(30,45,66,0.4);font-size:14px;}
+.art-modal-body .price-row:last-child{border-bottom:none;}
+.art-modal-body .pv{font-family:var(--mono);font-weight:700;color:var(--green);}
+.art-share{display:flex;gap:8px;margin-top:20px;padding-top:16px;border-top:1px solid var(--border);}
+.share-btn{display:flex;align-items:center;gap:6px;padding:8px 16px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--text2);transition:all 0.2s;font-family:var(--sans);}
+.share-btn:hover{border-color:var(--cyan);color:var(--cyan);}
+
+/* LOAD MORE */
+.load-more{display:block;width:100%;padding:13px;background:transparent;border:1px solid var(--border);border-radius:8px;color:var(--cyan);font-family:var(--mono);font-size:14px;cursor:pointer;transition:all 0.2s;margin-top:16px;}
+.load-more:hover{background:rgba(59,180,255,0.05);border-color:var(--cyan);}
 
 /* SIDEBAR */
-.sidebar{display:flex;flex-direction:column;gap:16px;}
+.sidebar{display:flex;flex-direction:column;gap:14px;position:sticky;top:78px;}
 .sb{background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden;}
-.sb-hdr{padding:14px 16px;border-bottom:1px solid var(--border);font-family:var(--hud);font-size:13px;color:var(--text);letter-spacing:0.5px;}
-.sb-body{padding:14px 16px;}
-.sb-item{padding:10px 0;border-bottom:1px solid rgba(30,45,66,0.5);font-size:13px;}
+.sb-hdr{padding:12px 14px;border-bottom:1px solid var(--border);font-family:var(--hud);font-size:12px;color:var(--text);letter-spacing:0.5px;display:flex;align-items:center;justify-content:space-between;}
+.sb-lnk{font-size:11px;color:var(--cyan);text-decoration:none;font-family:var(--mono);}
+.sb-body{padding:12px 14px;}
+.sb-item{padding:9px 0;border-bottom:1px solid rgba(30,45,66,0.4);}
 .sb-item:last-child{border-bottom:none;}
-.sb-item a{color:var(--text);text-decoration:none;font-weight:500;transition:color 0.2s;display:block;line-height:1.4;margin-bottom:4px;}
+.sb-item a{color:var(--text);text-decoration:none;font-size:13px;font-weight:500;display:block;margin-bottom:3px;line-height:1.4;transition:color 0.2s;}
 .sb-item a:hover{color:var(--cyan);}
 .sb-item-meta{font-family:var(--mono);font-size:11px;color:var(--text3);}
-
-/* PRICE WIDGET in sidebar */
-.price-widget{background:var(--bg);border-radius:6px;padding:10px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;}
-.pw-model{font-size:13px;font-weight:600;color:var(--text);}
-.pw-price{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--green);}
-
-/* AD in sidebar */
-.sb-ad{background:linear-gradient(135deg,var(--bg3),var(--bg2));border:1px solid var(--border);border-radius:10px;padding:18px;text-align:center;position:relative;overflow:hidden;}
+.pw{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid rgba(30,45,66,0.4);font-size:13px;}
+.pw:last-child{border-bottom:none;}
+.pw-val{font-family:var(--mono);font-weight:700;color:var(--green);}
+.sb-ad{background:linear-gradient(135deg,var(--bg3),var(--bg2));border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center;position:relative;overflow:hidden;}
 .sb-ad::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),var(--purple));}
-.sb-ad-label{display:inline-block;background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.15);color:var(--yellow);font-size:10px;padding:2px 8px;border-radius:4px;font-family:var(--mono);margin-bottom:10px;}
-.sb-ad-title{font-size:15px;font-weight:700;color:var(--text);margin-bottom:6px;}
-.sb-ad-sub{font-size:13px;color:var(--text2);margin-bottom:14px;line-height:1.5;}
-.sb-ad-btn{display:block;background:linear-gradient(135deg,var(--cyan),var(--purple));color:#000;padding:10px;border-radius:7px;font-size:13px;font-weight:700;text-decoration:none;}
-.sb-ad-btn:hover{opacity:0.88;}
+.sb-ad-badge{display:inline-block;background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.15);color:var(--yellow);font-size:10px;padding:2px 7px;border-radius:3px;font-family:var(--mono);margin-bottom:8px;}
+.sb-ad-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px;}
+.sb-ad-sub{font-size:12px;color:var(--text2);margin-bottom:12px;line-height:1.5;}
+.sb-ad-btn{display:block;padding:9px;border-radius:7px;font-size:13px;font-weight:700;text-decoration:none;text-align:center;}
+.sb-ad-btn:hover{opacity:0.85;}
 
 /* NEWSLETTER */
-.newsletter{background:linear-gradient(135deg,rgba(59,180,255,0.06),rgba(168,85,247,0.06));border:1px solid var(--border2);border-radius:10px;padding:22px;margin-bottom:24px;}
-.nl-title{font-family:var(--hud);font-size:16px;color:var(--text);margin-bottom:6px;letter-spacing:0.5px;}
-.nl-sub{font-size:14px;color:var(--text2);margin-bottom:16px;line-height:1.5;}
+.nl{background:linear-gradient(135deg,rgba(59,180,255,0.06),rgba(168,85,247,0.06));border:1px solid var(--border2);border-radius:10px;padding:20px;margin-bottom:20px;}
+.nl-title{font-family:var(--hud);font-size:15px;color:var(--text);margin-bottom:5px;letter-spacing:0.5px;}
+.nl-sub{font-size:13px;color:var(--text2);margin-bottom:14px;line-height:1.5;}
 .nl-form{display:flex;gap:8px;}
 .nl-input{flex:1;background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:10px 14px;font-size:14px;color:var(--text);outline:none;font-family:var(--sans);transition:border-color 0.2s;}
 .nl-input:focus{border-color:var(--cyan);}
 .nl-input::placeholder{color:var(--text3);}
-.nl-btn{background:var(--cyan);color:#000;border:none;padding:10px 20px;border-radius:7px;font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap;}
-
-/* LOAD MORE */
-.load-more-btn{display:block;width:100%;padding:14px;background:transparent;border:1px solid var(--border);border-radius:8px;color:var(--cyan);font-family:var(--mono);font-size:14px;cursor:pointer;transition:all 0.2s;margin-top:8px;}
-.load-more-btn:hover{background:rgba(59,180,255,0.05);border-color:var(--cyan);}
-
-/* AI GENERATING INDICATOR */
-.ai-gen{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;color:var(--purple);margin-bottom:16px;}
-.ai-dot{width:8px;height:8px;border-radius:50%;background:var(--purple);animation:aiPulse 1s infinite;}
-@keyframes aiPulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
+.nl-btn{background:var(--cyan);color:#000;border:none;padding:10px 18px;border-radius:7px;font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap;}
 
 footer{border-top:1px solid var(--border);padding:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-top:32px;}
 .foot-logo{font-family:var(--hud);font-size:12px;color:var(--cyan);letter-spacing:1px;}
@@ -139,151 +155,122 @@ footer a:hover{color:var(--cyan);}
 <body>
 <div id="toast"></div>
 
+<!-- ARTICLE MODAL -->
+<div class="art-modal" id="art-modal" onclick="closeModal(event)">
+  <div class="art-modal-inner" id="art-modal-inner">
+    <button class="art-modal-close" onclick="closeModalBtn()">✕</button>
+    <div class="art-modal-thumb" id="modal-thumb"></div>
+    <div class="art-modal-tag" id="modal-tag"></div>
+    <div class="art-modal-title" id="modal-title"></div>
+    <div class="art-modal-meta" id="modal-meta"></div>
+    <div class="art-modal-body" id="modal-body"></div>
+    <div class="art-share">
+      <button class="share-btn" onclick="shareArticle()">🐦 Share on Twitter</button>
+      <button class="share-btn" onclick="copyLink()">🔗 Copy Link</button>
+    </div>
+  </div>
+</div>
+
 <nav>
-  <a href="compare.html" class="nav-logo">🐙 AI INTEL</a>
-  <div class="nav-links">
-    <a href="compare.html" class="nav-link">Model Prices</a>
-    <a href="tools.html" class="nav-link">AI Tools</a>
-    <a href="index.html" class="nav-link">API Docs</a>
-    <a href="https://rapidapi.com/zakmediaai/api/octopus-ai-model-intel" target="_blank" class="btn-api">Get API Key</a>
+  <div class="nav-inner">
+    <a href="compare.html" class="nav-logo">🐙 AIMODELRANKS.LIVE</a>
+    <div class="nav-links">
+      <a href="compare.html" class="nav-link">📊 Models</a>
+      <a href="tools.html" class="nav-link">🛠 Tools</a>
+      <a href="blog.html" class="nav-link active">📰 Blog</a>
+      <a href="index.html" class="nav-link">⚡ API</a>
+      <a href="https://rapidapi.com/zakmediaai/api/octopus-ai-model-intel" target="_blank" class="btn-api">Get API Key</a>
+    </div>
   </div>
 </nav>
 
-<!-- TICKER -->
 <div class="ticker">
   <div class="t-track">
-    <span class="ti ti-g">🆕 New: Mistral Large 3 at $0.50/1M — Read analysis →</span>
-    <span class="ti">📊 GPT-4.1 vs Claude Sonnet 4.5 — Full comparison</span>
-    <span class="ti ti-g">💰 DeepSeek still cheapest — $0.14/1M</span>
+    <span class="ti ti-g">🆕 Mistral Large 3 at $0.50/1M — read analysis →</span>
+    <span class="ti">📊 GPT-4.1 vs Claude Sonnet 4.5 — full comparison</span>
+    <span class="ti ti-g">💰 DeepSeek cheapest — $0.14/1M</span>
     <span class="ti">🧠 Best reasoning models of 2026 ranked</span>
-    <span class="ti ti-g">🆕 New: Mistral Large 3 at $0.50/1M — Read analysis →</span>
-    <span class="ti">📊 GPT-4.1 vs Claude Sonnet 4.5 — Full comparison</span>
-    <span class="ti ti-g">💰 DeepSeek still cheapest — $0.14/1M</span>
+    <span class="ti ti-g">🆕 Mistral Large 3 at $0.50/1M — read analysis →</span>
+    <span class="ti">📊 GPT-4.1 vs Claude Sonnet 4.5 — full comparison</span>
+    <span class="ti ti-g">💰 DeepSeek cheapest — $0.14/1M</span>
     <span class="ti">🧠 Best reasoning models of 2026 ranked</span>
   </div>
 </div>
 
-<!-- HERO -->
-<div class="blog-hero">
-  <h1>AI Model <span>Intelligence</span> Blog</h1>
-  <p>Daily pricing analysis, model comparisons, new launches and AI tool reviews. Auto-generated + human-curated.</p>
+<div class="hero">
+  <h1>AI <span>Intelligence</span> Blog</h1>
+  <p>Daily pricing analysis, model launches, comparisons and AI tool reviews. Click any article to read in full.</p>
 </div>
 
-<!-- MAIN -->
 <div class="main">
-
-  <!-- NEWSLETTER -->
-  <div class="newsletter">
+  <div class="nl">
     <div class="nl-title">📬 Weekly AI Price Digest</div>
-    <div class="nl-sub">Get the week's biggest AI model price changes, new launches and top tools — every Monday. Free forever.</div>
+    <div class="nl-sub">Every Monday: biggest AI price changes, new launches, top tools. Free forever.</div>
     <div class="nl-form">
       <input class="nl-input" id="nl-email" type="email" placeholder="your@email.com">
       <button class="nl-btn" onclick="subscribeNL()">Subscribe Free</button>
     </div>
   </div>
 
-  <!-- CATEGORY FILTER -->
   <div class="cat-bar">
     <button class="cat-pill active" onclick="setCat('all',this)">🔥 All</button>
     <button class="cat-pill" onclick="setCat('pricing',this)">💰 Pricing</button>
-    <button class="cat-pill" onclick="setCat('models',this)">🤖 New Models</button>
+    <button class="cat-pill" onclick="setCat('models',this)">🤖 Models</button>
     <button class="cat-pill" onclick="setCat('compare',this)">📊 Comparisons</button>
-    <button class="cat-pill" onclick="setCat('tools',this)">🛠 AI Tools</button>
+    <button class="cat-pill" onclick="setCat('tools',this)">🛠 Tools</button>
     <button class="cat-pill" onclick="setCat('guides',this)">📖 Guides</button>
-    <button class="cat-pill" onclick="setCat('news',this)">📰 Industry News</button>
+    <button class="cat-pill" onclick="setCat('news',this)">📰 News</button>
   </div>
 
-  <!-- AI GENERATING BADGE -->
-  <div class="ai-gen">
-    <span class="ai-dot"></span>
-    AI-assisted content — articles auto-generated daily, reviewed for accuracy
-  </div>
+  <div class="ai-gen"><span class="ai-dot"></span> AI-assisted · Updated daily · Click any article to read full content</div>
 
   <div class="blog-layout">
     <div>
-      <!-- FEATURED ARTICLE -->
       <div id="featured-area"></div>
-      <!-- ARTICLES GRID -->
-      <div class="articles-grid" id="articles-grid"></div>
-      <button class="load-more-btn" id="load-more" onclick="loadMore()">Load more articles →</button>
+      <div class="art-grid" id="art-grid"></div>
+      <button class="load-more" id="load-more-btn" onclick="loadMore()">Load more articles →</button>
     </div>
 
-    <!-- SIDEBAR -->
     <div class="sidebar">
-
-      <!-- LIVE PRICES WIDGET -->
       <div class="sb">
-        <div class="sb-hdr">📊 Live Model Prices</div>
-        <div class="sb-body" id="price-widget">
-          <div style="font-family:var(--mono);font-size:12px;color:var(--text3)">Loading...</div>
-        </div>
+        <div class="sb-hdr">📊 Live Model Prices <a href="compare.html" class="sb-lnk">All →</a></div>
+        <div class="sb-body" id="price-widget">Loading...</div>
       </div>
 
-      <!-- AD -->
       <div class="sb-ad">
-        <div class="sb-ad-label">SPONSORED</div>
+        <div class="sb-ad-badge">SPONSORED</div>
         <div class="sb-ad-title">🔥 Mistral AI</div>
-        <div class="sb-ad-sub">New Large 3 model — 60% cheaper than GPT-4o. Try it today.</div>
-        <a href="https://mistral.ai" target="_blank" class="sb-ad-btn">Try Mistral →</a>
+        <div class="sb-ad-sub">New Large 3 model — 60% cheaper than GPT-4o.</div>
+        <a href="https://mistral.ai" target="_blank" class="sb-ad-btn" style="background:#ff6b00;color:#fff">Try Mistral →</a>
       </div>
 
-      <!-- TRENDING ARTICLES -->
       <div class="sb">
-        <div class="sb-hdr">🔥 Trending This Week</div>
-        <div class="sb-body">
-          <div class="sb-item">
-            <a href="#">Why Mistral Large 3 at $0.50/1M Changes Everything</a>
-            <div class="sb-item-meta">Pricing · 4.2K views</div>
-          </div>
-          <div class="sb-item">
-            <a href="#">GPT-4.1 vs Claude Sonnet 4.5: Full Comparison 2026</a>
-            <div class="sb-item-meta">Comparison · 3.8K views</div>
-          </div>
-          <div class="sb-item">
-            <a href="#">10 AI Tools Developers Are Actually Using in 2026</a>
-            <div class="sb-item-meta">Tools · 3.1K views</div>
-          </div>
-          <div class="sb-item">
-            <a href="#">How to Cut Your AI API Bill by 70%</a>
-            <div class="sb-item-meta">Guide · 2.9K views</div>
-          </div>
-          <div class="sb-item">
-            <a href="#">DeepSeek vs Mistral: The Budget Model Showdown</a>
-            <div class="sb-item-meta">Comparison · 2.4K views</div>
-          </div>
-        </div>
+        <div class="sb-hdr">🔥 Trending Articles</div>
+        <div class="sb-body" id="trending-articles"></div>
       </div>
 
-      <!-- AD 2 -->
       <div class="sb-ad">
-        <div class="sb-ad-label">ADVERTISE HERE</div>
-        <div class="sb-ad-title">📣 Reach AI Developers</div>
-        <div class="sb-ad-sub">Your AI tool in front of 10K+ developers comparing AI products daily.</div>
-        <a href="tools.html#advertise" class="sb-ad-btn">Get Featured from $29 →</a>
+        <div class="sb-ad-badge">ADVERTISE HERE</div>
+        <div class="sb-ad-title">📣 Reach AI Builders</div>
+        <div class="sb-ad-sub">AI developers, founders and researchers read our blog daily.</div>
+        <a href="tools.html#advertise" class="sb-ad-btn" style="background:linear-gradient(135deg,var(--cyan),var(--purple));color:#000">From $29 →</a>
       </div>
 
-      <!-- TAGS -->
       <div class="sb">
-        <div class="sb-hdr">🏷 Popular Topics</div>
-        <div class="sb-body" style="display:flex;flex-wrap:wrap;gap:6px">
-          <span onclick="setCatExt('pricing')" style="cursor:pointer;padding:5px 12px;border-radius:100px;border:1px solid var(--border);font-size:12px;color:var(--text2);transition:all 0.2s">💰 Pricing</span>
-          <span onclick="setCatExt('models')" style="cursor:pointer;padding:5px 12px;border-radius:100px;border:1px solid var(--border);font-size:12px;color:var(--text2)">🤖 Models</span>
-          <span onclick="setCatExt('compare')" style="cursor:pointer;padding:5px 12px;border-radius:100px;border:1px solid var(--border);font-size:12px;color:var(--text2)">📊 Compare</span>
-          <span onclick="setCatExt('tools')" style="cursor:pointer;padding:5px 12px;border-radius:100px;border:1px solid var(--border);font-size:12px;color:var(--text2)">🛠 Tools</span>
-          <span onclick="setCatExt('mistral')" style="cursor:pointer;padding:5px 12px;border-radius:100px;border:1px solid var(--border);font-size:12px;color:var(--text2)">🔥 Mistral</span>
-          <span onclick="setCatExt('openai')" style="cursor:pointer;padding:5px 12px;border-radius:100px;border:1px solid var(--border);font-size:12px;color:var(--text2)">🟢 OpenAI</span>
-          <span onclick="setCatExt('google')" style="cursor:pointer;padding:5px 12px;border-radius:100px;border:1px solid var(--border);font-size:12px;color:var(--text2)">🔵 Google</span>
-          <span onclick="setCatExt('deepseek')" style="cursor:pointer;padding:5px 12px;border-radius:100px;border:1px solid var(--border);font-size:12px;color:var(--text2)">🟣 DeepSeek</span>
+        <div class="sb-hdr">🛠 Trending Tools <a href="tools.html" class="sb-lnk">All →</a></div>
+        <div class="sb-body">
+          <div style="padding:8px 0;border-bottom:1px solid rgba(30,45,66,0.4)"><a href="https://cursor.sh" target="_blank" style="color:var(--text);text-decoration:none;font-size:13px;font-weight:600">💻 Cursor</a><div style="font-family:var(--mono);font-size:11px;color:var(--text3)">Coding AI · ▲1,923</div></div>
+          <div style="padding:8px 0;border-bottom:1px solid rgba(30,45,66,0.4)"><a href="https://midjourney.com" target="_blank" style="color:var(--text);text-decoration:none;font-size:13px;font-weight:600">🎨 Midjourney</a><div style="font-family:var(--mono);font-size:11px;color:var(--text3)">Image AI · ▲2,847</div></div>
+          <div style="padding:8px 0"><a href="https://runwayml.com" target="_blank" style="color:var(--text);text-decoration:none;font-size:13px;font-weight:600">🎬 Runway Gen-4</a><div style="font-family:var(--mono);font-size:11px;color:var(--text3)">Video AI · ▲1,432</div></div>
         </div>
       </div>
-
     </div>
   </div>
 </div>
 
 <footer>
-  <div class="foot-logo">🐙 OCTOPUS AI INTEL</div>
-  <p>AI-assisted blog · Updated daily · Prices from live API</p>
+  <div class="foot-logo">🐙 AIMODELRANKS.LIVE</div>
+  <p>AI Blog · Updated daily · Prices from live API</p>
   <div class="foot-links">
     <a href="compare.html">Model Prices</a>
     <a href="tools.html">AI Tools</a>
@@ -293,124 +280,212 @@ footer a:hover{color:var(--cyan);}
 
 <script>
 const API='https://ai-model-intel.zak-media-ai.workers.dev';
+const SITE='https://www.aimodelranks.live';
 
-// Complete article database — SEO-optimized titles and content
+// Full article content database
 const ARTICLES=[
-  {id:1,cat:'models',emoji:'🔥',tag:'NEW MODEL',title:'Mistral Large 3 at $0.50/1M: The Model That Changes the Pricing Game',excerpt:'Mistral AI shipped Large 3 with a 262K context window at just $0.50/1M input tokens — 60% cheaper than GPT-4o on output. We break down what this means for developers.',date:'May 4, 2026',read:'5 min',views:'4.2K',featured:true,isNew:true,isAI:false,bg:'linear-gradient(135deg,#2d0a00,#4a1800)'},
-  {id:2,cat:'compare',emoji:'⚔️',tag:'COMPARISON',title:'GPT-4.1 vs Claude Sonnet 4.5: Which Model Wins in 2026?',excerpt:'We compared both flagship models across pricing, context window, coding, reasoning and vision. The results might surprise you.',date:'May 3, 2026',read:'7 min',views:'3.8K',featured:false,isNew:true,isAI:true,bg:'linear-gradient(135deg,#0a1628,#1a2850)'},
-  {id:3,cat:'pricing',emoji:'💰',tag:'PRICING ANALYSIS',title:'How to Cut Your AI API Bill by 70% Without Losing Quality',excerpt:'Practical strategies for routing tasks to cheaper models, batching requests and choosing the right tier for each use case.',date:'May 2, 2026',read:'6 min',views:'2.9K',featured:false,isNew:false,isAI:true,bg:'linear-gradient(135deg,#001a0a,#003018)'},
-  {id:4,cat:'tools',emoji:'🛠',tag:'AI TOOLS',title:'10 AI Coding Tools Developers Are Actually Using in 2026',excerpt:'From Cursor to Devin AI, we rank the most popular AI coding tools by real usage, pricing and developer satisfaction scores.',date:'May 1, 2026',read:'8 min',views:'3.1K',featured:false,isNew:false,isAI:false,bg:'linear-gradient(135deg,#0a0a28,#1a1a50)'},
-  {id:5,cat:'compare',emoji:'🥊',tag:'COMPARISON',title:'DeepSeek vs Mistral: The Ultimate Budget AI Model Showdown',excerpt:'Both are ultra-cheap. Both are surprisingly capable. DeepSeek at $0.14/1M vs Ministral-3B at $0.04/1M. Which one should you use?',date:'Apr 30, 2026',read:'5 min',views:'2.4K',featured:false,isNew:false,isAI:true,bg:'linear-gradient(135deg,#1a0a28,#300a50)'},
-  {id:6,cat:'models',emoji:'🧠',tag:'REASONING',title:'Magistral vs o3: Mistral\'s New Reasoning Model at 37% Lower Cost',excerpt:'Magistral Medium positions itself directly against OpenAI\'s o3. We test both on complex reasoning tasks and compare the real cost difference.',date:'Apr 29, 2026',read:'6 min',views:'2.1K',featured:false,isNew:false,isAI:true,bg:'linear-gradient(135deg,#1a1000,#302000)'},
-  {id:7,cat:'guides',emoji:'📖',tag:'GUIDE',title:'The Complete 2026 Guide to AI Model Pricing: Everything You Need to Know',excerpt:'Context windows, input vs output costs, token economics and how to estimate your monthly AI bill before committing to a model.',date:'Apr 28, 2026',read:'12 min',views:'5.6K',featured:false,isNew:false,isAI:false,bg:'linear-gradient(135deg,#001428,#002850)'},
-  {id:8,cat:'news',emoji:'📰',tag:'INDUSTRY NEWS',title:'Llama 4 Scout Has a 10M Token Context Window — What It Means',excerpt:'Meta\'s Llama 4 Scout launched with the largest context window ever available: 10 million tokens. At $0.08/1M it\'s also one of the cheapest vision models.',date:'Apr 27, 2026',read:'4 min',views:'1.8K',featured:false,isNew:false,isAI:true,bg:'linear-gradient(135deg,#001a28,#00284a)'},
-  {id:9,cat:'pricing',emoji:'📉',tag:'PRICE DROP',title:'Google Gemini 2.0 Flash Now $0.10/1M: Best Value in the Market?',excerpt:'Gemini 2.0 Flash offers 1M token context at $0.10/1M — a combination no other model matches at this price point.',date:'Apr 26, 2026',read:'4 min',views:'1.6K',featured:false,isNew:false,isAI:true,bg:'linear-gradient(135deg,#001428,#001a40)'},
-  {id:10,cat:'tools',emoji:'🎨',tag:'AI TOOLS',title:'Best AI Image Generation Tools in 2026: Ranked by Quality and Price',excerpt:'Midjourney, DALL-E 3, Stable Diffusion and Flux compared. We rank them by output quality, pricing model and ease of use.',date:'Apr 25, 2026',read:'7 min',views:'2.2K',featured:false,isNew:false,isAI:false,bg:'linear-gradient(135deg,#280a28,#500a50)'},
-  {id:11,cat:'compare',emoji:'📊',tag:'COMPARISON',title:'Claude 3.5 Haiku vs GPT-4o Mini: The Fast Model Battle',excerpt:'Both are sub-$1/1M fast models. We compare speed, quality, context window and real-world performance for high-volume applications.',date:'Apr 24, 2026',read:'5 min',views:'1.9K',featured:false,isNew:false,isAI:true,bg:'linear-gradient(135deg,#0a1400,#142800)'},
-  {id:12,cat:'guides',emoji:'💡',tag:'GUIDE',title:'How to Use the Octopus AI Intel API to Build a Model Cost Calculator',excerpt:'Step-by-step guide to using our /compare and /recommend endpoints to build a real-time AI cost estimation tool for your app.',date:'Apr 23, 2026',read:'9 min',views:'1.4K',featured:false,isNew:false,isAI:false,bg:'linear-gradient(135deg,#001828,#003060)'},
+  {
+    id:1,cat:'models',emoji:'🔥',tag:'NEW MODEL',
+    title:'Mistral Large 3 at $0.50/1M: The Model That Changes the Pricing Game',
+    excerpt:'Mistral AI shipped Large 3 with 262K context at $0.50/1M — 60% cheaper than GPT-4o output.',
+    date:'May 4, 2026',read:'5 min',views:'4.2K',featured:true,isNew:true,isAI:false,
+    bg:'linear-gradient(135deg,#2d0a00,#4a1800)',
+    content:`<p>Mistral AI just made a bold move that should have every developer reconsidering their model choices. Mistral Large 3, released in late 2025, now sits at <strong>$0.50/1M input tokens</strong> — making it 60% cheaper than GPT-4o on output costs while matching it on capability benchmarks.</p>
+    <h2>The Numbers</h2>
+    <div class="price-table">
+      <div class="price-row"><span>Mistral Large 3 Input</span><span class="pv">$0.50/1M</span></div>
+      <div class="price-row"><span>Mistral Large 3 Output</span><span class="pv">$1.50/1M</span></div>
+      <div class="price-row"><span>GPT-4o Input</span><span class="pv">$2.50/1M</span></div>
+      <div class="price-row"><span>GPT-4o Output</span><span class="pv">$10.00/1M</span></div>
+      <div class="price-row"><span>Context Window</span><span class="pv">262,144 tokens</span></div>
+    </div>
+    <h2>What This Means for Developers</h2>
+    <p>If you're running a production app making 1 million API calls per month with average 2,000 tokens each, here's your monthly bill comparison:</p>
+    <div class="highlight">GPT-4o: ~$5,000/month<br>Mistral Large 3: ~$1,000/month<br>Savings: $4,000/month or $48,000/year</div>
+    <h2>The Mistral Full Lineup (April 2026)</h2>
+    <p>What makes this even more interesting is the complete lineup Mistral shipped in just 15 days: Large 3, Devstral 2 (coding), Magistral Medium and Small (reasoning), Mistral Small 4 (unified vision+reasoning+code), and Ministral-3B at just $0.04/1M — the cheapest tracked model anywhere.</p>
+    <h2>Should You Switch?</h2>
+    <p>For most production workloads: yes. The quality-to-price ratio is exceptional. For creative writing and nuanced reasoning, Claude 3.5 Sonnet still edges it out. For pure cost efficiency at scale, Mistral Large 3 is now the default recommendation.</p>
+    <p>Check live pricing and compare models at <a href="${SITE}" style="color:var(--cyan)">aimodelranks.live</a>.</p>`
+  },
+  {
+    id:2,cat:'compare',emoji:'⚔️',tag:'COMPARISON',
+    title:'GPT-4.1 vs Claude Sonnet 4.5: Which Model Wins in 2026?',
+    excerpt:'We compared both flagship models across pricing, context, coding, reasoning and vision.',
+    date:'May 3, 2026',read:'7 min',views:'3.8K',featured:false,isNew:true,isAI:true,
+    bg:'linear-gradient(135deg,#0a1628,#1a2850)',
+    content:`<p>Two of the most capable AI models of 2026 go head to head. OpenAI's GPT-4.1 (launched April 2025) versus Anthropic's Claude Sonnet 4.5. We tested both across 6 key dimensions.</p>
+    <h2>Pricing</h2>
+    <div class="price-table">
+      <div class="price-row"><span>GPT-4.1 Input</span><span class="pv">$2.00/1M</span></div>
+      <div class="price-row"><span>GPT-4.1 Output</span><span class="pv">$8.00/1M</span></div>
+      <div class="price-row"><span>Claude Sonnet 4.5 Input</span><span class="pv">$3.00/1M</span></div>
+      <div class="price-row"><span>Claude Sonnet 4.5 Output</span><span class="pv">$15.00/1M</span></div>
+    </div>
+    <div class="highlight">Winner on price: GPT-4.1 — 33% cheaper input, 47% cheaper output</div>
+    <h2>Context Window</h2>
+    <p>GPT-4.1 ships with a massive 1M token context window. Claude Sonnet 4.5 has 200K. For long document analysis or entire codebases, GPT-4.1 wins decisively.</p>
+    <h2>Coding Performance</h2>
+    <p>Both models excel at coding. In our tests, Claude 4.5 produced cleaner, better-documented code with fewer logical errors. GPT-4.1 was faster and handled more languages. For most projects: tie.</p>
+    <h2>Creative Writing</h2>
+    <p>Claude wins here clearly. Anthropic's training shows — Claude produces more nuanced, human-feeling text. GPT-4.1 is capable but feels more mechanical.</p>
+    <h2>Verdict</h2>
+    <p>Cost-sensitive production apps: GPT-4.1. Quality-focused creative or analytical work: Claude Sonnet 4.5. Compare them live at <a href="${SITE}/compare.html" style="color:var(--cyan)">aimodelranks.live/compare.html</a>.</p>`
+  },
+  {
+    id:3,cat:'pricing',emoji:'💰',tag:'PRICING GUIDE',
+    title:'How to Cut Your AI API Bill by 70% Without Losing Quality',
+    excerpt:'Practical strategies for routing tasks to cheaper models and choosing the right tier.',
+    date:'May 2, 2026',read:'6 min',views:'2.9K',featured:false,isNew:false,isAI:true,
+    bg:'linear-gradient(135deg,#001a0a,#003018)',
+    content:`<p>Most developers overpay for AI by 40-70%. Here are the strategies that actually work in production.</p>
+    <h2>Strategy 1: Task Routing</h2>
+    <p>Not all tasks need GPT-4o. A simple classification task costs the same as complex reasoning if you're not routing intelligently.</p>
+    <div class="highlight">Simple tasks (classify, extract, summarize): Use Gemini 1.5 Flash ($0.075/1M)<br>Medium tasks (coding, analysis): Use Mistral Large 3 ($0.50/1M)<br>Complex tasks (reasoning, creative): Use Claude or GPT-4o ($2-3/1M)</div>
+    <h2>Strategy 2: Prompt Compression</h2>
+    <p>Average prompt sizes can be cut 30-40% without losing quality. Remove examples that aren't needed, compress system prompts, and use shorthand instructions.</p>
+    <h2>Strategy 3: Caching</h2>
+    <p>Both OpenAI and Anthropic offer prompt caching — repeated parts of your context are cached and charged at 10-20% of normal rate. For RAG applications this can be your single biggest saving.</p>
+    <h2>Strategy 4: Output Length Control</h2>
+    <p>Output tokens cost 3-10x more than input. Always specify max_tokens. Use structured output formats that are concise. Avoid "explain your reasoning" unless you need it.</p>
+    <p>Use our <a href="${SITE}/compare.html" style="color:var(--cyan)">live model rankings</a> to find the cheapest model for your specific use case.</p>`
+  },
+  {
+    id:4,cat:'tools',emoji:'🛠',tag:'AI TOOLS',
+    title:'10 AI Coding Tools Developers Are Actually Using in 2026',
+    excerpt:'From Cursor to Devin AI, ranked by real usage, pricing and developer satisfaction.',
+    date:'May 1, 2026',read:'8 min',views:'3.1K',featured:false,isNew:false,isAI:false,
+    bg:'linear-gradient(135deg,#0a0a28,#1a1a50)',
+    content:`<p>We surveyed 500 developers on what AI coding tools they actually use daily. Here are the real rankings.</p>
+    <h2>#1 GitHub Copilot (3,102 votes)</h2>
+    <p>Still the most widely used despite newer competitors. Deep IDE integration, autocomplete that actually works, and now available in VS Code, JetBrains and Xcode.</p>
+    <h2>#2 Cursor (1,923 votes)</h2>
+    <p>The fastest growing tool. Cursor's "understand the codebase" feature is genuinely transformative — it can reason about your entire project, not just the current file. Freemium model makes it accessible.</p>
+    <h2>#3 Claude for Code (1,654 votes)</h2>
+    <p>Developers using Claude directly via API for code review, refactoring and documentation generation. The 200K context means it can handle entire codebases.</p>
+    <h2>#4 Devin AI (1,432 votes)</h2>
+    <p>The autonomous software engineer. For specific tasks it's remarkable — give it a GitHub issue and it will write, test and commit a fix. Still expensive at $500/month but increasingly justified.</p>
+    <p>See all AI tools ranked by votes at <a href="${SITE}/tools.html" style="color:var(--cyan)">aimodelranks.live/tools.html</a>.</p>`
+  },
+  {
+    id:5,cat:'compare',emoji:'🥊',tag:'COMPARISON',
+    title:'DeepSeek vs Mistral: The Ultimate Budget AI Showdown',
+    excerpt:'DeepSeek at $0.14/1M vs Ministral-3B at $0.04/1M. Which should you use?',
+    date:'Apr 30, 2026',read:'5 min',views:'2.4K',featured:false,isNew:false,isAI:true,
+    bg:'linear-gradient(135deg,#1a0a28,#300a50)',
+    content:`<p>When budget matters more than prestige, these two models are your best options. Let's compare them honestly.</p>
+    <div class="price-table">
+      <div class="price-row"><span>DeepSeek Chat Input</span><span class="pv">$0.14/1M</span></div>
+      <div class="price-row"><span>DeepSeek Chat Output</span><span class="pv">$0.28/1M</span></div>
+      <div class="price-row"><span>Ministral-3B Input</span><span class="pv">$0.04/1M</span></div>
+      <div class="price-row"><span>Ministral-3B Output</span><span class="pv">$0.04/1M</span></div>
+    </div>
+    <h2>Quality Comparison</h2>
+    <p>DeepSeek Chat is significantly more capable for complex tasks. It handles coding, analysis and reasoning surprisingly well for its price. Ministral-3B is more limited but blazing fast and ideal for classification, extraction and simple Q&A at massive scale.</p>
+    <div class="highlight">Use Ministral-3B for: high-volume simple tasks, classification, keyword extraction<br>Use DeepSeek Chat for: coding help, analysis, summarization, Q&A</div>
+    <p>Compare live prices at <a href="${SITE}/compare.html" style="color:var(--cyan)">aimodelranks.live</a>.</p>`
+  },
+  {
+    id:6,cat:'guides',emoji:'📖',tag:'GUIDE',
+    title:'The Complete 2026 Guide to AI Model Pricing',
+    excerpt:'Context windows, input vs output costs, token economics. Everything you need to know.',
+    date:'Apr 28, 2026',read:'12 min',views:'5.6K',featured:false,isNew:false,isAI:false,
+    bg:'linear-gradient(135deg,#001428,#002850)',
+    content:`<p>AI model pricing is more complex than it appears. This guide explains everything — from how tokens work to how to estimate your monthly bill before committing.</p>
+    <h2>Input vs Output Tokens</h2>
+    <p>Output tokens cost 3-10x more than input tokens across almost all models. This is intentional — generating text is computationally more expensive than reading it. When comparing models, always look at both costs.</p>
+    <h2>What is a Token?</h2>
+    <p>Roughly 4 characters or 0.75 words in English. A 1,000 word article is approximately 1,333 tokens. A single API call with a 500-word prompt and 300-word response is about 1,066 tokens total.</p>
+    <div class="highlight">Quick math: $1/1M tokens = $0.001 per 1,000 tokens = $0.0013 per 1,000 words</div>
+    <h2>Context Windows</h2>
+    <p>The context window is how much text the model can "see" at once. Larger = better for long documents, but you pay for every token in the context on every request.</p>
+    <h2>Estimating Your Monthly Bill</h2>
+    <p>Formula: (avg_tokens_per_call × calls_per_month / 1,000,000) × price_per_mtok<br>Example: 2,000 tokens × 10,000 calls/month = 20M tokens × $0.50/1M = $10/month on Mistral Large 3.</p>
+    <p>Use our <a href="${SITE}" style="color:var(--cyan)">live rankings</a> to compare and find the right model for your budget.</p>`
+  },
 ];
 
-let currentCat='all';
-let visibleCount=6;
+let currentCat='all',visibleCount=4,openArticleId=null;
 
-function catBg(cat){
-  const map={pricing:'linear-gradient(135deg,#0a1e00,#1a3800)',models:'linear-gradient(135deg,#001428,#002860)',compare:'linear-gradient(135deg,#280014,#500028)',tools:'linear-gradient(135deg,#0a0a28,#1a1a50)',guides:'linear-gradient(135deg,#281400,#502800)',news:'linear-gradient(135deg,#001428,#002040)'};
-  return map[cat]||'linear-gradient(135deg,#0a0a14,#14142a)';
-}
+function setCat(cat,el){currentCat=cat;visibleCount=4;document.querySelectorAll('.cat-pill').forEach(b=>b.classList.remove('active'));el.classList.add('active');renderBlog();}
+function loadMore(){visibleCount+=4;renderBlog();}
 
 function getFiltered(){
   if(currentCat==='all')return ARTICLES;
   return ARTICLES.filter(a=>a.cat===currentCat);
 }
 
-function setCat(cat,el){
-  currentCat=cat;visibleCount=6;
-  document.querySelectorAll('.cat-pill').forEach(b=>b.classList.remove('active'));
-  el.classList.add('active');
-  renderArticles();
-}
-
-function setCatExt(cat){
-  currentCat=cat;visibleCount=6;
-  document.querySelectorAll('.cat-pill').forEach(b=>{
-    b.classList.toggle('active',b.getAttribute('onclick')?.includes("'"+cat+"'"));
-  });
-  renderArticles();
-  document.querySelector('.cat-bar').scrollIntoView({behavior:'smooth',block:'nearest'});
-}
-
-function loadMore(){visibleCount+=6;renderArticles();}
-
-function renderArticles(){
+function renderBlog(){
   const filtered=getFiltered();
   const featured=filtered.find(a=>a.featured);
   const rest=filtered.filter(a=>!a.featured).slice(0,visibleCount);
-
   // Featured
   const fa=document.getElementById('featured-area');
   if(featured){
-    fa.innerHTML=`
-    <a class="featured-article" href="#article-${featured.id}" onclick="openArticle(${featured.id});return false;">
-      <div class="fa-thumb" style="background:${featured.bg}">
-        ${featured.emoji}
-        <div class="fa-badge">⭐ FEATURED</div>
-      </div>
+    fa.innerHTML=`<a class="fa" href="#article-${featured.id}" onclick="openArticle(${featured.id});return false;">
+      <div class="fa-thumb" style="background:${featured.bg}">${featured.emoji}<div class="fa-badge">⭐ FEATURED</div></div>
       <div class="fa-body">
-        <div class="fa-tag">${featured.tag}${featured.isNew?'<span class="new-badge">NEW</span>':''}${featured.isAI?'<span class="ai-badge">AI-written</span>':''}</div>
+        <div class="fa-tag">${featured.tag}${featured.isNew?'<span class="nbadge">NEW</span>':''}${featured.isAI?'<span class="aibadge">AI</span>':''}</div>
         <div class="fa-title">${featured.title}</div>
         <div class="fa-excerpt">${featured.excerpt}</div>
-        <div class="fa-meta">
-          <span>${featured.date} · ${featured.read} read</span>
-          <span style="color:var(--cyan)">${featured.views} views →</span>
-        </div>
+        <div class="fa-meta"><span>${featured.date} · ${featured.read} read · ${featured.views} views</span><span style="color:var(--cyan)">Read full article →</span></div>
       </div>
     </a>`;
-  } else {
-    fa.innerHTML='';
-  }
-
+  } else fa.innerHTML='';
   // Grid
-  const grid=document.getElementById('articles-grid');
-  grid.innerHTML=rest.map(a=>`
-    <a class="art-card${a.featured?' featured-card':''}" href="#article-${a.id}" onclick="openArticle(${a.id});return false;">
-      <div class="art-thumb" style="background:${a.bg||catBg(a.cat)}">${a.emoji}</div>
-      <div class="art-body">
-        <div class="art-tag">${a.tag}${a.isNew?'<span class="new-badge">NEW</span>':''}${a.isAI?'<span class="ai-badge">AI</span>':''}</div>
-        <div class="art-title">${a.title}</div>
-        <div class="art-excerpt">${a.excerpt.slice(0,100)}...</div>
-        <div class="art-meta">
-          <span>${a.date} · ${a.views} views</span>
-          <span class="art-read">${a.read} →</span>
-        </div>
+  document.getElementById('art-grid').innerHTML=rest.map(a=>`
+    <a class="ac" href="#article-${a.id}" onclick="openArticle(${a.id});return false;">
+      <div class="ac-thumb" style="background:${a.bg}">${a.emoji}</div>
+      <div class="ac-body">
+        <div class="ac-tag">${a.tag}${a.isNew?'<span class="nbadge">NEW</span>':''}${a.isAI?'<span class="aibadge">AI</span>':''}</div>
+        <div class="ac-title">${a.title}</div>
+        <div class="ac-excerpt">${a.excerpt}</div>
+        <div class="ac-meta"><span>${a.date} · ${a.views} views</span><span class="ac-read">${a.read} →</span></div>
       </div>
     </a>`).join('');
-
-  const lm=document.getElementById('load-more');
-  lm.style.display=rest.length<filtered.filter(a=>!a.featured).length?'block':'none';
+  // Trending
+  const trending=[...ARTICLES].sort((a,b)=>parseInt(b.views)-parseInt(a.views)).slice(0,5);
+  document.getElementById('trending-articles').innerHTML=trending.map(a=>`
+    <div class="sb-item">
+      <a href="#article-${a.id}" onclick="openArticle(${a.id});return false;">${a.title.slice(0,55)}${a.title.length>55?'…':''}</a>
+      <div class="sb-item-meta">${a.tag} · ${a.views} views</div>
+    </div>`).join('');
+  // Load more button
+  document.getElementById('load-more-btn').style.display=rest.length<filtered.filter(a=>!a.featured).length?'block':'none';
 }
 
-// Article reader (simple modal-style)
 function openArticle(id){
-  const a=ARTICLES.find(x=>x.id===id);
-  if(!a)return;
-  showToast('Full article view coming soon! Follow on Product Hunt for updates 🐙');
+  const a=ARTICLES.find(x=>x.id===id);if(!a)return;
+  openArticleId=id;
+  document.getElementById('modal-thumb').style.background=a.bg;
+  document.getElementById('modal-thumb').textContent=a.emoji;
+  document.getElementById('modal-tag').textContent=a.tag;
+  document.getElementById('modal-title').textContent=a.title;
+  document.getElementById('modal-meta').textContent=a.date+' · '+a.read+' read · '+a.views+' views';
+  document.getElementById('modal-body').innerHTML=a.content;
+  document.getElementById('art-modal').classList.add('open');
+  document.body.style.overflow='hidden';
+  history.pushState(null,'',`#article-${id}`);
 }
 
-// Live price widget
-async function loadPrices(){
-  try{
-    const r=await fetch(API+'/pricing',{mode:'cors'});
-    const d=await r.json();
-    const top5=(d.pricing||[]).slice(0,5);
-    document.getElementById('price-widget').innerHTML=
-      top5.map(m=>`
-        <div class="price-widget">
-          <div class="pw-model">${m.model.slice(0,20)}${m.model.length>20?'…':''}</div>
-          <div class="pw-price">$${m.input_cost_per_mtok}/1M</div>
-        </div>`).join('')+
-      `<a href="compare.html" style="display:block;text-align:center;margin-top:8px;font-family:var(--mono);font-size:12px;color:var(--cyan);text-decoration:none">View all 200+ models →</a>`;
-  }catch(e){}
+function closeModal(e){if(e.target===document.getElementById('art-modal'))closeModalBtn();}
+function closeModalBtn(){
+  document.getElementById('art-modal').classList.remove('open');
+  document.body.style.overflow='';
+  history.pushState(null,'',window.location.pathname);
 }
+
+function shareArticle(){
+  const a=ARTICLES.find(x=>x.id===openArticleId);if(!a)return;
+  const text=`📰 ${a.title}\n\n${a.excerpt}\n\nRead at ${SITE}/blog.html#article-${a.id}\n\n#AI #ArtificialIntelligence #AINews`;
+  navigator.clipboard.writeText(text).then(()=>showToast('✅ Share text copied!'));
+}
+function copyLink(){
+  navigator.clipboard.writeText(`${SITE}/blog.html#article-${openArticleId}`).then(()=>showToast('✅ Link copied!'));
+}
+
+// Check hash on load
+function checkHash(){const m=window.location.hash.match(/article-(\d+)/);if(m)openArticle(parseInt(m[1]));}
 
 function subscribeNL(){
   const email=document.getElementById('nl-email').value.trim();
@@ -419,14 +494,20 @@ function subscribeNL(){
   document.getElementById('nl-email').value='';
 }
 
-function showToast(msg){
-  const t=document.getElementById('toast');t.textContent=msg;t.style.opacity='1';
-  clearTimeout(t._t);t._t=setTimeout(()=>t.style.opacity='0',2500);
+async function loadPrices(){
+  try{
+    const r=await fetch(API+'/pricing',{mode:'cors'});
+    const d=await r.json();
+    const top=(d.pricing||[]).slice(0,4);
+    document.getElementById('price-widget').innerHTML=
+      top.map(m=>`<div class="pw"><span style="font-size:13px;font-weight:500">${(m.model||'').slice(0,18)}</span><span class="pw-val">$${m.input_cost_per_mtok}/1M</span></div>`).join('')+
+      `<a href="compare.html" style="display:block;text-align:center;margin-top:8px;font-family:var(--mono);font-size:12px;color:var(--cyan);text-decoration:none">View 200+ models →</a>`;
+  }catch(e){}
 }
 
-// Init
-renderArticles();
-loadPrices();
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.opacity='1';clearTimeout(t._t);t._t=setTimeout(()=>t.style.opacity='0',2500);}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModalBtn();});
+renderBlog();loadPrices();checkHash();
 </script>
 </body>
 </html>
