@@ -6,4 +6,4 @@ Real-time pricing for 200+ AI models via REST API.
 
 → Live demo: https://www.aimodelranks.live/
 → API access: https://rapidapi.com/zakmediaai/api/octopus-ai-model-intel
-→ Blog: https://www.aimodelranks.live//blog
+→ Blog: https://www.aimodelranks.live/blog
