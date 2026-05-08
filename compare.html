@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Octopus AI Intel — Live AI Model Prices & Tools Directory</title>
+<title>Octopus AI Intel — Live AI Model Price Rankings & Tools</title>
 <meta name="description" content="The Bloomberg Terminal for AI. Live prices for 200+ AI models + discover the best AI tools. Compare GPT-4o, Claude, Gemini, Mistral in real time.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700;800&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
@@ -21,16 +21,13 @@
 *{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
 body{background:var(--bg);color:var(--text);font-family:var(--sans);overflow-x:hidden;min-height:100vh;}
-
-/* ── ANNOUNCEMENT BAR ── */
 .ann{background:linear-gradient(90deg,#0a1628,#0d1f3c,#0a1628);border-bottom:1px solid var(--border);padding:9px 24px;display:flex;align-items:center;justify-content:center;gap:16px;font-size:13px;color:var(--text2);overflow:hidden;}
 .ann strong{color:var(--cyan);}
 .ann a{color:var(--cyan);text-decoration:none;font-weight:600;white-space:nowrap;}
 .ann-sep{color:var(--text3);}
-
-/* ── NAV ── */
 nav{position:sticky;top:0;z-index:1000;background:rgba(7,9,15,0.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
 .nav-top{display:flex;align-items:center;gap:12px;padding:0 24px;height:58px;}
+/* FIX 1: logo now links to home "/" */
 .nav-logo{font-family:var(--hud);font-size:16px;color:var(--cyan);letter-spacing:1px;text-decoration:none;flex-shrink:0;white-space:nowrap;text-shadow:0 0 20px rgba(59,180,255,0.3);}
 .nav-logo em{color:var(--text3);font-style:normal;font-size:12px;margin-left:6px;font-family:var(--mono);}
 .nav-search-wrap{flex:1;max-width:420px;position:relative;}
@@ -43,14 +40,11 @@ nav{position:sticky;top:0;z-index:1000;background:rgba(7,9,15,0.97);backdrop-fil
 .nav-link:hover,.nav-link.active{color:var(--cyan);}
 .btn-api{background:var(--cyan);color:#000;padding:8px 18px;border-radius:7px;font-size:14px;font-weight:700;text-decoration:none;white-space:nowrap;transition:opacity 0.2s;}
 .btn-api:hover{opacity:0.85;}
-/* page tabs */
 .nav-tabs{display:flex;padding:0 24px;border-top:1px solid var(--border);overflow-x:auto;scrollbar-width:none;}
 .nav-tabs::-webkit-scrollbar{display:none;}
 .ntab{padding:10px 18px;font-size:14px;font-weight:600;color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;white-space:nowrap;background:none;border-top:none;border-left:none;border-right:none;font-family:var(--sans);}
 .ntab:hover{color:var(--text);}
 .ntab.active{color:var(--cyan);border-bottom-color:var(--cyan);}
-
-/* ── SCROLLING MARKET CARDS ── */
 .mcards-section{background:var(--bg2);border-bottom:1px solid var(--border);overflow:hidden;position:relative;}
 .mcards-section::before,.mcards-section::after{content:'';position:absolute;top:0;bottom:0;width:80px;z-index:2;pointer-events:none;}
 .mcards-section::before{left:0;background:linear-gradient(to right,var(--bg2),transparent);}
@@ -67,8 +61,6 @@ nav{position:sticky;top:0;z-index:1000;background:rgba(7,9,15,0.97);backdrop-fil
 .mc-sub.nt{color:var(--text3);}
 .mc-spark{margin-top:8px;}
 @keyframes mcScroll{from{transform:translateX(0);}to{transform:translateX(-50%);}}
-
-/* ── TICKER ── */
 .ticker-bar{background:var(--bg);border-bottom:1px solid var(--border);overflow:hidden;padding:9px 0;position:relative;}
 .ticker-bar::before,.ticker-bar::after{content:'';position:absolute;top:0;bottom:0;width:80px;z-index:2;pointer-events:none;}
 .ticker-bar::before{left:0;background:linear-gradient(to right,var(--bg),transparent);}
@@ -80,11 +72,7 @@ nav{position:sticky;top:0;z-index:1000;background:rgba(7,9,15,0.97);backdrop-fil
 .ti-m{color:var(--text3);}
 .ti-r{color:var(--red);}
 @keyframes tScroll{from{transform:translateX(0);}to{transform:translateX(-50%);}}
-
-/* ── LAYOUT ── */
 .outer{max-width:1600px;margin:0 auto;padding:0 24px;}
-
-/* ── STATS STRIP ── */
 .stats-strip{display:flex;gap:0;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none;margin-bottom:0;}
 .stats-strip::-webkit-scrollbar{display:none;}
 .ss{display:flex;align-items:center;gap:6px;padding:0 16px;border-right:1px solid var(--border);font-family:var(--mono);font-size:13px;color:var(--text2);white-space:nowrap;flex-shrink:0;}
@@ -92,34 +80,20 @@ nav{position:sticky;top:0;z-index:1000;background:rgba(7,9,15,0.97);backdrop-fil
 .ss strong{color:var(--text);}
 .ss-up{color:var(--green);}
 .ss-dn{color:var(--red);}
-
-/* ── MAIN GRID ── */
 .page-grid{display:grid;grid-template-columns:1fr 320px;gap:24px;padding:20px 0;}
 @media(max-width:1100px){.page-grid{grid-template-columns:1fr;}}
-
-/* ── LEFT: MODEL TABLE ── */
-.left-col{}
-
-/* Section headers */
 .sec-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px;}
 .sec-title{font-family:var(--hud);font-size:16px;font-weight:900;color:var(--text);letter-spacing:0.5px;display:flex;align-items:center;gap:8px;}
 .sec-title .live-dot{width:8px;height:8px;background:var(--green);border-radius:50%;animation:ldot 1.5s infinite;}
 @keyframes ldot{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.4;transform:scale(0.7);}}
-.sec-actions{display:flex;align-items:center;gap:8px;}
-
-/* Provider pills */
 .prov-pills{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
 .ppill{padding:6px 14px;border-radius:100px;border:1px solid var(--border);background:transparent;font-size:13px;font-weight:500;color:var(--text2);cursor:pointer;transition:all 0.2s;font-family:var(--sans);}
 .ppill:hover{border-color:var(--cyan);color:var(--cyan);}
 .ppill.active{border-color:var(--cyan);color:var(--cyan);background:rgba(59,180,255,0.07);}
-
-/* Filter tabs */
 .filter-tabs{display:flex;gap:0;background:var(--bg2);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:14px;}
 .ftab{padding:8px 16px;font-size:13px;font-weight:500;color:var(--text2);cursor:pointer;transition:all 0.2s;background:none;border:none;font-family:var(--sans);white-space:nowrap;}
 .ftab:hover{color:var(--text);background:var(--bg3);}
 .ftab.active{color:var(--cyan);background:var(--bg3);box-shadow:inset 0 -2px 0 var(--cyan);}
-
-/* Controls row */
 .ctrl-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px;flex-wrap:wrap;}
 .ctrl-left{display:flex;gap:6px;align-items:center;}
 .ctrl-right{display:flex;gap:6px;align-items:center;}
@@ -127,8 +101,6 @@ select.dd{background:var(--bg3);border:1px solid var(--border);border-radius:6px
 .vt-toggle{display:flex;background:var(--bg3);border:1px solid var(--border);border-radius:6px;overflow:hidden;}
 .vtb{padding:7px 12px;background:transparent;border:none;cursor:pointer;color:var(--text3);font-size:16px;transition:all 0.2s;}
 .vtb.active{background:var(--bg4);color:var(--cyan);}
-
-/* Compare bar */
 .cmp-bar{display:none;background:rgba(59,180,255,0.04);border:1px solid var(--border2);border-radius:8px;padding:12px 16px;margin-bottom:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;animation:slideIn 0.2s ease;}
 @keyframes slideIn{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
 .cmp-bar.show{display:flex;}
@@ -139,8 +111,6 @@ select.dd{background:var(--bg3);border:1px solid var(--border);border-radius:6px
 .btn-cmp{background:linear-gradient(135deg,var(--cyan),var(--purple));color:#000;border:none;padding:8px 18px;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer;}
 .btn-clr{background:transparent;border:1px solid var(--border);color:var(--text2);padding:8px 12px;border-radius:6px;font-size:13px;cursor:pointer;transition:all 0.2s;}
 .btn-clr:hover{border-color:var(--red);color:var(--red);}
-
-/* Compare panel */
 .cmp-panel{display:none;background:var(--bg2);border:1px solid var(--border2);border-radius:10px;padding:24px;margin-bottom:16px;}
 .cmp-panel.show{display:block;}
 .cmp-title{font-family:var(--hud);font-size:15px;color:var(--text);letter-spacing:0.5px;margin-bottom:4px;}
@@ -161,8 +131,6 @@ select.dd{background:var(--bg3);border:1px solid var(--border);border-radius:6px
 .cpill{display:flex;align-items:center;gap:6px;background:rgba(59,180,255,0.04);border:1px solid var(--border);padding:7px 14px;border-radius:100px;font-size:12px;}
 .cpl{color:var(--text3);font-family:var(--mono);}
 .cpv{font-weight:600;color:var(--cyan);font-family:var(--mono);}
-
-/* ── THE TABLE ── */
 .tbl-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden;overflow-x:auto;}
 table{width:100%;border-collapse:collapse;font-size:14px;}
 thead tr{background:var(--bg3);}
@@ -215,8 +183,6 @@ td.td-sc{font-family:var(--mono);font-size:13px;}
 .ld{text-align:center;padding:40px;font-family:var(--mono);font-size:13px;color:var(--text3);}
 .spin{display:inline-block;width:14px;height:14px;border:2px solid var(--border);border-top-color:var(--cyan);border-radius:50%;animation:sp 0.7s linear infinite;vertical-align:middle;margin-right:8px;}
 @keyframes sp{to{transform:rotate(360deg);}}
-
-/* ── CARD GRID VIEW ── */
 .card-grid{display:none;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;}
 .card-grid.show{display:grid;}
 .mcard{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:18px;cursor:pointer;transition:border-color 0.2s,transform 0.2s;}
@@ -242,18 +208,13 @@ td.td-sc{font-family:var(--mono);font-size:13px;}
 .tp-b{background:rgba(0,217,126,0.08);color:var(--green);border:1px solid rgba(0,217,126,0.2);}
 .tp-m{background:rgba(59,180,255,0.08);color:var(--cyan);border:1px solid rgba(59,180,255,0.2);}
 .tp-p{background:rgba(255,136,102,0.08);color:#ff8866;border:1px solid rgba(255,136,102,0.2);}
-
-/* ── RIGHT SIDEBAR ── */
 .right-col{display:flex;flex-direction:column;gap:16px;}
-
-/* Sidebar card */
 .sb-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden;}
 .sb-hdr{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
 .sb-title{font-family:var(--hud);font-size:13px;color:var(--text);letter-spacing:0.5px;}
 .sb-link{font-family:var(--mono);font-size:11px;color:var(--cyan);text-decoration:none;}
+.sb-link:hover{text-decoration:underline;}
 .sb-body{padding:14px 16px;}
-
-/* TODAY'S WINNERS */
 .winner-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(30,45,66,0.5);}
 .winner-item:last-child{border-bottom:none;}
 .wi-icon{font-size:18px;flex-shrink:0;width:32px;text-align:center;}
@@ -265,8 +226,6 @@ td.td-sc{font-family:var(--mono);font-size:13px;}
 .wi-val.exp{color:#ff8866;}
 .wi-val.val{color:var(--yellow);}
 .wi-val.ctx{color:var(--cyan);}
-
-/* AD CARDS in sidebar */
 .ad-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden;position:relative;transition:border-color 0.2s,transform 0.2s;}
 .ad-card:hover{border-color:rgba(59,180,255,0.2);transform:translateY(-1px);}
 .ad-top-bar{height:3px;width:100%;}
@@ -278,8 +237,6 @@ td.td-sc{font-family:var(--mono);font-size:13px;}
 .ad-price .hp{color:var(--green);font-weight:700;}
 .ad-btn{display:block;text-align:center;padding:9px;border-radius:7px;font-size:13px;font-weight:700;text-decoration:none;transition:opacity 0.2s;}
 .ad-btn:hover{opacity:0.85;}
-
-/* TRENDING TOOLS in sidebar */
 .tool-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid rgba(30,45,66,0.5);text-decoration:none;}
 .tool-item:last-child{border-bottom:none;}
 .ti-ico{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
@@ -287,12 +244,15 @@ td.td-sc{font-family:var(--mono);font-size:13px;}
 .ti-name{font-size:13px;font-weight:600;color:var(--text);}
 .ti-cat{font-family:var(--mono);font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.3px;}
 .ti-votes{font-family:var(--mono);font-size:12px;color:var(--text3);}
-
-/* TWITTER BUTTON */
 .twitter-btn{display:flex;align-items:center;justify-content:center;gap:8px;background:rgba(29,161,242,0.08);border:1px solid rgba(29,161,242,0.2);color:#1da1f2;padding:10px;border-radius:8px;font-family:var(--mono);font-size:12px;cursor:pointer;width:100%;margin-top:12px;transition:background 0.2s;}
 .twitter-btn:hover{background:rgba(29,161,242,0.15);}
-
-/* SUBMIT AD PROMO in sidebar */
+/* FIX 2: Latest Blog sidebar card */
+.blog-item{display:block;padding:9px 0;border-bottom:1px solid rgba(30,45,66,0.5);text-decoration:none;}
+.blog-item:last-child{border-bottom:none;}
+.blog-item-title{font-size:13px;font-weight:600;color:var(--text);line-height:1.4;margin-bottom:3px;transition:color 0.2s;}
+.blog-item:hover .blog-item-title{color:var(--cyan);}
+.blog-item-meta{font-family:var(--mono);font-size:11px;color:var(--text3);}
+/* FIX 2: Advertise Here promo */
 .promo-ad{background:linear-gradient(135deg,rgba(59,180,255,0.06),rgba(168,85,247,0.06));border:1px solid var(--border2);border-radius:10px;padding:18px;text-align:center;}
 .promo-title{font-family:var(--hud);font-size:13px;color:var(--text);margin-bottom:6px;letter-spacing:0.5px;}
 .promo-sub{font-size:13px;color:var(--text2);margin-bottom:14px;line-height:1.5;}
@@ -300,10 +260,7 @@ td.td-sc{font-family:var(--mono);font-size:13px;}
 .promo-period{font-size:12px;color:var(--text3);font-family:var(--mono);margin-bottom:14px;}
 .btn-promo{display:block;background:linear-gradient(135deg,var(--cyan),var(--purple));color:#000;padding:11px;border-radius:8px;font-size:14px;font-weight:700;text-decoration:none;text-align:center;transition:opacity 0.2s;}
 .btn-promo:hover{opacity:0.88;}
-
-/* TOAST */
 #toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--bg3);border:1px solid var(--border2);color:var(--cyan);font-family:var(--mono);font-size:13px;padding:10px 20px;border-radius:8px;z-index:9999;opacity:0;transition:opacity 0.2s;pointer-events:none;white-space:nowrap;}
-
 @media(max-width:768px){
   .nav-top{padding:0 14px;}
   .outer{padding:0 14px;}
@@ -318,7 +275,6 @@ td.td-sc{font-family:var(--mono);font-size:13px;}
 <body>
 <div id="toast"></div>
 
-<!-- ANN BAR -->
 <div class="ann">
   <span>🐙 <strong>Octopus AI Intel</strong> — The Bloomberg Terminal for AI</span>
   <span class="ann-sep">·</span>
@@ -327,17 +283,21 @@ td.td-sc{font-family:var(--mono);font-size:13px;}
   <a href="https://rapidapi.com/zakmediaai/api/octopus-ai-model-intel" target="_blank">Get API Access →</a>
 </div>
 
-<!-- NAV -->
 <nav>
   <div class="nav-top">
-    <a href="compare.html" class="nav-logo">🐙 AI INTEL <em>v2.1</em></a>
+    <!-- FIX 1: Logo now links to home "/" -->
+    <a href="/" class="nav-logo">🐙 AI INTEL <em>v2.1</em></a>
     <div class="nav-search-wrap">
       <span class="sico">⌕</span>
       <input class="nav-search" id="search-input" type="text" placeholder="Search 210+ AI models... GPT, Claude, Mistral, Gemini..." oninput="render()">
     </div>
     <div class="nav-right">
-      <a href="tools.html" class="nav-link">🛠 AI Tools</a>
-      <a href="index.html" class="nav-link">API Docs</a>
+      <!-- FIX 1: Added Home link -->
+      <a href="/" class="nav-link">🏠 Home</a>
+      <a href="/compare" class="nav-link active">📊 Models</a>
+      <a href="/tools" class="nav-link">🛠 Tools</a>
+      <a href="/blog" class="nav-link">📰 Blog</a>
+      <a href="/index" class="nav-link">⚡ API</a>
       <a href="https://rapidapi.com/zakmediaai/api/octopus-ai-model-intel" target="_blank" class="btn-api">Get API Key</a>
     </div>
   </div>
@@ -353,14 +313,12 @@ td.td-sc{font-family:var(--mono);font-size:13px;}
   </div>
 </nav>
 
-<!-- SCROLLING MARKET CARDS -->
 <div class="mcards-section">
   <div class="mcards-track" id="mcards-track"><!-- JS --></div>
 </div>
 
-<!-- TICKER -->
 <div class="ticker-bar">
-  <div class="t-track" id="ticker-track">
+  <div class="t-track">
     <span class="ti ti-g">🆕 Mistral Large 3 — $0.50/1M — 60% cheaper output than GPT-4o</span>
     <span class="ti ti-m">➡️ gemini-1.5-flash — $0.075/1M — best budget value</span>
     <span class="ti ti-g">💰 ministral-3b — $0.04/1M — cheapest tracked</span>
@@ -369,23 +327,14 @@ td.td-sc{font-family:var(--mono);font-size:13px;}
     <span class="ti ti-g">🆕 llama-4-scout — 10M token context window</span>
     <span class="ti ti-m">➡️ gpt-4.1-nano — $0.10/1M — OpenAI budget</span>
     <span class="ti ti-y">📡 210+ AI models · 8 providers · API on RapidAPI</span>
-    <span class="ti ti-g">🆕 Mistral Small 4 — vision + reasoning + coding</span>
     <span class="ti ti-g">🆕 Mistral Large 3 — $0.50/1M — 60% cheaper output than GPT-4o</span>
     <span class="ti ti-m">➡️ gemini-1.5-flash — $0.075/1M — best budget value</span>
     <span class="ti ti-g">💰 ministral-3b — $0.04/1M — cheapest tracked</span>
     <span class="ti ti-y">🧠 Magistral Medium rivals o3 at 37% cheaper output</span>
-    <span class="ti ti-m">➡️ deepseek-chat — $0.14/1M — ultra cheap</span>
-    <span class="ti ti-g">🆕 llama-4-scout — 10M token context window</span>
-    <span class="ti ti-m">➡️ gpt-4.1-nano — $0.10/1M — OpenAI budget</span>
-    <span class="ti ti-y">📡 210+ AI models · 8 providers · API on RapidAPI</span>
-    <span class="ti ti-g">🆕 Mistral Small 4 — vision + reasoning + coding</span>
   </div>
 </div>
 
-<!-- MAIN -->
 <div class="outer">
-
-  <!-- STATS STRIP -->
   <div class="stats-strip">
     <div class="ss">Models: <strong id="ss-cnt">—</strong></div>
     <div class="ss">Providers: <strong id="ss-pvs">—</strong></div>
@@ -397,21 +346,16 @@ td.td-sc{font-family:var(--mono);font-size:13px;}
   </div>
 
   <div class="page-grid">
-
-    <!-- LEFT: MODEL TABLE -->
     <div class="left-col">
-
       <div class="sec-hdr">
         <div class="sec-title">
           <span class="live-dot"></span>
           AI Model Price Rankings
         </div>
-        <div class="sec-actions">
+        <div style="display:flex;align-items:center;gap:8px;">
           <span style="font-family:var(--mono);font-size:12px;color:var(--text3)" id="result-info"></span>
         </div>
       </div>
-
-      <!-- Provider pills -->
       <div class="prov-pills">
         <button class="ppill active" onclick="setProv('',this)">All</button>
         <button class="ppill" onclick="setProv('openai',this)">OpenAI</button>
@@ -423,8 +367,6 @@ td.td-sc{font-family:var(--mono);font-size:13px;}
         <button class="ppill" onclick="setProv('xai',this)">xAI</button>
         <button class="ppill" onclick="setProv('cohere',this)">Cohere</button>
       </div>
-
-      <!-- Controls -->
       <div class="ctrl-row">
         <div class="ctrl-left">
           <select class="dd" onchange="setSort(this.value)">
@@ -442,8 +384,6 @@ td.td-sc{font-family:var(--mono);font-size:13px;}
           </div>
         </div>
       </div>
-
-      <!-- Compare bar -->
       <div class="cmp-bar" id="cmp-bar">
         <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
           <span style="font-family:var(--mono);font-size:12px;color:var(--text2)">Comparing:</span>
@@ -454,16 +394,12 @@ td.td-sc{font-family:var(--mono);font-size:13px;}
           <button class="btn-clr" onclick="clearAll()">Clear</button>
         </div>
       </div>
-
-      <!-- Compare panel -->
       <div class="cmp-panel" id="cmp-panel">
         <div class="cmp-title">⚡ SIDE-BY-SIDE COMPARISON</div>
         <div class="cmp-sub" id="cmp-sub"></div>
         <div class="cmp-cols" id="cmp-cols"></div>
         <div class="cmp-pills" id="cmp-pills"></div>
       </div>
-
-      <!-- TABLE -->
       <div class="tbl-wrap" id="tbl-wrap">
         <table>
           <thead>
@@ -486,10 +422,7 @@ td.td-sc{font-family:var(--mono);font-size:13px;}
           </tbody>
         </table>
       </div>
-
-      <!-- CARD GRID -->
       <div class="card-grid" id="card-grid"></div>
-
     </div>
 
     <!-- RIGHT SIDEBAR -->
@@ -504,36 +437,25 @@ td.td-sc{font-family:var(--mono);font-size:13px;}
         <div class="sb-body">
           <div class="winner-item">
             <div class="wi-icon">💰</div>
-            <div class="wi-info">
-              <div class="wi-label">Cheapest Input</div>
-              <div class="wi-model" id="w-cheap-m">Loading...</div>
-            </div>
+            <div class="wi-info"><div class="wi-label">Cheapest Input</div><div class="wi-model" id="w-cheap-m">Loading...</div></div>
             <div class="wi-val cheap" id="w-cheap-v">—</div>
           </div>
           <div class="winner-item">
             <div class="wi-icon">💎</div>
-            <div class="wi-info">
-              <div class="wi-label">Most Premium</div>
-              <div class="wi-model" id="w-exp-m">Loading...</div>
-            </div>
+            <div class="wi-info"><div class="wi-label">Most Premium</div><div class="wi-model" id="w-exp-m">—</div></div>
             <div class="wi-val exp" id="w-exp-v">—</div>
           </div>
           <div class="winner-item">
             <div class="wi-icon">⭐</div>
-            <div class="wi-info">
-              <div class="wi-label">Best Value Score</div>
-              <div class="wi-model" id="w-val-m">Loading...</div>
-            </div>
+            <div class="wi-info"><div class="wi-label">Best Value Score</div><div class="wi-model" id="w-val-m">—</div></div>
             <div class="wi-val val" id="w-val-v">—</div>
           </div>
           <div class="winner-item">
             <div class="wi-icon">📄</div>
-            <div class="wi-info">
-              <div class="wi-label">Largest Context</div>
-              <div class="wi-model" id="w-ctx-m">Loading...</div>
-            </div>
+            <div class="wi-info"><div class="wi-label">Largest Context</div><div class="wi-model" id="w-ctx-m">—</div></div>
             <div class="wi-val ctx" id="w-ctx-v">—</div>
           </div>
+          <!-- FIX 3: Twitter URL fixed to https://www.aimodelranks.live/ -->
           <button class="twitter-btn" onclick="copyTwitter()">🐦 Copy Today's Twitter Post</button>
         </div>
       </div>
@@ -558,47 +480,32 @@ td.td-sc{font-family:var(--mono);font-size:13px;}
       <div class="sb-card">
         <div class="sb-hdr">
           <div class="sb-title">🛠 Trending AI Tools</div>
-          <a href="tools.html" class="sb-link">See all →</a>
+          <a href="/tools" class="sb-link">See all →</a>
         </div>
         <div class="sb-body">
           <a class="tool-item" href="https://cursor.sh" target="_blank">
             <div class="ti-ico" style="background:rgba(59,130,246,0.12)">💻</div>
-            <div class="ti-info">
-              <div class="ti-name">Cursor</div>
-              <div class="ti-cat">Coding AI</div>
-            </div>
+            <div class="ti-info"><div class="ti-name">Cursor</div><div class="ti-cat">Coding AI</div></div>
             <div class="ti-votes">▲ 1,923</div>
           </a>
           <a class="tool-item" href="https://runwayml.com" target="_blank">
             <div class="ti-ico" style="background:rgba(168,85,247,0.12)">🎬</div>
-            <div class="ti-info">
-              <div class="ti-name">Runway Gen-4</div>
-              <div class="ti-cat">Video AI</div>
-            </div>
+            <div class="ti-info"><div class="ti-name">Runway Gen-4</div><div class="ti-cat">Video AI</div></div>
             <div class="ti-votes">▲ 1,432</div>
           </a>
           <a class="tool-item" href="https://midjourney.com" target="_blank">
             <div class="ti-ico" style="background:rgba(236,72,153,0.12)">🎨</div>
-            <div class="ti-info">
-              <div class="ti-name">Midjourney</div>
-              <div class="ti-cat">Image AI</div>
-            </div>
+            <div class="ti-info"><div class="ti-name">Midjourney</div><div class="ti-cat">Image AI</div></div>
             <div class="ti-votes">▲ 2,847</div>
           </a>
           <a class="tool-item" href="https://elevenlabs.io" target="_blank">
             <div class="ti-ico" style="background:rgba(16,185,129,0.12)">🎵</div>
-            <div class="ti-info">
-              <div class="ti-name">ElevenLabs</div>
-              <div class="ti-cat">Audio AI</div>
-            </div>
+            <div class="ti-info"><div class="ti-name">ElevenLabs</div><div class="ti-cat">Audio AI</div></div>
             <div class="ti-votes">▲ 1,876</div>
           </a>
           <a class="tool-item" href="https://perplexity.ai" target="_blank">
             <div class="ti-ico" style="background:rgba(59,180,255,0.12)">🔬</div>
-            <div class="ti-info">
-              <div class="ti-name">Perplexity AI</div>
-              <div class="ti-cat">Research</div>
-            </div>
+            <div class="ti-info"><div class="ti-name">Perplexity AI</div><div class="ti-cat">Research</div></div>
             <div class="ti-votes">▲ 2,341</div>
           </a>
         </div>
@@ -620,13 +527,35 @@ td.td-sc{font-family:var(--mono);font-size:13px;}
         </div>
       </div>
 
-      <!-- ADVERTISE YOUR PRODUCT HERE -->
+      <!-- FIX 2: LATEST BLOG section -->
+      <div class="sb-card">
+        <div class="sb-hdr">
+          <div class="sb-title">📰 Latest Blog</div>
+          <a href="/blog" class="sb-link">Read all →</a>
+        </div>
+        <div class="sb-body">
+          <a href="/blog#article-1" class="blog-item">
+            <div class="blog-item-title">Mistral Large 3 at $0.50/1M: Game Changer?</div>
+            <div class="blog-item-meta">May 4, 2026 · 5 min read</div>
+          </a>
+          <a href="/blog#article-2" class="blog-item">
+            <div class="blog-item-title">GPT-4.1 vs Claude Sonnet 4.5: Full Comparison</div>
+            <div class="blog-item-meta">May 3, 2026 · 7 min read</div>
+          </a>
+          <a href="/blog#article-3" class="blog-item">
+            <div class="blog-item-title">How to Cut Your AI API Bill by 70%</div>
+            <div class="blog-item-meta">May 2, 2026 · 6 min read</div>
+          </a>
+        </div>
+      </div>
+
+      <!-- FIX 2: ADVERTISE HERE section -->
       <div class="promo-ad">
         <div class="promo-title">📣 Advertise Here</div>
-        <div class="promo-sub">Put your AI tool or model in front of developers and founders actively comparing AI products.</div>
+        <div class="promo-sub">Put your AI tool in front of 10K+ developers comparing AI products daily.</div>
         <div class="promo-price">from $29</div>
         <div class="promo-period">7 days · auto-expires · no account needed</div>
-        <a href="tools.html#advertise" class="btn-promo">Get Featured →</a>
+        <a href="/tools#advertise" class="btn-promo">Get Featured →</a>
       </div>
 
     </div>
@@ -635,6 +564,8 @@ td.td-sc{font-family:var(--mono);font-size:13px;}
 
 <script>
 const API='https://ai-model-intel.zak-media-ai.workers.dev';
+// FIX 3: Correct site URL for Twitter post
+const SITE_URL='https://www.aimodelranks.live/';
 let allModels=[],sel=new Set(),view='table',srt='cheap',prov='',tab='all',dir=1;
 let twitterText='';
 
@@ -649,7 +580,6 @@ const PC={
   cohere:{bg:'rgba(255,200,0,0.08)',c:'#eeb800',l:'C'},
 };
 function pc(p){return PC[p]||{bg:'rgba(100,100,100,0.1)',c:'#888',l:'?'};}
-
 function fmtC(n){if(!n||n===0)return'<span style="color:var(--green)">Free</span>';return'$'+n;}
 function fmtCtx(n){if(!n)return'—';if(n>=1e7)return(n/1e6).toFixed(0)+'M';if(n>=1e6)return(n/1e6).toFixed(1)+'M';if(n>=1e3)return Math.round(n/1e3)+'K';return n;}
 function cc(n){if(!n||n<=0.2)return'cheap';if(n<=2)return'mid';return'exp';}
@@ -659,7 +589,6 @@ function isNew(m){if(!m.release_date)return false;return(Date.now()-new Date(m.r
 function isReason(m){return/magistral|reasoner|o1|o3|thinking|r1/.test((m.model||'').toLowerCase());}
 function isCode(m){return/codestral|devstral/.test((m.model||'').toLowerCase());}
 function seed(s){let h=0;for(let i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h|=0;}return Math.abs(h);}
-
 function capTags(m){
   let t='';
   if(m.supports_vision)t+='<span class="ct ct-v">Vision</span>';
@@ -668,7 +597,6 @@ function capTags(m){
   if(isNew(m))t+='<span class="ct ct-n">New</span>';
   return t||'<span style="color:var(--text3);font-size:11px">—</span>';
 }
-
 function miniSVG(name,col){
   const s=seed(name);const pts=[];let h=s%60+20;
   for(let i=0;i<8;i++){h=Math.abs((h*1103515245+12345)&0x7fff)%55+12;pts.push(h);}
@@ -678,7 +606,6 @@ function miniSVG(name,col){
   return`<svg class="msp" viewBox="0 0 ${W} ${H}"><polyline points="${ps}" fill="none" stroke="${col}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="filter:drop-shadow(0 0 2px ${col}60)"/></svg>`;
 }
 
-// Market cards
 function buildMarketCards(m){
   if(!m.length)return;
   const sorted=[...m].sort((a,b)=>a.input_cost_per_mtok-b.input_cost_per_mtok);
@@ -716,7 +643,6 @@ function buildMarketCards(m){
   document.getElementById('mcards-track').innerHTML=html+html;
 }
 
-// Stats strip
 function updateStats(m){
   if(!m.length)return;
   const sorted=[...m].sort((a,b)=>a.input_cost_per_mtok-b.input_cost_per_mtok);
@@ -731,7 +657,6 @@ function updateStats(m){
   document.getElementById('ss-upd').textContent=new Date().toLocaleTimeString();
 }
 
-// Today's winners
 function updateWinners(m){
   if(!m.length)return;
   const sorted=[...m].sort((a,b)=>a.input_cost_per_mtok-b.input_cost_per_mtok);
@@ -748,7 +673,8 @@ function updateWinners(m){
   document.getElementById('w-val-v').textContent=vs(bv||m[0]).toFixed(1)+'pts';
   document.getElementById('w-ctx-m').textContent=bigCtx?.model||'—';
   document.getElementById('w-ctx-v').textContent=fmtCtx(bigCtx?.context_window||0);
-  twitterText=`🐙 AI Model Intel — ${today}\n\n💰 Cheapest: ${cheap?.model} $${cheap?.input_cost_per_mtok}/1M\n💎 Premium: ${expn?.model} $${expn?.input_cost_per_mtok}/1M\n⭐ Best value: ${bv?.model}\n📄 Largest context: ${bigCtx?.model} ${fmtCtx(bigCtx?.context_window)}\n\nFull live rankings → ai-model-intel.vercel.app\n\n#AI #AIModels #LLM #BuildInPublic`;
+  // FIX 3: URL now correctly points to homepage
+  twitterText=`🐙 AI Model Intel — ${today}\n\n💰 Cheapest: ${cheap?.model} $${cheap?.input_cost_per_mtok}/1M\n💎 Premium: ${expn?.model} $${expn?.input_cost_per_mtok}/1M\n⭐ Best value: ${bv?.model}\n📄 Largest context: ${bigCtx?.model} ${fmtCtx(bigCtx?.context_window)}\n\nFull live rankings → ${SITE_URL}\n\n#AI #AIModels #LLM #BuildInPublic`;
 }
 
 function copyTwitter(){
@@ -758,7 +684,6 @@ function copyTwitter(){
   });
 }
 
-// Filtering
 function setTab(t,el){tab=t;document.querySelectorAll('.ntab').forEach(b=>b.classList.remove('active'));el.classList.add('active');render();}
 function setProv(p,el){prov=p;document.querySelectorAll('.ppill').forEach(b=>b.classList.remove('active'));el.classList.add('active');render();}
 function setSort(s){if(srt===s)dir*=-1;else{srt=s;dir=1;}render();}
@@ -869,7 +794,6 @@ function renderGrid(models){
   }).join('');
 }
 
-// Selection + compare
 function rc(name){
   if(sel.has(name))sel.delete(name);
   else{if(sel.size>=4){showToast('Max 4 models to compare');return;}sel.add(name);}
@@ -948,7 +872,6 @@ async function loadData(){
   }
 }
 
-// Init
 document.getElementById('card-grid').style.display='none';
 document.getElementById('today-date').textContent=new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
 loadData();
