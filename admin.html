@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — aimodelranks.live</title>
+<meta name="robots" content="noindex,nofollow">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#07090f;--bg2:#0d1117;--bg3:#131b2a;--bg4:#1a2438;
+  --border:#1e2d42;--border2:rgba(59,180,255,0.2);
+  --cyan:#3bb4ff;--green:#00d97e;--red:#ff4d6d;
+  --yellow:#fbbf24;--purple:#a855f7;
+  --text:#f0f4f8;--text2:#94a3b8;--text3:#4a5a6e;
+  --mono:'IBM Plex Mono',monospace;
+  --sans:'Space Grotesk',sans-serif;
+  --hud:'Orbitron',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;}
+
+/* LOGIN */
+.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;}
+.login-box{background:var(--bg2);border:1px solid var(--border2);border-radius:12px;padding:40px;width:100%;max-width:380px;text-align:center;}
+.login-logo{font-family:var(--hud);font-size:18px;color:var(--cyan);letter-spacing:1px;margin-bottom:6px;}
+.login-sub{font-family:var(--mono);font-size:12px;color:var(--text3);margin-bottom:28px;}
+.login-input{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px 16px;font-size:15px;color:var(--text);outline:none;font-family:var(--sans);margin-bottom:12px;text-align:center;letter-spacing:4px;}
+.login-input:focus{border-color:var(--cyan);}
+.login-btn{width:100%;background:var(--cyan);color:#000;border:none;padding:13px;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;font-family:var(--sans);}
+.login-btn:hover{opacity:0.88;}
+.login-err{color:var(--red);font-family:var(--mono);font-size:13px;margin-top:10px;display:none;}
+
+/* ADMIN UI */
+.admin-wrap{display:none;}
+nav{background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:58px;}
+.nav-logo{font-family:var(--hud);font-size:14px;color:var(--cyan);letter-spacing:1px;}
+.nav-right{display:flex;align-items:center;gap:10px;}
+.nav-link{color:var(--text2);text-decoration:none;font-size:13px;font-family:var(--mono);transition:color 0.2s;}
+.nav-link:hover{color:var(--cyan);}
+.logout-btn{background:transparent;border:1px solid var(--border);color:var(--text3);padding:6px 14px;border-radius:6px;cursor:pointer;font-family:var(--mono);font-size:12px;transition:all 0.2s;}
+.logout-btn:hover{border-color:var(--red);color:var(--red);}
+
+.main{max-width:1400px;margin:0 auto;padding:24px;}
+
+/* STATS STRIP */
+.stats-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:24px;}
+.stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:18px;text-align:center;}
+.stat-num{font-family:var(--hud);font-size:28px;font-weight:900;color:var(--cyan);margin-bottom:4px;}
+.stat-lbl{font-family:var(--mono);font-size:11px;color:var(--text3);letter-spacing:0.5px;text-transform:uppercase;}
+
+/* TABS */
+.tabs{display:flex;gap:0;background:var(--bg2);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:20px;}
+.tab{padding:10px 20px;font-size:14px;font-weight:500;color:var(--text2);cursor:pointer;transition:all 0.2s;background:none;border:none;font-family:var(--sans);}
+.tab:hover{color:var(--text);background:var(--bg3);}
+.tab.active{color:var(--cyan);background:var(--bg3);box-shadow:inset 0 -2px 0 var(--cyan);}
+
+/* SECTION */
+.section{display:none;}
+.section.active{display:block;}
+.sec-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px;}
+.sec-title{font-family:var(--hud);font-size:15px;color:var(--text);letter-spacing:0.5px;}
+.search-input{background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:8px 14px;font-size:14px;color:var(--text);outline:none;font-family:var(--sans);width:260px;}
+.search-input:focus{border-color:var(--cyan);}
+
+/* TABLE */
+.tbl-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden;overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:14px;}
+thead tr{background:var(--bg3);}
+th{padding:11px 14px;text-align:left;font-family:var(--mono);font-size:11px;letter-spacing:0.8px;text-transform:uppercase;color:var(--text3);border-bottom:1px solid var(--border);white-space:nowrap;}
+tbody tr{border-bottom:1px solid rgba(30,45,66,0.4);transition:background 0.15s;}
+tbody tr:hover{background:rgba(59,180,255,0.02);}
+tbody tr:last-child{border-bottom:none;}
+td{padding:12px 14px;vertical-align:middle;}
+.badge{font-family:var(--mono);font-size:11px;padding:3px 8px;border-radius:4px;border:1px solid;}
+.b-free{background:rgba(0,217,126,0.08);color:var(--green);border-color:rgba(0,217,126,0.2);}
+.b-paid{background:rgba(251,191,36,0.08);color:var(--yellow);border-color:rgba(251,191,36,0.2);}
+.b-pending{background:rgba(255,77,109,0.08);color:var(--red);border-color:rgba(255,77,109,0.2);}
+.b-approved{background:rgba(0,217,126,0.08);color:var(--green);border-color:rgba(0,217,126,0.2);}
+.b-rejected{background:rgba(255,77,109,0.08);color:var(--red);border-color:rgba(255,77,109,0.2);}
+.tool-name{font-weight:600;color:var(--text);}
+.tool-url{font-family:var(--mono);font-size:12px;color:var(--cyan);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.ref-input{background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:6px 10px;font-size:13px;color:var(--text);outline:none;font-family:var(--mono);width:220px;transition:border-color 0.2s;}
+.ref-input:focus{border-color:var(--cyan);}
+.action-btn{padding:5px 12px;border-radius:5px;font-size:12px;font-weight:600;cursor:pointer;border:none;font-family:var(--sans);transition:opacity 0.2s;}
+.action-btn:hover{opacity:0.8;}
+.btn-approve{background:var(--green);color:#000;}
+.btn-reject{background:var(--red);color:#fff;}
+.btn-save{background:var(--cyan);color:#000;}
+.btn-delete{background:transparent;border:1px solid var(--border);color:var(--text3);}
+.btn-delete:hover{border-color:var(--red);color:var(--red);}
+
+/* AD SLOTS */
+.ad-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin-bottom:24px;}
+.ad-slot{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:18px;position:relative;}
+.ad-slot.filled{border-color:rgba(251,191,36,0.3);}
+.ad-slot.empty{border-style:dashed;}
+.slot-num{font-family:var(--hud);font-size:11px;color:var(--text3);margin-bottom:10px;letter-spacing:1px;}
+.slot-status{display:inline-block;margin-bottom:10px;}
+.slot-name{font-size:15px;font-weight:700;color:var(--text);margin-bottom:4px;}
+.slot-url{font-family:var(--mono);font-size:12px;color:var(--cyan);margin-bottom:6px;word-break:break-all;}
+.slot-exp{font-family:var(--mono);font-size:12px;color:var(--text3);}
+.slot-empty-txt{font-family:var(--mono);font-size:13px;color:var(--text3);text-align:center;padding:16px 0;}
+.capacity-bar{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:16px;}
+.cap-title{font-family:var(--mono);font-size:12px;color:var(--text2);margin-bottom:8px;}
+.cap-bar-wrap{background:rgba(255,255,255,0.04);border-radius:4px;height:8px;margin-bottom:6px;}
+.cap-bar-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--green),var(--cyan));transition:width 0.5s;}
+.cap-info{font-family:var(--mono);font-size:12px;color:var(--text3);}
+
+/* SETTINGS */
+.settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+@media(max-width:700px){.settings-grid{grid-template-columns:1fr;}}
+.setting-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;}
+.setting-title{font-family:var(--hud);font-size:13px;color:var(--text);margin-bottom:14px;letter-spacing:0.5px;}
+.setting-row{display:flex;flex-direction:column;gap:5px;margin-bottom:12px;}
+.setting-label{font-family:var(--mono);font-size:12px;color:var(--text2);}
+.setting-input{background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:9px 12px;font-size:14px;color:var(--text);outline:none;font-family:var(--sans);transition:border-color 0.2s;}
+.setting-input:focus{border-color:var(--cyan);}
+.btn-save-setting{background:var(--cyan);color:#000;border:none;padding:10px 20px;border-radius:7px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--sans);}
+
+/* ANALYTICS */
+.analytics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:20px;}
+.ana-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:16px;}
+.ana-num{font-family:var(--hud);font-size:24px;color:var(--cyan);margin-bottom:4px;}
+.ana-lbl{font-family:var(--mono);font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;}
+.ana-change{font-family:var(--mono);font-size:12px;margin-top:4px;}
+.up{color:var(--green);}
+.dn{color:var(--red);}
+
+/* REF STATS */
+.ref-stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;}
+.ref-stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:16px;}
+.rs-tool{font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px;}
+.rs-url{font-family:var(--mono);font-size:11px;color:var(--cyan);margin-bottom:8px;word-break:break-all;}
+.rs-clicks{font-family:var(--hud);font-size:22px;color:var(--green);}
+.rs-lbl{font-family:var(--mono);font-size:11px;color:var(--text3);}
+
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--bg3);border:1px solid var(--border2);color:var(--cyan);font-family:var(--mono);font-size:13px;padding:10px 20px;border-radius:8px;z-index:9999;opacity:0;transition:opacity 0.2s;pointer-events:none;white-space:nowrap;}
+</style>
+</head>
+<body>
+<div id="toast"></div>
+
+<!-- LOGIN SCREEN -->
+<div class="login-wrap" id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">🐙 AI INTEL</div>
+    <div class="login-sub">Admin Access — aimodelranks.live</div>
+    <input class="login-input" id="pwd-input" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')login()">
+    <button class="login-btn" onclick="login()">Access Admin Panel</button>
+    <div class="login-err" id="login-err">Incorrect password. Try again.</div>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div class="admin-wrap" id="admin-panel">
+  <nav>
+    <div class="nav-logo">🐙 ADMIN — aimodelranks.live</div>
+    <div class="nav-right">
+      <a href="/compare" class="nav-link" target="_blank">← View Site</a>
+      <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+  </nav>
+
+  <div class="main">
+    <!-- STATS -->
+    <div class="stats-strip">
+      <div class="stat-card"><div class="stat-num" id="s-tools">22</div><div class="stat-lbl">Total Tools</div></div>
+      <div class="stat-card"><div class="stat-num" id="s-pending">3</div><div class="stat-lbl">Pending Review</div></div>
+      <div class="stat-card"><div class="stat-num" id="s-ads">3</div><div class="stat-lbl">Active Ads</div></div>
+      <div class="stat-card"><div class="stat-num" id="s-slots">6</div><div class="stat-lbl">Ad Slots Free</div></div>
+      <div class="stat-card"><div class="stat-num" id="s-clicks">1.2K</div><div class="stat-lbl">Ref Clicks (7d)</div></div>
+      <div class="stat-card"><div class="stat-num" id="s-revenue">$237</div><div class="stat-lbl">Revenue (MTD)</div></div>
+    </div>
+
+    <!-- TABS -->
+    <div class="tabs">
+      <button class="tab active" onclick="setTab('tools',this)">🛠 Tools (22)</button>
+      <button class="tab" onclick="setTab('pending',this)">⏳ Pending (3)</button>
+      <button class="tab" onclick="setTab('ads',this)">📣 Ad Slots</button>
+      <button class="tab" onclick="setTab('refs',this)">🔗 Referrals</button>
+      <button class="tab" onclick="setTab('analytics',this)">📊 Analytics</button>
+      <button class="tab" onclick="setTab('settings',this)">⚙️ Settings</button>
+    </div>
+
+    <!-- TOOLS TAB -->
+    <div class="section active" id="tab-tools">
+      <div class="sec-hdr">
+        <div class="sec-title">All Listed Tools</div>
+        <input class="search-input" type="text" placeholder="Search tools..." oninput="filterTools(this.value)">
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr>
+            <th>#</th>
+            <th>Tool Name</th>
+            <th>Category</th>
+            <th>Pricing</th>
+            <th>Original URL</th>
+            <th>Your Ref Link</th>
+            <th>Votes</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr></thead>
+          <tbody id="tools-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- PENDING TAB -->
+    <div class="section" id="tab-pending">
+      <div class="sec-hdr">
+        <div class="sec-title">Pending Review</div>
+        <span style="font-family:var(--mono);font-size:12px;color:var(--text3)">Auto-scam filter already applied. Final review here.</span>
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr>
+            <th>Submitted</th>
+            <th>Tool Name</th>
+            <th>Category</th>
+            <th>URL</th>
+            <th>Description</th>
+            <th>Tier</th>
+            <th>Email</th>
+            <th>Actions</th>
+          </tr></thead>
+          <tbody id="pending-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ADS TAB -->
+    <div class="section" id="tab-ads">
+      <div class="sec-hdr">
+        <div class="sec-title">Ad Slot Management</div>
+        <span style="font-family:var(--mono);font-size:12px;color:var(--text3)">Max 9 slots · Rotate every 30s · Auto-expire on end date</span>
+      </div>
+
+      <!-- Capacity bars -->
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-bottom:20px;">
+        <div class="capacity-bar">
+          <div class="cap-title">🔲 Sidebar Banners (rotate every 30s)</div>
+          <div class="cap-bar-wrap"><div class="cap-bar-fill" id="sidebar-bar" style="width:33%"></div></div>
+          <div class="cap-info"><span id="sidebar-filled">3</span>/9 slots filled · <span id="sidebar-free">6</span> available</div>
+        </div>
+        <div class="capacity-bar">
+          <div class="cap-title">⭐ Spotlight Carousel</div>
+          <div class="cap-bar-wrap"><div class="cap-bar-fill" id="spot-bar" style="width:41%"></div></div>
+          <div class="cap-info"><span id="spot-filled">5</span>/12 slots filled · <span id="spot-free">7</span> available</div>
+        </div>
+        <div class="capacity-bar">
+          <div class="cap-title">📣 Top Announcement Strip</div>
+          <div class="cap-bar-wrap"><div class="cap-bar-fill" id="strip-bar" style="width:33%"></div></div>
+          <div class="cap-info"><span id="strip-filled">1</span>/3 slots filled · <span id="strip-free">2</span> available</div>
+        </div>
+      </div>
+
+      <div class="ad-grid" id="ad-grid"></div>
+    </div>
+
+    <!-- REFERRALS TAB -->
+    <div class="section" id="tab-refs">
+      <div class="sec-hdr">
+        <div class="sec-title">Referral Link Manager</div>
+        <span style="font-family:var(--mono);font-size:12px;color:var(--text3)">All tools get ?ref=aimodelranks appended. Override specific links below.</span>
+      </div>
+      <div style="background:rgba(59,180,255,0.04);border:1px solid var(--border2);border-radius:8px;padding:14px;margin-bottom:16px;font-family:var(--mono);font-size:13px;color:var(--text2);line-height:1.7;">
+        <strong style="color:var(--cyan)">How it works:</strong><br>
+        • All outbound tool links automatically append <code style="color:var(--green)">?ref=aimodelranks</code><br>
+        • Tools see your site as a referral source in their analytics<br>
+        • You can override any tool with a custom affiliate URL (e.g. from their affiliate program)<br>
+        • Contact tools that receive high clicks and negotiate commission
+      </div>
+      <div class="ref-stats" id="ref-stats"></div>
+    </div>
+
+    <!-- ANALYTICS TAB -->
+    <div class="section" id="tab-analytics">
+      <div class="sec-hdr"><div class="sec-title">Platform Analytics</div></div>
+      <div class="analytics-grid">
+        <div class="ana-card"><div class="ana-num">2,847</div><div class="ana-lbl">Page Views (7d)</div><div class="ana-change up">+23% vs last week</div></div>
+        <div class="ana-card"><div class="ana-num">1,234</div><div class="ana-lbl">Unique Visitors (7d)</div><div class="ana-change up">+18% vs last week</div></div>
+        <div class="ana-card"><div class="ana-num">1,203</div><div class="ana-lbl">Ref Clicks (7d)</div><div class="ana-change up">+31% vs last week</div></div>
+        <div class="ana-card"><div class="ana-num">$237</div><div class="ana-lbl">Ad Revenue (MTD)</div><div class="ana-change up">+$158 this month</div></div>
+        <div class="ana-card"><div class="ana-num">47</div><div class="ana-lbl">Email Subscribers</div><div class="ana-change up">+12 this week</div></div>
+        <div class="ana-card"><div class="ana-num">4</div><div class="ana-lbl">RapidAPI Subscribers</div><div class="ana-change up">+2 this week</div></div>
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Page</th><th>Views (7d)</th><th>Avg Time</th><th>Bounced</th><th>Top Source</th></tr></thead>
+          <tbody>
+            <tr><td style="font-weight:600">/compare (Home)</td><td style="color:var(--cyan);font-family:var(--mono)">1,432</td><td style="font-family:var(--mono)">3m 42s</td><td style="font-family:var(--mono)">38%</td><td style="font-family:var(--mono);color:var(--text3)">Product Hunt</td></tr>
+            <tr><td style="font-weight:600">/tools</td><td style="color:var(--cyan);font-family:var(--mono)">876</td><td style="font-family:var(--mono)">2m 18s</td><td style="font-family:var(--mono)">42%</td><td style="font-family:var(--mono);color:var(--text3)">Direct</td></tr>
+            <tr><td style="font-weight:600">/blog</td><td style="color:var(--cyan);font-family:var(--mono)">539</td><td style="font-family:var(--mono)">4m 56s</td><td style="font-family:var(--mono)">28%</td><td style="font-family:var(--mono);color:var(--text3)">Google</td></tr>
+            <tr><td style="font-weight:600">/api</td><td style="color:var(--cyan);font-family:var(--mono)">312</td><td style="font-family:var(--mono)">6m 12s</td><td style="font-family:var(--mono)">21%</td><td style="font-family:var(--mono);color:var(--text3)">RapidAPI</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- SETTINGS TAB -->
+    <div class="section" id="tab-settings">
+      <div class="sec-hdr"><div class="sec-title">Platform Settings</div></div>
+      <div class="settings-grid">
+        <div class="setting-card">
+          <div class="setting-title">🌐 Site Config</div>
+          <div class="setting-row"><label class="setting-label">Site Domain</label><input class="setting-input" value="https://www.aimodelranks.live" id="cfg-domain"></div>
+          <div class="setting-row"><label class="setting-label">Default Ref Tag</label><input class="setting-input" value="?ref=aimodelranks" id="cfg-ref"></div>
+          <div class="setting-row"><label class="setting-label">Admin Password (change)</label><input class="setting-input" type="password" placeholder="New password..." id="cfg-pwd"></div>
+          <button class="btn-save-setting" onclick="saveSettings()">Save Settings</button>
+        </div>
+        <div class="setting-card">
+          <div class="setting-title">📣 Ad Capacity Limits</div>
+          <div class="setting-row"><label class="setting-label">Max Sidebar Slots</label><input class="setting-input" type="number" value="9" id="cfg-sidebar-max"></div>
+          <div class="setting-row"><label class="setting-label">Max Spotlight Slots</label><input class="setting-input" type="number" value="12" id="cfg-spot-max"></div>
+          <div class="setting-row"><label class="setting-label">Max Strip Slots</label><input class="setting-input" type="number" value="3" id="cfg-strip-max"></div>
+          <div class="setting-row"><label class="setting-label">Sidebar Rotation (seconds)</label><input class="setting-input" type="number" value="30" id="cfg-rotation"></div>
+          <button class="btn-save-setting" onclick="saveSettings()">Save Settings</button>
+        </div>
+        <div class="setting-card">
+          <div class="setting-title">📬 Email / Newsletter</div>
+          <div class="setting-row"><label class="setting-label">Mailchimp API Key</label><input class="setting-input" type="password" placeholder="mc-xxxxxxxxxx" id="cfg-mc-key"></div>
+          <div class="setting-row"><label class="setting-label">Mailchimp List ID</label><input class="setting-input" placeholder="abc123def" id="cfg-mc-list"></div>
+          <div class="setting-row"><label class="setting-label">Weekly Digest Day</label>
+            <select class="setting-input" id="cfg-digest-day">
+              <option>Monday</option><option>Tuesday</option><option>Wednesday</option>
+            </select>
+          </div>
+          <button class="btn-save-setting" onclick="saveSettings()">Save Settings</button>
+        </div>
+        <div class="setting-card">
+          <div class="setting-title">💳 Payment Config</div>
+          <div style="font-family:var(--mono);font-size:13px;color:var(--text2);line-height:1.8;margin-bottom:14px;">
+            <strong style="color:var(--yellow)">Recommended: LemonSqueezy</strong><br>
+            ✅ No monthly fee<br>
+            ✅ Handles global VAT/tax<br>
+            ✅ No business registration needed<br>
+            ✅ 5% + $0.50 per transaction<br>
+            ✅ Instant payout to bank<br><br>
+            <strong style="color:var(--text3)">Setup:</strong><br>
+            1. Sign up at lemonsqueezy.com<br>
+            2. Create 3 products ($29/$79/$149)<br>
+            3. Paste checkout URLs below
+          </div>
+          <div class="setting-row"><label class="setting-label">Starter $29 Checkout URL</label><input class="setting-input" placeholder="https://yourstore.lemonsqueezy.com/checkout/..." id="cfg-pay-29"></div>
+          <div class="setting-row"><label class="setting-label">Growth $79 Checkout URL</label><input class="setting-input" placeholder="https://yourstore.lemonsqueezy.com/checkout/..." id="cfg-pay-79"></div>
+          <div class="setting-row"><label class="setting-label">Premium $149 Checkout URL</label><input class="setting-input" placeholder="https://yourstore.lemonsqueezy.com/checkout/..." id="cfg-pay-149"></div>
+          <button class="btn-save-setting" onclick="saveSettings()">Save URLs</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── PASSWORD ──────────────────────────────────────────────────────────
+// Change this to your actual password
+const ADMIN_PWD = 'octopus2026';
+
+function login(){
+  const pwd = document.getElementById('pwd-input').value;
+  if(pwd === ADMIN_PWD){
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('admin-panel').style.display = 'block';
+    sessionStorage.setItem('admin_auth','1');
+    initAdmin();
+  } else {
+    document.getElementById('login-err').style.display = 'block';
+    document.getElementById('pwd-input').value = '';
+    document.getElementById('pwd-input').focus();
+  }
+}
+
+function logout(){
+  sessionStorage.removeItem('admin_auth');
+  location.reload();
+}
+
+// Auto-login if session active
+if(sessionStorage.getItem('admin_auth')==='1'){
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('admin-panel').style.display='block';
+  setTimeout(initAdmin, 0);
+}
+
+// ── TOOLS DATA (synced with tools.html) ──────────────────────────────
+let TOOLS_DATA = [
+  {id:1,name:'Midjourney',cat:'image',pricing:'paid',url:'https://midjourney.com',votes:2847,status:'approved',email:'',ref:'https://midjourney.com?ref=aimodelranks',clicks:342,daysAgo:120},
+  {id:2,name:'ChatGPT',cat:'chat',pricing:'freemium',url:'https://chat.openai.com',votes:5230,status:'approved',email:'',ref:'https://chat.openai.com?ref=aimodelranks',clicks:891,daysAgo:180},
+  {id:3,name:'Cursor',cat:'coding',pricing:'freemium',url:'https://cursor.sh',votes:1923,status:'approved',email:'founder@cursor.sh',ref:'https://cursor.sh?ref=aimodelranks',clicks:267,daysAgo:60},
+  {id:4,name:'Claude',cat:'chat',pricing:'freemium',url:'https://claude.ai',votes:1654,status:'approved',email:'',ref:'https://claude.ai?ref=aimodelranks',clicks:198,daysAgo:90},
+  {id:5,name:'Runway Gen-4',cat:'video',pricing:'freemium',url:'https://runwayml.com',votes:1432,status:'approved',email:'',ref:'https://runwayml.com?ref=aimodelranks',clicks:156,daysAgo:7},
+  {id:6,name:'ElevenLabs',cat:'audio',pricing:'freemium',url:'https://elevenlabs.io',votes:1876,status:'approved',email:'',ref:'https://elevenlabs.io?ref=aimodelranks',clicks:213,daysAgo:150},
+  {id:7,name:'Perplexity AI',cat:'research',pricing:'freemium',url:'https://perplexity.ai',votes:2341,status:'approved',email:'',ref:'https://perplexity.ai?ref=aimodelranks',clicks:187,daysAgo:130},
+  {id:8,name:'Mistral Chat',cat:'chat',pricing:'free',url:'https://chat.mistral.ai',votes:654,status:'approved',email:'',ref:'https://chat.mistral.ai?ref=aimodelranks',clicks:89,daysAgo:6},
+];
+
+let PENDING_DATA = [
+  {id:101,name:'CodeRabbit',cat:'coding',pricing:'freemium',url:'https://coderabbit.ai',desc:'AI code review that understands your codebase.',tier:'free',email:'team@coderabbit.ai',submitted:'May 4, 2026'},
+  {id:102,name:'Kling AI',cat:'video',pricing:'freemium',url:'https://klingai.com',desc:'Chinese AI video generation, very high quality.',tier:'featured',email:'hi@klingai.com',submitted:'May 3, 2026'},
+  {id:103,name:'Bolt.new',cat:'coding',pricing:'freemium',url:'https://bolt.new',desc:'Build full-stack apps from a single prompt.',tier:'premium',email:'',submitted:'May 2, 2026'},
+];
+
+let AD_SLOTS = [
+  {id:1,type:'sidebar',name:'Mistral AI',url:'https://mistral.ai',logo:'🔥',color:'#ff6b00',expires:'May 10, 2026',tier:'Growth $79',active:true},
+  {id:2,type:'sidebar',name:'Google Gemini',url:'https://ai.google.dev',logo:'✨',color:'#4285f4',expires:'May 15, 2026',tier:'Growth $79',active:true},
+  {id:3,type:'sidebar',name:'Anthropic Claude',url:'https://anthropic.com',logo:'🤖',color:'#d05030',expires:'May 20, 2026',tier:'Starter $29',active:true},
+  {id:4,type:'sidebar',active:false},{id:5,type:'sidebar',active:false},{id:6,type:'sidebar',active:false},
+  {id:7,type:'sidebar',active:false},{id:8,type:'sidebar',active:false},{id:9,type:'sidebar',active:false},
+];
+
+// ── TABS ──────────────────────────────────────────────────────────────
+function setTab(name,el){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('tab-'+name).classList.add('active');
+}
+
+// ── TOOLS TABLE ───────────────────────────────────────────────────────
+function renderTools(filter=''){
+  const data = filter ? TOOLS_DATA.filter(t=>t.name.toLowerCase().includes(filter.toLowerCase())) : TOOLS_DATA;
+  document.getElementById('tools-tbody').innerHTML = data.map(t=>`
+    <tr id="tr-${t.id}">
+      <td style="font-family:var(--mono);font-size:12px;color:var(--text3)">${t.id}</td>
+      <td><div class="tool-name">${t.name}</div></td>
+      <td><span class="badge b-free">${t.cat}</span></td>
+      <td><span class="badge ${t.pricing==='free'?'b-free':t.pricing==='freemium'?'b-free':'b-paid'}">${t.pricing}</span></td>
+      <td><a href="${t.url}" target="_blank" class="tool-url">${t.url}</a></td>
+      <td>
+        <input class="ref-input" id="ref-${t.id}" value="${t.ref||t.url+'?ref=aimodelranks'}" placeholder="${t.url}?ref=aimodelranks">
+      </td>
+      <td style="font-family:var(--mono);color:var(--cyan)">${t.votes.toLocaleString()}</td>
+      <td><span class="badge b-${t.status}">${t.status}</span></td>
+      <td style="display:flex;gap:6px">
+        <button class="action-btn btn-save" onclick="saveRef(${t.id})">Save</button>
+        <button class="action-btn btn-delete" onclick="deleteTool(${t.id})">Delete</button>
+      </td>
+    </tr>`).join('');
+}
+
+function filterTools(q){ renderTools(q); }
+
+function saveRef(id){
+  const t = TOOLS_DATA.find(x=>x.id===id);
+  if(!t) return;
+  t.ref = document.getElementById('ref-'+id).value;
+  showToast('✅ Ref link saved for '+t.name);
+}
+
+function deleteTool(id){
+  if(!confirm('Delete this tool?')) return;
+  TOOLS_DATA = TOOLS_DATA.filter(t=>t.id!==id);
+  renderTools();
+  showToast('Tool deleted');
+}
+
+// ── PENDING TABLE ─────────────────────────────────────────────────────
+function renderPending(){
+  document.getElementById('pending-tbody').innerHTML = PENDING_DATA.length === 0
+    ? '<tr><td colspan="8" style="text-align:center;padding:32px;font-family:var(--mono);font-size:13px;color:var(--text3)">No pending submissions 🎉</td></tr>'
+    : PENDING_DATA.map(t=>`
+    <tr>
+      <td style="font-family:var(--mono);font-size:12px;color:var(--text3)">${t.submitted}</td>
+      <td><div class="tool-name">${t.name}</div></td>
+      <td><span class="badge b-free">${t.cat}</span></td>
+      <td><a href="${t.url}" target="_blank" class="tool-url">${t.url}</a></td>
+      <td style="font-size:13px;color:var(--text2);max-width:200px">${t.desc}</td>
+      <td><span class="badge ${t.tier==='free'?'b-approved':'b-paid'}">${t.tier}</span></td>
+      <td style="font-family:var(--mono);font-size:12px;color:var(--text3)">${t.email||'—'}</td>
+      <td style="display:flex;gap:6px">
+        <button class="action-btn btn-approve" onclick="approveTool(${t.id})">Approve</button>
+        <button class="action-btn btn-reject" onclick="rejectTool(${t.id})">Reject</button>
+      </td>
+    </tr>`).join('');
+}
+
+function approveTool(id){
+  const t = PENDING_DATA.find(x=>x.id===id);
+  if(!t) return;
+  TOOLS_DATA.unshift({...t,votes:0,status:'approved',ref:t.url+'?ref=aimodelranks',clicks:0});
+  PENDING_DATA = PENDING_DATA.filter(x=>x.id!==id);
+  renderPending();renderTools();
+  updateStats();
+  showToast('✅ '+t.name+' approved and listed!');
+}
+
+function rejectTool(id){
+  if(!confirm('Reject this submission?')) return;
+  PENDING_DATA = PENDING_DATA.filter(x=>x.id!==id);
+  renderPending();updateStats();
+  showToast('Tool rejected');
+}
+
+// ── AD SLOTS ──────────────────────────────────────────────────────────
+function renderAdSlots(){
+  document.getElementById('ad-grid').innerHTML = AD_SLOTS.map(s=>
+    s.active
+    ? `<div class="ad-slot filled">
+        <div class="slot-num">SLOT ${s.id} · ${s.type.toUpperCase()}</div>
+        <span class="badge b-approved slot-status">ACTIVE</span>
+        <div class="slot-name">${s.logo} ${s.name}</div>
+        <div class="slot-url">${s.url}</div>
+        <div class="slot-exp">Expires: ${s.expires} · ${s.tier}</div>
+        <div style="margin-top:10px">
+          <button class="action-btn btn-delete" onclick="deactivateSlot(${s.id})" style="margin-top:6px">Deactivate</button>
+        </div>
+      </div>`
+    : `<div class="ad-slot empty">
+        <div class="slot-num">SLOT ${s.id} · SIDEBAR</div>
+        <span class="badge b-pending slot-status">AVAILABLE</span>
+        <div class="slot-empty-txt">Empty slot<br><span style="font-size:11px">$29/7d or $79/30d</span></div>
+      </div>`
+  ).join('');
+}
+
+function deactivateSlot(id){
+  const s = AD_SLOTS.find(x=>x.id===id);
+  if(s){s.active=false;renderAdSlots();updateStats();showToast('Slot deactivated');}
+}
+
+// ── REFERRALS ─────────────────────────────────────────────────────────
+function renderRefs(){
+  document.getElementById('ref-stats').innerHTML = TOOLS_DATA.map(t=>`
+    <div class="ref-stat-card">
+      <div class="rs-tool">${t.name}</div>
+      <div class="rs-url">${t.ref||t.url+'?ref=aimodelranks'}</div>
+      <div class="rs-clicks">${(t.clicks||0).toLocaleString()}</div>
+      <div class="rs-lbl">clicks via your link (7d)</div>
+      ${t.clicks>100?`<div style="margin-top:8px;font-family:var(--mono);font-size:11px;color:var(--yellow)">🔥 High traffic — contact for affiliate deal</div>`:''}
+    </div>`).join('');
+}
+
+// ── STATS ─────────────────────────────────────────────────────────────
+function updateStats(){
+  document.getElementById('s-tools').textContent = TOOLS_DATA.length;
+  document.getElementById('s-pending').textContent = PENDING_DATA.length;
+  const activeAds = AD_SLOTS.filter(s=>s.active).length;
+  document.getElementById('s-ads').textContent = activeAds;
+  document.getElementById('s-slots').textContent = 9 - activeAds;
+  document.querySelectorAll('.tab')[0].textContent = '🛠 Tools ('+TOOLS_DATA.length+')';
+  document.querySelectorAll('.tab')[1].textContent = '⏳ Pending ('+PENDING_DATA.length+')';
+}
+
+function saveSettings(){ showToast('✅ Settings saved!'); }
+
+function showToast(msg){
+  const t=document.getElementById('toast');t.textContent=msg;t.style.opacity='1';
+  clearTimeout(t._t);t._t=setTimeout(()=>t.style.opacity='0',2500);
+}
+
+function initAdmin(){
+  renderTools();
+  renderPending();
+  renderAdSlots();
+  renderRefs();
+  updateStats();
+}
+</script>
+</body>
+</html>
