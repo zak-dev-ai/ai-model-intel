@@ -1,6 +1,15 @@
 {
+  "framework": null,
+  "outputDirectory": ".",
   "cleanUrls": true,
   "trailingSlash": false,
+  "redirects": [
+    { "source": "/compare.html", "destination": "/compare", "permanent": true },
+    { "source": "/tools.html", "destination": "/tools", "permanent": true },
+    { "source": "/blog.html", "destination": "/blog", "permanent": true },
+    { "source": "/admin.html", "destination": "/admin", "permanent": true },
+    { "source": "/index.html", "destination": "/", "permanent": true }
+  ],
   "headers": [
     {
       "source": "/(.*)",
