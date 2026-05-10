@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Legal — Terms, Privacy & Refund Policy | AI Model Ranks</title>
+<meta name="description" content="Terms of Service, Privacy Policy and Refund Policy for aimodelranks.live">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#07090f;--bg2:#0d1117;--bg3:#131b2a;
+  --border:#1e2d42;--border2:rgba(59,180,255,0.2);
+  --cyan:#3bb4ff;--green:#00d97e;--yellow:#fbbf24;--purple:#a855f7;
+  --text:#f0f4f8;--text2:#94a3b8;--text3:#4a5a6e;
+  --mono:'IBM Plex Mono',monospace;
+  --sans:'Space Grotesk',sans-serif;
+  --hud:'Orbitron',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);overflow-x:hidden;line-height:1.7;}
+
+nav{background:rgba(7,9,15,0.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 24px;height:58px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.nav-logo{font-family:var(--hud);font-size:15px;color:var(--cyan);text-decoration:none;letter-spacing:1px;}
+.nav-links{display:flex;gap:6px;}
+.nav-link{color:var(--text2);text-decoration:none;font-size:13px;padding:6px 10px;border-radius:6px;transition:color .2s;}
+.nav-link:hover{color:var(--cyan);}
+
+.hero{background:linear-gradient(180deg,rgba(59,180,255,0.04) 0%,transparent 100%);border-bottom:1px solid var(--border);padding:36px 24px 28px;text-align:center;}
+.hero h1{font-family:var(--hud);font-size:clamp(20px,4vw,34px);color:#fff;letter-spacing:1px;margin-bottom:8px;}
+.hero p{font-size:14px;color:var(--text2);max-width:500px;margin:0 auto;}
+.hero-updated{font-family:var(--mono);font-size:12px;color:var(--text3);margin-top:10px;}
+
+/* QUICK NAV */
+.quick-nav{background:var(--bg2);border-bottom:1px solid var(--border);padding:14px 24px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center;}
+.qn-label{font-family:var(--mono);font-size:11px;color:var(--text3);}
+.qn-link{padding:5px 14px;border-radius:100px;font-size:12px;font-weight:600;text-decoration:none;border:1px solid;transition:all .2s;}
+.qn-link.terms{color:var(--cyan);border-color:rgba(59,180,255,.3);}
+.qn-link.terms:hover{background:rgba(59,180,255,.06);}
+.qn-link.privacy{color:var(--green);border-color:rgba(0,217,126,.3);}
+.qn-link.privacy:hover{background:rgba(0,217,126,.06);}
+.qn-link.refund{color:var(--yellow);border-color:rgba(251,191,36,.3);}
+.qn-link.refund:hover{background:rgba(251,191,36,.06);}
+
+.outer{max-width:860px;margin:0 auto;padding:40px 24px 80px;}
+
+/* SECTION */
+.legal-section{margin-bottom:56px;padding-top:8px;}
+.section-anchor{display:block;height:80px;margin-top:-80px;visibility:hidden;}
+.section-badge{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:4px 12px;border-radius:100px;border:1px solid;margin-bottom:14px;}
+.section-badge.terms{color:var(--cyan);border-color:rgba(59,180,255,.3);background:rgba(59,180,255,.04);}
+.section-badge.privacy{color:var(--green);border-color:rgba(0,217,126,.3);background:rgba(0,217,126,.04);}
+.section-badge.refund{color:var(--yellow);border-color:rgba(251,191,36,.3);background:rgba(251,191,36,.04);}
+.legal-section h2{font-family:var(--hud);font-size:clamp(18px,3vw,26px);color:#fff;letter-spacing:.5px;margin-bottom:6px;}
+.legal-section .intro{font-size:14px;color:var(--text2);margin-bottom:24px;padding-bottom:20px;border-bottom:1px solid var(--border);}
+.legal-section h3{font-size:15px;font-weight:700;color:var(--text);margin:22px 0 8px;}
+.legal-section p{font-size:14px;color:var(--text2);margin-bottom:12px;line-height:1.8;}
+.legal-section ul{margin:8px 0 14px 20px;}
+.legal-section ul li{font-size:14px;color:var(--text2);margin-bottom:6px;line-height:1.7;}
+.highlight-box{background:var(--bg2);border:1px solid var(--border);border-left:3px solid var(--cyan);border-radius:0 8px 8px 0;padding:14px 18px;margin:16px 0;font-size:14px;color:var(--text2);line-height:1.7;}
+.highlight-box.green{border-left-color:var(--green);}
+.highlight-box.yellow{border-left-color:var(--yellow);}
+.highlight-box strong{color:var(--text);}
+
+/* DIVIDER */
+.section-divider{height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin:48px 0;}
+
+/* CONTACT */
+.contact-card{background:var(--bg2);border:1px solid var(--border2);border-radius:12px;padding:24px;text-align:center;margin-top:48px;}
+.contact-card h3{font-family:var(--hud);font-size:14px;color:var(--text);margin-bottom:8px;letter-spacing:.5px;}
+.contact-card p{font-size:14px;color:var(--text2);margin-bottom:12px;}
+.contact-card a{color:var(--cyan);text-decoration:none;font-family:var(--mono);font-size:14px;}
+.contact-card a:hover{text-decoration:underline;}
+
+footer{border-top:1px solid var(--border);padding:20px 24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
+.foot-logo{font-family:var(--hud);font-size:12px;color:var(--cyan);letter-spacing:1px;}
+footer p{font-size:12px;color:var(--text3);font-family:var(--mono);}
+.foot-links{display:flex;gap:14px;}
+footer a{color:var(--text3);text-decoration:none;font-size:12px;font-family:var(--mono);}
+footer a:hover{color:var(--cyan);}
+
+@media(max-width:600px){
+  .outer{padding:24px 16px 60px;}
+  nav{padding:0 14px;}
+  .quick-nav{padding:12px 14px;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">🐙 AI MODEL RANKS</a>
+  <div class="nav-links">
+    <a href="/" class="nav-link">🏠 Home</a>
+    <a href="/compare" class="nav-link">📊 Models</a>
+    <a href="/tools" class="nav-link">🛠 Tools</a>
+    <a href="/blog" class="nav-link">📰 Blog</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <h1>Legal Documents</h1>
+  <p>Terms of Service, Privacy Policy, and Refund Policy for AI Model Ranks and all services operating under aimodelranks.live.</p>
+  <div class="hero-updated">Last updated: May 10, 2026</div>
+</div>
+
+<div class="quick-nav">
+  <span class="qn-label">Jump to:</span>
+  <a href="#terms" class="qn-link terms">📋 Terms of Service</a>
+  <a href="#privacy" class="qn-link privacy">🔒 Privacy Policy</a>
+  <a href="#refund" class="qn-link refund">💳 Refund Policy</a>
+</div>
+
+<div class="outer">
+
+  <!-- ═══════════════════════════════════════
+       TERMS OF SERVICE
+  ═══════════════════════════════════════ -->
+  <span class="section-anchor" id="terms"></span>
+  <div class="legal-section">
+    <div class="section-badge terms">📋 Terms of Service</div>
+    <h2>Terms of Service</h2>
+    <p class="intro">By accessing or using AI Model Ranks (aimodelranks.live), you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use our services. These terms apply to all visitors, users, and customers.</p>
+
+    <h3>1. About Our Service</h3>
+    <p>AI Model Ranks ("we", "us", "our") operates aimodelranks.live, a platform that provides:</p>
+    <ul>
+      <li>Live AI model pricing data and rankings</li>
+      <li>An AI tools directory with community voting</li>
+      <li>Paid advertising and featured listing services for AI tool makers</li>
+      <li>A public API for AI model pricing data (via RapidAPI)</li>
+      <li>Educational blog content about AI models and pricing</li>
+    </ul>
+
+    <h3>2. Eligibility</h3>
+    <p>You must be at least 18 years old to purchase advertising or submit tools. Anyone may browse the site for free. By making a purchase, you confirm that you are legally capable of entering into binding contracts.</p>
+
+    <h3>3. Advertising & Featured Listings</h3>
+    <p>We offer paid advertising placements for AI tools and products. When you purchase an advertising slot:</p>
+    <ul>
+      <li>Your listing goes live within 2–24 hours of payment confirmation</li>
+      <li>Slots are time-limited (7 or 30 days depending on the plan purchased)</li>
+      <li>Slots auto-expire at the end of the purchased period with no automatic renewal</li>
+      <li>We reserve the right to reject any submission that violates our content guidelines</li>
+      <li>Rejected paid submissions receive a full refund within 5 business days</li>
+    </ul>
+
+    <div class="highlight-box">
+      <strong>Ad Content Rules:</strong> Submissions must not promote illegal products, adult content, crypto scams, MLM schemes, misleading health claims, or any content that is deceptive, fraudulent, or harmful. We use automated and manual review.
+    </div>
+
+    <h3>4. Free Tool Submissions</h3>
+    <p>You may submit your AI tool for free listing. Free submissions are reviewed within 24 hours. We reserve the right to reject, remove, or reclassify any submission at our sole discretion. Free submissions do not come with a placement guarantee.</p>
+
+    <h3>5. Pricing Data Accuracy</h3>
+    <p>We make every effort to keep AI model pricing data accurate and up to date (refreshed every 30 minutes from public sources). However, we do not guarantee the accuracy, completeness, or timeliness of pricing information. Always verify pricing directly with the AI provider before making business decisions. We are not liable for losses arising from reliance on our data.</p>
+
+    <h3>6. API Usage</h3>
+    <p>Our public API is provided via RapidAPI. Free tier endpoints are available to all. Premium endpoints require a paid RapidAPI subscription. API usage is subject to RapidAPI's Terms of Service in addition to ours. We may rate-limit or suspend API access for abuse.</p>
+
+    <h3>7. Intellectual Property</h3>
+    <p>All original content on aimodelranks.live — including our ranking methodology, site design, blog articles, and proprietary data — is owned by AI Model Ranks. You may not copy, reproduce, or redistribute our content without written permission. AI model names and provider brands remain the property of their respective owners.</p>
+
+    <h3>8. Limitation of Liability</h3>
+    <p>To the fullest extent permitted by law, AI Model Ranks shall not be liable for any indirect, incidental, special, or consequential damages arising from your use of the site, reliance on pricing data, or advertising purchases. Our maximum liability to any customer is limited to the amount paid for the relevant service.</p>
+
+    <h3>9. Changes to Terms</h3>
+    <p>We may update these terms at any time. We will notify users of significant changes by updating the "Last updated" date at the top of this page. Continued use of the site after changes constitutes acceptance of the updated terms.</p>
+
+    <h3>10. Governing Law</h3>
+    <p>These terms are governed by and construed in accordance with applicable laws. Any disputes will be resolved through good-faith negotiation first, and if necessary, through binding arbitration.</p>
+
+    <h3>11. Contact</h3>
+    <p>For questions about these terms, contact us at: <a href="mailto:legal@aimodelranks.live" style="color:var(--cyan)">legal@aimodelranks.live</a></p>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- ═══════════════════════════════════════
+       PRIVACY POLICY
+  ═══════════════════════════════════════ -->
+  <span class="section-anchor" id="privacy"></span>
+  <div class="legal-section">
+    <div class="section-badge privacy">🔒 Privacy Policy</div>
+    <h2>Privacy Policy</h2>
+    <p class="intro">This Privacy Policy explains how AI Model Ranks collects, uses, and protects your personal information when you use aimodelranks.live. We are committed to protecting your privacy and handling your data transparently.</p>
+
+    <div class="highlight-box green">
+      <strong>Short version:</strong> We collect minimal data. We do not sell your personal information to third parties. We use your data only to operate and improve our services.
+    </div>
+
+    <h3>1. Information We Collect</h3>
+    <p><strong>When you browse the site (no account required):</strong></p>
+    <ul>
+      <li>Standard web server logs (IP address, browser type, pages visited, timestamps) — retained for up to 30 days for security and analytics</li>
+      <li>Anonymous usage analytics to understand how visitors use the site</li>
+    </ul>
+    <p><strong>When you submit a tool (free listing):</strong></p>
+    <ul>
+      <li>Your email address (to notify you of review status)</li>
+      <li>Tool name, URL, category, and description you provide</li>
+    </ul>
+    <p><strong>When you make a purchase (paid advertising):</strong></p>
+    <ul>
+      <li>Email address and name (provided during checkout via Paddle)</li>
+      <li>Payment is processed entirely by Paddle — we never see or store your card details</li>
+      <li>Order ID and purchase amount (for record-keeping and ad activation)</li>
+    </ul>
+    <p><strong>When you subscribe to our newsletter:</strong></p>
+    <ul>
+      <li>Email address only</li>
+    </ul>
+
+    <h3>2. How We Use Your Information</h3>
+    <ul>
+      <li>To activate and manage your purchased advertising slot</li>
+      <li>To review and list your tool submission</li>
+      <li>To send transactional emails (order confirmation, listing approval)</li>
+      <li>To send our newsletter if you subscribed (unsubscribe anytime)</li>
+      <li>To detect and prevent fraud and abuse</li>
+      <li>To improve our site and services using anonymised analytics</li>
+    </ul>
+
+    <h3>3. Third-Party Services</h3>
+    <p>We use the following third-party services that may process your data:</p>
+    <ul>
+      <li><strong>Paddle</strong> — payment processing. Paddle acts as Merchant of Record and processes payments under their own privacy policy.</li>
+      <li><strong>Cloudflare</strong> — hosting, CDN, and DDoS protection. Cloudflare may process request data per their privacy policy.</li>
+      <li><strong>RapidAPI</strong> — API distribution. API users are subject to RapidAPI's privacy policy.</li>
+      <li><strong>OpenRouter</strong> — source for live AI model pricing data (no personal data shared).</li>
+    </ul>
+
+    <h3>4. Cookies</h3>
+    <p>We use minimal cookies necessary for site functionality. We do not use advertising cookies or cross-site tracking. You can disable cookies in your browser without losing access to our core features.</p>
+
+    <h3>5. Data Retention</h3>
+    <ul>
+      <li>Purchase records: retained for 7 years for legal/tax compliance</li>
+      <li>Tool submission emails: retained for 12 months</li>
+      <li>Newsletter subscriptions: retained until you unsubscribe</li>
+      <li>Server logs: 30 days</li>
+    </ul>
+
+    <h3>6. Your Rights</h3>
+    <p>Depending on your location, you may have the right to:</p>
+    <ul>
+      <li>Access the personal data we hold about you</li>
+      <li>Correct inaccurate data</li>
+      <li>Request deletion of your data ("right to be forgotten")</li>
+      <li>Object to processing of your data</li>
+      <li>Data portability</li>
+    </ul>
+    <p>To exercise any of these rights, email us at <a href="mailto:privacy@aimodelranks.live" style="color:var(--cyan)">privacy@aimodelranks.live</a>. We will respond within 30 days.</p>
+
+    <h3>7. Data Security</h3>
+    <p>We implement appropriate technical and organizational measures to protect your personal data against unauthorized access, alteration, disclosure, or destruction. All data is transmitted over HTTPS. Payment data is handled entirely by Paddle and is never stored on our servers.</p>
+
+    <h3>8. Children's Privacy</h3>
+    <p>Our services are not directed at children under 13. We do not knowingly collect personal information from children under 13. If you believe a child has provided us with personal information, please contact us and we will delete it promptly.</p>
+
+    <h3>9. Changes to This Policy</h3>
+    <p>We may update this Privacy Policy from time to time. We will notify you of significant changes by updating the date at the top of this page. We encourage you to review this page periodically.</p>
+
+    <h3>10. Contact</h3>
+    <p>For privacy-related questions: <a href="mailto:privacy@aimodelranks.live" style="color:var(--cyan)">privacy@aimodelranks.live</a></p>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- ═══════════════════════════════════════
+       REFUND POLICY
+  ═══════════════════════════════════════ -->
+  <span class="section-anchor" id="refund"></span>
+  <div class="legal-section">
+    <div class="section-badge refund">💳 Refund Policy</div>
+    <h2>Refund Policy</h2>
+    <p class="intro">We want you to be satisfied with your advertising purchase. This policy explains when and how you can request a refund for paid advertising slots on aimodelranks.live.</p>
+
+    <div class="highlight-box yellow">
+      <strong>Summary:</strong> Full refund if we reject your submission. 50% refund within 48 hours of activation if unused. No refund after 48 hours once the ad slot is live and delivering impressions.
+    </div>
+
+    <h3>1. Eligibility for Refunds</h3>
+
+    <p><strong>Full Refund (100%) — you are entitled to a full refund if:</strong></p>
+    <ul>
+      <li>Your submission is rejected by our content review team for violating our ad content guidelines</li>
+      <li>Technical issues on our platform prevent your ad from being displayed for more than 24 consecutive hours during your paid period</li>
+      <li>You were charged incorrectly or a duplicate charge occurred</li>
+      <li>You request a cancellation within 24 hours of purchase and before your ad goes live</li>
+    </ul>
+
+    <p><strong>Partial Refund (50%) — may be granted if:</strong></p>
+    <ul>
+      <li>You request a refund within 48 hours of your ad going live</li>
+      <li>You have not received significant traffic or impressions (fewer than 100 views)</li>
+      <li>Your circumstances have materially changed (product launch cancelled, business closed)</li>
+    </ul>
+
+    <p><strong>No Refund — refunds will not be issued if:</strong></p>
+    <ul>
+      <li>More than 48 hours have passed since your ad went live</li>
+      <li>Your ad has received substantial impressions (100+ views)</li>
+      <li>You change your mind after the ad has been running for more than 48 hours</li>
+      <li>Your submission was approved but you provided incorrect or misleading information about your tool</li>
+    </ul>
+
+    <h3>2. How to Request a Refund</h3>
+    <p>To request a refund:</p>
+    <ul>
+      <li>Email <a href="mailto:refunds@aimodelranks.live" style="color:var(--cyan)">refunds@aimodelranks.live</a> with the subject line "Refund Request"</li>
+      <li>Include your order ID (from your Paddle receipt email)</li>
+      <li>Include the reason for your refund request</li>
+      <li>We will respond within 2 business days</li>
+    </ul>
+
+    <h3>3. Refund Processing</h3>
+    <p>Approved refunds are processed through Paddle (our payment processor) within 5–10 business days. Refunds are returned to the original payment method. We do not offer cash refunds or refunds by alternative payment method.</p>
+
+    <h3>4. Ad Slot Expiry</h3>
+    <p>All advertising slots expire automatically at the end of the purchased period. There is no automatic renewal. Expiry is not grounds for a refund — the service was delivered for the purchased duration. If you wish to continue advertising, you must purchase a new slot.</p>
+
+    <h3>5. Disputes</h3>
+    <p>If you are unhappy with the outcome of a refund request, please email <a href="mailto:refunds@aimodelranks.live" style="color:var(--cyan)">refunds@aimodelranks.live</a> and we will escalate your case for a second review. We always prefer to resolve disputes amicably. If payment was processed by Paddle, you may also raise a dispute directly with Paddle as Merchant of Record.</p>
+
+    <h3>6. Free Tool Listings</h3>
+    <p>Free tool submissions are not subject to this refund policy as no payment is required. If a free submission is rejected, you may resubmit with corrected information.</p>
+
+    <h3>7. Contact</h3>
+    <p>For refund-related questions: <a href="mailto:refunds@aimodelranks.live" style="color:var(--cyan)">refunds@aimodelranks.live</a></p>
+  </div>
+
+  <!-- CONTACT CARD -->
+  <div class="contact-card">
+    <h3>📬 Questions About These Policies?</h3>
+    <p>We're happy to answer any questions. Reach us at:</p>
+    <a href="mailto:legal@aimodelranks.live">legal@aimodelranks.live</a>
+    <p style="margin-top:8px;font-size:13px;color:var(--text3)">We typically respond within 1 business day.</p>
+  </div>
+
+</div>
+
+<footer>
+  <div class="foot-logo">🐙 AIMODELRANKS.LIVE</div>
+  <p>© 2026 AI Model Ranks · All rights reserved</p>
+  <div class="foot-links">
+    <a href="/">Home</a>
+    <a href="/compare">Model Prices</a>
+    <a href="/tools">AI Tools</a>
+    <a href="/blog">Blog</a>
+    <a href="/legal">Legal</a>
+  </div>
+</footer>
+
+</body>
+</html>
