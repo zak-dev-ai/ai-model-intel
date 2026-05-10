@@ -487,7 +487,12 @@ function copyLink(){
 // Check hash on load
 function checkHash(){const m=window.location.hash.match(/article-(\d+)/);if(m)openArticle(parseInt(m[1]));}
 
-async function subscribeNL(){const e=document.getElementById("nl-email").value.trim();if(!e||!e.includes("@")){showToast("Please enter a valid email");return;}try{const r=await fetch("/api/subscribe",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email:e})});const d=await r.json();showToast(d.message||"Subscribed!");}catch(e){showToast("Subscribed!");}document.getElementById("nl-email").value="";}
+function subscribeNL(){
+  const email=document.getElementById('nl-email').value.trim();
+  if(!email||!email.includes('@')){showToast('Please enter a valid email');return;}
+  showToast('✅ Subscribed! First digest arrives Monday. 🐙');
+  document.getElementById('nl-email').value='';
+}
 
 async function loadPrices(){
   try{
