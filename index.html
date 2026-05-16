@@ -132,7 +132,7 @@ nav{position:sticky;top:0;z-index:1000;background:rgba(7,9,15,0.97);backdrop-fil
 .sc-body{position:relative;}
 .sc-badge{display:inline-flex;align-items:center;gap:5px;font-size:9px;font-weight:700;padding:2px 8px;border-radius:3px;font-family:var(--mono);margin-bottom:7px;letter-spacing:.5px;}
 .sc-name{font-weight:700;color:var(--text);margin-bottom:4px;}
-.sc-desc{color:var(--text2);line-height:1.5;margin-bottom:9px;}
+.sc-desc{color:var(--text2);line-height:1.5;margin-bottom:9px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .sc-cta{display:inline-block;padding:5px 12px;border-radius:6px;font-size:11px;font-weight:700;text-decoration:none;}
 
 /* ── ROW 4 — Live AI tools ticker ── */
@@ -888,7 +888,7 @@ function buildSpotlight() {
       <div class="sc-body">
         <div class="sc-badge">${a.plan.toUpperCase()} SPONSOR</div>
         <div class="sc-name">${a.emoji||'⭐'} ${a.name}</div>
-        <div class="sc-desc">${(a.desc||'').slice(0,65)}</div>
+        <div class="sc-desc">${(a.desc||"").slice(0,45)}</div>
         <span class="sc-cta" style="background:${a.color||'#a855f7'};color:#fff">Visit →</span>
       </div>
     </a>`;
@@ -902,7 +902,7 @@ function buildSpotlight() {
       <div class="sc-body">
         <div class="sc-badge" style="color:var(--green);border-color:rgba(0,217,126,0.2)">FEATURED TOOL</div>
         <div class="sc-name">${t.emoji||'🤖'} ${t.name}</div>
-        <div class="sc-desc">${(t.tagline||'').slice(0,65)}</div>
+        <div class="sc-desc">${(t.tagline||"").slice(0,40)}</div>
         <span class="sc-cta" style="background:var(--green);color:#000">Try It →</span>
       </div>
     </a>`;
@@ -930,7 +930,7 @@ function buildSpotlight() {
 
 // ── ROW 4: TOOLS TICKER ───────────────────────────────────────────
 function buildToolsTicker(tools) {
-  const items=tools.map(t=>`<span class="ttick"><img src="${t.image||''}" width="16" height="16" style="border-radius:3px;object-fit:contain;vertical-align:middle;background:#1a1a2e;margin-right:5px" onerror="this.style.display='none';this.insertAdjacentHTML('afterend','${t.emoji} ')">${t.name} ▲${t.votes.toLocaleString()}</span>`);
+  const items=tools.map(t=>`<span class="ttick"><img src="${t.image||''}" width="16" height="16" style="border-radius:3px;object-fit:contain;vertical-align:middle;background:#1a1a2e;margin-right:5px;display:none" onload="this.style.display='inline-block'" onerror="this.style.display='none'" loading="lazy"><span style="${t.image?'display:none;':'display:inline;'}margin-right:5px">${t.emoji}</span>${t.name} ▲${t.votes.toLocaleString()}</span>`);
   buildMarquee(document.getElementById('tools-ticker-track'), [...items,...items].join(''));
 }
 
@@ -942,8 +942,8 @@ function buildToolCards(tools) {
     <a href="${href}" target="_blank" rel="noopener" class="tc">
       <div class="tc-thumb ${catBgs[t.cat]||'cat-chat'}" style="display:flex;align-items:center;justify-content:center;gap:6px">
         <span class="tc-rank">#${i+1}</span>
-        <img src="${t.image||''}" width="22" height="22" style="object-fit:contain;border-radius:4px;flex-shrink:0" onerror="this.style.display='none';this.insertAdjacentHTML('afterend','${t.emoji} ')">
-        ${t.emoji}</div>
+        <img src="${t.image||''}" width="22" height="22" style="object-fit:contain;border-radius:4px;flex-shrink:0" onerror="this.style.display='none'">
+        <span class="tc-emoji" style="${t.image?'display:none':''}">${t.emoji}</span></div>
       <div class="tc-body">
         <div class="tc-name">${t.name}</div>
         <div class="tc-cat">${t.cat} AI</div>
