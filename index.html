@@ -130,10 +130,10 @@ nav{position:sticky;top:0;z-index:1000;background:rgba(7,9,15,0.97);backdrop-fil
 .scard.tier-empty .sc-empty-price{font-family:var(--hud);font-size:13px;color:rgba(251,191,36,.6);margin-top:4px;}
 
 .sc-body{position:relative;}
-.sc-badge{display:inline-flex;align-items:center;gap:5px;font-size:9px;font-weight:700;padding:2px 8px;border-radius:3px;font-family:var(--mono);margin-bottom:7px;letter-spacing:.5px;}
-.sc-name{font-weight:700;color:var(--text);margin-bottom:4px;}
-.sc-desc{color:var(--text2);line-height:1.3;margin-bottom:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px;max-width:180px;}
-.sc-cta{display:inline-block;padding:5px 12px;border-radius:6px;font-size:11px;font-weight:700;text-decoration:none;}
+.sc-badge{display:inline-flex;align-items:center;gap:4px;font-size:8px;font-weight:700;padding:3px 10px;border-radius:100px;font-family:var(--mono);margin-bottom:10px;letter-spacing:1px;text-transform:uppercase;}
+.sc-name{font-weight:700;color:var(--text);margin-bottom:6px;font-size:14px;text-align:center;}
+.sc-desc{color:var(--text2);line-height:1.4;margin-bottom:10px;font-size:11px;text-align:center;max-width:180px;}
+.sc-cta{display:block;padding:8px 16px;border-radius:8px;font-size:12px;font-weight:700;text-decoration:none;text-align:center;margin-top:auto;transition:all 0.2s;width:100%;}
 
 /* ── ROW 4 — Live AI tools ticker ── */
 .tools-ticker{background:rgba(168,85,247,.04);border-bottom:1px solid rgba(168,85,247,.1);padding:8px 0;position:relative;}
@@ -576,7 +576,7 @@ td.td-sc{font-family:var(--mono);font-size:11px;}
     <div class="spot-hdr-l">⭐ FEATURED TOOLS <span style="background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.2);padding:2px 7px;border-radius:3px;font-size:9px">SPONSORED</span></div>
     <div class="spot-hdr-r"><a href="/tools#advertise">Get featured here →</a></div>
   </div>
-  <div class="mq-track" id="spot-track" style="--spd:45s;padding:0 4px"><!-- JS fills --></div>
+  <div class="mq-track" id="spot-track" style="--spd:50s;padding:12px 8px;gap:14px;display:flex"><!-- JS fills --></div>
 </div>
 
 <!-- ROW 4: AI TOOLS TICKER -->
@@ -901,10 +901,10 @@ function buildSpotlight() {
     html+=`<a href="${tHref}" target="_blank" rel="noopener" class="scard tier-featured">
       <div class="sc-body">
         <div class="sc-badge" style="color:var(--green);border-color:rgba(0,217,126,0.2)">FEATURED TOOL</div>
-        <img src="${t.image||''}" width="36" height="36" style="object-fit:contain;border-radius:6px;margin-bottom:6px;background:var(--bg3);display:block" onerror="this.style.display='none'" loading="lazy">
+        <img src="${t.image||''}" width="52" height="52" style="object-fit:contain;border-radius:12px;margin-bottom:12px;background:rgba(255,255,255,0.03);display:block;padding:6px" onerror="this.style.display="none"" loading="lazy">
         <div class="sc-name">${t.emoji||'🤖'} ${t.name}</div>
         <div class="sc-desc">${(t.tagline||"").slice(0,28)}</div>
-        <span class="sc-cta" style="background:var(--green);color:#000">Try It →</span>
+        <span class="sc-cta" style="background:linear-gradient(135deg,var(--green),#00b86e);color:#000;box-shadow:0 2px 10px rgba(0,217,126,0.25)">Try It →</span>
       </div>
     </a>`;
   });
