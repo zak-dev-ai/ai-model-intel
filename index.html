@@ -832,18 +832,14 @@ function buildSpotlight() {
 }
 
 // ── ROW 4: TOOLS TICKER ───────────────────────────────────────────
-
-// ── ROW 4: TOOLS TICKER ───────────────────────────────────────────
-function buildToolsTicker(ads, tools) {
-  // 'ads' unused — all from tools
+function buildToolsTicker(tools) {
   const allNames=tools.map(t=>`${t.emoji} ${t.name} ▲${t.votes.toLocaleString()}`);
   const html=allNames.map(n=>`<span class="ttick">${n}</span>`).join('');
   buildMarquee(document.getElementById('tools-ticker-track'), html);
 }
 
 // ── ROW 5: TOOL PRODUCT CARDS ─────────────────────────────────────
-function buildToolCards(ads, tools) {
-  // 'ads' unused — all from tools
+function buildToolCards(tools) {
   const toolCards=tools.map((t,i)=>`
     <a href="${t.url}" target="_blank" rel="noopener" class="tc">
       <div class="tc-thumb ${catBgs[t.cat]||'cat-chat'}">
@@ -859,7 +855,7 @@ function buildToolCards(ads, tools) {
       </div>
     </a>`).join('');
 
-  buildMarquee(document.getElementById('toolcards-track'), paidCards+toolCards);
+  buildMarquee(document.getElementById('toolcards-track'), toolCards);
 }
 
 // ── AD SHOWCASE (3-column tier grid) — uses AdsManager ────────
