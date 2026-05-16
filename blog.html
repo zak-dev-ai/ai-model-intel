@@ -531,7 +531,7 @@ function renderBlogSidebar(){
     const tools=ToolsDB.load().filter(t=>t.approved!==false).sort((a,b)=>b.votes-a.votes).slice(0,5);
     tt.innerHTML=tools.map(t=>`
       <div style="padding:8px 0;border-bottom:1px solid rgba(30,45,66,0.4)">
-        <a href="${window.buildRefURL?buildRefURL(t):t.url}" target="_blank" style="color:var(--text);text-decoration:none;font-size:13px;font-weight:600">${t.image?`<img src="${t.image}" width="16" height="16" style="object-fit:contain;border-radius:3px;vertical-align:middle;margin-right:4px" onerror="this.style.display='none'" loading="lazy">`:""}<span style="${t.image?'display:none':''}">${t.emoji||'🤖'}</span> ${t.name}</a>
+<a href="${window.buildRefURL?buildRefURL(t):t.url}" target="_blank" style="color:var(--text);text-decoration:none;font-size:13px;font-weight:600">${t.image?`<img src="${t.image}" width="16" height="16" style="object-fit:contain;border-radius:3px;vertical-align:middle;margin-right:4px" onerror="this.style.display=\x27none\x27" loading="lazy">`:""} ${t.name}</a>
         <div style="font-family:var(--mono);font-size:11px;color:var(--text3)">${t.cat} AI · ▲${(t.votes||0).toLocaleString()}</div>
       </div>
     `).join('');

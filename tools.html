@@ -783,7 +783,7 @@ function renderTools(){
   if(tsb) tsb.innerHTML=top5.map((t,i)=>`
     <a class="tr-item" href="${buildRefURL(t)}" target="_blank">
       <div class="tr-rank">${i+1}</div>
-      <div class="tr-ico">${t.image?`<img src="${t.image}" width="20" height="20" style="object-fit:contain;border-radius:4px" onerror="this.style.display='none'" loading="lazy">`:""}<span style="${t.image?'display:none':''}">${t.emoji||'🤖'}</span></div>
+<div class="tr-ico">${t.image?`<img src="${t.image}" width="20" height="20" style="object-fit:contain;border-radius:4px" onerror="this.style.display=\x27none\x27" loading="lazy">`:""}</div>
       <div class="tr-inf"><div class="tr-nm">${t.name}</div><div class="tr-cat">${t.cat}</div></div>
       <div class="tr-votes">▲${(t.votes||0).toLocaleString()}</div>
     </a>`).join('');
