@@ -76,18 +76,21 @@ const DEFAULT_ADS = [
     id: 'default-s1', name: 'Mistral AI',
     tagline: 'New Large 3 — $0.50/1M tokens. 60% cheaper than GPT-4o.',
     url: 'https://mistral.ai', logo: '🔥', color: '#ff6b00',
+    image: 'https://icons.duckduckgo.com/ip3/mistral.ai.ico',
     type: 'sidebar', tier: 'default', active: true, expiresAt: null,
   },
   {
     id: 'default-s2', name: 'Google Gemini',
     tagline: '1M+ context window. Best price-to-performance.',
     url: 'https://ai.google.dev', logo: '✨', color: '#4285f4',
+    image: 'https://icons.duckduckgo.com/ip3/google.com.ico',
     type: 'sidebar', tier: 'default', active: true, expiresAt: null,
   },
   {
     id: 'default-s3', name: 'Anthropic Claude',
     tagline: '200K context. Best quality for complex reasoning.',
     url: 'https://anthropic.com', logo: '🤖', color: '#d05030',
+    image: 'https://icons.duckduckgo.com/ip3/anthropic.com.ico',
     type: 'sidebar', tier: 'default', active: true, expiresAt: null,
   },
 ];
