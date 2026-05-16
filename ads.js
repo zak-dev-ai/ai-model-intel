@@ -36,39 +36,27 @@ window.OCTOPUS_CONFIG = {
 // ── Default seed ads (shown when no paid ads exist) ──────────────────
 const DEFAULT_ADS = [
   {
-    id: 'default-1', slot: 1, filled: true,
-    name: 'Mistral AI', desc: 'New Large 3 — $0.50/1M tokens. 60% cheaper than GPT-4o.',
-    url: 'https://mistral.ai', emoji: '🔥', color: '#ff6b00',
+    image: 'https://icons.duckduckgo.com/ip3/mistral.ai.ico', emoji: '🔥', color: '#ff6b00',
     type: 'spotlight', plan: 'default', active: true, expiresAt: null,
   },
   {
-    id: 'default-2', slot: 2, filled: true,
-    name: 'Google Gemini', desc: '1M+ context window. Best price-to-performance.',
-    url: 'https://ai.google.dev', emoji: '✨', color: '#4285f4',
+    image: 'https://icons.duckduckgo.com/ip3/google.com.ico', emoji: '✨', color: '#4285f4',
     type: 'spotlight', plan: 'default', active: true, expiresAt: null,
   },
   {
-    id: 'default-3', slot: 3, filled: true,
-    name: 'Anthropic Claude', desc: '200K context. Best quality for complex reasoning.',
-    url: 'https://anthropic.com', emoji: '🤖', color: '#d05030',
+    image: 'https://icons.duckduckgo.com/ip3/anthropic.com.ico', emoji: '🤖', color: '#d05030',
     type: 'spotlight', plan: 'default', active: true, expiresAt: null,
   },
   {
-    id: 'default-4', slot: 4, filled: true,
-    name: 'DeepSeek', desc: 'Ultra-cheap AI chat — $0.14/1M tokens.',
-    url: 'https://chat.deepseek.com', emoji: '🔍', color: '#4f46e5',
+    image: 'https://icons.duckduckgo.com/ip3/deepseek.com.ico', emoji: '🔍', color: '#4f46e5',
     type: 'spotlight', plan: 'default', active: true, expiresAt: null,
   },
   {
-    id: 'default-5', slot: 5, filled: true,
-    name: 'Llama 4', desc: 'Meta Llama 4 Scout — 10M token context window.',
-    url: 'https://llama.meta.com', emoji: '🦙', color: '#00d97e',
+    image: 'https://icons.duckduckgo.com/ip3/meta.com.ico', emoji: '🦙', color: '#00d97e',
     type: 'spotlight', plan: 'default', active: true, expiresAt: null,
   },
   {
-    id: 'default-6', slot: 6, filled: true,
-    name: 'Sora AI', desc: "OpenAI's text-to-video AI model.",
-    url: 'https://openai.com/sora', emoji: '🎥', color: '#a855f7',
+    image: 'https://icons.duckduckgo.com/ip3/openai.com.ico', emoji: '🎥', color: '#a855f7',
     type: 'spotlight', plan: 'default', active: true, expiresAt: null,
   },
   // Sidebar defaults

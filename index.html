@@ -881,7 +881,7 @@ function buildSpotlight() {
     return`<a href="${a.url}?ref=aimodelranks" target="_blank" rel="noopener" class="scard tier-${a.plan}">
       <div class="sc-body">
         <div class="sc-badge">${a.plan.toUpperCase()} SPONSOR</div>
-        <div class="sc-name">${a.emoji||'⭐'} ${a.name}</div>
+        <div class="sc-name">${a.name}</div>
         <div class="sc-desc">${(a.desc||"").slice(0,28)}</div>
         <span class="sc-cta" style="background:${a.color||'#a855f7'};color:#fff">Visit →</span>
       </div>
@@ -896,7 +896,7 @@ function buildSpotlight() {
       <div class="sc-body">
         <div class="sc-badge" style="color:var(--green);border-color:rgba(0,217,126,0.2)">FEATURED TOOL</div>
         <img src="${t.image||''}" width="52" height="52" style="object-fit:contain;border-radius:12px;margin-bottom:12px;background:rgba(255,255,255,0.03);display:block;padding:6px" onerror="this.style.display="none"" loading="lazy">
-        <div class="sc-name">${t.emoji||'🤖'} ${t.name}</div>
+        <div class="sc-name">${t.name}</div>
         <div class="sc-desc">${(t.tagline||"").slice(0,28)}</div>
         <span class="sc-cta" style="background:linear-gradient(135deg,var(--green),#00b86e);color:#000;box-shadow:0 2px 10px rgba(0,217,126,0.25)">Try It →</span>
       </div>
