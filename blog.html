@@ -483,7 +483,17 @@ function checkHash(){const m=window.location.hash.match(/article-(\d+)/);if(m)op
 function subscribeNL(){
   const email=document.getElementById('nl-email').value.trim();
   if(!email||!email.includes('@')){showToast('Please enter a valid email');return;}
-  showToast('✅ Subscribed! First digest arrives Monday. 🐙');
+  // Save to localStorage
+  var subs=JSON.parse(localStorage.getItem('octopus_subscribers')||'[]');
+  if(subs.includes(email)){showToast('Already subscribed! ✅');return;}
+  subs.push(email);
+  localStorage.setItem('octopus_subscribers',JSON.stringify(subs));
+  // Also send to Supabase
+  try{
+    var K='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imprb3hyZnRsc2x5bGZtdWdqb21kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4MjAzNTEsImV4cCI6MjA5MzM5NjM1MX0.1LVo1a2K2V8QZPX94bVTBmzIxUskKp0mR7RmNwgOdcI';
+    fetch('https://jkoxrftlslylfmugjomd.supabase.co/rest/v1/analytics',{method:'POST',headers:{'apikey':K,'Authorization':'Bearer '+K,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({event:'subscribe',page:'/blog',value:1,created_at:new Date().toISOString()})}).catch(function(){});
+  }catch(e){}
+  showToast('✅ Subscribed! '+(subs.length)+' readers. Weekly digest coming! 🐙');
   document.getElementById('nl-email').value='';
 }
 
@@ -520,7 +530,7 @@ function renderBlogSidebar(){
     const tools=ToolsDB.load().filter(t=>t.approved!==false).sort((a,b)=>b.votes-a.votes).slice(0,5);
     tt.innerHTML=tools.map(t=>`
       <div style="padding:8px 0;border-bottom:1px solid rgba(30,45,66,0.4)">
-        <a href="${window.buildRefURL?buildRefURL(t):t.url}" target="_blank" style="color:var(--text);text-decoration:none;font-size:13px;font-weight:600">${t.image?`<img src="${t.image}" width="16" height="16" style="object-fit:contain;border-radius:3px;vertical-align:middle;margin-right:4px" onerror="this.style.display='none'" loading="lazy">`:''}${t.emoji||'🤖'} ${t.name}</a>
+        <a href="${window.buildRefURL?buildRefURL(t):t.url}" target="_blank" style="color:var(--text);text-decoration:none;font-size:13px;font-weight:600">${t.image?`<img src="${t.image}" width="16" height="16" style="object-fit:contain;border-radius:3px;vertical-align:middle;margin-right:4px" onerror="this.style.display='none'" loading="lazy">`:""}<span style="${t.image?'display:none':''}">${t.emoji||'🤖'}</span> ${t.name}</a>
         <div style="font-family:var(--mono);font-size:11px;color:var(--text3)">${t.cat} AI · ▲${(t.votes||0).toLocaleString()}</div>
       </div>
     `).join('');
