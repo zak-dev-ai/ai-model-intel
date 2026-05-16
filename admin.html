@@ -537,19 +537,35 @@ let AD_SLOTS = [
 ];
 
 // Load from localStorage or use defaults
-function loadData() {
-  try {
-    const t = localStorage.getItem('admin_tools');
-    const p = localStorage.getItem('admin_pending');
-    TOOLS_DATA = t ? JSON.parse(t) : [...DEFAULT_TOOLS];
-    PENDING_DATA = p ? JSON.parse(p) : [...DEFAULT_PENDING];
-  } catch(e) {
-    TOOLS_DATA = [...DEFAULT_TOOLS];
-    PENDING_DATA = [...DEFAULT_PENDING];
-  }
+function loadData() { try {
+    // Use ToolsDB live data if available
+    if (window.ToolsDB) {
+      const all = ToolsDB.load();
+      TOOLS_DATA = all.filter(t => t.approved !== false);
+      PENDING_DATA = all.filter(t => t.approved === false || !t.approved);
+    } else {
+      TOOLS_DATA = [...DEFAULT_TOOLS];
+      PENDING_DATA = [...DEFAULT_PENDING];
+    }
+    // Ads from AdsManager
+    if (window.AdsManager) {
+      AD_SLOTS = AdsManager.load().filter(a => a.filled !== undefined);
+    }
+  } catch(e) { TOOLS_DATA = [...DEFAULT_TOOLS]; PENDING_DATA = [...DEFAULT_PENDING]; }
 }
 
 function saveData() {
+  if (window.ToolsDB) {
+    // Save all tools back to ToolsDB
+    const all = ToolsDB.load();
+    const byId = {};
+    TOOLS_DATA.forEach(t => { byId[t.id] = t; });
+    PENDING_DATA.forEach(t => { byId[t.id] = t; });
+    const merged = all.map(t => byId[t.id] || t);
+    TOOLS_DATA.filter(t => !all.find(a => a.id === t.id)).forEach(t => merged.push(t));
+    PENDING_DATA.filter(t => !all.find(a => a.id === t.id)).forEach(t => merged.push(t));
+    ToolsDB.save(merged);
+  }
   localStorage.setItem('admin_tools', JSON.stringify(TOOLS_DATA));
   localStorage.setItem('admin_pending', JSON.stringify(PENDING_DATA));
 }
@@ -694,29 +710,20 @@ function rejectTool(id) {
 // AD SLOTS
 // ══════════════════════════════════════════════════════════════════════
 function renderAdSlots() {
-  document.getElementById('ad-grid').innerHTML = AD_SLOTS.map(s =>
-    s.active
-    ? `<div class="ad-slot filled">
-        <div class="slot-num">SLOT ${s.id} · ${s.type.toUpperCase()}</div>
-        <span class="badge b-approved slot-status">ACTIVE</span>
-        <div class="slot-name">${s.logo} ${s.name}</div>
-        <div class="slot-url">${s.url}</div>
-        <div class="slot-exp">Expires: ${s.expires} · ${s.tier}</div>
-        <div style="margin-top:10px">
-          <button class="action-btn btn-delete" onclick="deactivateSlot(${s.id})">Deactivate</button>
-        </div>
-      </div>`
-    : `<div class="ad-slot empty">
-        <div class="slot-num">SLOT ${s.id} · SIDEBAR</div>
-        <span class="badge b-pending slot-status">AVAILABLE</span>
-        <div class="slot-empty-txt">Empty slot<br><span style="font-size:11px">$29/7d or $79/30d</span></div>
-      </div>`
-  ).join('');
+  var ads = window.AdsManager ? AdsManager.load().filter(function(a) { return a.filled !== undefined; }) : AD_SLOTS;
+  document.getElementById('ad-grid').innerHTML = ads.map(function(s) {
+    if (s.filled) {
+      var exp = s.expiresAt ? new Date(s.expiresAt).toLocaleDateString() : 'No expiry';
+      return '<div class="ad-slot filled"><div class="slot-num">SLOT ' + s.slot + ' · ' + (s.plan||'default').toUpperCase() + '</div><span class="badge b-approved slot-status">ACTIVE</span><div class="slot-name">' + (s.emoji||'⭐') + ' ' + s.name + '</div><div class="slot-url">' + s.url + '</div><div class="slot-exp">Expires: ' + exp + '</div></div>';
+    }
+    return '<div class="ad-slot empty"><div class="slot-num">SLOT ' + s.slot + '</div><span class="badge b-pending slot-status">AVAILABLE</span><div class="slot-empty-txt">$29/wk or $79/mo</div></div>';
+  }).join('') || '<div style="padding:24px;color:var(--text3);font-family:var(--mono);text-align:center">No ad slots</div>';
 }
 
 function deactivateSlot(id) {
-  const s = AD_SLOTS.find(x => x.id === id);
-  if (s) { s.active = false; renderAdSlots(); updateStats(); showToast('Slot deactivated'); }
+  var ads = window.AdsManager ? AdsManager.load() : [];
+  var s = ads.find(function(x) { return x.id === id || x.slot === id; });
+  if (s) { s.active = false; s.filled = false; if (window.AdsManager) AdsManager.save(ads); renderAdSlots(); updateStats(); showToast('Slot deactivated'); }
 }
 
 // ══════════════════════════════════════════════════════════════════════
