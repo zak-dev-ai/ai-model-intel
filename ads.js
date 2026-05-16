@@ -459,6 +459,7 @@ document.addEventListener('DOMContentLoaded', function() {
   document.querySelectorAll('.ht-img, .tc-img, .scard-img, img[src*="logo.dev"], img[src*="duckduckgo"]').forEach(window.setupImgFallback);
 });
 
+var _pv=parseInt(localStorage.getItem("octopus_pv")||0);localStorage.setItem("octopus_pv",_pv+1);
 // ── Supabase Analytics Tracking ──────────────────────────────────
 (function() {
   const SUPABASE_URL = 'https://jkoxrftlslylfmugjomd.supabase.co';
