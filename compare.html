@@ -483,33 +483,7 @@ td.td-sc{font-family:var(--mono);font-size:13px;}
           <div class="sb-title">🛠 Trending AI Tools</div>
           <a href="/tools" class="sb-link">See all →</a>
         </div>
-        <div class="sb-body">
-          <a class="tool-item" href="https://cursor.sh?ref=aimodelranks" target="_blank" rel="noopener">
-            <div class="ti-ico" style="background:rgba(59,130,246,0.12)">💻</div>
-            <div class="ti-info"><div class="ti-name">Cursor</div><div class="ti-cat">Coding AI</div></div>
-            <div class="ti-votes">▲ 1,923</div>
-          </a>
-          <a class="tool-item" href="https://runwayml.com?ref=aimodelranks" target="_blank" rel="noopener">
-            <div class="ti-ico" style="background:rgba(168,85,247,0.12)">🎬</div>
-            <div class="ti-info"><div class="ti-name">Runway Gen-4</div><div class="ti-cat">Video AI</div></div>
-            <div class="ti-votes">▲ 1,432</div>
-          </a>
-          <a class="tool-item" href="https://midjourney.com?ref=aimodelranks" target="_blank" rel="noopener">
-            <div class="ti-ico" style="background:rgba(236,72,153,0.12)">🎨</div>
-            <div class="ti-info"><div class="ti-name">Midjourney</div><div class="ti-cat">Image AI</div></div>
-            <div class="ti-votes">▲ 2,847</div>
-          </a>
-          <a class="tool-item" href="https://elevenlabs.io?ref=aimodelranks" target="_blank" rel="noopener">
-            <div class="ti-ico" style="background:rgba(16,185,129,0.12)">🎵</div>
-            <div class="ti-info"><div class="ti-name">ElevenLabs</div><div class="ti-cat">Audio AI</div></div>
-            <div class="ti-votes">▲ 1,876</div>
-          </a>
-          <a class="tool-item" href="https://perplexity.ai?ref=aimodelranks" target="_blank" rel="noopener">
-            <div class="ti-ico" style="background:rgba(59,180,255,0.12)">🔬</div>
-            <div class="ti-info"><div class="ti-name">Perplexity AI</div><div class="ti-cat">Research</div></div>
-            <div class="ti-votes">▲ 2,341</div>
-          </a>
-        </div>
+        <div class="sb-body" id="trending-tools-static-compare"><!-- JS fills --></div>
       </div>
 
       <!-- SPONSORED AD 2 -->
@@ -924,6 +898,17 @@ function renderCompareSidebar(){
         </div>
         <span style="font-family:var(--mono);font-size:11px;color:var(--green)">▲${(t.votes||0).toLocaleString()}</span>
       </a>`).join('');
+  }
+
+  // Second trending tools sidebar (static section)
+  const tt2=document.getElementById('trending-tools-static-compare');
+  if(tt2 && window.ToolsDB){
+    var tls=ToolsDB.load().filter(function(t){return t.approved!==false}).sort(function(a,b){return b.votes-a.votes}).slice(0,5);
+    tt2.innerHTML=tls.map(function(t,i){
+      var href=window.buildRefURL?buildRefURL(t):t.url;
+      var img=t.image?'<img src="'+t.image+'" width="22" height="22" style="object-fit:contain;border-radius:4px" onerror="this.style.display=\"none\"" loading="lazy">':'';
+      return '<a class="tool-item" href="'+href+'" target="_blank" rel="noopener"><div class="ti-ico" style="background:rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:center">'+img+'</div><div class="ti-info"><div class="ti-name">'+t.name+'</div><div class="ti-cat">'+t.cat+' AI</div></div><div class="ti-votes">▲ '+(t.votes||0).toLocaleString()+'</div></a>';
+    }).join('');
   }
 }
 
