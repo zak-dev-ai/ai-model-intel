@@ -837,7 +837,7 @@ function submitTool(){
   const desc=document.getElementById('f-desc').value.trim();
   const email=document.getElementById('f-email').value.trim();
   const emoji=document.getElementById('f-emoji').value.trim()||'🤖';
-  const image=imgData||document.getElementById('f-img-url').value.trim()||`https://logo.clearbit.com/${(()=>{try{return new URL(url).hostname}catch{return 'unknown'}})()}`;
+  const image=imgData||document.getElementById('f-img-url').value.trim()||`https://www.google.com/s2/favicons?domain=${(()=>{try{return new URL(url).hostname}catch{return 'chatgpt.com'}})()}&sz=64`;
 
   if(!name||!url||!cat||!pricing||!desc||!email){ showToast('Please fill all required fields'); return; }
   if(!email.includes('@')){ showToast('Invalid email'); return; }
