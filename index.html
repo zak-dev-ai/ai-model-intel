@@ -897,7 +897,8 @@ function buildSpotlight() {
   // Fill with featured tools from ToolsDB if not enough paid ads
   const tools = window.ToolsDB ? ToolsDB.load().filter(t => t.featured && t.approved !== false).slice(0,8) : [];
   tools.forEach(t => {
-    html+=`<a href="${window.buildRefURL?buildRefURL(t):t.url}" target="_blank" rel="noopener" class="scard tier-featured">
+    const tHref = window.buildRefURL ? buildRefURL(t) : t.url + (t.url.includes('?')?'&':'?') + 'ref=aimodelranks';
+    html+=`<a href="${tHref}" target="_blank" rel="noopener" class="scard tier-featured">
       <div class="sc-body">
         <div class="sc-badge" style="color:var(--green);border-color:rgba(0,217,126,0.2)">FEATURED TOOL</div>
         <div class="sc-name">${t.emoji||'🤖'} ${t.name}</div>
@@ -936,8 +937,10 @@ function buildToolsTicker(tools) {
 
 // ── ROW 5: TOOL PRODUCT CARDS ─────────────────────────────────────
 function buildToolCards(tools) {
-  const toolCards=tools.map((t,i)=>`
-    <a href="${window.buildRefURL?buildRefURL(t):t.url}" target="_blank" rel="noopener" class="tc">
+  const toolCards=tools.map((t,i)=>{
+    const href = window.buildRefURL ? buildRefURL(t) : t.url + (t.url.includes('?')?'&':'?') + 'ref=aimodelranks';
+    return`
+    <a href="${href}" target="_blank" rel="noopener" class="tc">
       <div class="tc-thumb ${catBgs[t.cat]||'cat-chat'}">
         <span class="tc-rank">#${i+1}</span>${t.emoji}
       </div>
@@ -949,7 +952,8 @@ function buildToolCards(tools) {
           <span class="tc-votes">▲${t.votes.toLocaleString()}</span>
         </div>
       </div>
-    </a>`).join('');
+    </a>`;
+  }).join('');
 
   buildMarquee(document.getElementById('toolcards-track'), toolCards);
 }
@@ -1284,9 +1288,9 @@ function renderHomeTools(){
   const catBg={image:'#1a0a2e',video:'#0a0a28',coding:'#0a1e00',writing:'#1a0a00',chat:'#001828',audio:'#1a001a',research:'#001a28',productivity:'#1a1400',data:'#001428',design:'#280014',marketing:'#1a0a00'};
 
   grid.innerHTML=filtered.map((t,i)=>{
-    const url=window.buildRefURL?buildRefURL(t):t.url;
+    const href = window.buildRefURL ? buildRefURL(t) : t.url + (t.url.includes('?')?'&':'?') + 'ref=aimodelranks';
     const bg=catBg[t.cat]||'#001828';
-    return`<a href="${url}" target="_blank" rel="noopener" class="ht-card${t.featured?' featured':''}">
+    return`<a href="${href}" target="_blank" rel="noopener" class="ht-card${t.featured?' featured':''}">
       <div class="ht-img-wrap">
         <span class="ht-rank">#${i+1}</span>
         ${t.image?`<img class="ht-img" src="${t.image}" alt="${t.name}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`:''}
