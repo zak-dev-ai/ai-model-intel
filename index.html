@@ -1290,7 +1290,7 @@ function renderHomeTools(){
   grid.innerHTML=filtered.map((t,i)=>{
     const href = window.buildRefURL ? buildRefURL(t) : t.url + (t.url.includes('?')?'&':'?') + 'ref=aimodelranks';
     const bg=catBg[t.cat]||'#001828';
-    return`<a href="${href}" target="_blank" rel="noopener" class="ht-card${t.featured?' featured':''}">
+    return`<a href="${href}" target="_blank" rel="noopener" class="ht-card${t.featured?' featured':''}" data-emoji="${t.emoji||'🤖'}">
       <div class="ht-img-wrap">
         <span class="ht-rank">#${i+1}</span>
         ${t.image?`<img class="ht-img" src="${t.image}" alt="${t.name}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`:''}

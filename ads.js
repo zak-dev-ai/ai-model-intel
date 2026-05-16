@@ -442,18 +442,19 @@ window.scamCheck = function(name, url, desc) {
 })();
 
 
-// ── Global image fallback ──────────────────────────────────────────
-document.addEventListener('DOMContentLoaded', () => {
-  setInterval(() => {
-    document.querySelectorAll('img[src*="duckduckgo"]').forEach(img => {
-      if (img.naturalWidth === 0 && !img.dataset.fixed) {
-        img.dataset.fixed = '1';
-        const card = img.closest('.ht-card, .tool-card, .top6-card');
-        const emoji = card ? (card.dataset.emoji || '🤖') : '🤖';
-        img.style.display = 'none';
-        const fb = img.nextElementSibling;
-        if (fb && fb.classList.contains('ht-img-fallback')) fb.style.display = 'flex';
-      }
-    });
-  }, 2000);
+
+// ── Global image error handler ────────────────────────────────────
+window.setupImgFallback = function(img) {
+  img.onerror = function() {
+    const card = img.closest('[data-emoji]');
+    const emoji = card ? card.getAttribute('data-emoji') : '🤖';
+    const span = document.createElement('span');
+    span.style.cssText = 'font-size:40px;line-height:1;display:block;text-align:center';
+    span.textContent = emoji;
+    img.parentNode.replaceChild(span, img);
+  };
+};
+
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('img[src*="duckduckgo"]').forEach(window.setupImgFallback);
 });
