@@ -6,6 +6,7 @@
 <title>Admin — aimodelranks.live</title>
 <meta name="robots" content="noindex,nofollow">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+<script src="/ads.js"></script>
 <style>
 :root{
   --bg:#07090f;--bg2:#0d1117;--bg3:#131b2a;--bg4:#1a2438;
@@ -741,15 +742,21 @@ function renderRefs() {
 // STATS
 // ══════════════════════════════════════════════════════════════════════
 function updateStats() {
-  document.getElementById('s-tools').textContent = TOOLS_DATA.length;
-  document.getElementById('s-pending').textContent = PENDING_DATA.length;
-  document.getElementById('ana-tools').textContent = TOOLS_DATA.length;
-  document.getElementById('ana-pending').textContent = PENDING_DATA.length;
-  const activeAds = AD_SLOTS.filter(s => s.active).length;
+  const tools = window.ToolsDB ? ToolsDB.load().filter(t => t.approved !== false) : TOOLS_DATA;
+  const allTools = window.ToolsDB ? ToolsDB.load() : [];
+  const pending = allTools.filter(t => t.approved === false || !t.approved);
+  const ads = window.AdsManager ? AdsManager.load().filter(a => a.plan && a.plan !== 'default') : [];
+  const allAds = window.AdsManager ? AdsManager.load() : [];
+
+  document.getElementById('s-tools').textContent = tools.length;
+  document.getElementById('s-pending').textContent = pending.length;
+  document.getElementById('ana-tools').textContent = tools.length;
+  document.getElementById('ana-pending').textContent = pending.length;
+  const activeAds = ads.filter(s => s.active).length;
   document.getElementById('s-ads').textContent = activeAds;
-  document.getElementById('s-slots').textContent = 9 - activeAds;
-  document.getElementById('tab-btn-tools').textContent = '🛠 Tools (' + TOOLS_DATA.length + ')';
-  document.getElementById('tab-btn-pending').textContent = '⏳ Pending (' + PENDING_DATA.length + ')';
+  document.getElementById('s-slots').textContent = Math.max(0, 6 - ads.length);
+  document.getElementById('tab-btn-tools').textContent = '🛠 Tools (' + tools.length + ')';
+  document.getElementById('tab-btn-pending').textContent = '⏳ Pending (' + pending.length + ')';
 }
 
 function saveSettings() { showToast('✅ Settings saved!'); }
