@@ -769,11 +769,11 @@ td.td-sc{font-family:var(--mono);font-size:11px;}
           <a href="/tools" class="sb-link">See all →</a>
         </div>
         <div class="sb-body" id="sb-trending-tools">
-          <a class="ti" href="https://cursor.sh" target="_blank"><div class="ti-ico" style="background:rgba(59,130,246,.12)">💻</div><div class="ti-inf"><div class="ti-nm">Cursor</div><div class="ti-cat">Coding AI</div></div><div class="ti-votes">▲1,923</div></a>
-          <a class="ti" href="https://midjourney.com" target="_blank"><div class="ti-ico" style="background:rgba(236,72,153,.12)">🎨</div><div class="ti-inf"><div class="ti-nm">Midjourney</div><div class="ti-cat">Image AI</div></div><div class="ti-votes">▲2,847</div></a>
-          <a class="ti" href="https://runwayml.com" target="_blank"><div class="ti-ico" style="background:rgba(168,85,247,.12)">🎬</div><div class="ti-inf"><div class="ti-nm">Runway Gen-4</div><div class="ti-cat">Video AI</div></div><div class="ti-votes">▲1,432</div></a>
-          <a class="ti" href="https://perplexity.ai" target="_blank"><div class="ti-ico" style="background:rgba(59,180,255,.12)">🔬</div><div class="ti-inf"><div class="ti-nm">Perplexity AI</div><div class="ti-cat">Research</div></div><div class="ti-votes">▲2,341</div></a>
-          <a class="ti" href="https://elevenlabs.io" target="_blank"><div class="ti-ico" style="background:rgba(16,185,129,.12)">🎵</div><div class="ti-inf"><div class="ti-nm">ElevenLabs</div><div class="ti-cat">Audio AI</div></div><div class="ti-votes">▲1,876</div></a>
+          <a class="ti" href="https://cursor.sh?ref=aimodelranks" target="_blank" rel="noopener"><div class="ti-ico" style="background:rgba(59,130,246,.12)">💻</div><div class="ti-inf"><div class="ti-nm">Cursor</div><div class="ti-cat">Coding AI</div></div><div class="ti-votes">▲1,923</div></a>
+          <a class="ti" href="https://midjourney.com?ref=aimodelranks" target="_blank" rel="noopener"><div class="ti-ico" style="background:rgba(236,72,153,.12)">🎨</div><div class="ti-inf"><div class="ti-nm">Midjourney</div><div class="ti-cat">Image AI</div></div><div class="ti-votes">▲2,847</div></a>
+          <a class="ti" href="https://runwayml.com?ref=aimodelranks" target="_blank" rel="noopener"><div class="ti-ico" style="background:rgba(168,85,247,.12)">🎬</div><div class="ti-inf"><div class="ti-nm">Runway Gen-4</div><div class="ti-cat">Video AI</div></div><div class="ti-votes">▲1,432</div></a>
+          <a class="ti" href="https://perplexity.ai?ref=aimodelranks" target="_blank" rel="noopener"><div class="ti-ico" style="background:rgba(59,180,255,.12)">🔬</div><div class="ti-inf"><div class="ti-nm">Perplexity AI</div><div class="ti-cat">Research</div></div><div class="ti-votes">▲2,341</div></a>
+          <a class="ti" href="https://elevenlabs.io?ref=aimodelranks" target="_blank" rel="noopener"><div class="ti-ico" style="background:rgba(16,185,129,.12)">🎵</div><div class="ti-inf"><div class="ti-nm">ElevenLabs</div><div class="ti-cat">Audio AI</div></div><div class="ti-votes">▲1,876</div></a>
         </div>
       </div>
 
@@ -943,8 +943,7 @@ function buildToolCards(tools) {
     <a href="${href}" target="_blank" rel="noopener" class="tc">
       <div class="tc-thumb ${catBgs[t.cat]||'cat-chat'}" style="display:flex;align-items:center;justify-content:center;gap:6px">
         <span class="tc-rank">#${i+1}</span>
-        <img src="${t.image||''}" width="40" height="40" style="object-fit:contain;border-radius:6px;flex-shrink:0" onerror="this.style.display='none'">
-        <span class="tc-emoji" style="${t.image?'display:none':''}">${t.emoji}</span></div>
+        ${t.image?`<img src="${t.image}" alt="${t.name}" style="width:50px;height:50px;object-fit:contain;border-radius:8px;background:rgba(0,0,0,0.2)" onerror="this.style.display='none';this.nextSibling.style.display='block'" /><span style="display:none;font-size:32px;line-height:1">${t.emoji}</span>`:`<span style="font-size:32px;line-height:1">${t.emoji}</span>`}</div>
       <div class="tc-body">
         <div class="tc-name">${t.name}</div>
         <div class="tc-cat">${t.cat} AI</div>

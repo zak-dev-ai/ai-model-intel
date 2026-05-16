@@ -25,11 +25,11 @@ window.OCTOPUS_CONFIG = {
   },
   SLOT_PRICES: {
     1: '$149/mo', 2: '$79/mo', 3: '$79/mo',
-    4: '$29/wk', 5: '$29/wk', 6: '$29/wk?token=pk_public&size=128'
+    4: '$29/wk', 5: '$29/wk', 6: '$29/wk'
   },
   SLOT_PLANS: {
     1: 'premium', 2: 'growth', 3: 'growth',
-    4: 'starter', 5: 'starter', 6: 'starter?token=pk_public&size=128'
+    4: 'starter', 5: 'starter', 6: 'starter'
   }
 };
 
@@ -287,30 +287,30 @@ window.AdsManager = {
 // ── Tools DB (shared across pages) ──────────────────────────────────
 window.ToolsDB = {
   defaults: [
-    {id:1,name:'Midjourney',emoji:'🎨',cat:'image',pricing:'paid',tagline:'AI image generation creating stunning artistic visuals from text prompts.',votes:2847,featured:true,url:'https://midjourney.com',daysAgo:120,approved:true,image:'https://icons.duckduckgo.com/ip3/midjourney.com.ico'},
-    {id:2,name:'ChatGPT',emoji:'💬',cat:'chat',pricing:'freemium',tagline:"OpenAI's conversational AI for writing, coding, analysis and more.",votes:5230,featured:true,url:'https://chatgpt.com',daysAgo:180,approved:true,image:'https://icons.duckduckgo.com/ip3/chatgpt.com.ico'},
-    {id:3,name:'Cursor',emoji:'💻',cat:'coding',pricing:'freemium',tagline:'AI-powered code editor that understands your entire codebase.',votes:1923,featured:true,url:'https://cursor.sh',daysAgo:60,approved:true,image:'https://icons.duckduckgo.com/ip3/cursor.sh.ico'},
-    {id:4,name:'Claude',emoji:'🤖',cat:'chat',pricing:'freemium',tagline:"Anthropic's AI assistant for analysis, writing and reasoning.",votes:1654,featured:false,url:'https://claude.ai',daysAgo:90,approved:true,image:'https://icons.duckduckgo.com/ip3/claude.ai.ico'},
-    {id:5,name:'Runway Gen-4',emoji:'🎬',cat:'video',pricing:'freemium',tagline:'State-of-the-art AI video generation from text or image.',votes:1432,featured:true,url:'https://runwayml.com',daysAgo:7,approved:true,image:'https://icons.duckduckgo.com/ip3/runwayml.com.ico'},
-    {id:6,name:'ElevenLabs',emoji:'🎵',cat:'audio',pricing:'freemium',tagline:'Ultra-realistic AI voice cloning and text-to-speech.',votes:1876,featured:false,url:'https://elevenlabs.io',daysAgo:150,approved:true,image:'https://icons.duckduckgo.com/ip3/elevenlabs.io.ico'},
-    {id:7,name:'Perplexity AI',emoji:'🔬',cat:'research',pricing:'freemium',tagline:'AI-powered search engine that cites its sources.',votes:2341,featured:false,url:'https://perplexity.ai',daysAgo:130,approved:true,image:'https://icons.duckduckgo.com/ip3/perplexity.ai.ico'},
-    {id:8,name:'GitHub Copilot',emoji:'🐙',cat:'coding',pricing:'paid',tagline:'AI pair programmer for code completions in real time.',votes:3102,featured:false,url:'https://github.com/features/copilot',daysAgo:200,approved:true,image:'https://icons.duckduckgo.com/ip3/github.com.ico'},
-    {id:9,name:'Notion AI',emoji:'⚡',cat:'productivity',pricing:'freemium',tagline:'AI writing assistant built into Notion workspace.',votes:1543,featured:false,url:'https://notion.so',daysAgo:110,approved:true,image:'https://icons.duckduckgo.com/ip3/notion.so.ico'},
-    {id:10,name:'DALL-E 3',emoji:'🖼️',cat:'image',pricing:'freemium',tagline:'OpenAI image generation via ChatGPT Plus.',votes:987,featured:false,url:'https://openai.com/dall-e-3',daysAgo:140,approved:true,image:'https://icons.duckduckgo.com/ip3/chatgpt.com.ico'},
-    {id:11,name:'Stable Diffusion',emoji:'🎭',cat:'image',pricing:'free',tagline:'Open source image generation you can run locally.',votes:2654,featured:false,url:'https://stability.ai',daysAgo:220,approved:true,image:'https://icons.duckduckgo.com/ip3/stability.ai.ico'},
-    {id:12,name:'Sora',emoji:'🎥',cat:'video',pricing:'freemium',tagline:"OpenAI's text-to-video AI model.",votes:2109,featured:true,url:'https://openai.com/sora',daysAgo:5,approved:true,image:'https://icons.duckduckgo.com/ip3/chatgpt.com.ico'},
-    {id:13,name:'Mistral AI',emoji:'🔥',cat:'chat',pricing:'free',tagline:"Chat with Mistral's powerful open-weight models.",votes:654,featured:false,url:'https://chat.mistral.ai',daysAgo:6,approved:true,image:'https://icons.duckduckgo.com/ip3/mistral.ai.ico'},
-    {id:14,name:'DeepSeek',emoji:'🔍',cat:'chat',pricing:'free',tagline:'Ultra-cheap AI chat — $0.14/1M tokens.',votes:1876,featured:false,url:'https://chat.deepseek.com',daysAgo:4,approved:true,image:'https://icons.duckduckgo.com/ip3/deepseek.com.ico'},
-    {id:15,name:'Figma AI',emoji:'🖌️',cat:'design',pricing:'freemium',tagline:'AI features in the most popular design tool.',votes:1234,featured:false,url:'https://figma.com',daysAgo:45,approved:true,image:'https://icons.duckduckgo.com/ip3/figma.com.ico'},
-    {id:16,name:'Devin AI',emoji:'🤖',cat:'coding',pricing:'paid',tagline:'The first fully autonomous AI software engineer.',votes:1432,featured:false,url:'https://devin.ai',daysAgo:30,approved:true,image:'https://icons.duckduckgo.com/ip3/devin.ai.ico'},
-    {id:17,name:'Jasper AI',emoji:'✍️',cat:'writing',pricing:'paid',tagline:'AI marketing copy and content writing for brands.',votes:876,featured:false,url:'https://jasper.ai',daysAgo:160,approved:true,image:'https://icons.duckduckgo.com/ip3/jasper.ai.ico'},
-    {id:18,name:'Anthropic',emoji:'🧠',cat:'research',pricing:'freemium',tagline:'Advanced AI safety research and model development.',votes:543,featured:false,url:'https://anthropic.com',daysAgo:90,approved:true,image:'https://icons.duckduckgo.com/ip3/claude.ai.ico'},
-    {id:19,name:'HubSpot AI',emoji:'📢',cat:'marketing',pricing:'freemium',tagline:'AI marketing automation and content generation.',votes:432,featured:false,url:'https://hubspot.com',daysAgo:70,approved:true,image:'https://icons.duckduckgo.com/ip3/hubspot.com.ico'},
-    {id:20,name:'Replit AI',emoji:'⚡',cat:'coding',pricing:'freemium',tagline:'AI-powered code generation and deployment platform.',votes:876,featured:false,url:'https://replit.com',daysAgo:50,approved:true,image:'https://icons.duckduckgo.com/ip3/replit.com.ico'},
-    {id:21,name:'Canva AI',emoji:'🎨',cat:'design',pricing:'freemium',tagline:'AI-powered design tools for creating visual content.',votes:1543,featured:false,url:'https://canva.com',daysAgo:30,approved:true,image:'https://icons.duckduckgo.com/ip3/canva.com.ico'},
-    {id:22,name:'Google Gemini',emoji:'✨',cat:'chat',pricing:'free',tagline:'Google\'s multimodal AI with 1M+ token context.',votes:2341,featured:false,url:'https://gemini.google.com',daysAgo:15,approved:true,image:'https://icons.duckduckgo.com/ip3/gemini.google.com.ico'},
-    {id:23,name:'Copilot',emoji:'💡',cat:'productivity',pricing:'freemium',tagline:'Microsoft\'s AI companion across Office and Windows.',votes:987,featured:false,url:'https://copilot.microsoft.com',daysAgo:20,approved:true,image:'https://icons.duckduckgo.com/ip3/microsoft.com.ico'},
-    {id:24,name:'Llama AI',emoji:'🦙',cat:'chat',pricing:'free',tagline:'Meta\'s open-source LLM family — free and powerful.',votes:1654,featured:false,url:'https://llama.meta.com',daysAgo:10,approved:true,image:'https://icons.duckduckgo.com/ip3/meta.com.ico'},
+    {id:1,name:'Midjourney',emoji:'🎨',cat:'image',pricing:'paid',tagline:'AI image generation creating stunning artistic visuals from text prompts.',votes:2847,featured:true,url:'https://midjourney.com',daysAgo:120,approved:true,image:'https://img.logo.dev/midjourney.com?token=pk_public&size=128'},
+    {id:2,name:'ChatGPT',emoji:'💬',cat:'chat',pricing:'freemium',tagline:"OpenAI's conversational AI for writing, coding, analysis and more.",votes:5230,featured:true,url:'https://chatgpt.com',daysAgo:180,approved:true,image:'https://img.logo.dev/chatgpt.com?token=pk_public&size=128'},
+    {id:3,name:'Cursor',emoji:'💻',cat:'coding',pricing:'freemium',tagline:'AI-powered code editor that understands your entire codebase.',votes:1923,featured:true,url:'https://cursor.sh',daysAgo:60,approved:true,image:'https://img.logo.dev/cursor.sh?token=pk_public&size=128'},
+    {id:4,name:'Claude',emoji:'🤖',cat:'chat',pricing:'freemium',tagline:"Anthropic's AI assistant for analysis, writing and reasoning.",votes:1654,featured:false,url:'https://claude.ai',daysAgo:90,approved:true,image:'https://img.logo.dev/claude.ai?token=pk_public&size=128'},
+    {id:5,name:'Runway Gen-4',emoji:'🎬',cat:'video',pricing:'freemium',tagline:'State-of-the-art AI video generation from text or image.',votes:1432,featured:true,url:'https://runwayml.com',daysAgo:7,approved:true,image:'https://img.logo.dev/runwayml.com?token=pk_public&size=128'},
+    {id:6,name:'ElevenLabs',emoji:'🎵',cat:'audio',pricing:'freemium',tagline:'Ultra-realistic AI voice cloning and text-to-speech.',votes:1876,featured:false,url:'https://elevenlabs.io',daysAgo:150,approved:true,image:'https://img.logo.dev/elevenlabs.io?token=pk_public&size=128'},
+    {id:7,name:'Perplexity AI',emoji:'🔬',cat:'research',pricing:'freemium',tagline:'AI-powered search engine that cites its sources.',votes:2341,featured:false,url:'https://perplexity.ai',daysAgo:130,approved:true,image:'https://img.logo.dev/perplexity.ai?token=pk_public&size=128'},
+    {id:8,name:'GitHub Copilot',emoji:'🐙',cat:'coding',pricing:'paid',tagline:'AI pair programmer for code completions in real time.',votes:3102,featured:false,url:'https://github.com/features/copilot',daysAgo:200,approved:true,image:'https://img.logo.dev/github.com?token=pk_public&size=128'},
+    {id:9,name:'Notion AI',emoji:'⚡',cat:'productivity',pricing:'freemium',tagline:'AI writing assistant built into Notion workspace.',votes:1543,featured:false,url:'https://notion.so',daysAgo:110,approved:true,image:'https://img.logo.dev/notion.so?token=pk_public&size=128'},
+    {id:10,name:'DALL-E 3',emoji:'🖼️',cat:'image',pricing:'freemium',tagline:'OpenAI image generation via ChatGPT Plus.',votes:987,featured:false,url:'https://openai.com/dall-e-3',daysAgo:140,approved:true,image:'https://img.logo.dev/chatgpt.com?token=pk_public&size=128'},
+    {id:11,name:'Stable Diffusion',emoji:'🎭',cat:'image',pricing:'free',tagline:'Open source image generation you can run locally.',votes:2654,featured:false,url:'https://stability.ai',daysAgo:220,approved:true,image:'https://img.logo.dev/stability.ai?token=pk_public&size=128'},
+    {id:12,name:'Sora',emoji:'🎥',cat:'video',pricing:'freemium',tagline:"OpenAI's text-to-video AI model.",votes:2109,featured:true,url:'https://openai.com/sora',daysAgo:5,approved:true,image:'https://img.logo.dev/chatgpt.com?token=pk_public&size=128'},
+    {id:13,name:'Mistral AI',emoji:'🔥',cat:'chat',pricing:'free',tagline:"Chat with Mistral's powerful open-weight models.",votes:654,featured:false,url:'https://chat.mistral.ai',daysAgo:6,approved:true,image:'https://img.logo.dev/mistral.ai?token=pk_public&size=128'},
+    {id:14,name:'DeepSeek',emoji:'🔍',cat:'chat',pricing:'free',tagline:'Ultra-cheap AI chat — $0.14/1M tokens.',votes:1876,featured:false,url:'https://chat.deepseek.com',daysAgo:4,approved:true,image:'https://img.logo.dev/deepseek.com?token=pk_public&size=128'},
+    {id:15,name:'Figma AI',emoji:'🖌️',cat:'design',pricing:'freemium',tagline:'AI features in the most popular design tool.',votes:1234,featured:false,url:'https://figma.com',daysAgo:45,approved:true,image:'https://img.logo.dev/figma.com?token=pk_public&size=128'},
+    {id:16,name:'Devin AI',emoji:'🤖',cat:'coding',pricing:'paid',tagline:'The first fully autonomous AI software engineer.',votes:1432,featured:false,url:'https://devin.ai',daysAgo:30,approved:true,image:'https://img.logo.dev/devin.ai?token=pk_public&size=128'},
+    {id:17,name:'Jasper AI',emoji:'✍️',cat:'writing',pricing:'paid',tagline:'AI marketing copy and content writing for brands.',votes:876,featured:false,url:'https://jasper.ai',daysAgo:160,approved:true,image:'https://img.logo.dev/jasper.ai?token=pk_public&size=128'},
+    {id:18,name:'Anthropic',emoji:'🧠',cat:'research',pricing:'freemium',tagline:'Advanced AI safety research and model development.',votes:543,featured:false,url:'https://anthropic.com',daysAgo:90,approved:true,image:'https://img.logo.dev/claude.ai?token=pk_public&size=128'},
+    {id:19,name:'HubSpot AI',emoji:'📢',cat:'marketing',pricing:'freemium',tagline:'AI marketing automation and content generation.',votes:432,featured:false,url:'https://hubspot.com',daysAgo:70,approved:true,image:'https://img.logo.dev/hubspot.com?token=pk_public&size=128'},
+    {id:20,name:'Replit AI',emoji:'⚡',cat:'coding',pricing:'freemium',tagline:'AI-powered code generation and deployment platform.',votes:876,featured:false,url:'https://replit.com',daysAgo:50,approved:true,image:'https://img.logo.dev/replit.com?token=pk_public&size=128'},
+    {id:21,name:'Canva AI',emoji:'🎨',cat:'design',pricing:'freemium',tagline:'AI-powered design tools for creating visual content.',votes:1543,featured:false,url:'https://canva.com',daysAgo:30,approved:true,image:'https://img.logo.dev/canva.com?token=pk_public&size=128'},
+    {id:22,name:'Google Gemini',emoji:'✨',cat:'chat',pricing:'free',tagline:'Google\'s multimodal AI with 1M+ token context.',votes:2341,featured:false,url:'https://gemini.google.com',daysAgo:15,approved:true,image:'https://img.logo.dev/gemini.google.com?token=pk_public&size=128'},
+    {id:23,name:'Copilot',emoji:'💡',cat:'productivity',pricing:'freemium',tagline:'Microsoft\'s AI companion across Office and Windows.',votes:987,featured:false,url:'https://copilot.microsoft.com',daysAgo:20,approved:true,image:'https://img.logo.dev/microsoft.com?token=pk_public&size=128'},
+    {id:24,name:'Llama AI',emoji:'🦙',cat:'chat',pricing:'free',tagline:'Meta\'s open-source LLM family — free and powerful.',votes:1654,featured:false,url:'https://llama.meta.com',daysAgo:10,approved:true,image:'https://img.logo.dev/meta.com?token=pk_public&size=128'},
   ],
 
   load() {
@@ -338,7 +338,7 @@ window.ToolsDB = {
       votes: 0,
       approved: true,
       daysAgo: 0,
-      image: tool.image || (tool.url ? `https://icons.duckduckgo.com/ip3/${new URL(tool.url).hostname}.ico` : ''),
+      image: tool.image || (tool.url ? `https://img.logo.dev/${new URL(tool.url).hostname}?token=pk_public&size=128` : ''),
       submittedAt: new Date().toISOString(),
     };
     tools.unshift(newTool);
@@ -456,5 +456,5 @@ window.setupImgFallback = function(img) {
 };
 
 document.addEventListener('DOMContentLoaded', function() {
-  document.querySelectorAll('img[src*="duckduckgo"]').forEach(window.setupImgFallback);
+  document.querySelectorAll('.ht-img, .tc-img, .scard-img, img[src*="logo.dev"], img[src*="duckduckgo"]').forEach(window.setupImgFallback);
 });

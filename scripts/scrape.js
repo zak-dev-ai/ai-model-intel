@@ -98,16 +98,17 @@ const CONTEXT_WINDOWS = {
   'claude-3.5-sonnet': 200000,
   'claude-3-haiku': 200000,
 
-  'gemini-2.5-pro': 200000,
-  'gemini-2.5-flash': 100000,
-  'gemini-2.0-flash': 100000,
-  'gemini-1.5-flash': 100000,
+  'gemini-2.5-pro': 1048576,
+  'gemini-2.5-flash': 1048576,
+  'gemini-2.0-flash': 1048576,
+  'gemini-1.5-flash': 1048576,
+  'gemini-1.5-pro': 2097152,
 
   'mistral-large': 32000,
   'mistral-medium': 32000,
   'mistral-small': 32000,
-  'mistral-nemo': 32000,
-  'mistral-mini': 32000,
+  'mistral-nemo': 128000,
+  'mistral-mini': 131072,
 };
 
 // --------------------------------------------
