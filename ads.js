@@ -250,6 +250,7 @@ window.AdsManager = {
       emoji: data.emoji || '🚀',
       color: data.color || '#a855f7',
       cta: data.cta || 'Visit →',
+      image: data.image || (data.url ? (function(){try{return 'https://icons.duckduckgo.com/ip3/'+new URL(data.url).hostname+'.ico'}catch(e){return ''}})() : ''),
       type: data.plan === 'premium' ? 'strip' : 'spotlight',
       tier: data.plan,
       plan: data.plan,
