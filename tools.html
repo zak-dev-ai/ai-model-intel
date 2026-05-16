@@ -4,9 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AI Tools Rankings — aimodelranks.live</title>
-<meta name="description" content="Live ranking of the best AI tools by community votes. Image AI, video AI, coding AI, writing AI and more. Submit your AI tool free.">
+<meta name="description" content="Live ranking of the best AI tools by community votes. Submit your AI tool free.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700;800&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+<script src="/ads.js"></script>
 <style>
 :root{
   --bg:#07090f;--bg2:#0d1117;--bg3:#131b2a;--bg4:#1a2438;
@@ -14,233 +15,238 @@
   --cyan:#3bb4ff;--green:#00d97e;--red:#ff4d6d;
   --yellow:#fbbf24;--purple:#a855f7;--orange:#f97316;
   --text:#f0f4f8;--text2:#94a3b8;--text3:#4a5a6e;
-  --mono:'IBM Plex Mono',monospace;
-  --sans:'Space Grotesk',sans-serif;
-  --hud:'Orbitron',monospace;
+  --mono:'IBM Plex Mono',monospace;--sans:'Space Grotesk',sans-serif;--hud:'Orbitron',monospace;
 }
-*{margin:0;padding:0;box-sizing:border-box;}
-html{scroll-behavior:smooth;}
+*{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
 body{background:var(--bg);color:var(--text);font-family:var(--sans);overflow-x:hidden;}
 
 /* NAV */
 nav{position:sticky;top:0;z-index:1000;background:rgba(7,9,15,0.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
-.nav-inner{display:flex;align-items:center;gap:10px;padding:0 24px;height:58px;flex-wrap:nowrap;}
+.nav-inner{display:flex;align-items:center;gap:10px;padding:0 24px;height:58px;}
 .nav-logo{font-family:var(--hud);font-size:14px;color:var(--cyan);letter-spacing:1px;text-decoration:none;flex-shrink:0;}
 .nav-logo span{color:var(--purple);}
-.nav-search-wrap{flex:1;max-width:320px;position:relative;min-width:0;}
-.nav-search{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:9px 14px 9px 38px;font-size:14px;color:var(--text);outline:none;font-family:var(--sans);transition:border-color 0.2s;}
+.nav-search-wrap{flex:1;max-width:300px;position:relative;min-width:0;}
+.nav-search{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:9px 14px 9px 36px;font-size:14px;color:var(--text);outline:none;font-family:var(--sans);transition:border-color 0.2s;}
 .nav-search:focus{border-color:var(--purple);}
 .nav-search::placeholder{color:var(--text3);}
-.sico{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:15px;pointer-events:none;}
+.sico{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:14px;pointer-events:none;}
 .nav-links{display:flex;align-items:center;gap:2px;margin-left:auto;flex-shrink:0;}
 .nav-link{color:var(--text2);text-decoration:none;font-size:13px;font-weight:500;padding:6px 10px;border-radius:6px;transition:all 0.2s;white-space:nowrap;}
-.nav-link:hover{color:var(--cyan);background:rgba(59,180,255,0.06);}
+.nav-link:hover{color:var(--cyan);}
 .nav-link.active{color:var(--purple);}
-.btn-submit-nav{background:var(--purple);color:#fff;padding:7px 14px;border-radius:7px;font-size:13px;font-weight:700;text-decoration:none;white-space:nowrap;}
-.btn-submit-nav:hover{opacity:0.85;}
-
-/* MOBILE NAV */
-.mob-nav{display:none;background:var(--bg2);border-bottom:1px solid var(--border);padding:10px 16px;gap:8px;overflow-x:auto;scrollbar-width:none;}
-.mob-nav::-webkit-scrollbar{display:none;}
-.mob-nav a{color:var(--text2);text-decoration:none;font-size:13px;font-weight:500;padding:6px 12px;border-radius:6px;white-space:nowrap;border:1px solid var(--border);}
+.btn-nav{background:var(--purple);color:#fff;padding:7px 14px;border-radius:7px;font-size:13px;font-weight:700;text-decoration:none;white-space:nowrap;border:none;cursor:pointer;}
+.mob-nav{display:none;background:var(--bg2);border-bottom:1px solid var(--border);padding:8px 16px;gap:6px;overflow-x:auto;scrollbar-width:none;}
+.mob-nav a{color:var(--text2);text-decoration:none;font-size:12px;padding:5px 10px;border-radius:6px;border:1px solid var(--border);white-space:nowrap;flex-shrink:0;}
 .mob-nav a.active{color:var(--purple);border-color:rgba(168,85,247,0.3);}
 
 /* HERO */
-.hero{padding:36px 24px 28px;background:radial-gradient(ellipse at 50% 0%,rgba(168,85,247,0.08),transparent 60%);border-bottom:1px solid var(--border);text-align:center;position:relative;overflow:hidden;}
+.hero{padding:32px 24px 24px;border-bottom:1px solid var(--border);text-align:center;position:relative;overflow:hidden;background:radial-gradient(ellipse at 50% 0%,rgba(168,85,247,0.08),transparent 60%);}
 .hero-grid{position:absolute;inset:0;opacity:0.03;background-image:linear-gradient(rgba(168,85,247,1) 1px,transparent 1px),linear-gradient(90deg,rgba(168,85,247,1) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;}
-.hero h1{font-family:var(--hud);font-size:clamp(20px,4vw,40px);font-weight:900;color:#fff;letter-spacing:1px;margin-bottom:8px;position:relative;}
+.hero h1{font-family:var(--hud);font-size:clamp(18px,4vw,36px);color:#fff;letter-spacing:1px;margin-bottom:7px;position:relative;}
 .hero h1 .hl{color:var(--purple);}
-.hero p{font-size:15px;color:var(--text2);max-width:500px;margin:0 auto 20px;line-height:1.6;position:relative;}
+.hero p{font-size:14px;color:var(--text2);max-width:460px;margin:0 auto 18px;line-height:1.6;position:relative;}
 .hero-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;position:relative;}
-.btn-primary{background:var(--purple);color:#fff;padding:11px 22px;border-radius:8px;font-size:14px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:7px;transition:opacity 0.2s;}
-.btn-primary:hover{opacity:0.85;}
-.btn-outline{border:1px solid var(--border2);color:var(--purple);padding:11px 22px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:7px;transition:all 0.2s;}
-.btn-outline:hover{background:rgba(168,85,247,0.06);}
-.hero-stats{display:flex;gap:24px;justify-content:center;margin-top:24px;flex-wrap:wrap;position:relative;}
-.hstat-num{font-family:var(--hud);font-size:24px;font-weight:900;color:var(--purple);}
-.hstat-lbl{font-size:12px;color:var(--text3);font-family:var(--mono);}
+.btn-hero{background:var(--purple);color:#fff;padding:10px 20px;border-radius:8px;font-size:14px;font-weight:700;text-decoration:none;border:none;cursor:pointer;}
+.btn-hero-out{border:1px solid var(--border2);color:var(--purple);padding:10px 20px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;}
+.hero-stats{display:flex;gap:20px;justify-content:center;margin-top:18px;flex-wrap:wrap;position:relative;}
+.hstat-num{font-family:var(--hud);font-size:22px;font-weight:900;color:var(--purple);}
+.hstat-lbl{font-size:11px;color:var(--text3);font-family:var(--mono);}
 
-/* ── TOP 6 PAID AD SLOTS ── */
-.paid-slots-section{padding:20px 24px;background:var(--bg2);border-bottom:1px solid var(--border);}
-.paid-slots-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px;}
-.paid-slots-title{font-family:var(--hud);font-size:14px;color:var(--yellow);letter-spacing:0.5px;display:flex;align-items:center;gap:8px;}
-.paid-slots-sub{font-family:var(--mono);font-size:12px;color:var(--text3);}
-.paid-slots-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;}
-.paid-slot{border-radius:10px;overflow:hidden;border:1px solid var(--border);transition:border-color 0.2s,transform 0.2s;position:relative;min-height:160px;}
-.paid-slot:hover{transform:translateY(-2px);}
-.paid-slot.filled{border-color:rgba(251,191,36,0.3);background:var(--bg3);}
-.paid-slot.empty{border-style:dashed;border-color:rgba(168,85,247,0.2);background:rgba(168,85,247,0.02);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:14px;text-decoration:none;}
-.paid-slot.empty:hover{border-color:var(--purple);background:rgba(168,85,247,0.05);}
-.slot-top-bar{height:3px;width:100%;}
-.slot-body{padding:12px;}
-.slot-badge{display:inline-block;background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.2);color:var(--yellow);font-size:9px;padding:2px 6px;border-radius:3px;font-family:var(--mono);margin-bottom:7px;letter-spacing:0.5px;}
-.slot-ico{font-size:20px;margin-bottom:6px;}
-.slot-name{font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.slot-desc{font-size:11px;color:var(--text2);line-height:1.4;margin-bottom:8px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
-.slot-cta{display:block;text-align:center;padding:6px;border-radius:6px;font-size:11px;font-weight:700;text-decoration:none;transition:opacity 0.2s;}
-.slot-cta:hover{opacity:0.85;}
-.empty-ico{font-size:24px;margin-bottom:8px;opacity:0.4;}
-.empty-txt{font-family:var(--hud);font-size:10px;color:var(--purple);letter-spacing:0.5px;margin-bottom:4px;}
-.empty-price{font-family:var(--mono);font-size:11px;color:var(--text3);}
-.empty-buy{display:inline-block;margin-top:8px;background:rgba(168,85,247,0.1);border:1px solid rgba(168,85,247,0.3);color:var(--purple);font-size:10px;font-weight:700;padding:4px 10px;border-radius:5px;font-family:var(--mono);}
+/* TOP 6 PAID SLOTS */
+.slots-wrap{background:var(--bg2);border-bottom:1px solid var(--border);padding:16px 24px;}
+.slots-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:6px;}
+.slots-title{font-family:var(--hud);font-size:12px;color:var(--yellow);letter-spacing:1px;}
+.slots-sub{font-family:var(--mono);font-size:11px;color:var(--text3);}
+.slots-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;}
+.slot-card{border-radius:9px;overflow:hidden;border:1px solid var(--border);min-height:155px;display:flex;flex-direction:column;transition:transform 0.2s,border-color 0.2s;}
+.slot-card:hover{transform:translateY(-2px);}
+.slot-card.filled{border-color:rgba(251,191,36,0.25);background:var(--bg3);text-decoration:none;}
+.slot-card.empty{border-style:dashed;border-color:rgba(168,85,247,0.2);background:rgba(168,85,247,0.02);align-items:center;justify-content:center;text-align:center;padding:12px;cursor:pointer;text-decoration:none;}
+.slot-card.empty:hover{border-color:var(--purple);background:rgba(168,85,247,0.05);}
+.sc-bar{height:2px;flex-shrink:0;}
+.sc-body{padding:10px;flex:1;display:flex;flex-direction:column;}
+.sc-badge{font-family:var(--mono);font-size:8px;color:var(--yellow);letter-spacing:0.5px;margin-bottom:5px;}
+.sc-ico{font-size:18px;margin-bottom:4px;}
+.sc-name{font-size:11px;font-weight:700;color:var(--text);margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.sc-desc{font-size:10px;color:var(--text2);line-height:1.4;flex:1;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
+.sc-cta{display:block;text-align:center;padding:4px;border-radius:5px;font-size:10px;font-weight:700;text-decoration:none;margin-top:6px;}
+.sc-expiry{font-family:var(--mono);font-size:8px;color:var(--text3);text-align:center;margin-top:3px;}
+.empty-ico{font-size:20px;opacity:0.4;margin-bottom:5px;}
+.empty-label{font-family:var(--hud);font-size:9px;color:var(--purple);margin-bottom:2px;letter-spacing:0.5px;}
+.empty-price{font-family:var(--mono);font-size:10px;color:var(--text3);margin-bottom:6px;}
+.empty-btn{background:rgba(168,85,247,0.1);border:1px solid rgba(168,85,247,0.25);color:var(--purple);font-size:9px;font-weight:700;padding:4px 8px;border-radius:4px;font-family:var(--mono);}
 
-/* SPOTLIGHT (scrolling) */
+/* SPOTLIGHT */
 .spotlight{background:var(--bg2);border-bottom:1px solid var(--border);overflow:hidden;position:relative;}
 .spotlight::before,.spotlight::after{content:'';position:absolute;top:0;bottom:0;width:60px;z-index:2;pointer-events:none;}
 .spotlight::before{left:0;background:linear-gradient(to right,var(--bg2),transparent);}
 .spotlight::after{right:0;background:linear-gradient(to left,var(--bg2),transparent);}
-.spot-label{text-align:center;padding:10px 0 7px;font-family:var(--mono);font-size:11px;color:var(--text3);letter-spacing:2px;text-transform:uppercase;border-bottom:1px solid var(--border);}
-.spot-track{display:flex;gap:10px;padding:10px 24px;animation:spotScroll 40s linear infinite;width:max-content;}
+.spot-lbl{text-align:center;padding:8px 0 6px;font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase;border-bottom:1px solid var(--border);}
+.spot-track{display:flex;gap:10px;padding:10px 24px;animation:spotScroll 38s linear infinite;width:max-content;}
 .spot-track:hover{animation-play-state:paused;}
 @keyframes spotScroll{from{transform:translateX(0);}to{transform:translateX(-50%);}}
-.scard{flex-shrink:0;width:200px;background:var(--bg3);border:1px solid rgba(251,191,36,0.15);border-radius:10px;padding:13px;cursor:pointer;transition:border-color 0.2s,transform 0.2s;text-decoration:none;display:block;position:relative;overflow:hidden;}
-.scard::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--yellow),var(--orange));}
+.scard{flex-shrink:0;width:190px;background:var(--bg3);border:1px solid rgba(251,191,36,0.15);border-radius:9px;overflow:hidden;text-decoration:none;display:block;transition:border-color 0.2s,transform 0.2s;position:relative;}
 .scard:hover{border-color:rgba(251,191,36,0.35);transform:translateY(-2px);}
-.sp-badge{position:absolute;top:9px;right:9px;background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.2);color:var(--yellow);font-size:9px;padding:2px 5px;border-radius:3px;font-family:var(--mono);}
-.sp-ico{font-size:20px;margin-bottom:7px;}
-.sp-name{font-size:13px;font-weight:700;color:var(--text);margin-bottom:2px;}
-.sp-cat{font-size:10px;color:var(--text3);font-family:var(--mono);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;}
-.sp-desc{font-size:11px;color:var(--text2);line-height:1.4;margin-bottom:8px;}
-.sp-tag{font-size:10px;padding:2px 7px;border-radius:100px;background:rgba(0,217,126,0.08);color:var(--green);border:1px solid rgba(0,217,126,0.2);font-family:var(--mono);}
+.scard-img{width:100%;height:80px;object-fit:cover;background:var(--bg4);display:block;}
+.scard-body{padding:10px;}
+.scard-badge{position:absolute;top:7px;right:7px;background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.2);color:var(--yellow);font-size:8px;padding:2px 5px;border-radius:3px;font-family:var(--mono);}
+.sp-ico{font-size:14px;margin-bottom:3px;}
+.sp-name{font-size:12px;font-weight:700;color:var(--text);margin-bottom:2px;}
+.sp-cat{font-size:9px;color:var(--text3);font-family:var(--mono);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;}
+.sp-desc{font-size:10px;color:var(--text2);line-height:1.4;}
 
 /* TICKER */
-.tools-ticker{background:var(--bg);border-bottom:1px solid var(--border);overflow:hidden;padding:8px 0;position:relative;}
-.tools-ticker::before,.tools-ticker::after{content:'';position:absolute;top:0;bottom:0;width:50px;z-index:2;pointer-events:none;}
-.tools-ticker::before{left:0;background:linear-gradient(to right,var(--bg),transparent);}
-.tools-ticker::after{right:0;background:linear-gradient(to left,var(--bg),transparent);}
-.tt{display:flex;gap:36px;animation:ttScroll 55s linear infinite;white-space:nowrap;width:max-content;}
-.tti{font-family:var(--mono);font-size:12px;color:var(--text3);display:inline-flex;align-items:center;gap:5px;}
-.tti-g{color:var(--green);}
-.tti-p{color:var(--purple);}
-@keyframes ttScroll{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+.ticker{background:var(--bg);border-bottom:1px solid var(--border);overflow:hidden;padding:7px 0;position:relative;}
+.ticker::before,.ticker::after{content:'';position:absolute;top:0;bottom:0;width:50px;z-index:2;pointer-events:none;}
+.ticker::before{left:0;background:linear-gradient(to right,var(--bg),transparent);}
+.ticker::after{right:0;background:linear-gradient(to left,var(--bg),transparent);}
+.t-track{display:flex;gap:36px;animation:tScroll 55s linear infinite;white-space:nowrap;width:max-content;}
+.ti{font-family:var(--mono);font-size:12px;color:var(--text3);}
+.ti-g{color:var(--green);}
+.ti-p{color:var(--purple);}
+@keyframes tScroll{from{transform:translateX(0);}to{transform:translateX(-50%);}}
 
-/* MAIN LAYOUT */
+/* MOBILE CATS */
+.mob-cats{display:none;padding:8px 16px;background:var(--bg2);border-bottom:1px solid var(--border);gap:6px;overflow-x:auto;scrollbar-width:none;}
+.mob-cat{padding:5px 12px;border-radius:100px;border:1px solid var(--border);background:transparent;font-size:12px;color:var(--text2);cursor:pointer;font-family:var(--sans);white-space:nowrap;flex-shrink:0;}
+.mob-cat.active{border-color:var(--purple);color:var(--purple);background:rgba(168,85,247,0.07);}
+
+/* MAIN */
 .main{max-width:1400px;margin:0 auto;padding:20px 24px;}
-.layout{display:grid;grid-template-columns:180px 1fr 260px;gap:20px;align-items:start;}
+.layout{display:grid;grid-template-columns:175px 1fr 255px;gap:18px;align-items:start;}
 
 /* SIDEBAR LEFT */
-.sidebar-left{position:sticky;top:78px;}
-.sb-section{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:10px;}
+.sidebar-left{position:sticky;top:70px;}
+.sb-sec{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:10px;}
 .sb-ttl{font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;}
-.cat-btn{display:flex;align-items:center;justify-content:space-between;width:100%;padding:7px 9px;border-radius:7px;border:none;background:transparent;color:var(--text2);font-size:13px;cursor:pointer;transition:all 0.2s;text-align:left;font-family:var(--sans);font-weight:500;}
+.cat-btn{display:flex;align-items:center;justify-content:space-between;width:100%;padding:7px 9px;border-radius:6px;border:none;background:transparent;color:var(--text2);font-size:13px;cursor:pointer;transition:all 0.2s;text-align:left;font-family:var(--sans);font-weight:500;}
 .cat-btn:hover{background:var(--bg3);color:var(--text);}
 .cat-btn.active{background:rgba(168,85,247,0.08);color:var(--purple);border:1px solid rgba(168,85,247,0.15);}
 .cat-count{font-family:var(--mono);font-size:10px;color:var(--text3);}
 .cat-btn.active .cat-count{color:var(--purple);}
 
-/* MOBILE CATEGORY PILLS */
-.mob-cats{display:none;flex-wrap:wrap;gap:6px;padding:12px 16px;background:var(--bg2);border-bottom:1px solid var(--border);}
-.mob-cat{padding:6px 12px;border-radius:100px;border:1px solid var(--border);background:transparent;font-size:12px;color:var(--text2);cursor:pointer;font-family:var(--sans);}
-.mob-cat.active{border-color:var(--purple);color:var(--purple);background:rgba(168,85,247,0.07);}
-
 /* CONTENT */
-.toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px;flex-wrap:wrap;}
-.tool-count{font-family:var(--mono);font-size:13px;color:var(--text2);}
-.sort-row{display:flex;gap:7px;align-items:center;}
-select.dd{background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:7px 11px;font-size:13px;color:var(--text2);cursor:pointer;outline:none;font-family:var(--sans);}
-.vt{display:flex;background:var(--bg3);border:1px solid var(--border);border-radius:7px;overflow:hidden;}
-.vtbtn{padding:7px 11px;background:transparent;border:none;cursor:pointer;color:var(--text3);font-size:15px;transition:all 0.2s;}
+.toolbar{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px;flex-wrap:wrap;}
+.tool-count-lbl{font-family:var(--mono);font-size:12px;color:var(--text2);}
+.sort-row{display:flex;gap:6px;align-items:center;}
+select.dd{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:7px 11px;font-size:13px;color:var(--text2);cursor:pointer;outline:none;font-family:var(--sans);}
+.vt{display:flex;background:var(--bg3);border:1px solid var(--border);border-radius:6px;overflow:hidden;}
+.vtbtn{padding:7px 11px;background:transparent;border:none;cursor:pointer;color:var(--text3);font-size:14px;transition:all 0.2s;}
 .vtbtn.active{background:var(--bg4);color:var(--purple);}
 
-/* TOOLS GRID */
-.tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;}
+/* TOOL CARDS */
+.tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;}
 .tools-grid.list-mode{grid-template-columns:1fr;}
-
-/* TOOL CARD */
 .tool-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden;transition:border-color 0.2s,transform 0.2s;text-decoration:none;display:block;position:relative;}
 .tool-card:hover{border-color:rgba(168,85,247,0.25);transform:translateY(-2px);}
 .tool-card.featured{border-color:rgba(251,191,36,0.25);}
-.tool-card.featured::after{content:'⭐ FEATURED';position:absolute;top:8px;right:8px;background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.2);color:var(--yellow);font-size:9px;padding:2px 6px;border-radius:3px;font-family:var(--mono);letter-spacing:0.5px;z-index:1;}
-.tc-thumb{width:100%;height:120px;display:flex;align-items:center;justify-content:center;font-size:40px;position:relative;overflow:hidden;}
-.tc-rank{position:absolute;top:8px;left:8px;font-family:var(--hud);font-size:11px;color:rgba(255,255,255,0.4);background:rgba(0,0,0,0.4);padding:2px 7px;border-radius:4px;}
+.tool-card.featured::after{content:'⭐ FEATURED';position:absolute;top:7px;right:7px;background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.2);color:var(--yellow);font-size:8px;padding:2px 6px;border-radius:3px;font-family:var(--mono);z-index:1;}
+.tc-img-wrap{width:100%;height:110px;position:relative;overflow:hidden;}
+.tc-img{width:100%;height:100%;object-fit:cover;background:var(--bg3);display:block;}
+.tc-img-fallback{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:36px;}
+.tc-rank{position:absolute;top:7px;left:7px;font-family:var(--hud);font-size:10px;color:rgba(255,255,255,0.6);background:rgba(0,0,0,0.5);padding:2px 6px;border-radius:3px;}
 .tc-body{padding:12px;}
-.tc-name{font-size:15px;font-weight:700;color:var(--text);margin-bottom:3px;display:flex;align-items:center;gap:5px;}
+.tc-name{font-size:14px;font-weight:700;color:var(--text);margin-bottom:3px;display:flex;align-items:center;gap:5px;flex-wrap:wrap;}
 .new-badge{background:rgba(0,217,126,0.1);border:1px solid rgba(0,217,126,0.2);color:var(--green);font-size:9px;padding:1px 5px;border-radius:3px;font-family:var(--mono);}
-.tc-tagline{font-size:12px;color:var(--text2);margin-bottom:9px;line-height:1.5;}
-.tc-meta{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:5px;}
-.tc-pricing{font-size:10px;font-family:var(--mono);padding:3px 8px;border-radius:100px;}
+.tc-tagline{font-size:12px;color:var(--text2);margin-bottom:8px;line-height:1.5;}
+.tc-meta{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:4px;}
+.tc-pricing{font-size:10px;font-family:var(--mono);padding:3px 7px;border-radius:100px;}
 .pr-free{background:rgba(0,217,126,0.08);color:var(--green);border:1px solid rgba(0,217,126,0.2);}
 .pr-freemium{background:rgba(59,180,255,0.08);color:var(--cyan);border:1px solid rgba(59,180,255,0.2);}
 .pr-paid{background:rgba(255,77,109,0.08);color:var(--red);border:1px solid rgba(255,77,109,0.2);}
-.vote-btn{display:flex;align-items:center;gap:4px;background:transparent;border:1px solid var(--border);border-radius:6px;padding:4px 9px;cursor:pointer;font-size:12px;color:var(--text2);font-family:var(--mono);transition:all 0.2s;}
-.vote-btn:hover{border-color:var(--green);color:var(--green);}
-.vote-btn.voted{border-color:var(--green);color:var(--green);background:rgba(0,217,126,0.06);}
-
-/* LIST MODE */
-.tools-grid.list-mode .tool-card{display:grid;grid-template-columns:80px 1fr;align-items:center;}
-.tools-grid.list-mode .tc-thumb{width:80px;height:80px;flex-shrink:0;font-size:26px;border-right:1px solid var(--border);}
-.tools-grid.list-mode .tc-rank{top:5px;left:5px;font-size:10px;}
+.vote-btn{display:flex;align-items:center;gap:4px;background:transparent;border:1px solid var(--border);border-radius:6px;padding:4px 8px;cursor:pointer;font-size:12px;color:var(--text2);font-family:var(--mono);transition:all 0.2s;}
+.vote-btn:hover,.vote-btn.voted{border-color:var(--green);color:var(--green);background:rgba(0,217,126,0.06);}
+/* list mode */
+.tools-grid.list-mode .tool-card{display:grid;grid-template-columns:100px 1fr;}
+.tools-grid.list-mode .tc-img-wrap{width:100px;height:100%;min-height:90px;border-right:1px solid var(--border);}
 
 /* SIDEBAR RIGHT */
-.sidebar-right{display:flex;flex-direction:column;gap:12px;position:sticky;top:78px;}
+.sidebar-right{display:flex;flex-direction:column;gap:12px;position:sticky;top:70px;}
 .sb-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden;}
-.sb-hdr{padding:11px 13px;border-bottom:1px solid var(--border);font-family:var(--hud);font-size:12px;color:var(--text);letter-spacing:0.5px;display:flex;align-items:center;justify-content:space-between;}
-.sb-link{font-size:11px;color:var(--cyan);text-decoration:none;font-family:var(--mono);}
+.sb-hdr{padding:11px 13px;border-bottom:1px solid var(--border);font-family:var(--hud);font-size:11px;color:var(--text);letter-spacing:0.5px;display:flex;align-items:center;justify-content:space-between;}
+.sb-lnk{font-size:11px;color:var(--cyan);text-decoration:none;font-family:var(--mono);}
 .sb-body{padding:11px 13px;}
-.sb-ad{background:linear-gradient(135deg,var(--bg3),var(--bg2));border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center;position:relative;overflow:hidden;}
-.sb-ad::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),var(--purple));}
-.sb-ad-badge{display:inline-block;background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.15);color:var(--yellow);font-size:10px;padding:2px 6px;border-radius:3px;font-family:var(--mono);margin-bottom:7px;}
-.sb-ad-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:3px;}
-.sb-ad-sub{font-size:12px;color:var(--text2);margin-bottom:10px;line-height:1.5;}
-.sb-ad-btn{display:block;padding:8px;border-radius:7px;font-size:12px;font-weight:700;text-decoration:none;text-align:center;transition:opacity 0.2s;}
-.sb-ad-btn:hover{opacity:0.85;}
-.tr-item{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid rgba(30,45,66,0.4);text-decoration:none;}
+.tr-item{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid rgba(30,45,66,0.4);text-decoration:none;}
 .tr-item:last-child{border-bottom:none;}
-.tr-rank{font-family:var(--hud);font-size:11px;color:var(--text3);width:18px;text-align:center;flex-shrink:0;}
-.tr-ico{width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
+.tr-rank{font-family:var(--hud);font-size:10px;color:var(--text3);width:16px;flex-shrink:0;}
+.tr-ico{font-size:13px;flex-shrink:0;}
 .tr-inf{flex:1;min-width:0;}
 .tr-nm{font-size:12px;font-weight:600;color:var(--text);}
-.tr-cat{font-family:var(--mono);font-size:10px;color:var(--text3);text-transform:uppercase;}
-.tr-votes{font-family:var(--mono);font-size:11px;color:var(--green);}
-
-/* PRICES WIDGET */
-.pw-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid rgba(30,45,66,0.4);font-size:13px;}
+.tr-cat{font-family:var(--mono);font-size:9px;color:var(--text3);text-transform:uppercase;}
+.tr-votes{font-family:var(--mono);font-size:11px;color:var(--green);flex-shrink:0;}
+.sb-ad{background:linear-gradient(135deg,var(--bg3),var(--bg2));border:1px solid var(--border);border-radius:10px;padding:13px;text-align:center;position:relative;overflow:hidden;}
+.sb-ad::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),var(--purple));}
+.sb-ad-badge{display:inline-block;background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.15);color:var(--yellow);font-size:9px;padding:2px 6px;border-radius:3px;font-family:var(--mono);margin-bottom:7px;}
+.sb-ad-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px;}
+.sb-ad-sub{font-size:11px;color:var(--text2);margin-bottom:9px;line-height:1.4;}
+.sb-ad-btn{display:block;padding:7px;border-radius:6px;font-size:11px;font-weight:700;text-decoration:none;text-align:center;}
+.pw-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid rgba(30,45,66,0.4);font-size:12px;}
 .pw-row:last-child{border-bottom:none;}
-.pw-val{font-family:var(--mono);font-weight:700;color:var(--green);}
+.pw-val{font-family:var(--mono);font-weight:700;color:var(--green);font-size:11px;}
 
-/* AD PLANS */
-.ad-plans-section{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin-bottom:20px;}
+/* AD PLANS SECTION */
+.ad-plans{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:20px;position:relative;overflow:hidden;}
+.ad-plans::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--purple),var(--cyan),var(--green));}
 .ap-title{font-family:var(--hud);font-size:14px;color:var(--text);margin-bottom:4px;letter-spacing:0.5px;}
-.ap-sub{font-size:13px;color:var(--text2);margin-bottom:16px;}
+.ap-sub{font-size:13px;color:var(--text2);margin-bottom:16px;line-height:1.5;}
 .ap-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
-.aplan{border:1px solid var(--border);border-radius:8px;padding:14px;text-align:center;transition:border-color 0.2s;}
-.aplan:hover{border-color:rgba(168,85,247,0.25);}
+.aplan{border:1px solid var(--border);border-radius:9px;padding:16px;text-align:center;transition:border-color 0.2s,transform 0.2s;position:relative;}
+.aplan:hover{border-color:rgba(168,85,247,0.3);transform:translateY(-2px);}
 .aplan.popular{border-color:var(--purple);background:rgba(168,85,247,0.03);}
+.aplan-popular-badge{position:absolute;top:-9px;left:50%;transform:translateX(-50%);background:var(--purple);color:#fff;font-size:9px;font-weight:700;padding:2px 9px;border-radius:100px;font-family:var(--mono);white-space:nowrap;}
 .aplan-name{font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:1px;font-family:var(--mono);margin-bottom:5px;}
-.aplan-price{font-family:var(--hud);font-size:22px;font-weight:900;color:var(--purple);margin-bottom:2px;}
-.aplan-period{font-size:11px;color:var(--text3);font-family:var(--mono);margin-bottom:10px;}
-.aplan-feats{font-size:11px;color:var(--text2);line-height:1.7;margin-bottom:12px;}
-.btn-aplan{background:var(--purple);color:#fff;border:none;padding:8px;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer;width:100%;font-family:var(--sans);transition:opacity 0.2s;}
+.aplan-price{font-family:var(--hud);font-size:24px;font-weight:900;color:var(--purple);margin-bottom:2px;}
+.aplan-price span{font-size:11px;color:var(--text3);}
+.aplan-period{font-size:10px;color:var(--text3);font-family:var(--mono);margin-bottom:6px;}
+.aplan-slot{display:inline-block;background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.2);color:var(--yellow);font-size:9px;padding:2px 6px;border-radius:3px;font-family:var(--mono);margin-bottom:9px;}
+.aplan-feats{font-size:11px;color:var(--text2);line-height:1.7;margin-bottom:12px;text-align:left;}
+.aplan-feats li{list-style:none;padding:1px 0;}
+.aplan-feats li::before{content:'✅ ';font-size:10px;}
+.btn-aplan{display:block;background:var(--purple);color:#fff;border:none;padding:10px;border-radius:7px;font-size:13px;font-weight:700;cursor:pointer;width:100%;font-family:var(--sans);text-decoration:none;text-align:center;transition:opacity 0.2s;}
 .btn-aplan:hover{opacity:0.85;}
+.aplan-note{font-family:var(--mono);font-size:9px;color:var(--text3);margin-top:6px;}
 
-/* SUBMIT SECTION — now at the BOTTOM */
-.submit-section{background:linear-gradient(135deg,rgba(168,85,247,0.06),rgba(59,180,255,0.04));border:1px solid var(--border2);border-radius:12px;padding:24px;margin-top:24px;position:relative;overflow:hidden;}
+/* POST-PAYMENT FORM */
+.post-pay-wrap{display:none;background:rgba(0,217,126,0.04);border:1px solid rgba(0,217,126,0.15);border-radius:10px;padding:16px;margin-top:14px;}
+.post-pay-title{font-family:var(--hud);font-size:12px;color:var(--green);margin-bottom:12px;letter-spacing:0.5px;}
+.post-pay-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+
+/* SUBMIT SECTION */
+.submit-section{background:linear-gradient(135deg,rgba(168,85,247,0.05),rgba(59,180,255,0.03));border:1px solid var(--border2);border-radius:12px;padding:22px;margin-top:20px;position:relative;overflow:hidden;}
 .submit-section::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--purple),var(--cyan),var(--green));}
-.sub-title{font-family:var(--hud);font-size:17px;color:var(--text);margin-bottom:5px;letter-spacing:0.5px;}
-.sub-sub{font-size:13px;color:var(--text2);margin-bottom:20px;line-height:1.6;}
+.sub-title{font-family:var(--hud);font-size:16px;color:var(--text);margin-bottom:4px;letter-spacing:0.5px;}
+.sub-sub{font-size:13px;color:var(--text2);margin-bottom:18px;line-height:1.5;}
 .sub-form{display:grid;grid-template-columns:1fr 1fr;gap:11px;}
 .full{grid-column:1/-1;}
-.form-group{display:flex;flex-direction:column;gap:4px;}
-.form-label{font-size:12px;font-weight:600;color:var(--text2);font-family:var(--mono);}
-.form-input,.form-textarea,.form-select{background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:10px 13px;font-size:14px;color:var(--text);outline:none;font-family:var(--sans);transition:border-color 0.2s;width:100%;}
-.form-input:focus,.form-textarea:focus,.form-select:focus{border-color:var(--purple);}
-.form-input::placeholder,.form-textarea::placeholder{color:var(--text3);}
-.form-textarea{resize:vertical;min-height:75px;}
-.form-select option{background:var(--bg2);}
-.tier-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;grid-column:1/-1;}
-.tier-opt{border:2px solid var(--border);border-radius:8px;padding:12px;cursor:pointer;transition:all 0.2s;text-align:center;position:relative;}
+.fg{display:flex;flex-direction:column;gap:4px;}
+.fl{font-size:12px;font-weight:600;color:var(--text2);font-family:var(--mono);}
+.fi{background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:9px 13px;font-size:14px;color:var(--text);outline:none;font-family:var(--sans);transition:border-color 0.2s;width:100%;}
+.fi:focus{border-color:var(--purple);}
+.fi::placeholder{color:var(--text3);}
+textarea.fi{resize:vertical;min-height:70px;}
+select.fi option{background:var(--bg2);}
+/* Image upload */
+.img-upload{border:2px dashed var(--border);border-radius:8px;padding:18px;text-align:center;cursor:pointer;transition:border-color 0.2s;position:relative;background:var(--bg3);}
+.img-upload:hover{border-color:var(--purple);}
+.img-upload input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;}
+.img-upload-icon{font-size:24px;margin-bottom:5px;}
+.img-upload-txt{font-size:12px;color:var(--text2);}
+.img-preview{width:100%;height:110px;object-fit:cover;border-radius:6px;margin-top:8px;display:none;}
+/* Tier select */
+.tier-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.tier-opt{border:2px solid var(--border);border-radius:8px;padding:11px;cursor:pointer;transition:all 0.2s;text-align:center;position:relative;}
 .tier-opt:hover{border-color:rgba(168,85,247,0.3);}
 .tier-opt.active{border-color:var(--purple);background:rgba(168,85,247,0.04);}
 .tier-opt input{position:absolute;opacity:0;width:0;height:0;}
-.tier-name{font-weight:700;font-size:13px;color:var(--text);margin-bottom:3px;}
-.tier-price{font-family:var(--hud);font-size:18px;color:var(--purple);margin-bottom:3px;}
-.tier-price span{font-size:11px;color:var(--text3);}
-.tier-features{font-size:11px;color:var(--text2);line-height:1.5;font-family:var(--mono);}
-.tier-popular::before{content:'POPULAR';position:absolute;top:-9px;left:50%;transform:translateX(-50%);background:var(--purple);color:#fff;font-size:9px;font-weight:700;padding:2px 9px;border-radius:100px;font-family:var(--mono);letter-spacing:0.5px;white-space:nowrap;}
-.scam-notice{display:flex;gap:9px;background:rgba(251,191,36,0.04);border:1px solid rgba(251,191,36,0.12);border-radius:7px;padding:11px;font-size:12px;color:var(--text2);font-family:var(--mono);line-height:1.6;grid-column:1/-1;}
-.btn-submit-form{grid-column:1/-1;background:linear-gradient(135deg,var(--purple),var(--cyan));color:#000;border:none;padding:13px;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;font-family:var(--sans);transition:opacity 0.2s;}
-.btn-submit-form:hover{opacity:0.88;}
-.success-box{display:none;background:rgba(0,217,126,0.06);border:1px solid rgba(0,217,126,0.2);border-radius:8px;padding:16px;text-align:center;font-size:14px;color:var(--green);grid-column:1/-1;}
+.tier-name{font-weight:700;font-size:12px;color:var(--text);margin-bottom:2px;}
+.tier-price{font-family:var(--hud);font-size:16px;color:var(--purple);margin-bottom:2px;}
+.tier-price span{font-size:10px;color:var(--text3);}
+.tier-feats{font-size:10px;color:var(--text2);line-height:1.5;font-family:var(--mono);}
+.tier-pop{position:absolute;top:-8px;left:50%;transform:translateX(-50%);background:var(--purple);color:#fff;font-size:8px;font-weight:700;padding:2px 8px;border-radius:100px;font-family:var(--mono);white-space:nowrap;}
+.scam-notice{display:flex;gap:8px;background:rgba(251,191,36,0.04);border:1px solid rgba(251,191,36,0.12);border-radius:7px;padding:10px;font-size:11px;color:var(--text2);font-family:var(--mono);line-height:1.6;}
+.btn-submit{background:linear-gradient(135deg,var(--purple),var(--cyan));color:#000;border:none;padding:12px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--sans);width:100%;transition:opacity 0.2s;}
+.btn-submit:hover{opacity:0.88;}
+.success-box{display:none;background:rgba(0,217,126,0.06);border:1px solid rgba(0,217,126,0.2);border-radius:8px;padding:14px;text-align:center;font-size:13px;color:var(--green);}
 
 /* CAT BGs */
 .cat-image{background:linear-gradient(135deg,#1a0a2e,#2d1b69);}
@@ -255,142 +261,102 @@ select.dd{background:var(--bg3);border:1px solid var(--border);border-radius:7px
 .cat-design{background:linear-gradient(135deg,#280014,#500028);}
 .cat-marketing{background:linear-gradient(135deg,#1a0a00,#2e1800);}
 
+/* TOAST */
+#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--bg3);border:1px solid rgba(168,85,247,0.3);color:var(--purple);font-family:var(--mono);font-size:12px;padding:9px 18px;border-radius:8px;z-index:9999;opacity:0;transition:opacity 0.2s;pointer-events:none;white-space:nowrap;max-width:90vw;text-align:center;}
+
+/* SUCCESS MODAL */
+.pay-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:9000;align-items:center;justify-content:center;padding:20px;}
+.pay-modal.open{display:flex;}
+.pay-modal-box{background:var(--bg2);border:1px solid var(--border2);border-radius:12px;padding:28px;max-width:440px;width:100%;text-align:center;position:relative;}
+.pay-modal-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--green),var(--cyan));border-radius:12px 12px 0 0;}
+
 /* FOOTER */
-footer{border-top:1px solid var(--border);padding:20px 24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-top:28px;}
-.foot-logo{font-family:var(--hud);font-size:12px;color:var(--cyan);letter-spacing:1px;}
-footer p{font-size:12px;color:var(--text3);font-family:var(--mono);}
-.foot-links{display:flex;gap:14px;flex-wrap:wrap;}
-footer a{color:var(--text3);text-decoration:none;font-size:12px;font-family:var(--mono);transition:color 0.2s;}
+footer{border-top:1px solid var(--border);padding:18px 24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-top:24px;}
+.foot-logo{font-family:var(--hud);font-size:11px;color:var(--cyan);letter-spacing:1px;}
+footer p{font-size:11px;color:var(--text3);font-family:var(--mono);}
+.foot-links{display:flex;gap:12px;flex-wrap:wrap;}
+footer a{color:var(--text3);text-decoration:none;font-size:11px;font-family:var(--mono);transition:color 0.2s;}
 footer a:hover{color:var(--cyan);}
 
-#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--bg3);border:1px solid rgba(168,85,247,0.3);color:var(--purple);font-family:var(--mono);font-size:13px;padding:10px 20px;border-radius:8px;z-index:9999;opacity:0;transition:opacity 0.2s;pointer-events:none;white-space:nowrap;}
-
 /* ══ RESPONSIVE ══ */
-@media(max-width:1200px){
-  .paid-slots-grid{grid-template-columns:repeat(3,1fr);}
-  .layout{grid-template-columns:160px 1fr;}
-  .sidebar-right{display:none;}
-}
-@media(max-width:900px){
-  .paid-slots-grid{grid-template-columns:repeat(2,1fr);}
-  .layout{grid-template-columns:1fr;}
-  .sidebar-left{display:none;}
-  .mob-cats{display:flex;}
-  .ap-grid{grid-template-columns:1fr 1fr;}
-}
-@media(max-width:768px){
-  .nav-inner{padding:0 14px;gap:8px;}
-  .nav-links{display:none;}
-  .mob-nav{display:flex;}
-  .paid-slots-section{padding:14px 16px;}
-  .paid-slots-grid{grid-template-columns:repeat(2,1fr);}
-  .hero{padding:28px 16px 20px;}
-  .main{padding:16px;}
-  .tools-grid{grid-template-columns:repeat(auto-fill,minmax(200px,1fr));}
-  .sub-form{grid-template-columns:1fr;}
-  .full{grid-column:1;}
-  .tier-grid{grid-template-columns:1fr;}
-  .tier-popular::before{display:none;}
-  .ap-grid{grid-template-columns:1fr;}
-  footer{flex-direction:column;text-align:center;}
-  .sub-form .full,.scam-notice,.btn-submit-form,.success-box{grid-column:1;}
-}
-@media(max-width:480px){
-  .paid-slots-grid{grid-template-columns:1fr 1fr;}
-  .paid-slot{min-height:140px;}
-  .hero h1{font-size:22px;}
-  .hero-btns{flex-direction:column;align-items:center;}
-  .btn-primary,.btn-outline{width:100%;justify-content:center;}
-  .tools-grid{grid-template-columns:1fr;}
-  .toolbar{flex-direction:column;align-items:flex-start;}
-}
+@media(max-width:1200px){.slots-grid{grid-template-columns:repeat(3,1fr);}.layout{grid-template-columns:160px 1fr;}.sidebar-right{display:none;}}
+@media(max-width:900px){.slots-grid{grid-template-columns:repeat(2,1fr);}.layout{grid-template-columns:1fr;}.sidebar-left{display:none;}.mob-cats{display:flex;}.ap-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:768px){.nav-inner{padding:0 14px;}.nav-links{display:none;}.mob-nav{display:flex;}.slots-wrap{padding:12px 16px;}.main{padding:14px 16px;}.sub-form{grid-template-columns:1fr;}.full,.scam-notice,.btn-submit,.success-box{grid-column:1;}.tier-grid{grid-template-columns:1fr;}.ap-grid{grid-template-columns:1fr;}.post-pay-grid{grid-template-columns:1fr;}.hero{padding:22px 16px 16px;}footer{flex-direction:column;text-align:center;}}
+@media(max-width:480px){.slots-grid{grid-template-columns:1fr 1fr;}.hero h1{font-size:18px;}.hero-btns{flex-direction:column;align-items:stretch;}.btn-hero,.btn-hero-out{text-align:center;}.tools-grid{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
 <div id="toast"></div>
 
+<!-- PAYMENT SUCCESS MODAL -->
+<div class="pay-modal" id="pay-modal">
+  <div class="pay-modal-box">
+    <div style="font-size:40px;margin-bottom:10px">🎉</div>
+    <div style="font-family:var(--hud);font-size:16px;color:var(--text);margin-bottom:8px">Payment Successful!</div>
+    <div style="font-size:13px;color:var(--text2);margin-bottom:18px;line-height:1.6">Your ad slot is now live. Fill in your details below and click Activate. A confirmation email will be sent.</div>
+    <button onclick="document.getElementById('pay-modal').classList.remove('open')" style="background:var(--cyan);color:#000;border:none;padding:10px 22px;border-radius:7px;font-size:13px;font-weight:700;cursor:pointer;">Fill My Ad Details →</button>
+  </div>
+</div>
+
 <!-- NAV -->
 <nav>
   <div class="nav-inner">
-    <!-- FIX: Logo → home -->
     <a href="/" class="nav-logo">🐙 AI<span>RANKS</span>.LIVE</a>
     <div class="nav-search-wrap">
       <span class="sico">⌕</span>
       <input class="nav-search" id="search-input" type="text" placeholder="Search AI tools..." oninput="renderTools()">
     </div>
     <div class="nav-links">
-      <!-- FIX: Home link added -->
       <a href="/" class="nav-link">🏠 Home</a>
       <a href="/compare" class="nav-link">📊 Models</a>
       <a href="/tools" class="nav-link active">🛠 Tools</a>
       <a href="/blog" class="nav-link">📰 Blog</a>
       <a href="/index" class="nav-link">⚡ API</a>
-      <a href="#submit" class="btn-submit-nav">+ Submit Tool</a>
+      <button class="btn-nav" onclick="document.getElementById('submit-section').scrollIntoView({behavior:'smooth'})">+ Submit Tool</button>
     </div>
   </div>
 </nav>
-
-<!-- MOBILE NAV -->
 <div class="mob-nav">
-  <a href="/">🏠 Home</a>
-  <a href="/compare">📊 Models</a>
-  <a href="/tools" class="active">🛠 Tools</a>
-  <a href="/blog">📰 Blog</a>
-  <a href="/index">⚡ API</a>
-  <a href="#submit">+ Submit</a>
+  <a href="/">🏠 Home</a><a href="/compare">📊 Models</a><a href="/tools" class="active">🛠 Tools</a><a href="/blog">📰 Blog</a><a href="/index">⚡ API</a>
 </div>
 
 <!-- HERO -->
 <div class="hero">
   <div class="hero-grid"></div>
   <h1>AI Tools <span class="hl">Rankings</span></h1>
-  <p>Discover, vote and rank the best AI tools. Community-driven rankings. Free to list.</p>
+  <p>Discover, vote and rank the best AI tools. Community-driven. Free to list.</p>
   <div class="hero-btns">
-    <a href="#submit" class="btn-primary">🚀 Submit Your Tool Free</a>
-    <a href="/compare" class="btn-outline">📊 Model Prices →</a>
+    <button class="btn-hero" onclick="document.getElementById('submit-section').scrollIntoView({behavior:'smooth'})">🚀 Submit Your Tool Free</button>
+    <a href="/compare" class="btn-hero-out">📊 Model Prices →</a>
   </div>
   <div class="hero-stats">
-    <div><div class="hstat-num" id="hs-cnt">500+</div><div class="hstat-lbl">Tools Listed</div></div>
+    <div><div class="hstat-num" id="hs-cnt">—</div><div class="hstat-lbl">Tools Listed</div></div>
     <div><div class="hstat-num">12</div><div class="hstat-lbl">Categories</div></div>
-    <div><div class="hstat-num">Free</div><div class="hstat-lbl">Basic Listing</div></div>
-    <div><div class="hstat-num">24h</div><div class="hstat-lbl">Review Time</div></div>
+    <div><div class="hstat-num" id="hs-free">6</div><div class="hstat-lbl">Ad Slots Free</div></div>
   </div>
 </div>
 
-<!-- ── FIX 4: TOP 6 PAID AD SLOTS — Priority placement, buy button on empty ── -->
-<div class="paid-slots-section">
-  <div class="paid-slots-header">
-    <div class="paid-slots-title">⭐ FEATURED SPOTS <span style="font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:0px;font-weight:400">— top 6 paid positions</span></div>
-    <div class="paid-slots-sub">Slots 1–6 are premium ad placements · <a href="#advertise" style="color:var(--purple);text-decoration:none">from $29/week →</a></div>
+<!-- TOP 6 PAID AD SLOTS -->
+<div class="slots-wrap">
+  <div class="slots-hdr">
+    <div class="slots-title">⭐ FEATURED AD SLOTS <span style="font-family:var(--mono);font-size:9px;color:var(--text3);font-weight:400">— priority positions 1–6</span></div>
+    <div class="slots-sub"><a href="#advertise" style="color:var(--purple);text-decoration:none;font-family:var(--mono);font-size:10px" onclick="document.getElementById('advertise').scrollIntoView({behavior:'smooth'});return false">Buy a slot from $29 →</a></div>
   </div>
-  <div class="paid-slots-grid" id="paid-slots-grid"><!-- JS renders --></div>
+  <div class="slots-grid" id="paid-slots-grid"></div>
 </div>
 
-<!-- SPOTLIGHT CAROUSEL -->
+<!-- SPOTLIGHT -->
 <div class="spotlight">
-  <div class="spot-label">🔄 SPOTLIGHT CAROUSEL — Featured Tools</div>
-  <div class="spot-track" id="spot-track"><!-- JS --></div>
+  <div class="spot-lbl">🌟 Spotlight — Featured Tools</div>
+  <div class="spot-track" id="spot-track"></div>
 </div>
 
 <!-- TICKER -->
-<div class="tools-ticker">
-  <div class="tt" id="tt-track">
-    <span class="tti tti-g">🆕 Just listed: Runway Gen-4 — AI video generation</span>
-    <span class="tti tti-p">⭐ Trending: Cursor AI — 1,923 votes this week</span>
-    <span class="tti">📊 500+ tools across 12 categories</span>
-    <span class="tti tti-g">🆕 Sora by OpenAI — text to video</span>
-    <span class="tti tti-p">⭐ Midjourney v7 — 2,847 votes</span>
-    <span class="tti">🔥 Mistral Chat just listed — free to use</span>
-    <span class="tti tti-g">🆕 Just listed: Runway Gen-4 — AI video generation</span>
-    <span class="tti tti-p">⭐ Trending: Cursor AI — 1,923 votes this week</span>
-    <span class="tti">📊 500+ tools across 12 categories</span>
-    <span class="tti tti-g">🆕 Sora by OpenAI — text to video</span>
-    <span class="tti tti-p">⭐ Midjourney v7 — 2,847 votes</span>
-    <span class="tti">🔥 Mistral Chat just listed — free to use</span>
-  </div>
+<div class="ticker">
+  <div class="t-track" id="ticker-track"></div>
 </div>
 
-<!-- MOBILE CATEGORY PILLS -->
+<!-- MOBILE CATS -->
 <div class="mob-cats" id="mob-cats">
   <button class="mob-cat active" onclick="setCat('all',this)">🔥 All</button>
   <button class="mob-cat" onclick="setCat('image',this)">🎨 Image</button>
@@ -403,42 +369,92 @@ footer a:hover{color:var(--cyan);}
   <button class="mob-cat" onclick="setCat('new',this)">🆕 New</button>
 </div>
 
-<!-- MAIN -->
 <div class="main">
 
   <!-- AD PLANS -->
-  <div class="ad-plans-section" id="advertise">
-    <div class="ap-title">📣 Advertise Your AI Tool</div>
-    <div class="ap-sub">Get in front of developers and founders actively ranking AI tools. Pay once, auto-expires. No account needed.</div>
+  <div class="ad-plans" id="advertise">
+    <div class="ap-title">📣 Feature Your AI Tool — Buy an Ad Slot</div>
+    <div class="ap-sub">Instant placement in top 6 slots. Seen by 10K+ developers daily. One-time payment · auto-expires · confirmation email sent immediately.</div>
     <div class="ap-grid">
       <div class="aplan">
         <div class="aplan-name">Starter</div>
-        <div class="aplan-price">$29<span style="font-size:11px">/7d</span></div>
+        <div class="aplan-price">$29<span>/7 days</span></div>
         <div class="aplan-period">One-time · Auto-expires</div>
-        <div class="aplan-feats">Featured badge<br>Slot 4–6 placement<br>Ticker mention</div>
-        <button class="btn-aplan" onclick="startPay('Starter $29/7 days')">Get Slot 4–6</button>
+        <div class="aplan-slot">📍 Slots 4–6</div>
+        <ul class="aplan-feats">
+          <li>Slot 4, 5 or 6 placement</li>
+          <li>Featured badge on card</li>
+          <li>Spotlight carousel</li>
+          <li>Email confirmation + expiry alert</li>
+        </ul>
+        <a href="https://checkout.dodopayments.com/buy/pdt_0NeuDTWmUZGiP64pziSb4?quantity=1" target="_blank" class="btn-aplan" onclick="onPayClick('starter')" style="background:var(--cyan);color:#000">Buy Slot 4–6 — $29 →</a>
+        <div class="aplan-note">DodoPayments · Secure checkout</div>
       </div>
       <div class="aplan popular">
+        <div class="aplan-popular-badge">MOST POPULAR</div>
         <div class="aplan-name">Growth</div>
-        <div class="aplan-price">$79<span style="font-size:11px">/30d</span></div>
+        <div class="aplan-price">$79<span>/30 days</span></div>
         <div class="aplan-period">One-time · Auto-expires</div>
-        <div class="aplan-feats">Slot 2–3 placement<br>Spotlight carousel<br>Ticker + ann. bar</div>
-        <button class="btn-aplan" onclick="startPay('Growth $79/30 days')">Get Slot 2–3</button>
+        <div class="aplan-slot">📍 Slots 2–3</div>
+        <ul class="aplan-feats">
+          <li>Slot 2 or 3 placement</li>
+          <li>Spotlight carousel priority</li>
+          <li>Ticker + announcement bar</li>
+          <li>Email confirmation + expiry + renew link</li>
+        </ul>
+        <a href="https://checkout.dodopayments.com/buy/pdt_0NeuDc4euvgNHtJJynMUM?quantity=1" target="_blank" class="btn-aplan" onclick="onPayClick('growth')">Buy Slot 2–3 — $79 →</a>
+        <div class="aplan-note">DodoPayments · Secure checkout</div>
       </div>
       <div class="aplan">
         <div class="aplan-name">Premium</div>
-        <div class="aplan-price">$149<span style="font-size:11px">/30d</span></div>
+        <div class="aplan-price">$149<span>/30 days</span></div>
         <div class="aplan-period">One-time · Auto-expires</div>
-        <div class="aplan-feats">Slot 1 — top position<br>All pages hero<br>Newsletter mention</div>
-        <button class="btn-aplan" onclick="startPay('Premium $149/30 days')">Get Slot #1</button>
+        <div class="aplan-slot">📍 Slot #1 — Top Position</div>
+        <ul class="aplan-feats">
+          <li>Slot #1 — top of page</li>
+          <li>Homepage sidebar ad</li>
+          <li>All pages visibility</li>
+          <li>Newsletter mention + immediate review</li>
+        </ul>
+        <a href="https://checkout.dodopayments.com/buy/pdt_0NeuDicfvBmy8ws9vVtag?quantity=1" target="_blank" class="btn-aplan" onclick="onPayClick('premium')" style="background:linear-gradient(135deg,var(--purple),var(--cyan));color:#000">Buy Slot #1 — $149 →</a>
+        <div class="aplan-note">DodoPayments · Secure checkout</div>
       </div>
+    </div>
+
+    <!-- POST-PAYMENT FORM -->
+    <div class="post-pay-wrap" id="post-pay-wrap">
+      <div class="post-pay-title">✅ AFTER PAYMENT — Activate Your Ad Slot</div>
+      <div class="post-pay-grid">
+        <div class="fg"><label class="fl">Tool Name *</label><input class="fi" id="pp-name" placeholder="My AI Tool"></div>
+        <div class="fg"><label class="fl">Tool URL *</label><input class="fi" id="pp-url" type="url" placeholder="https://mytool.com"></div>
+        <div class="fg"><label class="fl">Emoji</label><input class="fi" id="pp-emoji" placeholder="🤖" maxlength="4"></div>
+        <div class="fg"><label class="fl">Short Description *</label><input class="fi" id="pp-desc" placeholder="What your tool does" maxlength="80"></div>
+        <div class="fg"><label class="fl">Your Email *</label><input class="fi" id="pp-email" type="email" placeholder="you@example.com"></div>
+        <div class="fg"><label class="fl">Plan Purchased *</label>
+          <select class="fi" id="pp-plan">
+            <option value="">Select plan...</option>
+            <option value="starter">Starter — $29 / 7 days (Slot 4–6)</option>
+            <option value="growth">Growth — $79 / 30 days (Slot 2–3)</option>
+            <option value="premium">Premium — $149 / 30 days (Slot #1)</option>
+          </select>
+        </div>
+        <div class="fg"><label class="fl">Brand Color (hex)</label><input class="fi" id="pp-color" placeholder="#a855f7"></div>
+        <div class="fg"><label class="fl">CTA Button Text</label><input class="fi" id="pp-cta" placeholder="Try Now →" maxlength="20"></div>
+        <div style="grid-column:1/-1">
+          <button class="btn-submit" onclick="activateAd()" style="background:var(--green);color:#000">🚀 Activate My Ad Slot →</button>
+        </div>
+        <div class="success-box full" id="pp-success" style="grid-column:1/-1"></div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:12px">
+      <button onclick="showPostPayForm()" style="background:transparent;border:1px solid var(--border);color:var(--text3);padding:7px 16px;border-radius:7px;font-size:12px;cursor:pointer;font-family:var(--mono)">Already paid? Fill your ad details here →</button>
     </div>
   </div>
 
   <div class="layout">
-    <!-- SIDEBAR LEFT (desktop) -->
+    <!-- SIDEBAR LEFT -->
     <div class="sidebar-left">
-      <div class="sb-section">
+      <div class="sb-sec">
         <div class="sb-ttl">Categories</div>
         <button class="cat-btn active" onclick="setCat('all',this)">🔥 All <span class="cat-count" id="cc-all">—</span></button>
         <button class="cat-btn" onclick="setCat('image',this)">🎨 Image <span class="cat-count" id="cc-image">—</span></button>
@@ -454,7 +470,7 @@ footer a:hover{color:var(--cyan);}
         <button class="cat-btn" onclick="setCat('marketing',this)">📢 Marketing <span class="cat-count" id="cc-marketing">—</span></button>
         <button class="cat-btn" onclick="setCat('new',this)">🆕 New <span class="cat-count" id="cc-new">—</span></button>
       </div>
-      <div class="sb-section">
+      <div class="sb-sec">
         <div class="sb-ttl">Pricing</div>
         <button class="cat-btn active" onclick="setPricing('',this)">All</button>
         <button class="cat-btn" onclick="setPricing('free',this)">🆓 Free</button>
@@ -463,10 +479,10 @@ footer a:hover{color:var(--cyan);}
       </div>
     </div>
 
-    <!-- CONTENT (tools list — NO submit form here anymore) -->
-    <div class="content">
+    <!-- TOOLS CONTENT -->
+    <div>
       <div class="toolbar">
-        <div class="tool-count" id="tool-count">Loading...</div>
+        <div class="tool-count-lbl" id="tool-count-lbl">Loading...</div>
         <div class="sort-row">
           <select class="dd" onchange="setSort(this.value)">
             <option value="votes">Most Voted</option>
@@ -481,108 +497,100 @@ footer a:hover{color:var(--cyan);}
         </div>
       </div>
       <div class="tools-grid" id="tools-grid"></div>
+
+      <!-- SUBMIT FORM AT BOTTOM -->
+      <div class="submit-section" id="submit-section">
+        <div class="sub-title">🚀 Submit Your AI Tool</div>
+        <div class="sub-sub">Goes live instantly after auto scam check. Free forever or choose a paid tier for top 6 slot placement.</div>
+        <div class="sub-form">
+          <div class="fg"><label class="fl">Tool Name *</label><input class="fi" id="f-name" type="text" placeholder="My AI Tool" maxlength="60"></div>
+          <div class="fg"><label class="fl">Website URL *</label><input class="fi" id="f-url" type="url" placeholder="https://mytool.com"></div>
+          <div class="fg"><label class="fl">Category *</label>
+            <select class="fi" id="f-cat">
+              <option value="">Select...</option>
+              <option value="image">🎨 Image AI</option><option value="video">🎬 Video AI</option>
+              <option value="coding">💻 Coding AI</option><option value="writing">✍️ Writing AI</option>
+              <option value="chat">💬 Chat AI</option><option value="audio">🎵 Audio</option>
+              <option value="research">🔬 Research</option><option value="productivity">⚡ Productivity</option>
+              <option value="data">📊 Data</option><option value="design">🖌️ Design</option><option value="marketing">📢 Marketing</option>
+            </select>
+          </div>
+          <div class="fg"><label class="fl">Pricing *</label>
+            <select class="fi" id="f-pricing">
+              <option value="">Select...</option>
+              <option value="free">Free</option><option value="freemium">Freemium</option><option value="paid">Paid</option>
+            </select>
+          </div>
+          <div class="fg full"><label class="fl">Short Description * (max 120 chars)</label><input class="fi" id="f-desc" type="text" placeholder="What does your tool do?" maxlength="120"></div>
+          <div class="fg full"><label class="fl">Full Description</label><textarea class="fi" id="f-full" placeholder="What makes it unique? Who is it for?"></textarea></div>
+          <div class="fg"><label class="fl">Your Email *</label><input class="fi" id="f-email" type="email" placeholder="founder@mytool.com"></div>
+          <div class="fg"><label class="fl">Emoji Icon</label><input class="fi" id="f-emoji" type="text" placeholder="🤖" maxlength="4"></div>
+
+          <!-- IMAGE UPLOAD -->
+          <div class="fg full">
+            <label class="fl">Tool Image / Screenshot *</label>
+            <div class="img-upload" id="img-upload-area">
+              <input type="file" id="f-img" accept="image/*" onchange="previewImg(this)">
+              <div id="upload-ph">
+                <div class="img-upload-icon">🖼️</div>
+                <div class="img-upload-txt">Click to upload image (JPG, PNG, WebP · max 2MB)<br><span style="font-size:10px;color:var(--text3)">Recommended: 400×200px</span></div>
+              </div>
+              <img id="img-preview" class="img-preview" alt="Preview">
+            </div>
+            <input class="fi" id="f-img-url" type="url" placeholder="Or paste image URL: https://..." style="margin-top:7px" oninput="previewImgUrl(this.value)">
+          </div>
+
+          <!-- LISTING TIER -->
+          <div class="fg full">
+            <label class="fl" style="margin-bottom:9px">Listing Option</label>
+            <div class="tier-grid">
+              <label class="tier-opt active" onclick="selTier('free',this)"><input type="radio" name="tier" value="free" checked>
+                <div class="tier-name">Free</div><div class="tier-price">$0<span>/always</span></div>
+                <div class="tier-feats">Basic listing · Auto-approved · Below paid slots</div>
+              </label>
+              <label class="tier-opt" style="position:relative" onclick="selTier('growth',this)">
+                <div class="tier-pop">POPULAR</div>
+                <input type="radio" name="tier" value="growth">
+                <div class="tier-name">Growth 30d</div><div class="tier-price">$79<span>/mo</span></div>
+                <div class="tier-feats">Slots 2–3 · Spotlight · 2h live</div>
+              </label>
+              <label class="tier-opt" onclick="selTier('premium',this)"><input type="radio" name="tier" value="premium">
+                <div class="tier-name">Premium</div><div class="tier-price">$149<span>/mo</span></div>
+                <div class="tier-feats">Slot #1 · All pages</div>
+              </label>
+            </div>
+          </div>
+
+          <div class="scam-notice full">🛡️ Auto scam filter: checks HTTPS domain, no crypto/MLM/adult content. Approved instantly if check passes. Paid listings refunded if auto-rejected.</div>
+          <div class="success-box full" id="f-success"></div>
+          <button class="btn-submit full" onclick="submitTool()">Submit Tool →</button>
+        </div>
+      </div>
     </div>
 
-    <!-- SIDEBAR RIGHT (desktop) -->
+    <!-- SIDEBAR RIGHT -->
     <div class="sidebar-right">
       <div class="sb-card">
         <div class="sb-hdr">🔥 Most Voted</div>
-        <div class="sb-body" id="trending-list"></div>
-      </div>
-      <div class="sb-ad">
-        <div class="sb-ad-badge">SPONSORED</div>
-        <div class="sb-ad-title">🔥 Mistral AI</div>
-        <div class="sb-ad-sub">Large 3 at $0.50/1M. Enterprise-grade at budget price.</div>
-        <a href="https://mistral.ai" target="_blank" class="sb-ad-btn" style="background:#ff6b00;color:#fff">Try Mistral →</a>
-      </div>
-      <div class="sb-card">
-        <div class="sb-hdr">📊 Live Model Prices <a href="/compare" class="sb-link">All →</a></div>
-        <div class="sb-body" id="prices-widget">Loading...</div>
+        <div class="sb-body" id="trending-sb"></div>
       </div>
       <div class="sb-ad">
         <div class="sb-ad-badge">ADVERTISE HERE</div>
         <div class="sb-ad-title">📣 Reach AI Builders</div>
-        <div class="sb-ad-sub">Your tool in front of developers comparing AI daily.</div>
-        <a href="#advertise" class="sb-ad-btn" style="background:linear-gradient(135deg,var(--purple),var(--cyan));color:#000">From $29 →</a>
+        <div class="sb-ad-sub">Your tool in front of 10K+ developers comparing AI daily.</div>
+        <a href="#advertise" class="sb-ad-btn" onclick="document.getElementById('advertise').scrollIntoView({behavior:'smooth'});return false" style="background:linear-gradient(135deg,var(--purple),var(--cyan));color:#000">From $29 →</a>
       </div>
-      <!-- Latest Blog in sidebar -->
       <div class="sb-card">
-        <div class="sb-hdr">📰 Latest Blog <a href="/blog" class="sb-link">All →</a></div>
+        <div class="sb-hdr">📊 Live Model Prices <a href="/compare" class="sb-lnk">All →</a></div>
+        <div class="sb-body" id="prices-sb">Loading...</div>
+      </div>
+      <div class="sb-card">
+        <div class="sb-hdr">📰 Latest Blog <a href="/blog" class="sb-lnk">All →</a></div>
         <div class="sb-body">
-          <a href="/blog#article-1" style="display:block;padding:8px 0;border-bottom:1px solid rgba(30,45,66,0.4);text-decoration:none">
-            <div style="font-size:12px;font-weight:600;color:var(--text);line-height:1.4;margin-bottom:2px">Mistral Large 3: Game Changer?</div>
-            <div style="font-family:var(--mono);font-size:10px;color:var(--text3)">May 4 · 5 min</div>
-          </a>
-          <a href="/blog#article-4" style="display:block;padding:8px 0;text-decoration:none">
-            <div style="font-size:12px;font-weight:600;color:var(--text);line-height:1.4;margin-bottom:2px">Top AI Coding Tools 2026</div>
-            <div style="font-family:var(--mono);font-size:10px;color:var(--text3)">May 1 · 8 min</div>
-          </a>
+          <a href="/blog#article-1" style="display:block;padding:6px 0;border-bottom:1px solid rgba(30,45,66,0.4);text-decoration:none"><div style="font-size:12px;font-weight:600;color:var(--text);line-height:1.3;margin-bottom:2px">Mistral Large 3: Game Changer?</div><div style="font-family:var(--mono);font-size:10px;color:var(--text3)">May 4 · 5 min</div></a>
+          <a href="/blog#article-4" style="display:block;padding:6px 0;text-decoration:none"><div style="font-size:12px;font-weight:600;color:var(--text);line-height:1.3;margin-bottom:2px">Top AI Coding Tools 2026</div><div style="font-family:var(--mono);font-size:10px;color:var(--text3)">May 1 · 8 min</div></a>
         </div>
       </div>
-    </div>
-  </div>
-
-  <!-- ── FIX 4: SUBMIT FORM MOVED TO BOTTOM ── -->
-  <div class="submit-section" id="submit">
-    <div class="sub-title">🚀 Submit Your AI Tool</div>
-    <div class="sub-sub">List free in under 2 minutes. Reviewed in 24h. Want priority? Choose a paid tier below and skip the queue — your tool appears in the top 6 slots instantly.</div>
-    <div class="sub-form" id="sub-form">
-      <div class="form-group"><label class="form-label">Tool Name *</label><input class="form-input" id="f-name" type="text" placeholder="My AI Tool" maxlength="60"></div>
-      <div class="form-group"><label class="form-label">Website URL *</label><input class="form-input" id="f-url" type="url" placeholder="https://mytool.com"></div>
-      <div class="form-group"><label class="form-label">Category *</label>
-        <select class="form-select" id="f-cat">
-          <option value="">Select...</option>
-          <option value="image">🎨 Image AI</option>
-          <option value="video">🎬 Video AI</option>
-          <option value="coding">💻 Coding AI</option>
-          <option value="writing">✍️ Writing AI</option>
-          <option value="chat">💬 Chat AI</option>
-          <option value="audio">🎵 Audio & Voice</option>
-          <option value="research">🔬 Research</option>
-          <option value="productivity">⚡ Productivity</option>
-          <option value="data">📊 Data & Analytics</option>
-          <option value="design">🖌️ Design</option>
-          <option value="marketing">📢 Marketing</option>
-        </select>
-      </div>
-      <div class="form-group"><label class="form-label">Pricing *</label>
-        <select class="form-select" id="f-pricing">
-          <option value="">Select...</option>
-          <option value="free">Free</option>
-          <option value="freemium">Freemium</option>
-          <option value="paid">Paid</option>
-        </select>
-      </div>
-      <div class="form-group full"><label class="form-label">Short Description * (max 120 chars)</label><input class="form-input" id="f-desc" type="text" placeholder="What does your tool do in one sentence?" maxlength="120"></div>
-      <div class="form-group full"><label class="form-label">Full Description</label><textarea class="form-textarea" id="f-full" placeholder="What makes it unique? Who is it for?"></textarea></div>
-      <div class="form-group"><label class="form-label">Your Email *</label><input class="form-input" id="f-email" type="email" placeholder="founder@mytool.com"></div>
-      <div class="form-group"><label class="form-label">Emoji Icon</label><input class="form-input" id="f-emoji" type="text" placeholder="🤖" maxlength="4"></div>
-
-      <!-- Tiers -->
-      <div class="form-group full">
-        <label class="form-label" style="margin-bottom:10px">Launch Option — paid tiers get top 6 slot placement</label>
-        <div class="tier-grid">
-          <label class="tier-opt active" onclick="selTier(this)"><input type="radio" name="tier" value="free" checked>
-            <div class="tier-name">Free Listing</div>
-            <div class="tier-price">$0<span>/forever</span></div>
-            <div class="tier-features">Basic listing · 24h review · Below paid slots</div>
-          </label>
-          <label class="tier-opt tier-popular" onclick="selTier(this)"><input type="radio" name="tier" value="featured">
-            <div class="tier-name">Featured 30d</div>
-            <div class="tier-price">$79<span>/month</span></div>
-            <div class="tier-features">Slots 2–3 · Spotlight carousel · Priority review · 2h live</div>
-          </label>
-          <label class="tier-opt" onclick="selTier(this)"><input type="radio" name="tier" value="premium">
-            <div class="tier-name">Premium</div>
-            <div class="tier-price">$149<span>/month</span></div>
-            <div class="tier-features">Slot #1 — top of page · All pages · Immediate review</div>
-          </label>
-        </div>
-      </div>
-
-      <div class="scam-notice">🛡️ Auto-scam filter checks: valid domain, HTTPS, no redirect farms, no crypto scams. Paid listings refunded if rejected.</div>
-      <div class="success-box" id="success-box">✅ Submitted! We'll review within 24h and email you when live. 🐙</div>
-      <button class="btn-submit-form" onclick="submitTool()">Submit Tool →</button>
     </div>
   </div>
 </div>
@@ -591,138 +599,120 @@ footer a:hover{color:var(--cyan);}
   <div class="foot-logo">🐙 AIMODELRANKS.LIVE</div>
   <p>AI Tools Directory + Model Price Rankings</p>
   <div class="foot-links">
-    <a href="/">Home</a>
-    <a href="/compare">Model Prices</a>
-    <a href="/blog">Blog</a>
-    <a href="/index">API Docs</a>
-    <a href="https://rapidapi.com/zakmediaai/api/octopus-ai-model-intel" target="_blank">RapidAPI</a>
+    <a href="/">Home</a><a href="/compare">Model Prices</a><a href="/blog">Blog</a>
+    <a href="/index">API Docs</a><a href="https://rapidapi.com/zakmediaai/api/octopus-ai-model-intel" target="_blank">RapidAPI</a>
   </div>
 </footer>
 
 <script>
-const API='https://ai-model-intel.zak-media-ai.workers.dev';
-const SITE_URL='https://www.aimodelranks.live/';
-
 // Referral map
-const REFERRAL_MAP={
-  'Cursor':'https://cursor.sh?ref=octopusai',
-  'ElevenLabs':'https://elevenlabs.io?ref=octopusai',
-  'Midjourney':'https://midjourney.com',
-  'GitHub Copilot':'https://github.com/features/copilot',
+window.REFERRAL_MAP = {
+  'Cursor':'https://cursor.sh?ref=aimodelranks',
+  'ElevenLabs':'https://elevenlabs.io?ref=aimodelranks',
+  'Midjourney':'https://midjourney.com?ref=aimodelranks',
+  'GitHub Copilot':'https://github.com/features/copilot?ref=aimodelranks',
 };
-function getURL(tool){return REFERRAL_MAP[tool.name]||tool.url;}
 
-// ── TOP 6 PAID AD SLOTS CONFIG ──
-// First 3 slots are filled (paid sponsors). Slots 4-6 are empty (for sale).
-const PAID_SLOTS=[
-  {
-    slot:1,filled:true,tier:'premium',
-    name:'Mistral AI',emoji:'🔥',
-    desc:'New Large 3 model — 60% cheaper than GPT-4o. Enterprise-grade.',
-    url:'https://mistral.ai',
-    color:'#ff6b00',cta:'Try Mistral →',ctaBg:'#ff6b00',ctaColor:'#fff'
-  },
-  {
-    slot:2,filled:true,tier:'growth',
-    name:'Google Gemini',emoji:'✨',
-    desc:'1M+ context window. Best price-to-performance ratio.',
-    url:'https://ai.google.dev',
-    color:'#4285f4',cta:'Try Gemini →',ctaBg:'#4285f4',ctaColor:'#fff'
-  },
-  {
-    slot:3,filled:true,tier:'growth',
-    name:'Anthropic Claude',emoji:'🤖',
-    desc:'Most capable AI for analysis, writing and complex reasoning.',
-    url:'https://claude.ai',
-    color:'#d05030',cta:'Try Claude →',ctaBg:'#d05030',ctaColor:'#fff'
-  },
-  {slot:4,filled:false},
-  {slot:5,filled:false},
-  {slot:6,filled:false},
-];
+const API = 'https://ai-model-intel.zak-media-ai.workers.dev';
+const catBgs = {image:'cat-image',video:'cat-video',coding:'cat-coding',writing:'cat-writing',chat:'cat-chat',audio:'cat-audio',research:'cat-research',productivity:'cat-productivity',data:'cat-data',design:'cat-design',marketing:'cat-marketing'};
+const voted = new Set(JSON.parse(localStorage.getItem(OCTOPUS_CONFIG.VOTED_KEY)||'[]'));
+let toolCat='all', toolPricing='', toolSort='votes', toolView='grid', selectedTier='free';
+let imgData = '';
 
-const catBgs={image:'cat-image',video:'cat-video',coding:'cat-coding',writing:'cat-writing',chat:'cat-chat',audio:'cat-audio',research:'cat-research',productivity:'cat-productivity',data:'cat-data',design:'cat-design',marketing:'cat-marketing'};
+function saveVoted(){ localStorage.setItem(OCTOPUS_CONFIG.VOTED_KEY, JSON.stringify([...voted])); }
+function pricingCls(p){ return p==='free'?'pr-free':p==='freemium'?'pr-freemium':'pr-paid'; }
+function pricingLbl(p){ return p==='free'?'Free':p==='freemium'?'Freemium':'Paid'; }
+function fmtExpiry(ts){ const d=Math.ceil((ts-Date.now())/86400000); return d<=0?'Expired':d===1?'Expires tomorrow':`Expires in ${d}d`; }
 
-let TOOLS=[
-  {id:1,name:'Midjourney',emoji:'🎨',cat:'image',pricing:'paid',tagline:'AI image generation creating stunning artistic visuals from text prompts.',votes:2847,featured:true,url:'https://midjourney.com',daysAgo:120},
-  {id:2,name:'ChatGPT',emoji:'💬',cat:'chat',pricing:'freemium',tagline:"OpenAI's conversational AI for writing, coding, analysis and more.",votes:5230,featured:true,url:'https://chat.openai.com',daysAgo:180},
-  {id:3,name:'Cursor',emoji:'💻',cat:'coding',pricing:'freemium',tagline:'AI-powered code editor that understands your entire codebase.',votes:1923,featured:true,url:'https://cursor.sh',daysAgo:60},
-  {id:4,name:'Claude',emoji:'🤖',cat:'chat',pricing:'freemium',tagline:"Anthropic's AI assistant for analysis, writing and complex reasoning.",votes:1654,featured:false,url:'https://claude.ai',daysAgo:90},
-  {id:5,name:'Runway Gen-4',emoji:'🎬',cat:'video',pricing:'freemium',tagline:'State-of-the-art AI video generation from text or image prompts.',votes:1432,featured:true,url:'https://runwayml.com',daysAgo:7},
-  {id:6,name:'Gemini',emoji:'✨',cat:'chat',pricing:'freemium',tagline:"Google's multimodal AI with 1M token context window.",votes:1287,featured:false,url:'https://gemini.google.com',daysAgo:95},
-  {id:7,name:'GitHub Copilot',emoji:'🐙',cat:'coding',pricing:'paid',tagline:'AI pair programmer suggesting code completions in real time.',votes:3102,featured:false,url:'https://github.com/features/copilot',daysAgo:200},
-  {id:8,name:'ElevenLabs',emoji:'🎵',cat:'audio',pricing:'freemium',tagline:'Ultra-realistic AI voice cloning and text-to-speech synthesis.',votes:1876,featured:false,url:'https://elevenlabs.io',daysAgo:150},
-  {id:9,name:'Perplexity AI',emoji:'🔬',cat:'research',pricing:'freemium',tagline:'AI-powered search engine that cites its sources.',votes:2341,featured:false,url:'https://perplexity.ai',daysAgo:130},
-  {id:10,name:'Notion AI',emoji:'⚡',cat:'productivity',pricing:'freemium',tagline:'AI writing and thinking assistant built into Notion workspace.',votes:1543,featured:false,url:'https://notion.so',daysAgo:110},
-  {id:11,name:'DALL-E 3',emoji:'🖼️',cat:'image',pricing:'freemium',tagline:'OpenAI image generation, accessible via ChatGPT Plus.',votes:987,featured:false,url:'https://openai.com/dall-e-3',daysAgo:140},
-  {id:12,name:'Stable Diffusion',emoji:'🎭',cat:'image',pricing:'free',tagline:'Open source image generation you can run locally or in cloud.',votes:2654,featured:false,url:'https://stability.ai',daysAgo:220},
-  {id:13,name:'Jasper AI',emoji:'✍️',cat:'writing',pricing:'paid',tagline:'AI marketing copy and content writing for brands.',votes:876,featured:false,url:'https://jasper.ai',daysAgo:160},
-  {id:14,name:'Figma AI',emoji:'🖌️',cat:'design',pricing:'freemium',tagline:'AI design features built into the most popular design tool.',votes:1234,featured:false,url:'https://figma.com',daysAgo:45},
-  {id:15,name:'Sora',emoji:'🎥',cat:'video',pricing:'freemium',tagline:"OpenAI's text-to-video AI — create videos from descriptions.",votes:2109,featured:true,url:'https://openai.com/sora',daysAgo:5},
-  {id:16,name:'Devin AI',emoji:'🤖',cat:'coding',pricing:'paid',tagline:'The first fully autonomous AI software engineer.',votes:1432,featured:false,url:'https://devin.ai',daysAgo:30},
-  {id:17,name:'Mistral Chat',emoji:'🔥',cat:'chat',pricing:'free',tagline:"Chat interface for Mistral's powerful open-weight models.",votes:654,featured:false,url:'https://chat.mistral.ai',daysAgo:6},
-  {id:18,name:'DeepSeek Chat',emoji:'🔍',cat:'chat',pricing:'free',tagline:'Ultra-cheap AI chat — $0.14/1M tokens via API.',votes:1876,featured:false,url:'https://chat.deepseek.com',daysAgo:4},
-  {id:19,name:'HubSpot AI',emoji:'📢',cat:'marketing',pricing:'freemium',tagline:'AI marketing automation and content generation.',votes:543,featured:false,url:'https://hubspot.com',daysAgo:70},
-  {id:20,name:'Tableau AI',emoji:'📊',cat:'data',pricing:'paid',tagline:'AI-powered data visualization and analytics platform.',votes:432,featured:false,url:'https://tableau.com',daysAgo:90},
-];
-
-let toolCat='all',toolPricing='',toolSort='votes',toolView='grid',selectedTier='free';
-const voted=new Set();
-
-// ── RENDER PAID SLOTS ──
+// ── PAID SLOTS RENDER ──
 function renderPaidSlots(){
-  document.getElementById('paid-slots-grid').innerHTML=PAID_SLOTS.map(s=>{
-    if(s.filled){
-      const tierLabel=s.tier==='premium'?'PREMIUM':'GROWTH';
-      const tierColor=s.tier==='premium'?'var(--purple)':'var(--cyan)';
-      return`<a href="${s.url}" target="_blank" class="paid-slot filled" style="text-decoration:none">
-        <div class="slot-top-bar" style="background:${s.color}"></div>
-        <div class="slot-body">
-          <div class="slot-badge">${tierLabel} · SLOT ${s.slot}</div>
-          <div class="slot-ico">${s.emoji}</div>
-          <div class="slot-name">${s.name}</div>
-          <div class="slot-desc">${s.desc}</div>
-          <div class="slot-cta" style="background:${s.ctaBg};color:${s.ctaColor}">${s.cta}</div>
+  const slots = AdsManager.load();
+  const slotPrice = {1:'$149/mo',2:'$79/mo',3:'$79/mo',4:'$29/wk',5:'$29/wk',6:'$29/wk'};
+  const slotPlan  = {1:'premium',2:'growth',3:'growth',4:'starter',5:'starter',6:'starter'};
+  const payLinks  = OCTOPUS_CONFIG.DODO;
+
+  document.getElementById('paid-slots-grid').innerHTML = slots.map(s => {
+    if(s.filled && s.plan !== 'default'){
+      return `<a href="${s.url}?ref=aimodelranks" target="_blank" class="slot-card filled">
+        <div class="sc-bar" style="background:${s.color}"></div>
+        <div class="sc-body">
+          <div class="sc-badge">${s.plan.toUpperCase()} · SLOT ${s.slot}</div>
+          <div class="sc-ico">${s.emoji}</div>
+          <div class="sc-name">${s.name}</div>
+          <div class="sc-desc">${s.desc}</div>
+          <div class="sc-cta" style="background:${s.color};color:#fff">${s.cta||'Visit →'}</div>
+          <div class="sc-expiry">${s.expiresAt?fmtExpiry(s.expiresAt):''}</div>
+        </div>
+      </a>`;
+    } else if(s.filled && s.plan === 'default'){
+      return `<a href="${s.url}?ref=aimodelranks" target="_blank" class="slot-card filled">
+        <div class="sc-bar" style="background:${s.color}"></div>
+        <div class="sc-body">
+          <div class="sc-badge">DEFAULT · SLOT ${s.slot}</div>
+          <div class="sc-ico">${s.emoji}</div>
+          <div class="sc-name">${s.name}</div>
+          <div class="sc-desc">${s.desc}</div>
+          <div class="sc-cta" style="background:${s.color};color:#fff">Visit →</div>
         </div>
       </a>`;
     } else {
-      const slotPrice=s.slot===4?'$29/wk':s.slot===5?'$29/wk':'$79/mo';
-      const slotTier=s.slot<=3?'PREMIUM':'STARTER';
-      return`<a href="#advertise" class="paid-slot empty" onclick="showToast('→ See ad plans below ↓')">
+      const plan = slotPlan[s.slot] || 'starter';
+      const price = slotPrice[s.slot] || '$29/wk';
+      return `<a href="${payLinks[plan]}" target="_blank" class="slot-card empty" onclick="onPayClick('${plan}')">
         <div class="empty-ico">📣</div>
-        <div class="empty-txt">SLOT ${s.slot} — AVAILABLE</div>
-        <div class="empty-price">${slotPrice}</div>
-        <div class="empty-buy">Buy This Slot →</div>
+        <div class="empty-label">SLOT ${s.slot} — OPEN</div>
+        <div class="empty-price">${price}</div>
+        <div class="empty-btn">Buy This Slot →</div>
       </a>`;
     }
   }).join('');
+
+  // Update free slots count
+  const stats = AdsManager.stats();
+  document.getElementById('hs-free').textContent = stats.slotsFree;
 }
 
-function selTier(el){
-  selectedTier=el.querySelector('input').value;
-  document.querySelectorAll('.tier-opt').forEach(t=>t.classList.remove('active'));
-  el.classList.add('active');
+// ── SPOTLIGHT ──
+function renderSpotlight(){
+  const tools = ToolsDB.load().filter(t=>t.featured && t.approved!==false);
+  const html = tools.map(t=>{
+    const url = buildRefURL(t);
+    return `<a href="${url}" target="_blank" class="scard">
+      <span class="scard-badge">FEATURED</span>
+      ${t.image?`<img class="scard-img" src="${t.image}" alt="${t.name}" loading="lazy" onerror="this.style.display='none'">`:''}
+      <div class="scard-body">
+        <div class="sp-ico">${t.emoji||'🤖'}</div>
+        <div class="sp-name">${t.name}</div>
+        <div class="sp-cat">${t.cat}</div>
+        <div class="sp-desc">${(t.tagline||'').slice(0,60)}</div>
+      </div>
+    </a>`;
+  }).join('');
+  const track = document.getElementById('spot-track');
+  track.innerHTML = html + html;
 }
 
+// ── TICKER ──
+function renderTicker(){
+  const top = ToolsDB.load().filter(t=>t.approved!==false).sort((a,b)=>b.votes-a.votes).slice(0,8);
+  const items = [
+    ...top.map(t=>`<span class="ti ti-p">⭐ ${t.name} — ▲${(t.votes||0).toLocaleString()} votes</span>`),
+    `<span class="ti ti-g">🆕 Submit your tool free — goes live instantly</span>`,
+    `<span class="ti">📊 210+ AI models ranked at /compare</span>`,
+  ];
+  document.getElementById('ticker-track').innerHTML = [...items,...items].join('');
+}
+
+// ── TOOLS FILTER + RENDER ──
 function setCat(cat,el){
   toolCat=cat;
-  // sync both desktop and mobile buttons
   document.querySelectorAll('.cat-btn,.mob-cat').forEach(b=>b.classList.remove('active'));
-  document.querySelectorAll('.cat-btn,.mob-cat').forEach(b=>{
-    if(b.textContent.trim().toLowerCase().includes(cat)||cat==='all'&&b.textContent.includes('All')){
-      // just remove active from all and add to clicked
-    }
-  });
+  document.querySelectorAll('.cat-btn,.mob-cat').forEach(b=>{ if(b.onclick && b.onclick.toString().includes(`'${cat}'`)) b.classList.add('active'); });
   el.classList.add('active');
   renderTools();
 }
-function setPricing(p,el){
-  toolPricing=p;
-  document.querySelectorAll('.sidebar-left .sb-section:last-child .cat-btn').forEach(b=>b.classList.remove('active'));
-  el.classList.add('active');
-  renderTools();
-}
-function setSort(s){toolSort=s;renderTools();}
+function setPricing(p,el){ toolPricing=p; document.querySelectorAll('.sidebar-left .sb-sec:last-child .cat-btn').forEach(b=>b.classList.remove('active')); el.classList.add('active'); renderTools(); }
+function setSort(s){ toolSort=s; renderTools(); }
 function setView(v){
   toolView=v;
   document.getElementById('vt-grid').classList.toggle('active',v==='grid');
@@ -733,97 +723,112 @@ function setView(v){
 
 function getFiltered(){
   const q=(document.getElementById('search-input').value||'').toLowerCase();
-  let t=[...TOOLS];
-  if(toolCat==='new')t=t.filter(x=>x.daysAgo<=7);
-  else if(toolCat!=='all')t=t.filter(x=>x.cat===toolCat);
-  if(toolPricing)t=t.filter(x=>x.pricing===toolPricing);
-  if(q)t=t.filter(x=>x.name.toLowerCase().includes(q)||x.tagline.toLowerCase().includes(q)||x.cat.toLowerCase().includes(q));
-  if(toolSort==='votes')t.sort((a,b)=>b.votes-a.votes);
-  else if(toolSort==='new')t.sort((a,b)=>a.daysAgo-b.daysAgo);
-  else if(toolSort==='name')t.sort((a,b)=>a.name.localeCompare(b.name));
-  else if(toolSort==='featured')t.sort((a,b)=>(b.featured?1:0)-(a.featured?1:0));
+  let t=ToolsDB.load().filter(x=>x.approved!==false);
+  if(toolCat==='new') t=t.filter(x=>(x.daysAgo||0)<=7);
+  else if(toolCat!=='all') t=t.filter(x=>x.cat===toolCat);
+  if(toolPricing) t=t.filter(x=>x.pricing===toolPricing);
+  if(q) t=t.filter(x=>x.name.toLowerCase().includes(q)||x.tagline.toLowerCase().includes(q)||x.cat.includes(q));
+  if(toolSort==='votes') t.sort((a,b)=>b.votes-a.votes);
+  else if(toolSort==='new') t.sort((a,b)=>(a.daysAgo||0)-(b.daysAgo||0));
+  else if(toolSort==='name') t.sort((a,b)=>a.name.localeCompare(b.name));
+  else if(toolSort==='featured') t.sort((a,b)=>(b.featured?1:0)-(a.featured?1:0));
   return t;
 }
 
 function updateCounts(){
-  const counts={all:TOOLS.length,new:TOOLS.filter(t=>t.daysAgo<=7).length};
-  ['image','video','coding','writing','chat','audio','research','productivity','data','design','marketing'].forEach(c=>{counts[c]=TOOLS.filter(t=>t.cat===c).length;});
-  Object.keys(counts).forEach(k=>{const el=document.getElementById('cc-'+k);if(el)el.textContent=counts[k];});
-  document.getElementById('hs-cnt').textContent=TOOLS.length+'+';
+  const all=ToolsDB.load().filter(x=>x.approved!==false);
+  const cats=['image','video','coding','writing','chat','audio','research','productivity','data','design','marketing'];
+  const el=id=>document.getElementById(id);
+  if(el('cc-all')) el('cc-all').textContent=all.length;
+  cats.forEach(c=>{ const e=el('cc-'+c); if(e) e.textContent=all.filter(t=>t.cat===c).length; });
+  const ne=el('cc-new'); if(ne) ne.textContent=all.filter(t=>(t.daysAgo||0)<=7).length;
+  const hc=el('hs-cnt'); if(hc) hc.textContent=all.length;
 }
-
-function pricingCls(p){return p==='free'?'pr-free':p==='freemium'?'pr-freemium':'pr-paid';}
-function pricingLbl(p){return p==='free'?'Free':p==='freemium'?'Freemium':'Paid';}
 
 function renderTools(){
   const tools=getFiltered();
   updateCounts();
-  document.getElementById('tool-count').textContent=tools.length+' AI tool'+(tools.length!==1?'s':'');
+  document.getElementById('tool-count-lbl').textContent=tools.length+' AI tool'+(tools.length!==1?'s':'');
   const grid=document.getElementById('tools-grid');
-  if(!tools.length){grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:48px;color:var(--text3);font-family:var(--mono)">No tools found for this filter.</div>';return;}
+  if(!tools.length){ grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text3);font-family:var(--mono)">No tools found.</div>'; return; }
   grid.innerHTML=tools.map((t,i)=>{
-    const rank=i+1;
-    const url=getURL(t);
+    const url=buildRefURL(t);
     const catCls=catBgs[t.cat]||'cat-chat';
     const isVoted=voted.has(t.id);
-    return`<a href="${url}" target="_blank" rel="noopener" class="tool-card${t.featured?' featured':''}">
-      <div class="tc-thumb ${catCls}">
-        <span class="tc-rank">#${rank}</span>
-        ${t.emoji}
+    const imgHtml=t.image
+      ?`<img class="tc-img" src="${t.image}" alt="${t.name}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
+      :'';
+    const fallback=`<div class="tc-img-fallback ${catCls}" style="${t.image?'display:none':''};">${t.emoji||'🤖'}</div>`;
+    return `<a href="${url}" target="_blank" rel="noopener" class="tool-card${t.featured?' featured':''}">
+      <div class="tc-img-wrap">
+        <span class="tc-rank">#${i+1}</span>
+        ${imgHtml}${fallback}
       </div>
       <div class="tc-body">
-        <div class="tc-name">${t.name}${t.daysAgo<=7?'<span class="new-badge">NEW</span>':''}</div>
+        <div class="tc-name">${t.name}${(t.daysAgo||0)<=7?'<span class="new-badge">NEW</span>':''}</div>
         <div class="tc-tagline">${t.tagline}</div>
         <div class="tc-meta">
           <span class="tc-pricing ${pricingCls(t.pricing)}">${pricingLbl(t.pricing)}</span>
-          <button class="vote-btn${isVoted?' voted':''}" onclick="event.preventDefault();vote(${t.id},this)">
-            ▲ <span class="vc">${t.votes.toLocaleString()}</span>
-          </button>
+          <button class="vote-btn${isVoted?' voted':''}" onclick="event.preventDefault();event.stopPropagation();vote(${t.id},this)">▲ <span class="vc">${(t.votes||0).toLocaleString()}</span></button>
         </div>
       </div>
     </a>`;
   }).join('');
 
-  // Trending sidebar
-  const top5=[...TOOLS].sort((a,b)=>b.votes-a.votes).slice(0,5);
-  const tList=document.getElementById('trending-list');
-  if(tList)tList.innerHTML=top5.map((t,i)=>`
-    <a class="tr-item" href="${getURL(t)}" target="_blank">
+  // trending sidebar
+  const top5=[...tools].sort((a,b)=>b.votes-a.votes).slice(0,5);
+  const tsb=document.getElementById('trending-sb');
+  if(tsb) tsb.innerHTML=top5.map((t,i)=>`
+    <a class="tr-item" href="${buildRefURL(t)}" target="_blank">
       <div class="tr-rank">${i+1}</div>
-      <div class="tr-ico ${catBgs[t.cat]||''}">${t.emoji}</div>
+      <div class="tr-ico">${t.emoji||'🤖'}</div>
       <div class="tr-inf"><div class="tr-nm">${t.name}</div><div class="tr-cat">${t.cat}</div></div>
-      <div class="tr-votes">▲${t.votes.toLocaleString()}</div>
+      <div class="tr-votes">▲${(t.votes||0).toLocaleString()}</div>
     </a>`).join('');
 }
 
 function vote(id,btn){
-  if(voted.has(id)){showToast('Already voted!');return;}
-  const t=TOOLS.find(x=>x.id===id);if(!t)return;
-  t.votes++;voted.add(id);
+  if(voted.has(id)){ showToast('Already voted!'); return; }
+  ToolsDB.vote(id); voted.add(id); saveVoted();
   btn.classList.add('voted');
-  btn.querySelector('.vc').textContent=t.votes.toLocaleString();
-  showToast('Voted for '+t.name+' ✅');
+  btn.querySelector('.vc').textContent=(parseInt(btn.querySelector('.vc').textContent.replace(/,/g,''))+1).toLocaleString();
+  showToast('✅ Voted!');
 }
 
-function buildSpotlight(){
-  const featured=TOOLS.filter(t=>t.featured);
-  const html=featured.map(t=>`
-    <a href="${getURL(t)}" target="_blank" class="scard">
-      <span class="sp-badge">FEATURED</span>
-      <div class="sp-ico">${t.emoji}</div>
-      <div class="sp-name">${t.name}</div>
-      <div class="sp-cat">${t.cat}</div>
-      <div class="sp-desc">${t.tagline.slice(0,65)}…</div>
-      <span class="sp-tag">${pricingLbl(t.pricing)}</span>
-    </a>`).join('');
-  document.getElementById('spot-track').innerHTML=html+html;
+// ── IMAGE UPLOAD ──
+function previewImg(input){
+  const file=input.files[0]; if(!file) return;
+  if(file.size>2*1024*1024){ showToast('Image too large — max 2MB'); return; }
+  const reader=new FileReader();
+  reader.onload=e=>{
+    imgData=e.target.result;
+    document.getElementById('img-preview').src=imgData;
+    document.getElementById('img-preview').style.display='block';
+    document.getElementById('upload-ph').style.display='none';
+  };
+  reader.readAsDataURL(file);
 }
 
-function scamCheck(name,url,desc){
-  const bad=['free money','earn $','crypto','nft','mlm','guaranteed income','click to win'];
-  return bad.some(s=>(name+url+desc).toLowerCase().includes(s));
+function previewImgUrl(url){
+  if(!url) return;
+  imgData=url;
+  document.getElementById('img-preview').src=url;
+  document.getElementById('img-preview').style.display='block';
+  document.getElementById('upload-ph').style.display='none';
 }
 
+// ── TIER SELECTION ──
+function selTier(tier,el){
+  selectedTier=tier;
+  document.querySelectorAll('.tier-opt').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  if(tier!=='free'){
+    document.getElementById('advertise').scrollIntoView({behavior:'smooth'});
+    showToast('👆 Complete payment above, then fill your ad details');
+  }
+}
+
+// ── SUBMIT TOOL (FREE) ──
 function submitTool(){
   const name=document.getElementById('f-name').value.trim();
   const url=document.getElementById('f-url').value.trim();
@@ -832,50 +837,147 @@ function submitTool(){
   const desc=document.getElementById('f-desc').value.trim();
   const email=document.getElementById('f-email').value.trim();
   const emoji=document.getElementById('f-emoji').value.trim()||'🤖';
-  if(!name||!url||!cat||!pricing||!desc||!email){showToast('Please fill all required fields');return;}
-  if(!url.startsWith('http')){showToast('URL must start with https://');return;}
-  if(!email.includes('@')){showToast('Invalid email');return;}
-  if(scamCheck(name,url,desc)){showToast('⚠️ Submission flagged by scam filter');return;}
+  const image=imgData||document.getElementById('f-img-url').value.trim()||`https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=400&h=200&fit=crop`;
+
+  if(!name||!url||!cat||!pricing||!desc||!email){ showToast('Please fill all required fields'); return; }
+  if(!email.includes('@')){ showToast('Invalid email'); return; }
+
   if(selectedTier!=='free'){
-    const prices={featured:'$79',premium:'$149'};
-    showToast('Redirecting to payment ('+prices[selectedTier]+')...');
-    setTimeout(()=>showSuccess(name),1500);return;
+    // Go to Dodo checkout
+    const payUrl=OCTOPUS_CONFIG.DODO[selectedTier]||OCTOPUS_CONFIG.DODO.starter;
+    // Pre-fill post-pay form
+    document.getElementById('pp-name').value=name;
+    document.getElementById('pp-url').value=url;
+    document.getElementById('pp-email').value=email;
+    document.getElementById('pp-emoji').value=emoji;
+    document.getElementById('pp-desc').value=desc;
+    document.getElementById('pp-plan').value=selectedTier;
+    localStorage.setItem('octopus_pending_submit', JSON.stringify({name,url,email,emoji,desc,image,plan:selectedTier}));
+    window.open(payUrl,'_blank');
+    showPostPayForm();
+    showToast('Complete payment in the new tab, then fill ad details above ↑');
+    return;
   }
-  TOOLS.unshift({id:TOOLS.length+1,name,emoji,cat,pricing,tagline:desc,votes:0,featured:false,url,daysAgo:0});
-  showSuccess(name);renderTools();
+
+  // Free listing — auto-approve immediately
+  const result=ToolsDB.add({name,emoji,cat,pricing,tagline:desc,url,image,featured:false,email});
+  if(result.error){ showToast('⚠️ '+result.error); return; }
+
+  const successEl=document.getElementById('f-success');
+  successEl.style.display='block';
+  successEl.textContent=`✅ "${name}" is now live! Appears immediately in the tools list.`;
+  document.querySelector('.btn-submit').style.display='none';
+  renderTools(); renderSpotlight(); renderTicker(); updateCounts();
+  showToast('🎉 "'+name+'" is now live!');
 }
 
-function showSuccess(name){
-  document.getElementById('success-box').style.display='block';
-  document.getElementById('success-box').textContent='✅ "'+name+'" submitted! Review within 24h. 🐙';
-  document.querySelector('.btn-submit-form').style.display='none';
+// ── PAYMENT FLOW ──
+function onPayClick(plan){
+  localStorage.setItem('octopus_last_pay', JSON.stringify({plan, ts:Date.now()}));
+  setTimeout(showPostPayForm, 1000);
 }
 
-function startPay(plan){
-  showToast('Starting checkout: '+plan+' — contact us at ads@aimodelranks.live');
+function showPostPayForm(){
+  const wrap=document.getElementById('post-pay-wrap');
+  wrap.style.display='block';
+  wrap.scrollIntoView({behavior:'smooth'});
+  // Pre-fill from pending if exists
+  try{
+    const pending=JSON.parse(localStorage.getItem('octopus_pending_submit')||'null');
+    if(pending){
+      if(pending.name) document.getElementById('pp-name').value=pending.name;
+      if(pending.url) document.getElementById('pp-url').value=pending.url;
+      if(pending.email) document.getElementById('pp-email').value=pending.email;
+      if(pending.emoji) document.getElementById('pp-emoji').value=pending.emoji;
+      if(pending.desc) document.getElementById('pp-desc').value=pending.desc;
+      if(pending.plan) document.getElementById('pp-plan').value=pending.plan;
+    }
+    const lastPay=JSON.parse(localStorage.getItem('octopus_last_pay')||'null');
+    if(lastPay && lastPay.plan) document.getElementById('pp-plan').value=lastPay.plan;
+  }catch(e){}
 }
 
+function activateAd(){
+  const name=document.getElementById('pp-name').value.trim();
+  const url=document.getElementById('pp-url').value.trim();
+  const emoji=document.getElementById('pp-emoji').value.trim()||'🚀';
+  const desc=document.getElementById('pp-desc').value.trim();
+  const email=document.getElementById('pp-email').value.trim();
+  const plan=document.getElementById('pp-plan').value;
+  const color=document.getElementById('pp-color').value.trim()||'#a855f7';
+  const cta=document.getElementById('pp-cta').value.trim()||'Visit →';
+
+  if(!name||!url||!email||!plan){ showToast('Please fill all fields'); return; }
+  if(!url.startsWith('http')){ showToast('URL must start with https://'); return; }
+  if(!email.includes('@')){ showToast('Invalid email'); return; }
+
+  const freeSlot=AdsManager.freeSlotForPlan(plan);
+  if(freeSlot===null){ showToast(`All ${plan} slots filled — email admin@aimodelranks.live`); return; }
+
+  const ad=AdsManager.activateAd({plan,name,emoji,desc,url,color,cta,email});
+  if(!ad){ showToast('Could not activate slot — please contact admin'); return; }
+
+  AdsManager.sendConfirmation(ad);
+
+  // Also add to tools list
+  ToolsDB.add({name,emoji,cat:'chat',pricing:'freemium',tagline:desc,url,image:'',featured:plan==='premium',email});
+
+  const successEl=document.getElementById('pp-success');
+  successEl.style.display='block';
+  successEl.innerHTML=`✅ <strong>${name}</strong> is live in Slot ${ad.slot}! Confirmation sent to <strong>${email}</strong>. Expires: <strong>${new Date(ad.expiresAt).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</strong>.`;
+
+  localStorage.removeItem('octopus_pending_submit');
+  localStorage.removeItem('octopus_last_pay');
+
+  renderPaidSlots(); renderTools(); renderSpotlight();
+  showToast(`🎉 ${name} is now live in Slot ${ad.slot}!`);
+}
+
+// ── PRICES SIDEBAR ──
 async function loadPrices(){
   try{
     const r=await fetch(API+'/pricing',{mode:'cors'});
     const d=await r.json();
     const top=(d.pricing||[]).slice(0,4);
-    const pw=document.getElementById('prices-widget');
-    if(pw)pw.innerHTML=
-      top.map(m=>`<div class="pw-row"><span style="color:var(--text);font-weight:500;font-size:12px">${(m.model||'').slice(0,16)}</span><span class="pw-val">$${m.input_cost_per_mtok}/1M</span></div>`).join('')+
-      `<a href="/compare" style="display:block;text-align:center;margin-top:8px;font-family:var(--mono);font-size:11px;color:var(--cyan);text-decoration:none">View 200+ models →</a>`;
-  }catch(e){
-    const pw=document.getElementById('prices-widget');
-    if(pw)pw.innerHTML='<a href="/compare" style="color:var(--cyan);font-size:12px">View live prices →</a>';
-  }
+    const pw=document.getElementById('prices-sb');
+    if(pw) pw.innerHTML=top.map(m=>`<div class="pw-row"><span style="color:var(--text);font-weight:500;font-size:11px">${(m.model||'').slice(0,16)}</span><span class="pw-val">$${m.input_cost_per_mtok}/1M</span></div>`).join('')
+      +`<a href="/compare" style="display:block;text-align:center;margin-top:7px;font-family:var(--mono);font-size:10px;color:var(--cyan);text-decoration:none">View 200+ models →</a>`;
+  }catch(e){}
 }
 
-function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.opacity='1';clearTimeout(t._t);t._t=setTimeout(()=>t.style.opacity='0',2500);}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.opacity='1';clearTimeout(t._t);t._t=setTimeout(()=>t.style.opacity='0',3000);}
+
+// Check if returned from Dodo payment redirect
+function checkPaymentReturn(){
+  const params=new URLSearchParams(window.location.search);
+  if(params.get('success')==='1'||params.get('payment_success')==='true'){
+    const pending=JSON.parse(localStorage.getItem('octopus_pending_submit')||'null');
+    if(pending){
+      document.getElementById('pp-name').value=pending.name||'';
+      document.getElementById('pp-url').value=pending.url||'';
+      document.getElementById('pp-email').value=pending.email||'';
+      document.getElementById('pp-emoji').value=pending.emoji||'🚀';
+      document.getElementById('pp-desc').value=pending.desc||'';
+      document.getElementById('pp-plan').value=pending.plan||'growth';
+    }
+    history.replaceState({},'',window.location.pathname);
+    return true;
+  }
+  return false;
+}
+
+// Check if returned from payment
+if(checkPaymentReturn()){
+  document.getElementById('pay-modal').classList.add('open');
+  setTimeout(showPostPayForm, 500);
+}
 
 renderPaidSlots();
-buildSpotlight();
+renderSpotlight();
+renderTicker();
 renderTools();
 loadPrices();
+setInterval(()=>{renderPaidSlots();},60000); // re-check expiry every minute
 </script>
 </body>
 </html>
