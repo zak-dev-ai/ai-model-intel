@@ -639,7 +639,7 @@ function renderPaidSlots(){
         <div class="sc-bar" style="background:${s.color}"></div>
         <div class="sc-body">
           <div class="sc-badge">${s.plan.toUpperCase()} · SLOT ${s.slot}</div>
-          <div class="sc-ico"><img src="${s.image||''}" width="24" height="24" style="object-fit:contain;border-radius:4px" onerror="this.style.display='none'" loading="lazy"><span>${s.emoji}</span></div>
+          <div class="sc-ico"><img src="${s.image||''}" width="24" height="24" style="object-fit:contain;border-radius:4px" onerror="this.style.display='none'" loading="lazy"><span style="${s.image?"display:none":""}">${s.emoji}</span></div>
           <div class="sc-name">${s.name}</div>
           <div class="sc-desc">${s.desc}</div>
           <div class="sc-cta" style="background:${s.color};color:#fff">${s.cta||'Visit →'}</div>
@@ -651,7 +651,7 @@ function renderPaidSlots(){
         <div class="sc-bar" style="background:${s.color}"></div>
         <div class="sc-body">
           <div class="sc-badge">DEFAULT · SLOT ${s.slot}</div>
-          <div class="sc-ico"><img src="${s.image||''}" width="24" height="24" style="object-fit:contain;border-radius:4px" onerror="this.style.display='none'" loading="lazy"><span>${s.emoji}</span></div>
+          <div class="sc-ico"><img src="${s.image||''}" width="24" height="24" style="object-fit:contain;border-radius:4px" onerror="this.style.display='none'" loading="lazy"><span style="${s.image?"display:none":""}">${s.emoji}</span></div>
           <div class="sc-name">${s.name}</div>
           <div class="sc-desc">${s.desc}</div>
           <div class="sc-cta" style="background:${s.color};color:#fff">Visit →</div>
