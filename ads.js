@@ -36,27 +36,39 @@ window.OCTOPUS_CONFIG = {
 // ── Default seed ads (shown when no paid ads exist) ──────────────────
 const DEFAULT_ADS = [
   {
-    image: 'https://icons.duckduckgo.com/ip3/mistral.ai.ico', emoji: '🔥', color: '#ff6b00',
+    id: 'default-1', slot: 1, filled: true,
+    name: 'Mistral AI', desc: 'New Large 3 — $0.50/1M tokens. 60% cheaper than GPT-4o.',
+    url: 'https://mistral.ai', image: 'https://icons.duckduckgo.com/ip3/mistral.ai.ico', emoji: '🔥', color: '#ff6b00',
     type: 'spotlight', plan: 'default', active: true, expiresAt: null,
   },
   {
-    image: 'https://icons.duckduckgo.com/ip3/google.com.ico', emoji: '✨', color: '#4285f4',
+    id: 'default-2', slot: 2, filled: true,
+    name: 'Google Gemini', desc: '1M+ context window. Best price-to-performance.',
+    url: 'https://ai.google.dev', image: 'https://icons.duckduckgo.com/ip3/google.com.ico', emoji: '✨', color: '#4285f4',
     type: 'spotlight', plan: 'default', active: true, expiresAt: null,
   },
   {
-    image: 'https://icons.duckduckgo.com/ip3/anthropic.com.ico', emoji: '🤖', color: '#d05030',
+    id: 'default-3', slot: 3, filled: true,
+    name: 'Anthropic Claude', desc: '200K context. Best quality for complex reasoning.',
+    url: 'https://anthropic.com', image: 'https://icons.duckduckgo.com/ip3/anthropic.com.ico', emoji: '🤖', color: '#d05030',
     type: 'spotlight', plan: 'default', active: true, expiresAt: null,
   },
   {
-    image: 'https://icons.duckduckgo.com/ip3/deepseek.com.ico', emoji: '🔍', color: '#4f46e5',
+    id: 'default-4', slot: 4, filled: true,
+    name: 'DeepSeek', desc: 'Ultra-cheap AI chat — $0.14/1M tokens.',
+    url: 'https://chat.deepseek.com', image: 'https://icons.duckduckgo.com/ip3/deepseek.com.ico', emoji: '🔍', color: '#4f46e5',
     type: 'spotlight', plan: 'default', active: true, expiresAt: null,
   },
   {
-    image: 'https://icons.duckduckgo.com/ip3/meta.com.ico', emoji: '🦙', color: '#00d97e',
+    id: 'default-5', slot: 5, filled: true,
+    name: 'Llama AI', desc: 'Meta open-source LLM — free and powerful.',
+    url: 'https://llama.meta.com', image: 'https://icons.duckduckgo.com/ip3/meta.com.ico', emoji: '🦙', color: '#00d97e',
     type: 'spotlight', plan: 'default', active: true, expiresAt: null,
   },
   {
-    image: 'https://icons.duckduckgo.com/ip3/openai.com.ico', emoji: '🎥', color: '#a855f7',
+    id: 'default-6', slot: 6, filled: true,
+    name: 'Sora AI', desc: 'OpenAI text-to-video generation model.',
+    url: 'https://openai.com/sora', image: 'https://icons.duckduckgo.com/ip3/openai.com.ico', emoji: '🎥', color: '#a855f7',
     type: 'spotlight', plan: 'default', active: true, expiresAt: null,
   },
   // Sidebar defaults
