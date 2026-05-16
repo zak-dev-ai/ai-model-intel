@@ -232,6 +232,56 @@ window.AdsManager = {
     show();
     return setInterval(show, intervalMs);
   },
+
+  // Find free slot for plan (for post-pay form)
+  freeSlotForPlan(plan) {
+    const occupied = this.load().filter(a => a.plan !== 'default').map(a => a.slot);
+    const available = [1,2,3,4,5,6].filter(s => !occupied.includes(s));
+    if (available.length === 0) return null;
+    if (plan === 'premium') return available[0];
+    if (plan === 'growth') return available[Math.min(1, available.length-1)];
+    return available[Math.min(2, available.length-1)];
+  },
+
+  // Activate an ad slot (called from post-pay form)
+  activateAd(data) {
+    const durations = { starter: 7, growth: 30, premium: 30 };
+    const days = durations[data.plan] || 7;
+    const slot = this.freeSlotForPlan(data.plan);
+    if (!slot) return null;
+    const newAd = {
+      id: 'paid-' + Date.now(),
+      slot: slot,
+      filled: true,
+      name: data.name,
+      desc: data.desc,
+      url: data.url,
+      emoji: data.emoji || '🚀',
+      color: data.color || '#a855f7',
+      cta: data.cta || 'Visit →',
+      type: data.plan === 'premium' ? 'strip' : 'spotlight',
+      tier: data.plan,
+      plan: data.plan,
+      active: true,
+      expiresAt: Date.now() + (days * 86400000),
+      buyerEmail: data.email,
+      purchasedAt: new Date().toISOString(),
+    };
+    this.add(newAd);
+    return newAd;
+  },
+
+  // Send email confirmation (uses mailto fallback)
+  sendConfirmation(ad) {
+    const days = Math.ceil((ad.expiresAt - Date.now()) / 86400000);
+    const subj = encodeURIComponent(`Your ad is LIVE on aimodelranks.live — Slot ${ad.slot}`);
+    const body = encodeURIComponent(
+      `Hi there,\n\nYour ad for ${ad.name} is now live at:\nhttps://www.aimodelranks.live/tools\n\nSlot: #${ad.slot}\nPlan: ${ad.plan}\nExpires: ${new Date(ad.expiresAt).toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'})}\n${days} days remaining\n\nNeed changes? Reply to this email.\n\n— aimodelranks.live team`
+    );
+    if (ad.buyerEmail) {
+      window.open(`mailto:${ad.buyerEmail}?subject=${subj}&body=${body}`);
+    }
+  },
 };
 
 // ── Tools DB (shared across pages) ──────────────────────────────────
@@ -356,56 +406,3 @@ window.scamCheck = function(name, url, desc) {
   } catch(e) {}
 })();
 
-  // Find free slot for plan
-  freeSlotForPlan(plan) {
-    const occupied = this.load().filter(a => a.plan !== 'default').map(a => a.slot);
-    const available = [1,2,3,4,5,6].filter(s => !occupied.includes(s));
-    if (available.length === 0) return null;
-    // Return slot based on plan priority
-    if (plan === 'premium') return available[0]; // gets lowest available = best slot
-    if (plan === 'growth') return available[Math.min(1, available.length-1)];
-    return available[Math.min(2, available.length-1)];
-  },
-
-  // Activate an ad slot (called from post-pay form)
-  activateAd(data) {
-    const durations = { starter: 7, growth: 30, premium: 30 };
-    const days = durations[data.plan] || 7;
-    const slot = this.freeSlotForPlan(data.plan);
-    if (!slot) return null;
-    const newAd = {
-      id: 'paid-' + Date.now(),
-      slot: slot,
-      filled: true,
-      name: data.name,
-      desc: data.desc,
-      url: data.url,
-      emoji: data.emoji || '🚀',
-      color: data.color || '#a855f7',
-      cta: data.cta || 'Visit →',
-      type: data.plan === 'premium' ? 'strip' : 'spotlight',
-      tier: data.plan,
-      plan: data.plan,
-      active: true,
-      expiresAt: Date.now() + (days * 86400000),
-      buyerEmail: data.email,
-      purchasedAt: new Date().toISOString(),
-    };
-    this.add(newAd);
-    return newAd;
-  },
-
-  // Stub for sending email confirmation — uses mailto as fallback
-  sendConfirmation(ad) {
-    const days = Math.ceil((ad.expiresAt - Date.now()) / 86400000);
-    const subj = encodeURIComponent(`Your ad is LIVE on aimodelranks.live — Slot ${ad.slot}`);
-    const body = encodeURIComponent(
-      `Hi there,\n\nYour ad for ${ad.name} is now live at:\nhttps://www.aimodelranks.live/tools\n\nSlot: #${ad.slot}\nPlan: ${ad.plan}\nExpires: ${new Date(ad.expiresAt).toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'})}\n${days} days remaining\n\nNeed changes? Reply to this email.\n\n— aimodelranks.live team`
-    );
-    // In production this would use Resend/SendGrid. Fallback: open mail.
-    if (ad.buyerEmail) {
-      window.open(`mailto:${ad.buyerEmail}?subject=${subj}&body=${body}`);
-    }
-  },
-
-console.log('🐙 Octopus Ads System loaded — v2');
