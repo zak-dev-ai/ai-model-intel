@@ -77,15 +77,24 @@ nav{position:sticky;top:0;z-index:1000;background:rgba(7,9,15,0.97);backdrop-fil
 .empty-btn{background:rgba(168,85,247,0.1);border:1px solid rgba(168,85,247,0.25);color:var(--purple);font-size:9px;font-weight:700;padding:4px 8px;border-radius:4px;font-family:var(--mono);}
 
 /* SPOTLIGHT */
-.spotlight{background:var(--bg2);border-bottom:1px solid var(--border);overflow:hidden;position:relative;padding:12px 0;}
+.spotlight{background:var(--bg2);border-bottom:1px solid var(--border);overflow:hidden;position:relative;padding:10px 0;}
 .spotlight::before,.spotlight::after{content:'';position:absolute;top:0;bottom:0;width:60px;z-index:2;pointer-events:none;}
 .spotlight::before{left:0;background:linear-gradient(to right,var(--bg2),transparent);}
 .spotlight::after{right:0;background:linear-gradient(to left,var(--bg2),transparent);}
+
+.mq-wrap{overflow:hidden;position:relative;}
+.mq-wrap::before,.mq-wrap::after{content:"";position:absolute;top:0;bottom:0;width:60px;z-index:2;pointer-events:none;}
+.mq-wrap::before{left:0;background:linear-gradient(to right,var(--bg2),transparent);}
+.mq-wrap::after{right:0;background:linear-gradient(to left,var(--bg2),transparent);}
+.mq-track{display:flex;width:max-content;will-change:transform;}
+.mq-track{animation:mq var(--spd,60s) linear infinite;}
+.mq-track:hover{animation-play-state:paused;}
+@keyframes mq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 .spot-lbl{text-align:center;padding:8px 0 6px;font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase;border-bottom:1px solid var(--border);}
-.spot-track{display:flex;padding:0;animation:spotScroll 50s linear infinite;width:max-content;}
-.spot-track:hover{animation-play-state:paused;}
-@keyframes spotScroll{from{transform:translateX(0);}to{transform:translateX(-50%);}}
-.scard{flex-shrink:0;width:190px;margin-right:14px;background:var(--bg3);border:1px solid rgba(251,191,36,0.15);border-radius:9px;overflow:hidden;text-decoration:none;display:block;transition:border-color 0.2s,transform 0.2s;position:relative;}
+
+
+
+.scard{flex-shrink:0;width:190px;margin:0 7px;background:var(--bg3);border:1px solid rgba(251,191,36,0.15);border-radius:9px;overflow:hidden;text-decoration:none;display:block;transition:border-color 0.2s,transform 0.2s;position:relative;}
 .scard:hover{border-color:rgba(251,191,36,0.35);transform:translateY(-2px);}
 .scard-img{width:52px;height:52px;object-fit:contain;border-radius:10px;background:rgba(255,255,255,0.05);display:block;margin:10px auto 4px;padding:5px;}
 .scard-body{padding:10px;text-align:center;}
@@ -348,7 +357,7 @@ footer a:hover{color:var(--cyan);}
 <!-- SPOTLIGHT -->
 <div class="spotlight">
   <div class="spot-lbl">🌟 Spotlight — Featured Tools</div>
-  <div class="spot-track" id="spot-track"></div>
+  <div class="mq-track" id="spot-track" style="--spd:40s;padding:0 8px"></div>
 </div>
 
 <!-- TICKER -->
@@ -526,18 +535,7 @@ footer a:hover{color:var(--cyan);}
           <div class="fg"><label class="fl">Your Email *</label><input class="fi" id="f-email" type="email" placeholder="founder@mytool.com"></div>
           
 
-          <!-- IMAGE UPLOAD -->
-          <div class="fg full">
-            <label class="fl">Tool Image / Screenshot *</label>
-            <div class="img-upload" id="img-upload-area">
-              <input type="file" id="f-img" accept="image/*" onchange="previewImg(this)">
-              <div id="upload-ph">
-                <div class="img-upload-icon">🖼️</div>
-                <div class="img-upload-txt">Click to upload image (JPG, PNG, WebP · max 2MB)<br><span style="font-size:10px;color:var(--text3)">Recommended: 400×200px</span></div>
-              </div>
-              <img id="img-preview" class="img-preview" alt="Preview">
-            </div>
-            <input class="fi" id="f-img-url" type="url" placeholder="Paste your tool logo/screenshot URL here (https://...)" style="margin-top:7px" oninput="previewImgUrl(this.value)"><div style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-top:4px;line-height:1.5">💡 Use a direct image link (ending in .png, .jpg, .webp). Recommended 400×200px. We donot store images — only the URL you provide.</div>
+          <div class="fg full"><label class="fl">Tool Logo / Screenshot URL *</label><input class="fi" id="f-img-url" type="url" placeholder="Paste your tool logo/screenshot URL here (https://...)" style="margin-top:7px" oninput="previewImgUrl(this.value)"><div style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-top:4px;line-height:1.5">💡 Use a direct image link (ending in .png, .jpg, .webp). Recommended 400×200px. We donot store images — only the URL you provide.</div>
           </div>
 
           <!-- LISTING TIER -->
@@ -837,7 +835,7 @@ function submitTool(){
   const desc=document.getElementById('f-desc').value.trim();
   const email=document.getElementById('f-email').value.trim();
   const emoji='🚀'||'🤖';
-  const image=imgData||document.getElementById('f-img-url').value.trim()||`https://icons.duckduckgo.com/ip3/${(()=>{try{return new URL(url).hostname}catch{return 'openai.com'}})()}.ico`;
+  const image=document.getElementById('f-img-url').value.trim()||`https://icons.duckduckgo.com/ip3/${(()=>{try{return new URL(url).hostname}catch{return 'openai.com'}})()}.ico`;
 
   if(!name||!url||!cat||!pricing||!desc||!email){ showToast('Please fill all required fields'); return; }
   if(!email.includes('@')){ showToast('Invalid email'); return; }
