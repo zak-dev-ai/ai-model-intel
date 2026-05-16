@@ -458,3 +458,27 @@ window.setupImgFallback = function(img) {
 document.addEventListener('DOMContentLoaded', function() {
   document.querySelectorAll('.ht-img, .tc-img, .scard-img, img[src*="logo.dev"], img[src*="duckduckgo"]').forEach(window.setupImgFallback);
 });
+
+// ── Supabase Analytics Tracking ──────────────────────────────────
+(function() {
+  const SUPABASE_URL = 'https://jkoxrftlslylfmugjomd.supabase.co';
+  const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imprb3hyZnRsc2x5bGZtdWdqb21kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4MjAzNTEsImV4cCI6MjA5MzM5NjM1MX0.1LVo1a2K2V8QZPX94bVTBmzIxUskKp0mR7RmNwgOdcI';
+  
+  try {
+    fetch(SUPABASE_URL + '/rest/v1/analytics', {
+      method: 'POST',
+      headers: {
+        'apikey': SUPABASE_ANON,
+        'Authorization': 'Bearer ' + SUPABASE_ANON,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify({
+        event: 'pageview',
+        page: window.location.pathname,
+        value: 1,
+        created_at: new Date().toISOString()
+      })
+    }).catch(() => {});
+  } catch(e) {}
+})();

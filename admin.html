@@ -438,7 +438,7 @@ async function login() {
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('admin-panel').style.display = 'block';
     sessionStorage.setItem('admin_auth', '1');
-    initAdmin();
+    initAdmin();fetchSupabaseAnalytics();
   } else {
     document.getElementById('login-err').style.display = 'block';
     document.getElementById('pwd-input').value = '';
@@ -763,7 +763,19 @@ function showToast(msg) {
 }
 
 function trackPageView() { var v = parseInt(localStorage.getItem("octopus_pageviews")||0); localStorage.setItem("octopus_pageviews", v+1); }
-function initAdmin() { trackPageView();
+async function fetchSupabaseAnalytics(){
+try{
+const U="https://jkoxrftlslylfmugjomd.supabase.co";
+const K=atob("ZXlKaGJHY2lPaUpJVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SnBjM01pT2lKemRYQmhZbUZ6WlNJc0luSmxaaUk2SW1wcmIzQnllbVpwYzJ4c2VXeG1kV2RxYjIxa0lpd2ljbTlzWlNJNkltRnViazRpTENKcFlYUWlPakUzTnpjNE1qQXpOVE1zSW1WNGNDSTZNakE1TXpNNU5qa3hPWDAuaVZvMWEySzJWOFFaUFg5NGJWVEJtekl4VXNrS3AwbVI3Um1Od2dPZGNJ");
+const r=await fetch(U+"/rest/v1/analytics?select=id",{headers:{"apikey":K,"Authorization":"Bearer "+K}});
+const d=await r.json();
+document.getElementById("ana-views").textContent=d.length.toLocaleString();
+document.getElementById("s-clicks").textContent=d.length.toLocaleString();
+const ads=window.AdsManager?AdsManager.load().filter(a=>a.plan&&a.plan!=="default"):[];
+const n=ads.filter(s=>s.active).length;
+document.getElementById("ana-revenue").textContent=n>0?"$"+(n*79):"$0";
+document.getElementById("s-revenue").textContent=n>0?"$"+(n*79):"$0"}catch(e){}}
+function initAdmin(){
   loadData();
   renderTools();
   renderPending();
