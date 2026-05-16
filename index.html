@@ -197,6 +197,60 @@ nav{position:sticky;top:0;z-index:1000;background:rgba(7,9,15,0.97);backdrop-fil
 .hstat-num{font-family:var(--hud);font-size:clamp(18px,3vw,26px);color:var(--cyan);margin-bottom:2px;}
 .hstat-lbl{font-size:10px;color:var(--text3);font-family:var(--mono);}
 
+/* ── TOP 6 PAID SLOTS ── */
+.top6-section{padding:16px 24px;background:var(--bg2);border-bottom:1px solid var(--border);}
+.top6-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:6px;}
+.top6-title{font-family:var(--hud);font-size:12px;color:var(--yellow);letter-spacing:1px;display:flex;align-items:center;gap:7px;}
+.top6-sub{font-family:var(--mono);font-size:10px;color:var(--text3);}
+.top6-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;}
+.top6-card{border-radius:9px;overflow:hidden;border:1px solid var(--border);min-height:145px;display:flex;flex-direction:column;transition:transform 0.2s,border-color 0.2s;text-decoration:none;}
+.top6-card:hover{transform:translateY(-2px);}
+.top6-card.filled{border-color:rgba(251,191,36,0.25);background:var(--bg3);}
+.top6-card.empty{border-style:dashed;border-color:rgba(168,85,247,0.2);background:rgba(168,85,247,0.02);align-items:center;justify-content:center;text-align:center;padding:12px;cursor:pointer;}
+.top6-card.empty:hover{border-color:var(--purple);background:rgba(168,85,247,0.05);}
+.t6-bar{height:2px;flex-shrink:0;}
+.t6-body{padding:10px;flex:1;display:flex;flex-direction:column;}
+.t6-badge{font-family:var(--mono);font-size:8px;color:var(--yellow);letter-spacing:0.5px;margin-bottom:4px;}
+.t6-ico{font-size:18px;margin-bottom:3px;}
+.t6-name{font-size:11px;font-weight:700;color:var(--text);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.t6-desc{font-size:10px;color:var(--text2);line-height:1.4;flex:1;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
+.t6-cta{display:block;text-align:center;padding:4px;border-radius:5px;font-size:10px;font-weight:700;text-decoration:none;margin-top:5px;}
+.t6-expiry{font-family:var(--mono);font-size:8px;color:var(--text3);text-align:center;margin-top:2px;}
+.empty-ico{font-size:20px;opacity:0.4;margin-bottom:4px;}
+.empty-label{font-family:var(--hud);font-size:9px;color:var(--purple);margin-bottom:2px;letter-spacing:0.5px;}
+.empty-price{font-family:var(--mono);font-size:10px;color:var(--text3);margin-bottom:5px;}
+.empty-btn{background:rgba(168,85,247,0.1);border:1px solid rgba(168,85,247,0.25);color:var(--purple);font-size:9px;font-weight:700;padding:4px 8px;border-radius:4px;font-family:var(--mono);}
+
+/* ── TOOLS GRID (home page) ── */
+.tools-section{padding:20px 0;border-bottom:1px solid var(--border);}
+.ts-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px;}
+.ts-title{font-family:var(--hud);font-size:14px;color:var(--text);letter-spacing:0.5px;display:flex;align-items:center;gap:8px;}
+.ts-link{font-size:11px;color:var(--cyan);text-decoration:none;font-family:var(--mono);}
+.cat-pills{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:0 0 12px;}
+.cat-pills::-webkit-scrollbar{display:none;}
+.cat-pill{padding:5px 12px;border-radius:100px;border:1px solid var(--border);background:transparent;font-size:12px;color:var(--text2);cursor:pointer;font-family:var(--sans);white-space:nowrap;flex-shrink:0;transition:all 0.2s;}
+.cat-pill:hover{border-color:var(--purple);color:var(--text);}
+.cat-pill.active{background:rgba(168,85,247,0.08);border-color:var(--purple);color:var(--purple);}
+.ts-toolbar{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
+.ts-count{font-family:var(--mono);font-size:12px;color:var(--text2);}
+.ts-sort select{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:6px 10px;font-size:12px;color:var(--text2);cursor:pointer;outline:none;font-family:var(--sans);}
+.home-tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px;}
+.ht-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden;transition:all 0.2s;text-decoration:none;display:block;position:relative;}
+.ht-card:hover{border-color:rgba(168,85,247,0.25);transform:translateY(-2px);}
+.ht-card.featured{border-color:rgba(251,191,36,0.25);}
+.ht-card.featured::after{content:'⭐ FEATURED';position:absolute;top:7px;right:7px;background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.2);color:var(--yellow);font-size:8px;padding:2px 6px;border-radius:3px;font-family:var(--mono);z-index:1;}
+.ht-img-wrap{width:100%;height:100px;position:relative;overflow:hidden;}
+.ht-img{width:100%;height:100%;object-fit:cover;background:var(--bg3);display:block;}
+.ht-img-fallback{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:32px;}
+.ht-rank{position:absolute;top:6px;left:6px;font-family:var(--hud);font-size:10px;color:rgba(255,255,255,0.6);background:rgba(0,0,0,0.5);padding:2px 6px;border-radius:3px;}
+.ht-body{padding:10px;}
+.ht-name{font-size:13px;font-weight:700;color:var(--text);margin-bottom:2px;display:flex;align-items:center;gap:4px;flex-wrap:wrap;}
+.ht-new-badge{background:rgba(0,217,126,0.1);border:1px solid rgba(0,217,126,0.2);color:var(--green);font-size:8px;padding:1px 4px;border-radius:3px;font-family:var(--mono);}
+.ht-tagline{font-size:11px;color:var(--text2);margin-bottom:6px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.ht-meta{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:4px;}
+.ht-pricing{font-size:10px;font-family:var(--mono);padding:2px 7px;border-radius:100px;}
+.ht-votes{font-size:10px;font-family:var(--mono);color:var(--green);}
+
 /* ── AD TIER SHOWCASE (below hero) ── */
 .ad-showcase{padding:24px;background:linear-gradient(180deg,rgba(7,9,15,0) 0%,rgba(251,191,36,.03) 100%);border-bottom:1px solid rgba(251,191,36,.1);}
 .outer{max-width:1400px;margin:0 auto;padding:0 24px;}
@@ -205,6 +259,9 @@ nav{position:sticky;top:0;z-index:1000;background:rgba(7,9,15,0.97);backdrop-fil
 .ashow-sub{font-family:var(--mono);font-size:11px;color:var(--text3);}
 .ashow-sub a{color:var(--purple);text-decoration:none;}
 .tier-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+@media(max-width:1100px){.top6-grid{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:768px){.top6-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:500px){.top6-grid{grid-template-columns:1fr 1fr;}}
 @media(max-width:900px){.tier-row{grid-template-columns:1fr 1fr;}}
 @media(max-width:580px){.tier-row{grid-template-columns:1fr;}}
 
@@ -556,6 +613,15 @@ td.td-sc{font-family:var(--mono);font-size:11px;}
   </div>
 </div>
 
+<!-- TOP 6 PAID SLOTS -->
+<div class="top6-section">
+  <div class="top6-hdr">
+    <div class="top6-title">⭐ SPOTLIGHT SLOTS <span style="font-family:var(--mono);font-size:9px;color:var(--text3);font-weight:400">— priority positions 1–6</span></div>
+    <div class="top6-sub"><a href="/tools#advertise" style="color:var(--purple);text-decoration:none;font-family:var(--mono);font-size:10px">Buy a slot from $29 →</a></div>
+  </div>
+  <div class="top6-grid" id="home-top6-grid"></div>
+</div>
+
 <!-- AD TIER SHOWCASE (always visible — shows paid first, empty slots with buy CTA) -->
 <div class="ad-showcase">
   <div class="outer">
@@ -565,6 +631,36 @@ td.td-sc{font-family:var(--mono);font-size:11px;}
     </div>
     <div class="tier-row" id="ad-showcase-grid"><!-- JS fills --></div>
   </div>
+</div>
+
+<!-- AI TOOLS GRID -->
+<div class="tools-section outer">
+  <div class="ts-hdr">
+    <div class="ts-title">🛠 AI Tools & Products</div>
+    <a href="/tools" class="ts-link">View all tools →</a>
+  </div>
+  <div class="cat-pills" id="home-cat-pills">
+    <span class="cat-pill active" onclick="homeSetCat('all',this)">🔥 All</span>
+    <span class="cat-pill" onclick="homeSetCat('image',this)">🎨 Image</span>
+    <span class="cat-pill" onclick="homeSetCat('video',this)">🎬 Video</span>
+    <span class="cat-pill" onclick="homeSetCat('coding',this)">💻 Code</span>
+    <span class="cat-pill" onclick="homeSetCat('chat',this)">💬 Chat</span>
+    <span class="cat-pill" onclick="homeSetCat('audio',this)">🎵 Audio</span>
+    <span class="cat-pill" onclick="homeSetCat('writing',this)">✍️ Writing</span>
+    <span class="cat-pill" onclick="homeSetCat('research',this)">🔬 Research</span>
+    <span class="cat-pill" onclick="homeSetCat('new',this)">🆕 New</span>
+  </div>
+  <div class="ts-toolbar">
+    <div class="ts-count" id="home-tools-count">Loading...</div>
+    <div class="ts-sort">
+      <select onchange="homeSetSort(this.value)">
+        <option value="votes">Most Voted</option>
+        <option value="new">Newest</option>
+        <option value="name">Name A–Z</option>
+      </select>
+    </div>
+  </div>
+  <div class="home-tools-grid" id="home-tools-grid"></div>
 </div>
 
 <!-- MAIN PAGE GRID -->
@@ -1105,6 +1201,107 @@ function loadAdsFromManager(){
   buildSidebarAds();
   buildToolCards(tools);
   buildToolsTicker(tools);
+  renderHomeTop6();
+  renderHomeTools();
+}
+
+// ── HOME PAGE TOP 6 SLOTS ────────────────────────────────────────────
+function renderHomeTop6(){
+  const grid=document.getElementById('home-top6-grid');
+  if(!grid) return;
+  const slots=window.AdsManager ? AdsManager.load() : [];
+  const planToSlot={premium:1,growth:[2,3],starter:[4,5,6]};
+  const paidBySlot={};
+  slots.forEach(s=>{
+    if(s.plan==='premium') paidBySlot[1]=s;
+    else if(s.plan==='growth' && !paidBySlot[2]) paidBySlot[2]=s;
+    else if(s.plan==='growth' && !paidBySlot[3]) paidBySlot[3]=s;
+    else if(s.plan==='starter' && !paidBySlot[4]) paidBySlot[4]=s;
+    else if(s.plan==='starter' && !paidBySlot[5]) paidBySlot[5]=s;
+    else if(s.plan==='starter' && !paidBySlot[6]) paidBySlot[6]=s;
+  });
+  const prices={1:'$149/mo',2:'$79/mo',3:'$79/mo',4:'$29/wk',5:'$29/wk',6:'$29/wk'};
+  const plans={1:'premium',2:'growth',3:'growth',4:'starter',5:'starter',6:'starter'};
+  const dodo=window.OCTOPUS_CONFIG ? OCTOPUS_CONFIG.DODO : CHECKOUT;
+
+  let html='';
+  for(let i=1;i<=6;i++){
+    const s=paidBySlot[i];
+    if(s && s.plan!=='default'){
+      const daysLeft=s.expiresAt?Math.ceil((s.expiresAt-Date.now())/86400000):'—';
+      html+=`<a href="${s.url}?ref=aimodelranks" target="_blank" class="top6-card filled">
+        <div class="t6-bar" style="background:${s.color||'#a855f7'}"></div>
+        <div class="t6-body">
+          <div class="t6-badge">${s.plan.toUpperCase()} · SLOT ${i}</div>
+          <div class="t6-ico">${s.emoji||'🚀'}</div>
+          <div class="t6-name">${s.name}</div>
+          <div class="t6-desc">${(s.desc||'').slice(0,50)}</div>
+          <div class="t6-cta" style="background:${s.color||'#a855f7'};color:#fff">${s.cta||'Visit →'}</div>
+          ${s.expiresAt?'<div class="t6-expiry">'+daysLeft+'d left</div>':''}
+        </div>
+      </a>`;
+    } else {
+      const plan=plans[i];
+      const link=dodo?dodo[plan]:'#';
+      html+=`<a href="${link}" target="_blank" class="top6-card empty">
+        <div class="empty-ico">📣</div>
+        <div class="empty-label">SLOT ${i} — OPEN</div>
+        <div class="empty-price">${prices[i]}</div>
+        <div class="empty-btn">Buy This Slot →</div>
+      </a>`;
+    }
+  }
+  grid.innerHTML=html;
+}
+
+// ── HOME PAGE TOOLS GRID ─────────────────────────────────────────────
+let homeCat='all', homeSort='votes';
+function homeSetCat(cat,el){
+  homeCat=cat;
+  document.querySelectorAll('#home-cat-pills .cat-pill').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  renderHomeTools();
+}
+function homeSetSort(s){ homeSort=s; renderHomeTools(); }
+
+function renderHomeTools(){
+  const grid=document.getElementById('home-tools-grid');
+  if(!grid) return;
+  const tools=window.ToolsDB ? ToolsDB.load().filter(t=>t.approved!==false) : TOOLS_DATA;
+  let filtered=tools;
+  if(homeCat==='new') filtered=filtered.filter(t=>(t.daysAgo||0)<=7);
+  else if(homeCat!=='all') filtered=filtered.filter(t=>t.cat===homeCat);
+
+  if(homeSort==='votes') filtered.sort((a,b)=>b.votes-a.votes);
+  else if(homeSort==='new') filtered.sort((a,b)=>(a.daysAgo||0)-(b.daysAgo||0));
+  else if(homeSort==='name') filtered.sort((a,b)=>a.name.localeCompare(b.name));
+
+  document.getElementById('home-tools-count').textContent=filtered.length+' AI tool'+(filtered.length!==1?'s':'');
+  if(!filtered.length){
+    grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--text3);font-family:var(--mono);font-size:13px">No tools found in this category.</div>';
+    return;
+  }
+  const catBg={image:'#1a0a2e',video:'#0a0a28',coding:'#0a1e00',writing:'#1a0a00',chat:'#001828',audio:'#1a001a',research:'#001a28',productivity:'#1a1400',data:'#001428',design:'#280014',marketing:'#1a0a00'};
+
+  grid.innerHTML=filtered.map((t,i)=>{
+    const url=window.buildRefURL?buildRefURL(t):t.url;
+    const bg=catBg[t.cat]||'#001828';
+    return`<a href="${url}" target="_blank" rel="noopener" class="ht-card${t.featured?' featured':''}">
+      <div class="ht-img-wrap">
+        <span class="ht-rank">#${i+1}</span>
+        ${t.image?`<img class="ht-img" src="${t.image}" alt="${t.name}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`:''}
+        <div class="ht-img-fallback" style="background:${bg};${t.image?'display:none':''}">${t.emoji||'🤖'}</div>
+      </div>
+      <div class="ht-body">
+        <div class="ht-name">${t.name}${(t.daysAgo||0)<=7?'<span class="ht-new-badge">NEW</span>':''}</div>
+        <div class="ht-tagline">${t.tagline||''}</div>
+        <div class="ht-meta">
+          <span class="ht-pricing ${t.pricing==='free'?'pr-free':t.pricing==='freemium'?'pr-freemium':'pr-paid'}">${t.pricing==='free'?'Free':t.pricing==='freemium'?'Freemium':'Paid'}</span>
+          <span class="ht-votes">▲${(t.votes||0).toLocaleString()}</span>
+        </div>
+      </div>
+    </a>`;
+  }).join('');
 }
 
 async function loadModels(){
