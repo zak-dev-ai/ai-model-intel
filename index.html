@@ -710,10 +710,14 @@ td.td-sc{font-family:var(--mono);font-size:11px;}
 // ── CONFIG ────────────────────────────────────────────────────────
 const API      = 'https://ai-model-intel.zak-media-ai.workers.dev';
 const SITE_URL = 'https://www.aimodelranks.live/';
-const CHECKOUT = {
-  premium: 'https://aimodelranks.lemonsqueezy.com/checkout/buy/61e7b8bd-38e4-4768-9bc0-daae53fdaa09',
-  growth:  'https://aimodelranks.lemonsqueezy.com/checkout/buy/7dbe497c-fe81-45b4-b316-1af6a122a648',
-  starter: 'https://aimodelranks.lemonsqueezy.com/checkout/buy/6b81057f-a1a3-440d-848c-f74ef281657d',
+const CHECKOUT = window.OCTOPUS_CONFIG ? {
+  premium: window.OCTOPUS_CONFIG.DODO.premium,
+  growth: window.OCTOPUS_CONFIG.DODO.growth,
+  starter: window.OCTOPUS_CONFIG.DODO.starter,
+} : {
+  premium: 'https://checkout.dodopayments.com/buy/pdt_0NeuDicfvBmy8ws9vVtag?quantity=1',
+  growth:  'https://checkout.dodopayments.com/buy/pdt_0NeuDc4euvgNHtJJynMUM?quantity=1',
+  starter: 'https://checkout.dodopayments.com/buy/pdt_0NeuDTWmUZGiP64pziSb4?quantity=1',
 };
 
 // ── STATIC TOOL DATA ──────────────────────────────────────────────
@@ -781,34 +785,40 @@ function buildModelCards(m) {
 }
 
 // ── ROW 3: SPOTLIGHT CAROUSEL ─────────────────────────────────────
-function buildSpotlight(ads) {
-  const tierOrder={premium:0,growth:1,starter:2,default:3};
-  const sorted=[...ads].sort((a,b)=>(tierOrder[a.tier]??4)-(tierOrder[b.tier]??4));
-
-  let html=sorted.map(a=>{
-    const isPremium=a.tier==='premium',isGrowth=a.tier==='growth';
-    const cls=isPremium?'tier-premium':isGrowth?'tier-growth':'tier-starter';
-    const badgeTxt=isPremium?'⭐ PREMIUM SPONSOR':isGrowth?'✦ GROWTH FEATURE':'• FEATURED';
-    const ctaBg=isPremium?'linear-gradient(135deg,var(--yellow),var(--orange))':isGrowth?'var(--purple)':'var(--cyan)';
-    const ctaColor=isPremium?'#000':'#fff';
-    return`<a href="${a.ad_url||'#'}" target="_blank" rel="noopener" class="scard ${cls}">
+function buildSpotlight() {
+  const paid = window.AdsManager ? AdsManager.load().filter(a => a.plan !== 'default') : [];
+  let html=paid.map(a=>{
+    return`<a href="${a.url}?ref=aimodelranks" target="_blank" rel="noopener" class="scard tier-${a.plan}">
       <div class="sc-body">
-        <div class="sc-badge">${badgeTxt}</div>
-        <div class="sc-name">${a.ad_name}</div>
-        <div class="sc-desc">${(a.ad_desc||'').slice(0,65)}</div>
-        <span class="sc-cta" style="background:${ctaBg};color:${ctaColor}">${a.ad_cta||'Learn More →'}</span>
+        <div class="sc-badge">${a.plan.toUpperCase()} SPONSOR</div>
+        <div class="sc-name">${a.emoji||'⭐'} ${a.name}</div>
+        <div class="sc-desc">${(a.desc||'').slice(0,65)}</div>
+        <span class="sc-cta" style="background:${a.color||'#a855f7'};color:#fff">Visit →</span>
       </div>
     </a>`;
   }).join('');
 
-  // Fill empties up to at least 8 items
-  const total=sorted.length;
+  // Fill with featured tools from ToolsDB if not enough paid ads
+  const tools = window.ToolsDB ? ToolsDB.load().filter(t => t.featured && t.approved !== false).slice(0,8) : [];
+  tools.forEach(t => {
+    html+=`<a href="${window.buildRefURL?buildRefURL(t):t.url}" target="_blank" rel="noopener" class="scard tier-featured">
+      <div class="sc-body">
+        <div class="sc-badge" style="color:var(--green);border-color:rgba(0,217,126,0.2)">FEATURED TOOL</div>
+        <div class="sc-name">${t.emoji||'🤖'} ${t.name}</div>
+        <div class="sc-desc">${(t.tagline||'').slice(0,65)}</div>
+        <span class="sc-cta" style="background:var(--green);color:#000">Try It →</span>
+      </div>
+    </a>`;
+  });
+
+  // Fill remaining with empty buy slots
   const empties=[
-    {tier:'premium',price:'$149/30d',label:'⭐ Premium Spot',feats:'Homepage hero · All pages top · Immediate review'},
-    {tier:'growth', price:'$79/30d', label:'✦ Growth Spot', feats:'Spotlight carousel · All pages sidebar · Priority'},
-    {tier:'starter',price:'$29/7d',  label:'• Starter Spot', feats:'Featured badge · Category placement · 7 days'},
+    {tier:'premium',price:'$149/30d',label:'⭐ Premium Spot',feats:'#1 placement · All pages · Immediate'},
+    {tier:'growth', price:'$79/30d', label:'✦ Growth Spot', feats:'Slots 2-3 · Spotlight · Priority'},
+    {tier:'starter',price:'$29/7d',  label:'• Starter Spot', feats:'Slots 4-6 · Featured badge · 7 days'},
   ];
-  for(let i=0;i<Math.max(0,8-total);i++){
+  const totalEntries = paid.length + tools.length;
+  for(let i=0;i<Math.max(0,8-totalEntries);i++){
     const e=empties[i%3];
     html+=`<a href="${CHECKOUT[e.tier]}" target="_blank" rel="noopener" class="scard tier-empty">
       <div class="sc-body">
@@ -822,29 +832,18 @@ function buildSpotlight(ads) {
 }
 
 // ── ROW 4: TOOLS TICKER ───────────────────────────────────────────
+
+// ── ROW 4: TOOLS TICKER ───────────────────────────────────────────
 function buildToolsTicker(ads, tools) {
-  // Paid tool names from ads go first
-  const paidNames=ads.filter(a=>a.tier!=='default').map(a=>a.ad_name);
-  const allNames=[...paidNames,...tools.map(t=>`${t.emoji} ${t.name} ▲${t.votes.toLocaleString()}`)];
+  // 'ads' unused — all from tools
+  const allNames=tools.map(t=>`${t.emoji} ${t.name} ▲${t.votes.toLocaleString()}`);
   const html=allNames.map(n=>`<span class="ttick">${n}</span>`).join('');
   buildMarquee(document.getElementById('tools-ticker-track'), html);
 }
 
 // ── ROW 5: TOOL PRODUCT CARDS ─────────────────────────────────────
 function buildToolCards(ads, tools) {
-  // Paid ads as featured cards first
-  const paidCards=ads.filter(a=>a.tier!=='default').map(a=>`
-    <a href="${a.ad_url||'#'}" target="_blank" rel="noopener" class="tc paid">
-      <div class="tc-thumb cat-chat" style="background:linear-gradient(135deg,${a.ad_color||'#a855f7'}20,${a.ad_color||'#a855f7'}05)">
-        <span class="tc-rank">PAID</span>${a.ad_emoji||'⭐'}
-      </div>
-      <div class="tc-body">
-        <div class="tc-name">${(a.ad_name||'').slice(0,18)}</div>
-        <div class="tc-cat">Sponsored</div>
-        <div class="tc-footer"><span class="tc-sp">FEATURED</span><span class="ti-votes">★</span></div>
-      </div>
-    </a>`).join('');
-
+  // 'ads' unused — all from tools
   const toolCards=tools.map((t,i)=>`
     <a href="${t.url}" target="_blank" rel="noopener" class="tc">
       <div class="tc-thumb ${catBgs[t.cat]||'cat-chat'}">
@@ -863,26 +862,26 @@ function buildToolCards(ads, tools) {
   buildMarquee(document.getElementById('toolcards-track'), paidCards+toolCards);
 }
 
-// ── AD SHOWCASE (3-column tier grid) ─────────────────────────────
-function buildAdShowcase(ads) {
-  const tierOrder={premium:0,growth:1,starter:2};
-  const paid=[...ads].filter(a=>a.tier!=='default').sort((a,b)=>(tierOrder[a.tier]??4)-(tierOrder[b.tier]??4));
-  const premium=paid.filter(a=>a.tier==='premium');
-  const growth=paid.filter(a=>a.tier==='growth');
-  const starter=paid.filter(a=>a.tier==='starter');
+// ── AD SHOWCASE (3-column tier grid) — uses AdsManager ────────
+function buildAdShowcase() {
+  const grid=document.getElementById('ad-showcase-grid');
+  if(!grid) return;
+  const slots = (window.AdsManager ? AdsManager.load().filter(a => a.plan && a.plan !== 'default') : []);
+  const premium = slots.find(a => a.plan === 'premium');
+  const growth = slots.find(a => a.plan === 'growth');
+  const starter = slots.find(a => a.plan === 'starter');
 
-  function adCard(a,cls){
+  function adCard(a, tier){
     const colors={premium:'linear-gradient(90deg,var(--yellow),var(--orange))',growth:'linear-gradient(90deg,var(--purple),var(--cyan))',starter:'var(--cyan)'};
     const labels={premium:'⭐ PREMIUM · $149/30 days',growth:'✦ GROWTH · $79/30 days',starter:'• STARTER · $29/7 days'};
     const ctaBg={premium:'linear-gradient(135deg,var(--yellow),var(--orange))',growth:'var(--purple)',starter:'var(--cyan)'};
-    const ctaColor=a.tier==='premium'?'#000':'#fff';
-    return`<a href="${a.ad_url||'#'}" target="_blank" rel="noopener" class="adshow-card ${a.tier}">
-      <div class="ac-bar" style="background:${colors[a.tier]}"></div>
+    return`<a href="${a.url}" target="_blank" rel="noopener" class="adshow-card ${tier}">
+      <div class="ac-bar" style="background:${colors[tier]}"></div>
       <div class="ac-body">
-        <div class="ac-label">${labels[a.tier]}</div>
-        <div class="ac-name">${a.ad_emoji||'⭐'} ${a.ad_name}</div>
-        <div class="ac-desc">${a.ad_desc}</div>
-        <span class="ac-cta" style="background:${ctaBg[a.tier]};color:${ctaColor}">${a.ad_cta||'Learn More →'}</span>
+        <div class="ac-label">${labels[tier]}</div>
+        <div class="ac-name">${a.emoji||'⭐'} ${a.name}</div>
+        <div class="ac-desc">${a.desc}</div>
+        <span class="ac-cta" style="background:${ctaBg[tier]};color:${tier==='premium'?'#000':'#fff'}">Visit Site →</span>
       </div>
     </a>`;
   }
@@ -905,38 +904,37 @@ function buildAdShowcase(ads) {
     </div>`;
   }
 
-  const grid=document.getElementById('ad-showcase-grid');
-  // Show 1 of each tier (paid if available, empty if not)
-  grid.innerHTML=(premium[0]?adCard(premium[0],'premium'):emptyCard('premium'))+
-                 (growth[0] ?adCard(growth[0],'growth') :emptyCard('growth'))+
-                 (starter[0]?adCard(starter[0],'starter'):emptyCard('starter'));
+  grid.innerHTML=(premium?adCard(premium,'premium'):emptyCard('premium'))+
+                 (growth?adCard(growth,'growth'):emptyCard('growth'))+
+                 (starter?adCard(starter,'starter'):emptyCard('starter'));
 }
 
-// ── SIDEBAR ADS ───────────────────────────────────────────────────
-function buildSidebarAds(ads) {
-  const tierOrder={premium:0,growth:1,starter:2,default:3};
-  const sorted=[...ads].sort((a,b)=>(tierOrder[a.tier]??4)-(tierOrder[b.tier]??4));
-  document.getElementById('sidebar-ads').innerHTML=sorted.slice(0,3).map(a=>`
-    <a href="${a.ad_url||'#'}" target="_blank" rel="noopener" class="sb-ad">
-      <div class="sb-ad-bar" style="background:${a.ad_color||'#a855f7'}"></div>
+// ── SIDEBAR ADS — uses AdsManager ────────────────────────────────
+function buildSidebarAds() {
+  const sidebar=document.getElementById('sidebar-ads');
+  const mobAds=document.getElementById('mob-ads');
+  if(!sidebar) return;
+  const ads = window.AdsManager ? AdsManager.sidebar() : [];
+  const sorted = ads.slice(0,3);
+  sidebar.innerHTML=sorted.map(a=>`
+    <a href="${a.url}?ref=aimodelranks" target="_blank" rel="noopener" class="sb-ad">
+      <div class="sb-ad-bar" style="background:${a.color||'#a855f7'}"></div>
       <div class="sb-ad-body">
         <div class="sb-ad-badge">SPONSORED</div>
-        <div class="sb-ad-name">${a.ad_name}</div>
-        <div class="sb-ad-desc">${a.ad_desc}</div>
-        <span class="sb-ad-btn" style="background:${a.ad_color||'#a855f7'};color:#fff">${a.ad_cta||'Learn More →'}</span>
+        <div class="sb-ad-name">${a.name}</div>
+        <div class="sb-ad-desc">${a.tagline||a.desc}</div>
+        <span class="sb-ad-btn" style="background:${a.color||'#a855f7'};color:#fff">Visit ${a.name} →</span>
       </div>
     </a>`).join('<div style="height:10px"></div>');
-
-  // Mobile ads
-  document.getElementById('mob-ads').innerHTML=sorted.slice(0,2).map(a=>`
-    <a href="${a.ad_url||'#'}" target="_blank" rel="noopener" class="mob-ad">
-      <div class="mob-ad-bar" style="background:${a.ad_color||'#a855f7'}"></div>
+  if(mobAds) mobAds.innerHTML=sorted.slice(0,2).map(a=>`
+    <a href="${a.url}?ref=aimodelranks" target="_blank" rel="noopener" class="mob-ad">
+      <div class="mob-ad-bar" style="background:${a.color||'#a855f7'}"></div>
       <div class="mob-ad-body">
         <div class="mob-ad-badge">SPONSORED</div>
-        <div class="mob-ad-name">${a.ad_name}</div>
-        <div class="mob-ad-desc">${(a.ad_desc||'').slice(0,60)}</div>
+        <div class="mob-ad-name">${a.name}</div>
+        <div class="mob-ad-desc">${(a.tagline||a.desc||'').slice(0,60)}</div>
       </div>
-      <a href="${a.ad_url||'#'}" target="_blank" rel="noopener" class="mob-ad-btn" style="background:${a.ad_color||'#a855f7'};color:#fff">${(a.ad_cta||'→').replace(' →','')}</a>
+      <span class="mob-ad-btn" style="background:${a.color||'#a855f7'};color:#fff">→</span>
     </a>`).join('');
 }
 
@@ -1101,22 +1099,16 @@ function doCompare(){
 
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.opacity='1';clearTimeout(t._t);t._t=setTimeout(()=>t.style.opacity='0',2200);}
 
-// ── DEFAULT ADS (shown before /ads loads) ─────────────────────────
-const DEFAULT_ADS=[
-  {id:'d1',tier:'default',slot_type:'sidebar',ad_name:'🔥 Mistral AI',ad_emoji:'🔥',ad_desc:'Enterprise models at fraction of cost. Large 3 at $0.50/1M.',ad_url:'https://mistral.ai',ad_cta:'Explore Mistral →',ad_color:'#ff6b00'},
-  {id:'d2',tier:'default',slot_type:'sidebar',ad_name:'✨ Google Gemini',ad_emoji:'✨',ad_desc:'1M+ token context. Best price-to-performance.',ad_url:'https://ai.google.dev',ad_cta:'Try Gemini →',ad_color:'#4285f4'},
-  {id:'d3',tier:'default',slot_type:'spotlight',ad_name:'📣 Advertise Here',ad_emoji:'📣',ad_desc:'Your AI tool in front of 10K+ developers. From $29/week.',ad_url:'/tools#advertise',ad_cta:'Get Featured →',ad_color:'#a855f7'},
-];
-
-// ── LOAD & INIT ───────────────────────────────────────────────────
-async function loadAds(){
-  let ads=DEFAULT_ADS;
-  try{const r=await fetch(API+'/ads',{mode:'cors'});const d=await r.json();if(d.ads?.length)ads=d.ads;}catch{}
-  buildSpotlight(ads);
-  buildAdShowcase(ads);
-  buildSidebarAds(ads);
-  buildToolCards(ads, TOOLS_DATA);
-  buildToolsTicker(ads, TOOLS_DATA);
+// ── ADS FROM AdsManager ────────────────────────────────────────────
+function loadAdsFromManager(){
+  // Use ToolsDB for spotlight + tool cards (shows default tools with images)
+  const tools = window.ToolsDB ? ToolsDB.load().filter(t => t.approved !== false) : TOOLS_DATA;
+  // Build sections — pass empty ads array for 'ads' param since we use AdsManager internally now
+  buildSpotlight();
+  buildAdShowcase();
+  buildSidebarAds();
+  buildToolCards(tools);
+  buildToolsTicker(tools);
 }
 
 async function loadModels(){
@@ -1136,15 +1128,10 @@ async function loadModels(){
 // Init
 document.getElementById('card-grid').style.display='none';
 document.getElementById('today-date').textContent=new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
-buildToolsTicker(DEFAULT_ADS, TOOLS_DATA); // show immediately
-buildToolCards(DEFAULT_ADS, TOOLS_DATA);
-buildSpotlight(DEFAULT_ADS);
-buildAdShowcase(DEFAULT_ADS);
-buildSidebarAds(DEFAULT_ADS);
+loadAdsFromManager();
 loadModels();
-loadAds();
 setInterval(loadModels, 60000);
-setInterval(loadAds, 120000);
+setInterval(loadAdsFromManager, 120000);
 </script>
 </body>
 </html>
