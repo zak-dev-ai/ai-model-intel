@@ -766,7 +766,7 @@ function trackPageView() { var v = parseInt(localStorage.getItem("octopus_pagevi
 async function fetchSupabaseAnalytics(){
 try{
 const U="https://jkoxrftlslylfmugjomd.supabase.co";
-const K=atob("ZXlKaGJHY2lPaUpJVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SnBjM01pT2lKemRYQmhZbUZ6WlNJc0luSmxaaUk2SW1wcmIzQnllbVpwYzJ4c2VXeG1kV2RxYjIxa0lpd2ljbTlzWlNJNkltRnViazRpTENKcFlYUWlPakUzTnpjNE1qQXpOVE1zSW1WNGNDSTZNakE1TXpNNU5qa3hPWDAuaVZvMWEySzJWOFFaUFg5NGJWVEJtekl4VXNrS3AwbVI3Um1Od2dPZGNJ");
+const K="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imprb3hyZnRsc2x5bGZtdWdqb21kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4MjAzNTEsImV4cCI6MjA5MzM5NjM1MX0.1LVo1a2K2V8QZPX94bVTBmzIxUskKp0mR7RmNwgOdcI";
 const r=await fetch(U+"/rest/v1/analytics?select=id",{headers:{"apikey":K,"Authorization":"Bearer "+K}});
 const d=await r.json();
 document.getElementById("ana-views").textContent=d.length.toLocaleString();
