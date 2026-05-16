@@ -837,7 +837,7 @@ function submitTool(){
   const desc=document.getElementById('f-desc').value.trim();
   const email=document.getElementById('f-email').value.trim();
   const emoji=document.getElementById('f-emoji').value.trim()||'🤖';
-  const image=imgData||document.getElementById('f-img-url').value.trim()||`https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=400&h=200&fit=crop`;
+  const image=imgData||document.getElementById('f-img-url').value.trim()||`https://logo.clearbit.com/${(()=>{try{return new URL(url).hostname}catch{return 'unknown'}})()}`;
 
   if(!name||!url||!cat||!pricing||!desc||!email){ showToast('Please fill all required fields'); return; }
   if(!email.includes('@')){ showToast('Invalid email'); return; }
