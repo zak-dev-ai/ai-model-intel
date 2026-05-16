@@ -503,7 +503,7 @@ async function changePassword() {
 if (sessionStorage.getItem('admin_auth') === '1') {
   document.getElementById('login-screen').style.display = 'none';
   document.getElementById('admin-panel').style.display = 'block';
-  setTimeout(initAdmin, 0);
+  setTimeout(function(){initAdmin();fetchSupabaseAnalytics();}, 200);
 }
 
 // ══════════════════════════════════════════════════════════════════════
