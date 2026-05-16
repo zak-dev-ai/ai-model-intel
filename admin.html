@@ -763,18 +763,7 @@ function showToast(msg) {
 }
 
 function trackPageView() { var v = parseInt(localStorage.getItem("octopus_pageviews")||0); localStorage.setItem("octopus_pageviews", v+1); }
-async function fetchSupabaseAnalytics(){
-try{
-const U="https://jkoxrftlslylfmugjomd.supabase.co";
-const K="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imprb3hyZnRsc2x5bGZtdWdqb21kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4MjAzNTEsImV4cCI6MjA5MzM5NjM1MX0.1LVo1a2K2V8QZPX94bVTBmzIxUskKp0mR7RmNwgOdcI";
-const r=await fetch(U+"/rest/v1/analytics?select=id",{headers:{"apikey":K,"Authorization":"Bearer "+K}});
-const d=await r.json();
-document.getElementById("ana-views").textContent=d.length.toLocaleString();
-document.getElementById("s-clicks").textContent=d.length.toLocaleString();
-const ads=window.AdsManager?AdsManager.load().filter(a=>a.plan&&a.plan!=="default"):[];
-const n=ads.filter(s=>s.active).length;
-document.getElementById("ana-revenue").textContent=n>0?"$"+(n*79):"$0";
-document.getElementById("s-revenue").textContent=n>0?"$"+(n*79):"$0"}catch(e){}}
+async function fetchSupabaseAnalytics(){const K="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imprb3hyZnRsc2x5bGZtdWdqb21kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4MjAzNTEsImV4cCI6MjA5MzM5NjM1MX0.1LVo1a2K2V8QZPX94bVTBmzIxUskKp0mR7RmNwgOdcI";try{const r=await fetch("https://jkoxrftlslylfmugjomd.supabase.co/rest/v1/analytics?select=id",{headers:{"apikey":K,"Authorization":"Bearer "+K}});const d=await r.json();if(Array.isArray(d)){document.getElementById("ana-views").textContent=d.length.toLocaleString();document.getElementById("s-clicks").textContent=d.length.toLocaleString()}else{document.getElementById("ana-views").textContent=d.length?d.length:"?"}}catch(e){document.getElementById("ana-views").textContent="..."}const ads=window.AdsManager?AdsManager.load().filter(a=>a.plan&&a.plan!=="default"):[];const m=ads.filter(s=>s.active).length;document.getElementById("ana-revenue").textContent=m>0?"$"+(m*79):"$0";document.getElementById("s-revenue").textContent=m>0?"$"+(m*79):"$0"}
 function initAdmin(){
   loadData();
   renderTools();
