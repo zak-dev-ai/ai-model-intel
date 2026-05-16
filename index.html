@@ -937,7 +937,7 @@ function buildToolsTicker(tools) {
 // ── ROW 5: TOOL PRODUCT CARDS ─────────────────────────────────────
 function buildToolCards(tools) {
   const toolCards=tools.map((t,i)=>`
-    <a href="${t.url}" target="_blank" rel="noopener" class="tc">
+    <a href="${window.buildRefURL?buildRefURL(t):t.url}" target="_blank" rel="noopener" class="tc">
       <div class="tc-thumb ${catBgs[t.cat]||'cat-chat'}">
         <span class="tc-rank">#${i+1}</span>${t.emoji}
       </div>
@@ -967,7 +967,7 @@ function buildAdShowcase() {
     const colors={premium:'linear-gradient(90deg,var(--yellow),var(--orange))',growth:'linear-gradient(90deg,var(--purple),var(--cyan))',starter:'var(--cyan)'};
     const labels={premium:'⭐ PREMIUM · $149/30 days',growth:'✦ GROWTH · $79/30 days',starter:'• STARTER · $29/7 days'};
     const ctaBg={premium:'linear-gradient(135deg,var(--yellow),var(--orange))',growth:'var(--purple)',starter:'var(--cyan)'};
-    return`<a href="${a.url}" target="_blank" rel="noopener" class="adshow-card ${tier}">
+    return`<a href="${a.url}?ref=aimodelranks" target="_blank" rel="noopener" class="adshow-card ${tier}">
       <div class="ac-bar" style="background:${colors[tier]}"></div>
       <div class="ac-body">
         <div class="ac-label">${labels[tier]}</div>
