@@ -288,9 +288,9 @@ window.AdsManager = {
 window.ToolsDB = {
   defaults: [
     {id:1,name:'Midjourney',emoji:'🎨',cat:'image',pricing:'paid',tagline:'AI image generation creating stunning artistic visuals from text prompts.',votes:2847,featured:true,url:'https://midjourney.com',daysAgo:120,approved:true,image:'https://logo.clearbit.com/midjourney.com'},
-    {id:2,name:'ChatGPT',emoji:'💬',cat:'chat',pricing:'freemium',tagline:"OpenAI's conversational AI for writing, coding, analysis and more.",votes:5230,featured:true,url:'https://chatgpt.com',daysAgo:180,approved:true,image:'https://logo.clearbit.com/chatgpt.com'},
+    {id:2,name:'ChatGPT',emoji:'💬',cat:'chat',pricing:'freemium',tagline:"OpenAI's conversational AI for writing, coding, analysis and more.",votes:5230,featured:true,url:'https://chatgpt.com',daysAgo:180,approved:true,image:'https://logo.clearbit.com/openai.com'},
     {id:3,name:'Cursor',emoji:'💻',cat:'coding',pricing:'freemium',tagline:'AI-powered code editor that understands your entire codebase.',votes:1923,featured:true,url:'https://cursor.sh',daysAgo:60,approved:true,image:'https://logo.clearbit.com/cursor.sh'},
-    {id:4,name:'Claude',emoji:'🤖',cat:'chat',pricing:'freemium',tagline:"Anthropic's AI assistant for analysis, writing and reasoning.",votes:1654,featured:false,url:'https://claude.ai',daysAgo:90,approved:true,image:'https://logo.clearbit.com/claude.ai'},
+    {id:4,name:'Claude',emoji:'🤖',cat:'chat',pricing:'freemium',tagline:"Anthropic's AI assistant for analysis, writing and reasoning.",votes:1654,featured:false,url:'https://claude.ai',daysAgo:90,approved:true,image:'https://logo.clearbit.com/anthropic.com'},
     {id:5,name:'Runway Gen-4',emoji:'🎬',cat:'video',pricing:'freemium',tagline:'State-of-the-art AI video generation from text or image.',votes:1432,featured:true,url:'https://runwayml.com',daysAgo:7,approved:true,image:'https://logo.clearbit.com/runwayml.com'},
     {id:6,name:'ElevenLabs',emoji:'🎵',cat:'audio',pricing:'freemium',tagline:'Ultra-realistic AI voice cloning and text-to-speech.',votes:1876,featured:false,url:'https://elevenlabs.io',daysAgo:150,approved:true,image:'https://logo.clearbit.com/elevenlabs.io'},
     {id:7,name:'Perplexity AI',emoji:'🔬',cat:'research',pricing:'freemium',tagline:'AI-powered search engine that cites its sources.',votes:2341,featured:false,url:'https://perplexity.ai',daysAgo:130,approved:true,image:'https://logo.clearbit.com/perplexity.ai'},
@@ -308,7 +308,7 @@ window.ToolsDB = {
     {id:19,name:'HubSpot AI',emoji:'📢',cat:'marketing',pricing:'freemium',tagline:'AI marketing automation and content generation.',votes:432,featured:false,url:'https://hubspot.com',daysAgo:70,approved:true,image:'https://logo.clearbit.com/hubspot.com'},
     {id:20,name:'Replit AI',emoji:'⚡',cat:'coding',pricing:'freemium',tagline:'AI-powered code generation and deployment platform.',votes:876,featured:false,url:'https://replit.com',daysAgo:50,approved:true,image:'https://logo.clearbit.com/replit.com'},
     {id:21,name:'Canva AI',emoji:'🎨',cat:'design',pricing:'freemium',tagline:'AI-powered design tools for creating visual content.',votes:1543,featured:false,url:'https://canva.com',daysAgo:30,approved:true,image:'https://logo.clearbit.com/canva.com'},
-    {id:22,name:'Google Gemini',emoji:'✨',cat:'chat',pricing:'free',tagline:'Google\'s multimodal AI with 1M+ token context.',votes:2341,featured:false,url:'https://gemini.google.com',daysAgo:15,approved:true,image:'https://logo.clearbit.com/gemini.google.com'},
+    {id:22,name:'Google Gemini',emoji:'✨',cat:'chat',pricing:'free',tagline:'Google\'s multimodal AI with 1M+ token context.',votes:2341,featured:false,url:'https://gemini.google.com',daysAgo:15,approved:true,image:'https://logo.clearbit.com/google.com'},
     {id:23,name:'Copilot',emoji:'💡',cat:'productivity',pricing:'freemium',tagline:'Microsoft\'s AI companion across Office and Windows.',votes:987,featured:false,url:'https://copilot.microsoft.com',daysAgo:20,approved:true,image:'https://logo.clearbit.com/microsoft.com'},
     {id:24,name:'Llama AI',emoji:'🦙',cat:'chat',pricing:'free',tagline:'Meta\'s open-source LLM family — free and powerful.',votes:1654,featured:false,url:'https://llama.meta.com',daysAgo:10,approved:true,image:'https://logo.clearbit.com/meta.com'},
   ],
@@ -357,31 +357,45 @@ window.ToolsDB = {
 
 // ── Global REFERRAL_MAP for partner links ───────────────────────────
 window.REFERRAL_MAP = window.REFERRAL_MAP || {
-  'Cursor': 'https://cursor.sh?ref=aimodelranks',
-  'ElevenLabs': 'https://elevenlabs.io?ref=aimodelranks',
   'Midjourney': 'https://midjourney.com?ref=aimodelranks',
-  'GitHub Copilot': 'https://github.com/features/copilot?ref=aimodelranks',
   'ChatGPT': 'https://chatgpt.com?ref=aimodelranks',
+  'Cursor': 'https://cursor.sh?ref=aimodelranks',
   'Claude': 'https://claude.ai?ref=aimodelranks',
-  'Perplexity AI': 'https://perplexity.ai?ref=aimodelranks',
   'Runway Gen-4': 'https://runwayml.com?ref=aimodelranks',
-  'DeepSeek': 'https://chat.deepseek.com?ref=aimodelranks',
+  'ElevenLabs': 'https://elevenlabs.io?ref=aimodelranks',
+  'Perplexity AI': 'https://perplexity.ai?ref=aimodelranks',
+  'GitHub Copilot': 'https://github.com/features/copilot?ref=aimodelranks',
   'Notion AI': 'https://notion.so?ref=aimodelranks',
   'DALL-E 3': 'https://openai.com/dall-e-3?ref=aimodelranks',
+  'Stable Diffusion':'https://stability.ai?ref=aimodelranks',
   'Sora': 'https://openai.com/sora?ref=aimodelranks',
-  'Mistral AI': 'https://mistral.ai?ref=aimodelranks',
+  'Mistral AI': 'https://chat.mistral.ai?ref=aimodelranks',
+  'DeepSeek': 'https://chat.deepseek.com?ref=aimodelranks',
   'Figma AI': 'https://figma.com?ref=aimodelranks',
-  'Google Gemini': 'https://gemini.google.com?ref=aimodelranks',
-  'Copilot': 'https://copilot.microsoft.com?ref=aimodelranks',
-  'Llama AI': 'https://llama.meta.com?ref=aimodelranks',
-  'Stable Diffusion': 'https://stability.ai?ref=aimodelranks',
-  'Canva AI': 'https://canva.com?ref=aimodelranks',
   'Devin AI': 'https://devin.ai?ref=aimodelranks',
   'Jasper AI': 'https://jasper.ai?ref=aimodelranks',
   'Anthropic': 'https://anthropic.com?ref=aimodelranks',
   'HubSpot AI': 'https://hubspot.com?ref=aimodelranks',
   'Replit AI': 'https://replit.com?ref=aimodelranks',
+  'Canva AI': 'https://canva.com?ref=aimodelranks',
+  'Google Gemini': 'https://gemini.google.com?ref=aimodelranks',
+  'Copilot': 'https://copilot.microsoft.com?ref=aimodelranks',
+  'Llama AI': 'https://llama.meta.com?ref=aimodelranks',
+};
 
+
+// ── Image fallback handler ────────────────────────────────────────
+window.fixBrokenImage = function(img) {
+  img.onerror = function() {
+    const card = img.closest('.ht-card, .tool-card, .tc, .scard');
+    const emoji = card ? (card.querySelector('.ht-name, .tc-name, .sp-name, .sc-name')?.textContent?.charAt(0) || '🤖') : '🤖';
+    img.style.display = 'none';
+    const fallback = img.nextElementSibling;
+    if (fallback && fallback.classList.contains('ht-img-fallback')) {
+      fallback.style.display = 'flex';
+    }
+    img.onerror = null;
+  };
 };
 
 // ── Referral URL builder ─────────────────────────────────────────────
