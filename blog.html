@@ -7,6 +7,7 @@
 <meta name="description" content="Daily AI model pricing analysis, new model launches, cost comparisons and AI tool reviews. The AI intelligence blog.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700;800&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+<script src="/ads.js"></script>
 <style>
 :root{
   --bg:#07090f;--bg2:#0d1117;--bg3:#131b2a;
@@ -237,12 +238,8 @@ footer a:hover{color:var(--cyan);}
         <div class="sb-body" id="price-widget">Loading...</div>
       </div>
 
-      <div class="sb-ad">
-        <div class="sb-ad-badge">SPONSORED</div>
-        <div class="sb-ad-title">🔥 Mistral AI</div>
-        <div class="sb-ad-sub">New Large 3 model — 60% cheaper than GPT-4o.</div>
-        <a href="https://mistral.ai" target="_blank" class="sb-ad-btn" style="background:#ff6b00;color:#fff">Try Mistral →</a>
-      </div>
+      <!-- SPONSORED ADS (dynamic from AdsManager) -->
+      <div id="sidebar-ads-blog"></div>
 
       <div class="sb">
         <div class="sb-hdr">🔥 Trending Articles</div>
@@ -253,16 +250,12 @@ footer a:hover{color:var(--cyan);}
         <div class="sb-ad-badge">ADVERTISE HERE</div>
         <div class="sb-ad-title">📣 Reach AI Builders</div>
         <div class="sb-ad-sub">AI developers, founders and researchers read our blog daily.</div>
-        <a href="tools.html#advertise" class="sb-ad-btn" style="background:linear-gradient(135deg,var(--cyan),var(--purple));color:#000">From $29 →</a>
+        <a href="/tools#advertise" class="sb-ad-btn" style="background:linear-gradient(135deg,var(--cyan),var(--purple));color:#000">From $29 →</a>
       </div>
 
       <div class="sb">
-        <div class="sb-hdr">🛠 Trending Tools <a href="tools.html" class="sb-lnk">All →</a></div>
-        <div class="sb-body">
-          <div style="padding:8px 0;border-bottom:1px solid rgba(30,45,66,0.4)"><a href="https://cursor.sh" target="_blank" style="color:var(--text);text-decoration:none;font-size:13px;font-weight:600">💻 Cursor</a><div style="font-family:var(--mono);font-size:11px;color:var(--text3)">Coding AI · ▲1,923</div></div>
-          <div style="padding:8px 0;border-bottom:1px solid rgba(30,45,66,0.4)"><a href="https://midjourney.com" target="_blank" style="color:var(--text);text-decoration:none;font-size:13px;font-weight:600">🎨 Midjourney</a><div style="font-family:var(--mono);font-size:11px;color:var(--text3)">Image AI · ▲2,847</div></div>
-          <div style="padding:8px 0"><a href="https://runwayml.com" target="_blank" style="color:var(--text);text-decoration:none;font-size:13px;font-weight:600">🎬 Runway Gen-4</a><div style="font-family:var(--mono);font-size:11px;color:var(--text3)">Video AI · ▲1,432</div></div>
-        </div>
+        <div class="sb-hdr">🛠 Trending Tools <a href="/tools" class="sb-lnk">All →</a></div>
+        <div class="sb-body" id="trending-tools-blog"></div>
       </div>
     </div>
   </div>
@@ -507,7 +500,35 @@ async function loadPrices(){
 
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.opacity='1';clearTimeout(t._t);t._t=setTimeout(()=>t.style.opacity='0',2500);}
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModalBtn();});
-renderBlog();loadPrices();checkHash();
+// ── SIDEBAR ADS + TRENDING TOOLS (dynamic from AdsManager/ToolsDB) ─
+function renderBlogSidebar(){
+  const sb=document.getElementById('sidebar-ads-blog');
+  if(sb && window.AdsManager){
+    const ads=AdsManager.sidebar();
+    sb.innerHTML=ads.slice(0,2).map(a=>`
+      <div class="sb-ad">
+        <div class="sb-ad-badge">SPONSORED</div>
+        <div class="sb-ad-title">${a.logo} ${a.name}</div>
+        <div class="sb-ad-sub">${a.tagline||a.desc}</div>
+        <a href="${a.url}?ref=aimodelranks" target="_blank" class="sb-ad-btn" style="background:${a.color||'#a855f7'};color:#fff">Visit ${a.name} →</a>
+      </div>
+    `).join('')||'<div class="sb-ad"><div class="sb-ad-badge">ADVERTISE</div><div class="sb-ad-title">📣 Your Tool Here</div><div class="sb-ad-sub">Reach AI developers reading our blog daily.</div><a href="/tools#advertise" class="sb-ad-btn" style="background:linear-gradient(135deg,var(--cyan),var(--purple));color:#000">From $29 →</a></div>';
+  }
+
+  const tt=document.getElementById('trending-tools-blog');
+  if(tt && window.ToolsDB){
+    const tools=ToolsDB.load().filter(t=>t.approved!==false).sort((a,b)=>b.votes-a.votes).slice(0,5);
+    tt.innerHTML=tools.map(t=>`
+      <div style="padding:8px 0;border-bottom:1px solid rgba(30,45,66,0.4)">
+        <a href="${window.buildRefURL?buildRefURL(t):t.url}" target="_blank" style="color:var(--text);text-decoration:none;font-size:13px;font-weight:600">${t.emoji||'🤖'} ${t.name}</a>
+        <div style="font-family:var(--mono);font-size:11px;color:var(--text3)">${t.cat} AI · ▲${(t.votes||0).toLocaleString()}</div>
+      </div>
+    `).join('');
+  }
+}
+
+renderBlog();loadPrices();checkHash();renderBlogSidebar();
+setInterval(renderBlogSidebar,60000);
 </script>
 </body>
 </html>
