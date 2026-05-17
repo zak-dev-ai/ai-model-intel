@@ -10,9 +10,6 @@
     { "source": "/admin.html", "destination": "/admin", "permanent": true },
     { "source": "/index.html", "destination": "/", "permanent": true }
   ],
-  "rewrites": [
-    { "source": "/api/blog", "destination": "/api/blog" }
-  ],
   "headers": [
     {
       "source": "/(.*)",
@@ -22,11 +19,5 @@
         { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
       ]
     }
-  ],
-  "functions": {
-    "api/**/*.js": {
-      "runtime": "@vercel/node@4",
-      "maxDuration": 30
-    }
-  }
+  ]
 }
