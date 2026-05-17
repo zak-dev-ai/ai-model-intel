@@ -400,6 +400,36 @@ const ARTICLES=[
   },
 ];
 
+// ── Dynamic articles loader ──────────────────────────────────────
+// Fetches fresh blog posts from the generator API, merges with hardcoded ARTICLES
+var FETCHED_ARTICLES = [];
+
+function fetchBlogArticles(){
+  fetch(API+'/blog/articles')
+    .then(function(r){return r.json();})
+    .then(function(data){
+      if(data && data.articles && data.articles.length){
+        FETCHED_ARTICLES = data.articles;
+        // Merge: prepend dynamic articles to ARTICLES (dedup by title)
+        var existingTitles = ARTICLES.map(function(a){return a.title});
+        data.articles.forEach(function(a){
+          if(existingTitles.indexOf(a.title) === -1){
+            ARTICLES.unshift(a);
+            existingTitles.push(a.title);
+          }
+        });
+        // Re-render with the new articles
+        visibleCount = 4;
+        renderBlog();
+        showToast('✨ New articles loaded!');
+      }
+    })
+    .catch(function(){}); // Silent fail — use hardcoded articles
+}
+
+// Try to load fresh articles on page load, after a small delay
+setTimeout(fetchBlogArticles, 2000);
+
 let currentCat='all',visibleCount=4,openArticleId=null;
 
 function setCat(cat,el){currentCat=cat;visibleCount=4;document.querySelectorAll('.cat-pill').forEach(b=>b.classList.remove('active'));el.classList.add('active');renderBlog();}

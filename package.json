@@ -2,5 +2,7 @@
   "name": "ai-model-intel",
   "version": "1.0.0",
   "type": "module",
-  "dependencies": {}
+  "dependencies": {
+    "@supabase/supabase-js": "^2.105.4"
+  }
 }
