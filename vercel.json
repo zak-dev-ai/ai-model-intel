@@ -10,6 +10,9 @@
     { "source": "/admin.html", "destination": "/admin", "permanent": true },
     { "source": "/index.html", "destination": "/", "permanent": true }
   ],
+  "rewrites": [
+    { "source": "/api/blog", "destination": "/api/blog" }
+  ],
   "headers": [
     {
       "source": "/(.*)",

@@ -405,7 +405,7 @@ const ARTICLES=[
 var FETCHED_ARTICLES = [];
 
 function fetchBlogArticles(){
-  fetch('/api/blog/articles')
+  fetch('/api/blog')
     .then(function(r){return r.json();})
     .then(function(data){
       if(data && data.articles && data.articles.length){
