@@ -7,7 +7,7 @@
 <meta name="description" content="Daily AI model pricing analysis, new model launches, cost comparisons and AI tool reviews. The AI intelligence blog.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700;800&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
-<script src="/ads.js"></script>
+<script src="/app.js"></script>
 <style>
 :root{
   --bg:#07090f;--bg2:#0d1117;--bg3:#131b2a;
@@ -222,6 +222,7 @@ footer a:hover{color:var(--cyan);}
     <button class="cat-pill" onclick="setCat('tools',this)">🛠 Tools</button>
     <button class="cat-pill" onclick="setCat('guides',this)">📖 Guides</button>
     <button class="cat-pill" onclick="setCat('news',this)">📰 News</button>
+    <button class="cat-pill" onclick="fetchBlogArticles()">🔄 Fresh</button>
   </div>
 
   <div class="ai-gen"><span class="ai-dot"></span> AI-assisted · Updated daily · Click any article to read full content</div>
@@ -471,11 +472,11 @@ function closeModalBtn(){
 
 function shareArticle(){
   const a=ARTICLES.find(x=>x.id===openArticleId);if(!a)return;
-  const text=`📰 ${a.title}\n\n${a.excerpt}\n\nRead at ${SITE}/blog.html#article-${a.id}\n\n#AI #ArtificialIntelligence #AINews`;
+  const text=`📰 ${a.title}\n\n${a.excerpt}\n\nRead at ${SITE}/blog#article-${a.id}\n\n#AI #ArtificialIntelligence #AINews`;
   navigator.clipboard.writeText(text).then(()=>showToast('✅ Share text copied!'));
 }
 function copyLink(){
-  navigator.clipboard.writeText(`${SITE}/blog.html#article-${openArticleId}`).then(()=>showToast('✅ Link copied!'));
+  navigator.clipboard.writeText(`${SITE}/blog#article-${openArticleId}`).then(()=>showToast('✅ Link copied!'));
 }
 
 // Check hash on load
@@ -505,41 +506,49 @@ async function loadPrices(){
     const top=(d.pricing||[]).slice(0,4);
     document.getElementById('price-widget').innerHTML=
       top.map(m=>`<div class="pw"><span style="font-size:13px;font-weight:500">${(m.model||'').slice(0,18)}</span><span class="pw-val">$${m.input_cost_per_mtok}/1M</span></div>`).join('')+
-      `<a href="compare.html" style="display:block;text-align:center;margin-top:8px;font-family:var(--mono);font-size:12px;color:var(--cyan);text-decoration:none">View 200+ models →</a>`;
-  }catch(e){}
+      `<a href="/compare" style="display:block;text-align:center;margin-top:8px;font-family:var(--mono);font-size:12px;color:var(--cyan);text-decoration:none">View 200+ models →</a>`;
+  }catch(e){
+    document.getElementById('price-widget').innerHTML='<div style="padding:8px 0;text-align:center;font-size:13px;color:var(--text3)">⚠️ Could not load prices</div><a href="/compare" style="display:block;text-align:center;margin-top:8px;font-family:var(--mono);font-size:12px;color:var(--cyan);text-decoration:none">Go to compare →</a>';
+  }
 }
 
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.opacity='1';clearTimeout(t._t);t._t=setTimeout(()=>t.style.opacity='0',2500);}
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModalBtn();});
-// ── SIDEBAR ADS + TRENDING TOOLS (dynamic from AdsManager/ToolsDB) ─
+// ── SIDEBAR ADS + TRENDING TOOLS ─
 function renderBlogSidebar(){
   const sb=document.getElementById('sidebar-ads-blog');
-  if(sb && window.AdsManager){
-    const ads=AdsManager.sidebar();
-    sb.innerHTML=ads.slice(0,2).map(a=>`
+  try {
+    var ads = window.AdsManager ? AdsManager.sidebar() : [];
+    sb.innerHTML = ads.slice(0,2).map(function(a){return `
       <div class="sb-ad">
         <div class="sb-ad-badge">SPONSORED</div>
-        <div class="sb-ad-title">${a.logo} ${a.name}</div>
-        <div class="sb-ad-sub">${a.tagline||a.desc}</div>
+        <div class="sb-ad-title">${a.logo||'🚀'} ${a.name}</div>
+        <div class="sb-ad-sub">${a.tagline||a.desc||'Featured AI tool.'}</div>
         <a href="${a.url}?ref=aimodelranks" target="_blank" class="sb-ad-btn" style="background:${a.color||'#a855f7'};color:#fff">Visit ${a.name} →</a>
-      </div>
-    `).join('')||'<div class="sb-ad"><div class="sb-ad-badge">ADVERTISE</div><div class="sb-ad-title">📣 Your Tool Here</div><div class="sb-ad-sub">Reach AI developers reading our blog daily.</div><a href="/tools#advertise" class="sb-ad-btn" style="background:linear-gradient(135deg,var(--cyan),var(--purple));color:#000">From $29 →</a></div>';
-  }
-
+      </div>`}).join('') || defaultSidebarAds();
+  } catch(e){ sb.innerHTML = defaultSidebarAds(); }
+  
   const tt=document.getElementById('trending-tools-blog');
-  if(tt && window.ToolsDB){
-    const tools=ToolsDB.load().filter(t=>t.approved!==false).sort((a,b)=>b.votes-a.votes).slice(0,5);
-    tt.innerHTML=tools.map(t=>`
-      <div style="padding:8px 0;border-bottom:1px solid rgba(30,45,66,0.4)">
-<a href="${window.buildRefURL?buildRefURL(t):t.url}" target="_blank" style="color:var(--text);text-decoration:none;font-size:13px;font-weight:600">${t.image?`<img src="${t.image}" width="16" height="16" style="object-fit:contain;border-radius:3px;vertical-align:middle;margin-right:4px" onerror="this.style.display=\x27none\x27" loading="lazy">`:""} ${t.name}</a>
-        <div style="font-family:var(--mono);font-size:11px;color:var(--text3)">${t.cat} AI · ▲${(t.votes||0).toLocaleString()}</div>
-      </div>
-    `).join('');
-  }
+  try {
+    var tools = window.ToolsDB ? ToolsDB.load().filter(function(t){return t.approved!==false}).sort(function(a,b){return b.votes-a.votes}).slice(0,5) : [];
+    if(tools.length) {
+      tt.innerHTML = tools.map(function(t){return '<div style="padding:8px 0;border-bottom:1px solid rgba(30,45,66,0.4)"><a href="'+(window.buildRefURL?buildRefURL(t):t.url)+'" target="_blank" style="color:var(--text);text-decoration:none;font-size:13px;font-weight:600">'+(t.image?'<img src="'+t.image+'" width="16" height="16" style="object-fit:contain;border-radius:3px;vertical-align:middle;margin-right:4px" onerror="this.style.display=\"none\"" loading="lazy">':'')+t.emoji+' '+t.name+'</a><div style="font-family:var(--mono);font-size:11px;color:var(--text3)">'+t.cat+' AI · ▲'+(t.votes||0).toLocaleString()+'</div></div>';}).join('');
+    } else { tt.innerHTML = defaultTrendingTools(); }
+  } catch(e){ tt.innerHTML = defaultTrendingTools(); }
 }
 
-renderBlog();loadPrices();checkHash();renderBlogSidebar();
-setInterval(renderBlogSidebar,60000);
+function defaultSidebarAds(){
+  return '<div class="sb-ad"><div class="sb-ad-badge">ADVERTISE</div><div class="sb-ad-title">📣 Your Tool Here</div><div class="sb-ad-sub">Reach AI developers reading our blog daily.</div><a href="/tools#advertise" class="sb-ad-btn" style="background:linear-gradient(135deg,var(--cyan),var(--purple));color:#000">From $29 →</a></div>'+
+  '<div class="sb-ad"><div class="sb-ad-badge">SPONSORED</div><div class="sb-ad-title">🔥 Mistral AI</div><div class="sb-ad-sub">New Large 3 — 60% cheaper than GPT-4o output.</div><a href="https://mistral.ai?ref=aimodelranks" target="_blank" class="sb-ad-btn" style="background:#ff6b00;color:#fff">Try Mistral →</a></div>';
+}
+
+function defaultTrendingTools(){
+  return '<div style="padding:8px 0;border-bottom:1px solid rgba(30,45,66,0.4)"><a href="https://cursor.sh?ref=aimodelranks" target="_blank" style="color:var(--text);text-decoration:none;font-size:13px;font-weight:600">💻 Cursor</a><div style="font-family:var(--mono);font-size:11px;color:var(--text3)">Coding AI · ▲1,923</div></div>'+
+  '<div style="padding:8px 0;border-bottom:1px solid rgba(30,45,66,0.4)"><a href="https://chatgpt.com?ref=aimodelranks" target="_blank" style="color:var(--text);text-decoration:none;font-size:13px;font-weight:600">💬 ChatGPT</a><div style="font-family:var(--mono);font-size:11px;color:var(--text3)">Chat AI · ▲5,230</div></div>'+
+  '<div style="padding:8px 0;border-bottom:1px solid rgba(30,45,66,0.4)"><a href="https://midjourney.com?ref=aimodelranks" target="_blank" style="color:var(--text);text-decoration:none;font-size:13px;font-weight:600">🎨 Midjourney</a><div style="font-family:var(--mono);font-size:11px;color:var(--text3)">Image AI · ▲2,847</div></div>'+
+  '<div style="padding:8px 0;border-bottom:1px solid rgba(30,45,66,0.4)"><a href="https://claude.ai?ref=aimodelranks" target="_blank" style="color:var(--text);text-decoration:none;font-size:13px;font-weight:600">🤖 Claude</a><div style="font-family:var(--mono);font-size:11px;color:var(--text3)">Chat AI · ▲1,654</div></div>'+
+  '<div style="padding:8px 0"><a href="https://runwayml.com?ref=aimodelranks" target="_blank" style="color:var(--text);text-decoration:none;font-size:13px;font-weight:600">🎬 Runway Gen-4</a><div style="font-family:var(--mono);font-size:11px;color:var(--text3)">Video AI · ▲1,432</div></div>';
+}
 </script>
 </body>
 </html>
