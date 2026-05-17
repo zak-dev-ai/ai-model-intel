@@ -2,7 +2,7 @@
   "articles": [
     {
       "_date": "2026-05-17",
-      "id": 1779014233621,
+      "id": 1779014278370,
       "cat": "pricing",
       "emoji": "💰",
       "tag": "PRICING",
@@ -19,12 +19,12 @@
     },
     {
       "_date": "2026-05-17",
-      "id": 1779014233622,
+      "id": 1779014278371,
       "cat": "news",
       "emoji": "📰",
       "tag": "AI NEWS",
       "title": "AI Briefing — May 17, 2026",
-      "excerpt": "Playing Atari ST Music on the Amiga with Zero CPU, Mozilla to UK regulators: VPNs are essential privacy and security too",
+      "excerpt": "AI industry updates.",
       "date": "May 17, 2026",
       "read": "3 min",
       "views": "0.5K",
@@ -32,11 +32,11 @@
       "isNew": true,
       "isAI": true,
       "bg": "linear-gradient(135deg,#001428,#002850)",
-      "content": "<h2>Today in AI</h2>\n      <h2>1. Playing Atari ST Music on the Amiga with Zero CPU</h2><p>Trending on Hacker News today.</p><h2>2. Mozilla to UK regulators: VPNs are essential privacy and security tools</h2><p>Trending on Hacker News today.</p><h2>3. Hosting a website on an 8-bit microcontroller</h2><p>Trending on Hacker News today.</p><h2>4. A nicer voltmeter clock</h2><p>Trending on Hacker News today.</p><h2>5. MCP Hello Page</h2><p>Trending on Hacker News today.</p>\n      <div class=\"highlight\">Bookmark <a href=\"https://www.aimodelranks.live\" style=\"color:var(--cyan)\">aimodelranks.live</a> for daily AI intelligence.</div>"
+      "content": "<h2>Today in AI</h2>\n      <p>AI pricing continues to drop. New models are being released at lower price points. Check aimodelranks.live for the latest data.</p>\n      <div class=\"highlight\">Bookmark <a href=\"https://www.aimodelranks.live\" style=\"color:var(--cyan)\">aimodelranks.live</a> for daily AI intelligence.</div>"
     },
     {
       "_date": "2026-05-17",
-      "id": 1779014233623,
+      "id": 1779014278372,
       "cat": "tools",
       "emoji": "🛠",
       "tag": "AI TOOLS",
