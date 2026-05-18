@@ -108,15 +108,6 @@ nav{position:sticky;top:0;z-index:1000;background:rgba(7,9,15,0.96);backdrop-fil
 .ai-dot{width:6px;height:6px;border-radius:50%;background:var(--purple);animation:pulse 1.2s infinite;}
 .refresh-btn{background:transparent;border:1px solid var(--border);color:var(--text3);font-family:var(--mono);font-size:11px;padding:5px 12px;border-radius:5px;cursor:pointer;transition:all var(--tr);}
 .refresh-btn:hover{border-color:var(--cyan);color:var(--cyan);}
-/* GENERATE BUTTON */
-.gen-btn-wrap{margin-bottom:18px;}
-.gen-btn{display:flex;align-items:center;gap:10px;width:100%;padding:13px 18px;background:linear-gradient(135deg,rgba(59,180,255,0.08),rgba(168,85,247,0.08));border:1px solid var(--border2);border-radius:var(--radius);color:var(--text);font-family:var(--mono);font-size:13px;cursor:pointer;transition:all var(--tr);}
-.gen-btn:hover{border-color:var(--cyan);background:rgba(59,180,255,0.12);}
-.gen-btn.loading{opacity:.7;cursor:wait;}
-.gen-spinner{width:14px;height:14px;border:2px solid rgba(59,180,255,0.2);border-top-color:var(--cyan);border-radius:50%;animation:spin .8s linear infinite;flex-shrink:0;display:none;}
-@keyframes spin{to{transform:rotate(360deg)}}
-.gen-label{flex:1;}
-.gen-tag{font-size:10px;color:var(--purple);}
 /* FEATURED ARTICLE */
 .featured{margin-bottom:18px;cursor:pointer;}
 .fa{background:var(--bg2);border:1px solid var(--border2);border-radius:12px;overflow:hidden;cursor:pointer;text-decoration:none;display:block;transition:border-color var(--tr),transform var(--tr),box-shadow var(--tr);}
@@ -315,25 +306,7 @@ footer a:hover{color:var(--cyan);}
 
   <div class="blog-layout">
     <div>
-      <!-- Generate Button -->
-      <div class="gen-btn-wrap">
-        <button class="gen-btn" id="gen-btn" onclick="generateFreshArticle()">
-          <div class="gen-spinner" id="gen-spinner"></div>
-          <span id="gen-icon">✨</span>
-          <span class="gen-label">
-            <strong id="gen-label-main">Generate Fresh AI Article</strong>
-            <span class="gen-tag" id="gen-tag"> · Powered by Claude · New content on demand</span>
-          </span>
-        </button>
-        <div id="api-key-area" style="display:none;margin-top:8px">
-          <div style="display:flex;gap:8px">
-            <input id="api-key-input" type="password" placeholder="sk-ant-api03-..." style="flex:1;background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:9px 12px;font-size:13px;color:var(--text);font-family:var(--mono);outline:none" value="">
-            <button onclick="saveAPIKey()" style="background:var(--green);color:#000;border:none;padding:9px 16px;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer">Save</button>
-            <button onclick="toggleAPIKeyInput()" style="background:transparent;border:1px solid var(--border);color:var(--text2);padding:9px 12px;border-radius:7px;font-size:12px;cursor:pointer">✕</button>
-          </div>
-          <div style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-top:4px">🔒 Stored locally. Get your key at <a href="https://console.anthropic.com" target="_blank" style="color:var(--cyan)">console.anthropic.com</a></div>
-        </div>
-      </div>
+
 
       <div class="cat-bar">
         <button class="cat-pill active" onclick="setCat('all',this)">🔥 All</button>
@@ -420,8 +393,6 @@ footer a:hover{color:var(--cyan);}
 <script>
 const API='https://ai-model-intel.zak-media-ai.workers.dev';
 const SITE='https://www.aimodelranks.live';
-const STORAGE_KEY='aimodelranks_blog_articles';
-const ANTHROPIC_API='https://api.anthropic.com/v1/messages';
 
 // ── Helpers ──
 function escHtml(s){var d=document.createElement('div');d.appendChild(document.createTextNode(s));return d.innerHTML;}
@@ -438,25 +409,10 @@ var ARTICLES=[
 ];
 
 // ── State ──
-var currentCat='all',visibleCount=4,openArticleId=null,isGenerating=false;
+var currentCat='all',visibleCount=4,openArticleId=null;
 
-function toggleAPIKeyInput(){var el=document.getElementById('api-key-area');el.style.display=el.style.display==='none'?'block':'none';if(el.style.display==='block'){var inp=document.getElementById('api-key-input');inp.value=localStorage.getItem('anthropic_api_key')||'';inp.focus()}}
-function saveAPIKey(){var k=document.getElementById('api-key-input').value.trim();if(!k||!k.startsWith('sk-')){showToast('⚠️ Invalid API key — must start with sk-');return}localStorage.setItem('anthropic_api_key',k);document.getElementById('api-key-area').style.display='none';showToast('✅ API key saved!')}
-var FETCHED_ARTICLES=[],STORED_ARTICLES=[];
 
-// ── Load stored/generated articles ──
-function loadStored(){
-  try{
-    var s=JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');
-    if(s.length){
-      STORED_ARTICLES=s;
-      var existingIds=ARTICLES.map(function(a){return a.id});
-      s.forEach(function(a){
-        if(existingIds.indexOf(a.id)===-1){ARTICLES.unshift(a);existingIds.push(a.id)}
-      });
-    }
-  }catch(e){}
-}
+
 
 function loadFetched(){
   fetch('/static/blog-articles.json').then(function(r){return r.json()}).then(function(data){
@@ -475,54 +431,7 @@ function refreshArticles(){
   showToast('↻ Refreshed!');
 }
 
-// ── AI Generation ──
-var TOPICS=[
-  {cat:'models',tag:'NEW MODEL',emoji:'🤖',prompt:'Write about a significant AI model release or update in 2026. Focus on pricing, capabilities, context window.'},
-  {cat:'pricing',tag:'PRICING ANALYSIS',emoji:'💰',prompt:'Write a deep analysis of AI API pricing trends in 2026. Compare models, show real cost calculations.'},
-  {cat:'compare',tag:'COMPARISON',emoji:'📊',prompt:'Write a head-to-head comparison of two AI models in 2026. Be specific with pricing and benchmarks.'},
-  {cat:'tools',tag:'AI TOOLS',emoji:'🛠',prompt:'Write about AI developer tools in 2026 — coding assistants, writing tools, or automation platforms.'},
-  {cat:'guides',tag:'GUIDE',emoji:'📖',prompt:'Write a practical guide for developers using AI APIs. Cover cost optimization, best practices, or architecture.'},
-  {cat:'news',tag:'AI NEWS',emoji:'📰',prompt:'Write about a significant AI industry development in 2026 — company announcement, funding, or market shift.'}
-];
 
-var BG_GRADIENTS=['linear-gradient(135deg,#2d0a00,#4a1800)','linear-gradient(135deg,#0a1628,#1a2850)','linear-gradient(135deg,#001a0a,#003018)','linear-gradient(135deg,#0a0a28,#1a1a50)','linear-gradient(135deg,#1a0a28,#300a50)','linear-gradient(135deg,#001428,#002850)'];
-
-var ARTICLE_IMGS=['https://images.unsplash.com/photo-1614624532983-4ce03382e63d?w=800&h=400&fit=crop&q=80','https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=800&h=400&fit=crop&q=80','https://images.unsplash.com/photo-1518432031352-d6fc5c10da5a?w=800&h=400&fit=crop&q=80','https://images.unsplash.com/photo-1675557009875-436f1cba1cf5?w=800&h=400&fit=crop&q=80'];
-
-function generateFreshArticle(){
-  if(isGenerating)return;
-  isGenerating=true;
-  var btn=document.getElementById('gen-btn'),spinner=document.getElementById('gen-spinner'),icon=document.getElementById('gen-icon'),label=document.getElementById('gen-label-main'),tag=document.getElementById('gen-tag');
-  btn.classList.add('loading');spinner.style.display='block';icon.style.display='none';
-  label.textContent='Generating fresh article…';tag.textContent=' · Claude is writing, 15–30s';
-  var topic=TOPICS[Math.floor(Math.random()*TOPICS.length)];
-  var today=new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
-  var apiKey=localStorage.getItem('anthropic_api_key')||'';
-  if(!apiKey){showToast('⚠️ Set your Anthropic API key first');toggleAPIKeyInput();btn.classList.remove('loading');spinner.style.display='none';icon.style.display='block';label.textContent='Generate Fresh AI Article';tag.textContent=' · Powered by Claude · New content on demand';isGenerating=false;return;}
-  var sys='You are a sharp AI industry journalist for AIModelRanks.live. Write data-focused with specific numbers. Return ONLY valid JSON: {"title":"string","excerpt":"string under 140 chars","content":"HTML article 400-600 words with <p><h2><strong><ul> tags","emoji":"single emoji","readMin":number}. Today: '+today+'. Must include at least one price or statistic. Raw JSON only, no markdown.';
-  fetch(ANTHROPIC_API,{method:'POST',headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:sys,messages:[{role:'user',content:topic.prompt}]})})
-    .then(function(r){return r.json()})
-    .then(function(data){
-      var text=data.content&&data.content[0]?data.content[0].text:'';
-      var parsed=JSON.parse(text.replace(/```json|```/g,'').trim());
-      var a={id:'gen-'+Date.now(),cat:topic.cat,tag:topic.tag,emoji:parsed.emoji||topic.emoji,title:parsed.title,excerpt:parsed.excerpt,content:parsed.content,date:today,read:parsed.readMin+' min',views:Math.floor(Math.random()*800)+200,featured:false,isNew:true,isAI:true,generated:true,bg:'linear-gradient(135deg,#281a00,#503000)',img:ARTICLE_IMGS[Math.floor(Math.random()*ARTICLE_IMGS.length)]};
-      ARTICLES.unshift(a);saveGenerated();renderBlog();updateStats();
-      showToast('✨ Fresh article generated!');
-    })
-    .catch(function(e){console.error(e);showToast('⚠️ Generation issue — showing existing articles.')})
-    .then(function(){
-      btn.classList.remove('loading');spinner.style.display='none';icon.style.display='block';
-      label.textContent='Generate Fresh AI Article';tag.textContent=' · Powered by Claude · New content on demand';
-      isGenerating=false;
-    });
-}
-
-function saveGenerated(){
-  try{
-    var g=ARTICLES.filter(function(a){return a.generated});
-    localStorage.setItem(STORAGE_KEY,JSON.stringify(g));
-  }catch(e){}
-}
 
 // ── Category ──
 function setCat(cat,el){currentCat=cat;visibleCount=4;document.querySelectorAll('.cat-pill').forEach(function(b){b.classList.remove('active')});el.classList.add('active');renderBlog();}
@@ -661,18 +570,13 @@ function defaultTrendingTools(){return '<div style="padding:8px 0;border-bottom:
 
 // ── Init ──
 document.addEventListener('DOMContentLoaded',function(){
-  loadStored();
   renderBlog();
-  setTimeout(function(){loadFetched()},1000);
+  setTimeout(function(){loadFetched()},500);
   loadPrices();
   setupScrollProgress();
   updateStats();
   renderBlogSidebar();
-  // API key status
-  var k=localStorage.getItem('anthropic_api_key');
-  var tag=document.getElementById('gen-tag');
-  if(k)tag.textContent=' · Claude ready · click to generate';
-  // Hash check
+  // Hash check for deep linking
   var m=window.location.hash.match(/article-(\d+)/);
   if(m)setTimeout(function(){openArticle(parseInt(m[1]))},100);
   // Keyboard
