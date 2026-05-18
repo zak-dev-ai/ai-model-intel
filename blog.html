@@ -576,9 +576,10 @@ document.addEventListener('DOMContentLoaded',function(){
   setupScrollProgress();
   updateStats();
   renderBlogSidebar();
-  // Hash check for deep linking
-  var m=window.location.hash.match(/article-(\d+)/);
-  if(m)setTimeout(function(){openArticle(parseInt(m[1]))},100);
+  // Hash-based deep linking
+  function handleHash(){var m=window.location.hash.match(/article-(\d+)/);if(m)openArticle(parseInt(m[1]));}
+  window.addEventListener('hashchange',handleHash);
+  handleHash();
   // Keyboard
   document.addEventListener('keydown',function(e){if(e.key==='Escape')closeModal()});
 });
