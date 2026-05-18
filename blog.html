@@ -301,6 +301,8 @@ footer a:hover{color:var(--cyan);}
   </div>
 </div>
 
+<script src="/app.js"></script>
+
 <!-- NAV -->
 <nav>
   <div class="nav-inner">
@@ -424,12 +426,8 @@ footer a:hover{color:var(--cyan);}
 
       <div class="sb">
         <div class="sb-hdr">🛠 Trending Tools <a href="/tools.html" class="sb-lnk">All →</a></div>
-        <div class="sb-body">
-          <div class="sb-item"><div class="sb-thumb">💻</div><div class="sb-item-content"><a class="sb-item-title" href="https://cursor.sh?ref=aimodelranks" target="_blank">Cursor</a><div class="sb-item-meta">Coding AI · ▲1,923</div></div></div>
-          <div class="sb-item"><div class="sb-thumb">💬</div><div class="sb-item-content"><a class="sb-item-title" href="https://chatgpt.com?ref=aimodelranks" target="_blank">ChatGPT</a><div class="sb-item-meta">Chat AI · ▲5,230</div></div></div>
-          <div class="sb-item"><div class="sb-thumb">🎨</div><div class="sb-item-content"><a class="sb-item-title" href="https://midjourney.com?ref=aimodelranks" target="_blank">Midjourney</a><div class="sb-item-meta">Image AI · ▲2,847</div></div></div>
-          <div class="sb-item"><div class="sb-thumb">🤖</div><div class="sb-item-content"><a class="sb-item-title" href="https://claude.ai?ref=aimodelranks" target="_blank">Claude</a><div class="sb-item-meta">Chat AI · ▲1,654</div></div></div>
-          <div class="sb-item"><div class="sb-thumb">🎬</div><div class="sb-item-content"><a class="sb-item-title" href="https://runwayml.com?ref=aimodelranks" target="_blank">Runway Gen-4</a><div class="sb-item-meta">Video AI · ▲1,432</div></div></div>
+        <div class="sb-body" id="trending-tools-blog">
+          <div style="padding:12px 0;text-align:center;color:var(--text3);font-family:var(--mono);font-size:11px">Loading…</div>
         </div>
       </div>
     </div>
@@ -676,6 +674,24 @@ async function loadPrices(){
   }
 }
 
+// ── Trending Tools sidebar ────────────────────────────
+function renderTrendingTools(){
+  var sb=document.getElementById('trending-tools-blog');
+  if(!sb)return;
+  var tools=window.ToolsDB?ToolsDB.load().filter(function(t){return t.approved!==false}):null;
+  if(!tools||!tools.length){
+    // Static fallback
+    tools=[{name:'Cursor',emoji:'💻',cat:'coding',votes:1923,url:'https://cursor.sh',image:null},{name:'ChatGPT',emoji:'💬',cat:'chat',votes:5230,url:'https://chatgpt.com',image:null},{name:'Midjourney',emoji:'🎨',cat:'image',votes:2847,url:'https://midjourney.com',image:null},{name:'Claude',emoji:'🤖',cat:'chat',votes:1654,url:'https://claude.ai',image:null},{name:'Runway Gen-4',emoji:'🎬',cat:'video',votes:1432,url:'https://runwayml.com',image:null}];
+  }
+  tools.sort(function(a,b){return b.votes-a.votes});
+  sb.innerHTML=tools.slice(0,5).map(function(t,i){
+    var img=t.image?'<img src="'+t.image+'" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:6px" onerror="this.style.display=\'none\'">':'';
+    var thumb=img?'<div class="sb-thumb">'+img+'</div>':'<div class="sb-thumb">'+(t.emoji||'🔧')+'</div>';
+    var href=(window.buildRefURL?buildRefURL(t):t.url)+'?ref=aimodelranks';
+    return '<div class="sb-item">'+thumb+'<div class="sb-item-content"><a class="sb-item-title" href="'+esc(href)+'" target="_blank">'+esc(t.name)+'</a><div class="sb-item-meta">'+esc(t.cat||'AI')+' Tool · ▲'+(t.votes||0).toLocaleString()+'</div></div></div>';
+  }).join('');
+}
+
 // ── Newsletter ────────────────────────────────────────
 function subscribeNL(){
   var email = document.getElementById('nl-email').value.trim();
@@ -782,6 +798,7 @@ document.addEventListener('DOMContentLoaded', function(){
   // Render immediately
   render();
   loadPrices();
+  renderTrendingTools();
   setupScrollProgress();
 
   // Category pills
@@ -805,6 +822,7 @@ document.addEventListener('DOMContentLoaded', function(){
   document.getElementById('refresh-btn').addEventListener('click', function(){
     render();
     loadPrices();
+    renderTrendingTools();
     showToast('↻ Refreshed!');
   });
 
