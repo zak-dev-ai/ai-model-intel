@@ -229,9 +229,29 @@ footer a:hover{color:var(--cyan);}
 
   <div class="blog-layout">
     <div>
-      <div id="featured-area"></div>
-      <div class="art-grid" id="art-grid"></div>
-      <button class="load-more" id="load-more-btn" onclick="loadMore()">Load more articles →</button>
+      <!-- STATIC FALLBACK (hidden when JS loads) -->
+      <div id="static-articles">
+        <a class="fa" id="static-featured" href="#article-1">
+          <div class="fa-thumb" style="background:linear-gradient(135deg,#2d0a00,#4a1800)">🔥<div class="fa-badge">⭐ FEATURED</div></div>
+          <div class="fa-body">
+            <div class="fa-tag">NEW MODEL<span class="nbadge">NEW</span></div>
+            <div class="fa-title">Mistral Large 3 at $0.50/1M: The Model That Changes the Pricing Game</div>
+            <div class="fa-excerpt">Mistral AI shipped Large 3 with 262K context at $0.50/1M — 60% cheaper than GPT-4o output.</div>
+            <div class="fa-meta"><span>May 4, 2026 · 5 min read · 4.2K views</span><span style="color:var(--cyan)">Read full article →</span></div>
+          </div>
+        </a>
+        <div class="art-grid">
+          <a class="ac" href="#article-2"><div class="ac-thumb" style="background:linear-gradient(135deg,#0a1628,#1a2850)">⚔️</div><div class="ac-body"><div class="ac-tag">COMPARISON<span class="nbadge">NEW</span><span class="aibadge">AI</span></div><div class="ac-title">GPT-4.1 vs Claude Sonnet 4.5: Which Model Wins in 2026?</div><div class="ac-excerpt">We compared both flagship models across pricing, context, coding, reasoning and vision.</div><div class="ac-meta"><span>May 3, 2026 · 3.8K views</span><span class="ac-read">7 min →</span></div></div></a>
+          <a class="ac" href="#article-3"><div class="ac-thumb" style="background:linear-gradient(135deg,#001a0a,#003018)">💰</div><div class="ac-body"><div class="ac-tag">PRICING GUIDE<span class="aibadge">AI</span></div><div class="ac-title">How to Cut Your AI API Bill by 70% Without Losing Quality</div><div class="ac-excerpt">Practical strategies for routing tasks to cheaper models and choosing the right tier.</div><div class="ac-meta"><span>May 2, 2026 · 2.9K views</span><span class="ac-read">6 min →</span></div></div></a>
+          <a class="ac" href="#article-4"><div class="ac-thumb" style="background:linear-gradient(135deg,#0a0a28,#1a1a50)">🛠</div><div class="ac-body"><div class="ac-tag">AI TOOLS</div><div class="ac-title">10 AI Coding Tools Developers Are Actually Using in 2026</div><div class="ac-excerpt">From Cursor to Devin AI, ranked by real usage, pricing and developer satisfaction.</div><div class="ac-meta"><span>May 1, 2026 · 3.1K views</span><span class="ac-read">8 min →</span></div></div></a>
+          <a class="ac" href="#article-5"><div class="ac-thumb" style="background:linear-gradient(135deg,#1a0a28,#300a50)">🥊</div><div class="ac-body"><div class="ac-tag">COMPARISON<span class="aibadge">AI</span></div><div class="ac-title">DeepSeek vs Mistral: The Ultimate Budget AI Showdown</div><div class="ac-excerpt">DeepSeek at $0.14/1M vs Ministral-3B at $0.04/1M. Which should you use?</div><div class="ac-meta"><span>Apr 30, 2026 · 2.4K views</span><span class="ac-read">5 min →</span></div></div></a>
+        </div>
+        <button class="load-more" onclick="document.getElementById('static-articles').querySelectorAll('.ac').forEach(e=>e.style.display='block')">View all articles →</button>
+      </div>
+      <!-- JS RENDERED (replaces static content) -->
+      <div id="featured-area" style="display:none"></div>
+      <div class="art-grid" id="art-grid" style="display:none"></div>
+      <button class="load-more" id="load-more-btn" onclick="loadMore()" style="display:none">Load more articles →</button>
     </div>
 
     <div class="sidebar">
@@ -441,6 +461,16 @@ function getFiltered(){
 }
 
 function renderBlog(){
+  // Hide static fallback, show JS sections
+  var staticEl=document.getElementById('static-articles');
+  if(staticEl) staticEl.style.display='none';
+  var faEl=document.getElementById('featured-area');
+  if(faEl) faEl.style.display='';
+  var gridEl=document.getElementById('art-grid');
+  if(gridEl) gridEl.style.display='';
+  var btnEl=document.getElementById('load-more-btn');
+  if(btnEl) btnEl.style.display='';
+  // Render articles
   const filtered=getFiltered();
   const featured=filtered.find(a=>a.featured);
   const rest=filtered.filter(a=>!a.featured).slice(0,visibleCount);
