@@ -570,6 +570,15 @@ function defaultTrendingTools(){return '<div style="padding:8px 0;border-bottom:
 
 // ── Init ──
 document.addEventListener('DOMContentLoaded',function(){
+  // One delegation listener for ALL article clicks — no inline onclick needed
+  document.querySelector('.blog-layout').addEventListener('click',function(e){
+    var el=e.target.closest('[data-id]');
+    if(el){var aid=el.getAttribute('data-id');if(aid)openArticle(parseInt(aid));return;}
+    el=e.target.closest('.fa')||e.target.closest('.ac');
+    if(el){var pid=el.getAttribute('href');if(pid){var m=pid.match(/article-(\d+)/);if(m)openArticle(parseInt(m[1]))}}else{
+    el=e.target.closest('.sb-item-content a')||e.target.closest('.sb-item-title');
+    if(el){var sid=el.getAttribute('href');if(sid){var sm=sid.match(/article-(\d+)/);if(sm)openArticle(parseInt(sm[1]))}}}
+  });
   renderBlog();
   setTimeout(function(){loadFetched()},500);
   loadPrices();
