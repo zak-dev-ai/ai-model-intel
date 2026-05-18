@@ -456,8 +456,7 @@ footer a:hover{color:var(--cyan);}
    • No external file dependencies
 ═══════════════════════════════════════════════════════ */
 
-// SITE defined in app.js — blog just uses it
-if(typeof SITE==='undefined'){var SITE='https://www.aimodelranks.live';}
+var BLOG_SITE = (typeof SITE !== 'undefined') ? SITE : 'https://www.aimodelranks.live';
 var API_WORKER = 'https://ai-model-intel.zak-media-ai.workers.dev';
 
 // ── Helpers ──────────────────────────────────────────
@@ -501,12 +500,12 @@ function buildModalHero(a){
 
 // ── Seed Articles ─────────────────────────────────────
 var ARTICLES = [
-  {id:1,cat:'models',emoji:'🔥',tag:'NEW MODEL',title:'Mistral Large 3 at $0.50/1M: The Model That Changes the Pricing Game',excerpt:'Mistral AI shipped Large 3 with 262K context at $0.50/1M — 60% cheaper than GPT-4o output. Here is what it means for your stack.',date:'May 4, 2026',read:'5 min',views:4200,featured:true,isNew:true,isAI:false,img:'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&h=400&fit=crop&q=80',content:'<p>Mistral AI just made a bold move that should have every developer reconsidering their model choices. Mistral Large 3 now sits at <strong>$0.50/1M input tokens</strong> — making it 60% cheaper than GPT-4o on output costs while matching it on capability benchmarks.</p><h2>The Numbers</h2><div class="price-table"><div class="price-row"><span>Mistral Large 3 Input</span><span class="price-val">$0.50/1M</span></div><div class="price-row"><span>Mistral Large 3 Output</span><span class="price-val">$1.50/1M</span></div><div class="price-row"><span>GPT-4o Input</span><span class="price-val">$2.50/1M</span></div><div class="price-row"><span>GPT-4o Output</span><span class="price-val">$10.00/1M</span></div><div class="price-row"><span>Context Window</span><span class="price-val">262,144 tokens</span></div></div><h2>Real Cost Comparison at Scale</h2><p>If you\'re running 1 million API calls/month with avg 2,000 tokens each:</p><div class="highlight">GPT-4o: ~$5,000/month<br>Mistral Large 3: ~$1,000/month<br><strong>Savings: $4,000/month → $48,000/year</strong></div><h2>Should You Switch?</h2><p>For most production workloads: yes. The quality-to-price ratio is exceptional. For nuanced creative writing, Claude still edges it out. For pure cost efficiency, Mistral Large 3 is now the default choice in 2026.</p><p>Compare all models live at <a href="'+SITE+'/compare.html">aimodelranks.live/compare.html</a>.</p>'},
+  {id:1,cat:'models',emoji:'🔥',tag:'NEW MODEL',title:'Mistral Large 3 at $0.50/1M: The Model That Changes the Pricing Game',excerpt:'Mistral AI shipped Large 3 with 262K context at $0.50/1M — 60% cheaper than GPT-4o output. Here is what it means for your stack.',date:'May 4, 2026',read:'5 min',views:4200,featured:true,isNew:true,isAI:false,img:'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&h=400&fit=crop&q=80',content:'<p>Mistral AI just made a bold move that should have every developer reconsidering their model choices. Mistral Large 3 now sits at <strong>$0.50/1M input tokens</strong> — making it 60% cheaper than GPT-4o on output costs while matching it on capability benchmarks.</p><h2>The Numbers</h2><div class="price-table"><div class="price-row"><span>Mistral Large 3 Input</span><span class="price-val">$0.50/1M</span></div><div class="price-row"><span>Mistral Large 3 Output</span><span class="price-val">$1.50/1M</span></div><div class="price-row"><span>GPT-4o Input</span><span class="price-val">$2.50/1M</span></div><div class="price-row"><span>GPT-4o Output</span><span class="price-val">$10.00/1M</span></div><div class="price-row"><span>Context Window</span><span class="price-val">262,144 tokens</span></div></div><h2>Real Cost Comparison at Scale</h2><p>If you\'re running 1 million API calls/month with avg 2,000 tokens each:</p><div class="highlight">GPT-4o: ~$5,000/month<br>Mistral Large 3: ~$1,000/month<br><strong>Savings: $4,000/month → $48,000/year</strong></div><h2>Should You Switch?</h2><p>For most production workloads: yes. The quality-to-price ratio is exceptional. For nuanced creative writing, Claude still edges it out. For pure cost efficiency, Mistral Large 3 is now the default choice in 2026.</p><p>Compare all models live at <a href="'+BLOG_SITE+'/compare.html">aimodelranks.live/compare.html</a>.</p>'},
   {id:2,cat:'compare',emoji:'⚔️',tag:'COMPARISON',title:'GPT-4.1 vs Claude Sonnet 4.5: Which Model Wins in 2026?',excerpt:'We compared both flagship models across pricing, context, coding, reasoning and vision tasks.',date:'May 3, 2026',read:'7 min',views:3800,featured:false,isNew:true,isAI:true,img:'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&h=400&fit=crop&q=80',content:'<p>Two of the most capable AI models of 2026 go head to head. OpenAI\'s GPT-4.1 versus Anthropic\'s Claude Sonnet 4.5. We tested both across 6 key dimensions.</p><h2>Pricing — Winner: GPT-4.1</h2><div class="price-table"><div class="price-row"><span>GPT-4.1 Input</span><span class="price-val">$2.00/1M</span></div><div class="price-row"><span>GPT-4.1 Output</span><span class="price-val">$8.00/1M</span></div><div class="price-row"><span>Claude Sonnet 4.5 Input</span><span class="price-val">$3.00/1M</span></div><div class="price-row"><span>Claude Sonnet 4.5 Output</span><span class="price-val">$15.00/1M</span></div></div><div class="highlight">GPT-4.1 is 33% cheaper on input, 47% cheaper on output tokens.</div><h2>Context Window — Winner: GPT-4.1</h2><p>GPT-4.1 ships with 1M token context. Claude Sonnet 4.5 offers 200K. For entire codebases or book-length analysis, GPT-4.1 wins handily.</p><h2>Coding — Tie</h2><p>Both excel. Claude 4.5 produces cleaner, better-commented code. GPT-4.1 handles more edge cases and obscure libraries. For most projects it\'s a tie.</p><h2>Final Verdict</h2><p>Cost-sensitive production apps → GPT-4.1. Quality-focused creative or analytical work → Claude Sonnet 4.5. You genuinely cannot go wrong with either in 2026.</p>'},
   {id:3,cat:'pricing',emoji:'💰',tag:'PRICING GUIDE',title:'How to Cut Your AI API Bill by 70% Without Losing Quality',excerpt:'Practical strategies for routing tasks to cheaper models, prompt caching and batch APIs.',date:'May 2, 2026',read:'6 min',views:2900,featured:false,isNew:false,isAI:true,img:'https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=800&h=400&fit=crop&q=80',content:'<p>Most developers overpay for AI by 40–70%. Here are the strategies that actually work in production.</p><h2>Strategy 1: Smart Task Routing</h2><p>Not all tasks need GPT-4o. Route by complexity:</p><div class="highlight">Simple (classify, extract): Gemini 1.5 Flash ($0.075/1M)<br>Medium (summarize, Q&A): Mistral Large 3 ($0.50/1M)<br>Complex (reason, code, write): Claude/GPT-4o ($2–3/1M)</div><h2>Strategy 2: Prompt Caching</h2><p>Both OpenAI and Anthropic offer prompt caching — repeated context charged at 10–20% of normal rate. For RAG apps this is your single biggest lever.</p><h2>Strategy 3: Batch APIs</h2><p>Both providers offer 50% discount for batch/non-realtime workloads. If latency does not matter, use batches for everything: embeddings, classification, content generation.</p><div class="highlight"><strong>Combined savings:</strong> Routing (30%) + Caching (25%) + Batches (15%) = up to 70% off your bill with zero quality loss on appropriate tasks.</div><h2>Bonus: Switch Output Models</h2><p>Output tokens cost 3–10× more than input. For long-form generation, test whether Mistral Large 3 ($1.50/1M out) is good enough vs GPT-4o ($10/1M out). For many use cases: yes.</p>'},
   {id:4,cat:'tools',emoji:'🛠',tag:'AI TOOLS',title:'10 AI Coding Tools Developers Are Actually Using in 2026',excerpt:'From Cursor to Devin AI, ranked by real usage, pricing and developer satisfaction scores.',date:'May 1, 2026',read:'8 min',views:3100,featured:false,isNew:false,isAI:false,img:'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800&h=400&fit=crop&q=80',content:'<p>We surveyed 500 developers on what AI coding tools they actually use daily in 2026. Here are the real results.</p><h2>#1 GitHub Copilot — 3,102 votes</h2><p>Still the most widely adopted. Deep IDE integration, inline autocomplete that works. The safe, enterprise-approved choice.</p><h2>#2 Cursor — 1,923 votes</h2><p>Fastest-growing tool in 2026. "Understand the entire codebase" is genuinely transformative — it reasons about your full project, not just the open file.</p><h2>#3 Claude for Code — 1,654 votes</h2><p>Used via API for code review, refactoring and documentation. The 200K context handles entire services in one shot.</p><h2>#4 Devin AI — 1,432 votes</h2><p>Autonomous software engineer. Give it a GitHub issue and it writes, tests and commits a fix. At $500/month it is increasingly justified for larger teams.</p><h2>#5 Windsurf — 987 votes</h2><p>The challenger to Cursor. Flows mode and cascade context make it genuinely different. Worth trying if Cursor feels slow.</p>'},
   {id:5,cat:'compare',emoji:'🥊',tag:'COMPARISON',title:'DeepSeek vs Mistral: The Ultimate Budget AI Showdown',excerpt:'DeepSeek at $0.14/1M vs Ministral-3B at $0.04/1M. Which should you build with?',date:'Apr 30, 2026',read:'5 min',views:2400,featured:false,isNew:false,isAI:true,img:'https://images.unsplash.com/photo-1535378917042-10a22c95931a?w=800&h=400&fit=crop&q=80',content:'<p>When budget matters more than prestige, these two dominate the value tier in 2026.</p><div class="price-table"><div class="price-row"><span>DeepSeek Chat Input</span><span class="price-val">$0.14/1M</span></div><div class="price-row"><span>DeepSeek Chat Output</span><span class="price-val">$0.28/1M</span></div><div class="price-row"><span>Ministral-3B Input</span><span class="price-val">$0.04/1M</span></div><div class="price-row"><span>Ministral-3B Output</span><span class="price-val">$0.04/1M</span></div></div><h2>Quality Comparison</h2><p>DeepSeek Chat handles complex tasks surprisingly well for the price — coding, analysis and summarization all perform above expectations. Ministral-3B is limited in reasoning but blazing fast and extremely cheap — ideal for classification, extraction and Q&A at massive scale.</p><div class="highlight">Use Ministral-3B for: high-volume simple tasks, classification, entity extraction<br>Use DeepSeek Chat for: coding assistance, analysis, long-form summarization</div><h2>Verdict</h2><p>Both are incredible value. For maximum throughput at minimum cost: Ministral-3B. For budget-conscious but capable tasks: DeepSeek Chat.</p>'},
-  {id:6,cat:'guides',emoji:'📖',tag:'GUIDE',title:'The Complete 2026 Guide to AI Model Pricing',excerpt:'Context windows, input vs output costs, token economics and when to pay for premium.',date:'Apr 28, 2026',read:'12 min',views:5600,featured:false,isNew:false,isAI:false,img:'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=400&fit=crop&q=80',content:'<p>AI model pricing is more complex than a single number. This guide explains everything you need to make smart decisions in 2026.</p><h2>Input vs Output Tokens</h2><p>Output tokens cost 3–10× more than input. When comparing models, always check both figures. A model at $1/1M input but $20/1M output is expensive if your app generates long responses.</p><div class="highlight">Quick math: $1/1M tokens = $0.001 per 1,000 tokens ≈ $0.0013 per 1,000 words</div><h2>Estimating Your Monthly Bill</h2><p>Formula: (avg_tokens × calls_per_month / 1,000,000) × price_per_million</p><p>Example: 2,000 tokens × 10K calls/month = 20M tokens × $0.50/1M = $10/month on Mistral Large 3</p><h2>Context Windows — Why They Matter</h2><p>Longer context = more tokens billed per call. A 200K context model does not mean you always send 200K tokens — but it means you can. For RAG and long documents, this is transformative.</p><h2>Caching, Batching, Streaming</h2><ul><li><strong>Prompt caching</strong>: 10–20% rate on repeated prefixes (OpenAI + Anthropic)</li><li><strong>Batch APIs</strong>: 50% discount, 24h turnaround</li><li><strong>Streaming</strong>: same cost as standard, better UX</li></ul><p>Track 200+ models at <a href="'+SITE+'/compare.html">aimodelranks.live/compare.html</a></p>'}
+  {id:6,cat:'guides',emoji:'📖',tag:'GUIDE',title:'The Complete 2026 Guide to AI Model Pricing',excerpt:'Context windows, input vs output costs, token economics and when to pay for premium.',date:'Apr 28, 2026',read:'12 min',views:5600,featured:false,isNew:false,isAI:false,img:'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=400&fit=crop&q=80',content:'<p>AI model pricing is more complex than a single number. This guide explains everything you need to make smart decisions in 2026.</p><h2>Input vs Output Tokens</h2><p>Output tokens cost 3–10× more than input. When comparing models, always check both figures. A model at $1/1M input but $20/1M output is expensive if your app generates long responses.</p><div class="highlight">Quick math: $1/1M tokens = $0.001 per 1,000 tokens ≈ $0.0013 per 1,000 words</div><h2>Estimating Your Monthly Bill</h2><p>Formula: (avg_tokens × calls_per_month / 1,000,000) × price_per_million</p><p>Example: 2,000 tokens × 10K calls/month = 20M tokens × $0.50/1M = $10/month on Mistral Large 3</p><h2>Context Windows — Why They Matter</h2><p>Longer context = more tokens billed per call. A 200K context model does not mean you always send 200K tokens — but it means you can. For RAG and long documents, this is transformative.</p><h2>Caching, Batching, Streaming</h2><ul><li><strong>Prompt caching</strong>: 10–20% rate on repeated prefixes (OpenAI + Anthropic)</li><li><strong>Batch APIs</strong>: 50% discount, 24h turnaround</li><li><strong>Streaming</strong>: same cost as standard, better UX</li></ul><p>Track 200+ models at <a href="'+BLOG_SITE+'/compare.html">aimodelranks.live/compare.html</a></p>'}
 ];
 
 // ── State ─────────────────────────────────────────────
@@ -529,7 +528,7 @@ function render(){
   // Featured
   var fa = document.getElementById('featured-area');
   if(featured){
-    fa.innerHTML = '<a class="fa" data-id="'+featured.id+'" href="'+SITE+'/blog.html#article-'+featured.id+'" onclick="return openById(event,'+featured.id+')">'
+    fa.innerHTML = '<a class="fa" data-id="'+featured.id+'" href="'+BLOG_SITE+'/blog.html#article-'+featured.id+'" onclick="return openById(event,'+featured.id+')">'
       + buildVisualFA(featured)
       + '<div class="fa-body">'
       + '<div class="fa-tag">'+esc(featured.tag)+(featured.isNew?'<span class="nbadge">NEW</span>':'')+(featured.isAI?'<span class="aibadge">AI</span>':'')+'</div>'
@@ -541,7 +540,7 @@ function render(){
 
   // Grid
   document.getElementById('art-grid').innerHTML = visible.map(function(a){
-    return '<a class="ac" data-id="'+a.id+'" href="'+SITE+'/blog.html#article-'+a.id+'" onclick="return openById(event,'+a.id+')">'
+    return '<a class="ac" data-id="'+a.id+'" href="'+BLOG_SITE+'/blog.html#article-'+a.id+'" onclick="return openById(event,'+a.id+')">'
       + buildVisualAC(a)
       + '<div class="ac-body">'
       + '<div class="ac-tag">'+esc(a.tag)+(a.isNew?'<span class="nbadge">NEW</span>':'')+(a.isAI?'<span class="aibadge">AI</span>':'')+'</div>'
@@ -572,7 +571,7 @@ function renderTrending(){
       : '<div class="sb-thumb">'+esc(a.emoji||catEmoji(a.cat))+'</div>';
     return '<div class="sb-item">'+visual
       +'<div class="sb-item-content">'
-      +'<a class="sb-item-title" href="'+SITE+'/blog.html#article-'+a.id+'" onclick="return openById(event,'+a.id+')">'+esc(a.title.slice(0,55))+(a.title.length>55?'…':'')+'</a>'
+      +'<a class="sb-item-title" href="'+BLOG_SITE+'/blog.html#article-'+a.id+'" onclick="return openById(event,'+a.id+')">'+esc(a.title.slice(0,55))+(a.title.length>55?'…':'')+'</a>'
       +'<div class="sb-item-meta">'+esc(a.tag)+' · '+fmtViews(a.views)+' views</div>'
       +'</div></div>';
   }).join('');
@@ -628,21 +627,21 @@ function doShareTwitter(){
   var a = ARTICLES.find(function(x){ return x.id === openArticleId; });
   if(!a) return;
   var text = '📊 ' + a.title + '\n\nvia AIModelRanks.live — The Bloomberg Terminal for AI 🐙';
-  var url = SITE+'/blog.html#article-'+a.id;
+  var url = BLOG_SITE+'/blog.html#article-'+a.id;
   window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(text)+'&url='+encodeURIComponent(url),'_blank','width=620,height=420');
   showToast('✅ Sharing on Twitter/X with AIModelRanks.live');
 }
 function doShareWhatsApp(){
   var a = ARTICLES.find(function(x){ return x.id === openArticleId; });
   if(!a) return;
-  var text = '📊 ' + a.title + '\n\n' + a.excerpt + '\n\n🔗 ' + SITE+'/blog.html#article-'+a.id + '\n\nvia AIModelRanks.live';
+  var text = '📊 ' + a.title + '\n\n' + a.excerpt + '\n\n🔗 ' + BLOG_SITE+'/blog.html#article-'+a.id + '\n\nvia AIModelRanks.live';
   window.open('https://wa.me/?text='+encodeURIComponent(text),'_blank');
   showToast('✅ Opening WhatsApp…');
 }
 function doShareCopy(){
   var a = ARTICLES.find(function(x){ return x.id === openArticleId; });
   if(!a) return;
-  var text = a.title + ' — ' + SITE+'/blog.html#article-'+a.id + ' via AIModelRanks.live';
+  var text = a.title + ' — ' + BLOG_SITE+'/blog.html#article-'+a.id + ' via AIModelRanks.live';
   if(navigator.clipboard){
     navigator.clipboard.writeText(text).then(function(){ showToast('✅ Link copied (with AIModelRanks.live)'); });
   } else {
@@ -720,7 +719,7 @@ function updateStructuredData(){
     "@context":"https://schema.org",
     "@type":"Blog",
     "name":"AIModelRanks AI Intelligence Blog",
-    "url":SITE+"/blog.html",
+    "url":BLOG_SITE+"/blog.html",
     "description":"Daily AI model pricing analysis, new launches, cost comparisons and tool reviews.",
     "publisher":{"@type":"Organization","name":"AIModelRanks.live","url":SITE},
     "blogPost": articles.map(function(a){
@@ -730,7 +729,7 @@ function updateStructuredData(){
         "description":a.excerpt,
         "datePublished":a.date,
         "author":{"@type":"Organization","name":"AIModelRanks.live"},
-        "url":SITE+"/blog.html#article-"+a.id
+        "url":BLOG_SITE+"/blog.html#article-"+a.id
       };
     })
   };
@@ -782,7 +781,7 @@ window.BlogModule = {
       var thumb = a.img
         ? '<img style="width:44px;height:44px;border-radius:6px;object-fit:cover;flex-shrink:0" src="'+esc(a.img)+'?w=88&h=88&fit=crop&q=50" alt="" loading="lazy">'
         : '<div style="width:44px;height:44px;border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:20px;background:var(--bg3,#131b2a)">'+esc(a.emoji||catEmoji(a.cat))+'</div>';
-      return '<a href="'+SITE+'/blog.html#article-'+a.id+'" style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid rgba(30,45,66,.5);text-decoration:none;align-items:center" target="_blank">'
+      return '<a href="'+BLOG_SITE+'/blog.html#article-'+a.id+'" style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid rgba(30,45,66,.5);text-decoration:none;align-items:center" target="_blank">'
         +thumb
         +'<div style="flex:1;min-width:0">'
         +'<div style="font-size:12px;font-weight:600;color:var(--text,#f0f4f8);line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">'+esc(a.title)+'</div>'
