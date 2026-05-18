@@ -456,7 +456,8 @@ footer a:hover{color:var(--cyan);}
    • No external file dependencies
 ═══════════════════════════════════════════════════════ */
 
-var SITE = 'https://www.aimodelranks.live';
+// SITE defined in app.js — blog just uses it
+if(typeof SITE==='undefined'){var SITE='https://www.aimodelranks.live';}
 var API_WORKER = 'https://ai-model-intel.zak-media-ai.workers.dev';
 
 // ── Helpers ──────────────────────────────────────────
