@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700;800&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
 <script src="/app.js"></script>
+<script src="/blog-module.js" defer></script>
 <style>
 :root{
   --bg:#07090f;--bg2:#0d1117;--bg3:#131b2a;--bg4:#1a2438;
@@ -247,12 +248,7 @@ td.td-sc{font-family:var(--mono);font-size:13px;}
 .ti-votes{font-family:var(--mono);font-size:12px;color:var(--text3);}
 .twitter-btn{display:flex;align-items:center;justify-content:center;gap:8px;background:rgba(29,161,242,0.08);border:1px solid rgba(29,161,242,0.2);color:#1da1f2;padding:10px;border-radius:8px;font-family:var(--mono);font-size:12px;cursor:pointer;width:100%;margin-top:12px;transition:background 0.2s;}
 .twitter-btn:hover{background:rgba(29,161,242,0.15);}
-/* FIX 2: Latest Blog sidebar card */
-.blog-item{display:block;padding:9px 0;border-bottom:1px solid rgba(30,45,66,0.5);text-decoration:none;}
-.blog-item:last-child{border-bottom:none;}
-.blog-item-title{font-size:13px;font-weight:600;color:var(--text);line-height:1.4;margin-bottom:3px;transition:color 0.2s;}
-.blog-item:hover .blog-item-title{color:var(--cyan);}
-.blog-item-meta{font-family:var(--mono);font-size:11px;color:var(--text3);}
+/* Latest Blog sidebar — rendered by blog-module.js */
 /* FIX 2: Advertise Here promo */
 .promo-ad{background:linear-gradient(135deg,rgba(59,180,255,0.06),rgba(168,85,247,0.06));border:1px solid var(--border2);border-radius:10px;padding:18px;text-align:center;}
 .promo-title{font-family:var(--hud);font-size:13px;color:var(--text);margin-bottom:6px;letter-spacing:0.5px;}
@@ -508,19 +504,8 @@ td.td-sc{font-family:var(--mono);font-size:13px;}
           <div class="sb-title">📰 Latest Blog</div>
           <a href="/blog" class="sb-link">Read all →</a>
         </div>
-        <div class="sb-body">
-          <a href="/blog#article-1" class="blog-item">
-            <div class="blog-item-title">Mistral Large 3 at $0.50/1M: Game Changer?</div>
-            <div class="blog-item-meta">May 4, 2026 · 5 min read</div>
-          </a>
-          <a href="/blog#article-2" class="blog-item">
-            <div class="blog-item-title">GPT-4.1 vs Claude Sonnet 4.5: Full Comparison</div>
-            <div class="blog-item-meta">May 3, 2026 · 7 min read</div>
-          </a>
-          <a href="/blog#article-3" class="blog-item">
-            <div class="blog-item-title">How to Cut Your AI API Bill by 70%</div>
-            <div class="blog-item-meta">May 2, 2026 · 6 min read</div>
-          </a>
+        <div class="sb-body" id="latest-blog">
+          <div style="padding:12px 0;text-align:center;color:var(--text3);font-family:var(--mono);font-size:11px">Loading articles…</div>
         </div>
       </div>
 
@@ -918,6 +903,8 @@ renderCompareSidebar();
 loadData();
 setInterval(loadData,60000);
 setInterval(renderCompareSidebar,30000);
+// Latest Blog sidebar
+if(window.BlogModule){BlogModule.renderLatest('latest-blog',5)}else{setTimeout(function(){if(window.BlogModule)BlogModule.renderLatest('latest-blog',5)},500)}
 </script>
 </body>
 </html>
