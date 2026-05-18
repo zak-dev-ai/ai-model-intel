@@ -10,6 +10,17 @@ const path = require('path');
 const https = require('https');
 
 const MODELS_API = 'https://ai-model-intel.zak-media-ai.workers.dev/pricing';
+
+const ARTICLE_IMGS = [
+  'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=400&fit=crop&q=80',
+  'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&h=400&fit=crop&q=80',
+  'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800&h=400&fit=crop&q=80',
+  'https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=800&h=400&fit=crop&q=80',
+  'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&h=400&fit=crop&q=80',
+  'https://images.unsplash.com/photo-1535378917042-10a22c95931a?w=800&h=400&fit=crop&q=80',
+  'https://images.unsplash.com/photo-1614624532983-4ce03382e63d?w=800&h=400&fit=crop&q=80',
+  'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=800&h=400&fit=crop&q=80'
+];
 const OUTPUT = path.join(__dirname, '..', 'static', 'blog-articles.json');
 
 function fetch(url) {
@@ -52,6 +63,8 @@ async function generate() {
     ).filter(h => !/^(Ask|Show) HN/.test(h));
   } catch {}
 
+  function pickImg() { return ARTICLE_IMGS[Math.floor(Math.random() * ARTICLE_IMGS.length)]; }
+
   if (modelData.length > 0) {
     const top3 = modelData.slice(0, 3);
     articles.push({
@@ -61,6 +74,7 @@ async function generate() {
       date: dateStr, read: '3 min', views: '0.8K',
       featured: false, isNew: true, isAI: true,
       bg: 'linear-gradient(135deg,#001a0a,#003018)',
+      img: pickImg(),
       content: `<h2>Top Budget Models Today</h2>
         <div class="price-table">${top3.map(m => `<div class="price-row"><span>${m.model?.split(': ').pop() || m.model}</span><span class="pv">$${m.input_cost_per_mtok}/1M</span></div>`).join('')}</div>
         <div class="highlight">Route simple tasks to budget models ($0.02-0.05/1M). Save premium models for complex reasoning. This alone cuts API bills 60-80%.</div>
@@ -75,6 +89,7 @@ async function generate() {
     date: dateStr, read: '3 min', views: '0.5K',
     featured: articles.length === 0, isNew: true, isAI: true,
     bg: 'linear-gradient(135deg,#001428,#002850)',
+    img: pickImg(),
     content: `<h2>Today in AI</h2>
       ${rssHeadlines.length > 0
         ? rssHeadlines.map((h, i) => `<h2>${i+1}. ${h}</h2><p>Trending on Hacker News today.</p>`).join('')
@@ -89,6 +104,7 @@ async function generate() {
     date: dateStr, read: '3 min', views: '0.6K',
     featured: false, isNew: true, isAI: false,
     bg: 'linear-gradient(135deg,#0a0a28,#1a1a50)',
+    img: pickImg(),
     content: `<h2>This Week's Standouts</h2>
       <p>Browse and vote at <a href="https://www.aimodelranks.live/tools" style="color:var(--cyan)">aimodelranks.live/tools</a>.</p>
       <h2>Code Assistants</h2>

@@ -29,6 +29,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700;800&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
 <script src="/app.js"></script>
+<script src="/blog-module.js" defer></script>
 <style>
 :root{
   --bg:#07090f;--bg2:#0d1117;--bg3:#131b2a;--bg4:#1a2235;
@@ -324,6 +325,14 @@ footer a:hover{color:var(--cyan);}
             <span class="gen-tag" id="gen-tag"> · Powered by Claude · New content on demand</span>
           </span>
         </button>
+        <div id="api-key-area" style="display:none;margin-top:8px">
+          <div style="display:flex;gap:8px">
+            <input id="api-key-input" type="password" placeholder="sk-ant-api03-..." style="flex:1;background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:9px 12px;font-size:13px;color:var(--text);font-family:var(--mono);outline:none" value="">
+            <button onclick="saveAPIKey()" style="background:var(--green);color:#000;border:none;padding:9px 16px;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer">Save</button>
+            <button onclick="toggleAPIKeyInput()" style="background:transparent;border:1px solid var(--border);color:var(--text2);padding:9px 12px;border-radius:7px;font-size:12px;cursor:pointer">✕</button>
+          </div>
+          <div style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-top:4px">🔒 Stored locally. Get your key at <a href="https://console.anthropic.com" target="_blank" style="color:var(--cyan)">console.anthropic.com</a></div>
+        </div>
       </div>
 
       <div class="cat-bar">
@@ -430,6 +439,9 @@ var ARTICLES=[
 
 // ── State ──
 var currentCat='all',visibleCount=4,openArticleId=null,isGenerating=false;
+
+function toggleAPIKeyInput(){var el=document.getElementById('api-key-area');el.style.display=el.style.display==='none'?'block':'none';if(el.style.display==='block'){var inp=document.getElementById('api-key-input');inp.value=localStorage.getItem('anthropic_api_key')||'';inp.focus()}}
+function saveAPIKey(){var k=document.getElementById('api-key-input').value.trim();if(!k||!k.startsWith('sk-')){showToast('⚠️ Invalid API key — must start with sk-');return}localStorage.setItem('anthropic_api_key',k);document.getElementById('api-key-area').style.display='none';showToast('✅ API key saved!')}
 var FETCHED_ARTICLES=[],STORED_ARTICLES=[];
 
 // ── Load stored/generated articles ──
@@ -485,8 +497,10 @@ function generateFreshArticle(){
   label.textContent='Generating fresh article…';tag.textContent=' · Claude is writing, 15–30s';
   var topic=TOPICS[Math.floor(Math.random()*TOPICS.length)];
   var today=new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+  var apiKey=localStorage.getItem('anthropic_api_key')||'';
+  if(!apiKey){showToast('⚠️ Set your Anthropic API key first');toggleAPIKeyInput();btn.classList.remove('loading');spinner.style.display='none';icon.style.display='block';label.textContent='Generate Fresh AI Article';tag.textContent=' · Powered by Claude · New content on demand';isGenerating=false;return;}
   var sys='You are a sharp AI industry journalist for AIModelRanks.live. Write data-focused with specific numbers. Return ONLY valid JSON: {"title":"string","excerpt":"string under 140 chars","content":"HTML article 400-600 words with <p><h2><strong><ul> tags","emoji":"single emoji","readMin":number}. Today: '+today+'. Must include at least one price or statistic. Raw JSON only, no markdown.';
-  fetch(ANTHROPIC_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:sys,messages:[{role:'user',content:topic.prompt}]})})
+  fetch(ANTHROPIC_API,{method:'POST',headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:sys,messages:[{role:'user',content:topic.prompt}]})})
     .then(function(r){return r.json()})
     .then(function(data){
       var text=data.content&&data.content[0]?data.content[0].text:'';
@@ -543,7 +557,7 @@ function renderBlog(){
   document.getElementById('load-more-btn').style.display=rest.length>visibleCount?'block':'none';
   // Trending
   var trending=ARTICLES.slice().sort(function(a,b){return b.views-a.views}).slice(0,5);
-  document.getElementById('trending-articles').innerHTML=trending.map(function(a){return '<div class="sb-item"><img class="sb-item-thumb" src="'+a.img+'?w=88&h=88&fit=crop&q=60" alt="" loading="lazy"><div class="sb-item-content"><a href="#article-'+a.id+'" onclick="openArticle('+a.id+');return false;">'+escHtml(a.title.slice(0,50))+(a.title.length>50?'…':'')+'</a><div class="sb-item-meta">'+a.tag+' · '+formatViews(a.views)+' views</div></div></div>';}).join('');
+  document.getElementById('trending-articles').innerHTML=trending.map(function(a){var ti=a.img||'';var thumb=ti?'<img class="sb-item-thumb" src="'+ti+'?w=88&h=88&fit=crop&q=60" alt="" loading="lazy">':'<div class="sb-item-thumb" style="display:flex;align-items:center;justify-content:center;font-size:18px">'+(a.emoji||'📰')+'</div>';return '<div class="sb-item">'+thumb+'<div class="sb-item-content"><a href="#article-'+a.id+'" onclick="openArticle('+a.id+');return false;">'+escHtml(a.title.slice(0,50))+(a.title.length>50?'…':'')+'</a><div class="sb-item-meta">'+a.tag+' · '+formatViews(a.views)+' views</div></div></div>';}).join('');
   // Status
   document.getElementById('status-label').textContent=filtered.length+' articles · AI-generated · Click to read in full';
 }
@@ -553,7 +567,8 @@ function openArticle(id){
   var a=ARTICLES.find(function(x){return x.id===id});if(!a)return;
   openArticleId=id;
   a.views=(a.views||0)+1;
-  document.getElementById('modal-thumb').innerHTML='<img src="'+a.img+'" alt="'+escHtml(a.title)+'" style="width:100%;height:100%;object-fit:cover;display:block">';
+  var mi=a.img||'';
+  document.getElementById('modal-thumb').innerHTML=mi?'<img src="'+mi+'" alt="'+escHtml(a.title)+'" style="width:100%;height:100%;object-fit:cover;display:block" onerror="this.style.display=\'none\';this.parentNode.style.background=\'var(--bg3)\'">':'<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:64px;background:var(--bg3)">'+a.emoji+'</div>';
   document.getElementById('modal-tags').innerHTML='<span class="tag-pill tag-cat">'+a.tag+'</span>'+(a.isNew?'<span class="tag-pill tag-new">NEW</span>':'')+(a.isAI?'<span class="tag-pill tag-ai">AI</span>':'');
   document.getElementById('modal-title').textContent=a.title;
   document.getElementById('modal-byline').innerHTML='<span>'+a.date+'</span><span>·</span><span>'+a.read+' read</span><span>·</span><span>'+formatViews(a.views)+' views</span><span>·</span><span style="color:var(--cyan);font-weight:600">AIModelRanks.live</span>';
@@ -573,7 +588,9 @@ function handleOverlayClick(e){if(e.target===document.getElementById('modal-over
 
 function shareTwitter(){
   var a=ARTICLES.find(function(x){return x.id===openArticleId});if(!a)return;
-  window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(a.title+' — by AIModelRanks.live')+'&url='+encodeURIComponent(SITE+'/blog#article-'+a.id),'_blank','width=600,height=400');
+  var text=a.title+' — read on AIModelRanks.live';
+  window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(text)+'&url='+encodeURIComponent(SITE+'/blog#article-'+a.id),'_blank','width=600,height=400');
+  showToast('✅ Shared on Twitter/X — aimodelranks.live branding included');
 }
 function copyLink(){
   var a=ARTICLES.find(function(x){return x.id===openArticleId});if(!a)return;
@@ -603,12 +620,13 @@ function updateStats(){
 function subscribeNL(){
   var email=document.getElementById('nl-email').value.trim();
   if(!email||!email.includes('@')){showToast('Please enter a valid email');return;}
-  var subs=JSON.parse(localStorage.getItem('octopus_subscribers')||'[]');
+  var subs=JSON.parse(localStorage.getItem('aimodelranks_subscribers')||'[]');
   if(subs.includes(email)){showToast('Already subscribed! ✅');return;}
-  subs.push(email);
-  localStorage.setItem('octopus_subscribers',JSON.stringify(subs));
-  showToast('✅ Subscribed! Weekly digest coming every Monday. 🐙');
+  subs.push(email);localStorage.setItem('aimodelranks_subscribers',JSON.stringify(subs));
+  showToast('✅ Subscribed! ('+subs.length+' readers). Weekly digest coming every Monday. 🐙');
   document.getElementById('nl-email').value='';
+  // Also send to API if available
+  try{fetch(API+'/subscribe',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:email,page:'/blog'})}).catch(function(){})}catch(e){}
 }
 
 // ── Prices ──
@@ -650,6 +668,10 @@ document.addEventListener('DOMContentLoaded',function(){
   setupScrollProgress();
   updateStats();
   renderBlogSidebar();
+  // API key status
+  var k=localStorage.getItem('anthropic_api_key');
+  var tag=document.getElementById('gen-tag');
+  if(k)tag.textContent=' · Claude ready · click to generate';
   // Hash check
   var m=window.location.hash.match(/article-(\d+)/);
   if(m)setTimeout(function(){openArticle(parseInt(m[1]))},100);
