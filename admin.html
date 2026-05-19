@@ -772,7 +772,22 @@ function showToast(msg) {
 }
 
 function trackPageView() { var v = parseInt(localStorage.getItem("octopus_pageviews")||0); localStorage.setItem("octopus_pageviews", v+1); }
-async function fetchSupabaseAnalytics(){var lv=parseInt(localStorage.getItem("octopus_pv")||0);document.getElementById("ana-views").textContent=lv.toLocaleString();document.getElementById("s-clicks").textContent=lv.toLocaleString();try{var K="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imprb3hyZnRsc2x5bGZtdWdqb21kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4MjAzNTEsImV4cCI6MjA5MzM5NjM1MX0.1LVo1a2K2V8QZPX94bVTBmzIxUskKp0mR7RmNwgOdcI";var r=await fetch("https://jkoxrftlslylfmugjomd.supabase.co/rest/v1/analytics?select=id",{headers:{"apikey":K,"Authorization":"Bearer "+K}});var d=await r.json();if(Array.isArray(d)){document.getElementById("ana-views").textContent=d.length.toLocaleString();document.getElementById("s-clicks").textContent=d.length.toLocaleString()}}catch(e){}var ads=window.AdsManager?AdsManager.load().filter(function(a){return a.plan&&a.plan!=="default"}):[];var n=ads.filter(function(s){return s.active}).length;document.getElementById("ana-revenue").textContent=n>0?"$"+(n*79):"$0";document.getElementById("s-revenue").textContent=n>0?"$"+(n*79):"$0"}
+async function fetchSupabaseAnalytics(){
+  var lv=parseInt(localStorage.getItem("octopus_pv")||0);
+  document.getElementById("ana-views").textContent=lv.toLocaleString();
+  document.getElementById("s-clicks").textContent=lv.toLocaleString();
+  try{
+    var K="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imprb3hyZnRsc2x5bGZtdWdqb21kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4MjAzNTEsImV4cCI6MjA5MzM5NjM1MX0.1LVo1a2K2V8QZPX94bVTBmzIxUskKp0mR7RmNwgOdcI";
+    var r=await fetch("https://jkoxrftlslylfmugjomd.supabase.co/rest/v1/analytics?select=id",{headers:{"apikey":K,"Authorization":"Bearer "+K}});
+    var d=await r.json();
+    if(Array.isArray(d)){document.getElementById("ana-views").textContent=d.length.toLocaleString();document.getElementById("s-clicks").textContent=d.length.toLocaleString()}
+  }catch(e){}
+  var ads=window.AdsManager?AdsManager.load().filter(function(a){return a.plan&&a.plan!=="default"}):[];
+  var activeAds=ads.filter(function(s){return s.active});
+  var rev=activeAds.reduce(function(sum,a){ var prices={starter:9,growth:49,premium:99}; return sum+(prices[a.plan]||0); },0);
+  document.getElementById("ana-revenue").textContent=rev>0?"$"+rev:"$0";
+  document.getElementById("s-revenue").textContent=rev>0?"$"+rev:"$0";
+}
 function initAdmin(){
   loadData();
   renderTools();
