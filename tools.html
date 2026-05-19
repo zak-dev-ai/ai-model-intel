@@ -861,6 +861,30 @@ function vote(id,btn){
   showToast('✅ Voted!');
 }
 
+// ── FREE TOOLS GRID ──
+function renderFreeTools(){
+  const grid=document.getElementById('free-tools-grid');
+  if(!grid) return;
+  const tools=ToolsDB.load().filter(function(t){
+    return t.approved!==false && (t.pricing==='free'||t.pricing==='freemium');
+  }).sort(function(a,b){return b.votes-a.votes}).slice(0,8);
+  if(!tools.length){ grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:24px;color:var(--text3);font-family:var(--mono);font-size:12px">No free tools yet — <a href="#submit-tool" style="color:var(--green)">submit yours</a></div>'; return; }
+  grid.innerHTML=tools.map(function(t,i){
+    var url=buildRefURL(t);
+    var catCls=catBgs[t.cat]||'cat-chat';
+    var isVoted=voted.has(t.id);
+    var imgHtml=t.image ? '<img class="tc-img" src="'+t.image+'" alt="'+t.name+'" loading="lazy" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">' : '';
+    var fallback='<div class="tc-img-fallback '+catCls+'" style="'+(t.image?'display:none':'')+'">'+(t.emoji||'🤖')+'</div>';
+    return '<a href="'+url+'" target="_blank" rel="noopener" class="tool-card'+(t.featured?' featured':'')+'">'+
+      '<div class="tc-img-wrap"><span class="tc-rank">#'+(i+1)+'</span>'+imgHtml+fallback+'</div>'+
+      '<div class="tc-body"><div class="tc-name">'+t.name+((t.daysAgo||0)<=7?'<span class="new-badge">NEW</span>':'')+'</div>'+
+      '<div class="tc-tagline">'+t.tagline+'</div>'+
+      '<div class="tc-meta"><span class="tc-pricing '+pricingCls(t.pricing)+'">'+pricingLbl(t.pricing)+'</span>'+
+      '<button class="vote-btn'+(isVoted?' voted':'')+'" onclick="event.preventDefault();event.stopPropagation();vote('+t.id+',this)">▲ <span class="vc">'+(t.votes||0).toLocaleString()+'</span></button></div>'+
+      '</div></a>';
+  }).join('');
+}
+
 // ── IMAGE UPLOAD ──
 function previewImg(input){
   const file=input.files[0]; if(!file) return;
@@ -1039,6 +1063,7 @@ if(checkPaymentReturn()){
 }
 
 renderPaidSlots();
+renderFreeTools();
 renderSpotlight();
 renderTicker();
 renderTools();
@@ -1052,7 +1077,7 @@ function renderJobs(){
   const empty=document.getElementById('jobs-empty');
   if(!grid) return;
   const jobs=window.JobsDB ? JobsDB.active() : [];
-  if(jobs.length===0){ if(empty) empty.style.display=''; grid.innerHTML=''; return; }
+  if(jobs.length===0){ if(empty) empty.style.display=''; return; }
   if(empty) empty.style.display='none';
   grid.innerHTML=jobs.map(function(j){
     var daysLeft=Math.max(0,Math.ceil((new Date(j.expiresAt)-new Date())/86400000));
