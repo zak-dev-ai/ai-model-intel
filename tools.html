@@ -83,6 +83,14 @@ nav{position:sticky;top:0;z-index:1000;background:rgba(7,9,15,0.97);backdrop-fil
 .job-card .jc-apply{font-family:var(--mono);font-size:10px;padding:4px 12px;border-radius:6px;background:var(--cyan);color:#000;text-decoration:none;font-weight:600}
 
 .sc-body{padding:10px;flex:1;display:flex;flex-direction:column;}
+.sc-visual{position:relative;overflow:hidden;height:80px;display:flex;align-items:center;justify-content:center;background:var(--bg2);flex-shrink:0}
+.sc-visual img{width:48px;height:48px;object-fit:contain;border-radius:8px}
+.sc-visual.empty{background:rgba(168,85,247,0.05);border-bottom:1px dashed rgba(168,85,247,0.15)}
+.sc-visual .sc-emoji{font-size:36px;line-height:1}
+.sc-tierpill{position:absolute;top:6px;right:6px;font-family:var(--mono);font-size:7px;padding:2px 6px;border-radius:100px;letter-spacing:0.5px;text-transform:uppercase}
+.sc-tierpill.premium{color:var(--yellow);border:1px solid rgba(251,191,36,0.3);background:rgba(251,191,36,0.06)}
+.sc-tierpill.growth{color:var(--purple);border:1px solid rgba(168,85,247,0.3);background:rgba(168,85,247,0.06)}
+.sc-tierpill.starter{color:var(--cyan);border:1px solid rgba(59,180,255,0.3);background:rgba(59,180,255,0.06)}
 .sc-badge{font-family:var(--mono);font-size:8px;color:var(--yellow);letter-spacing:0.5px;margin-bottom:5px;}
 .sc-ico{font-size:18px;margin-bottom:4px;}
 .sc-name{font-size:11px;font-weight:700;color:var(--text);margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
