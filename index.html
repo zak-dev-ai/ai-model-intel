@@ -98,7 +98,7 @@ nav{position:sticky;top:0;z-index:1000;background:rgba(7,9,15,0.97);backdrop-fil
 .scard:hover{transform:translateY(-4px);box-shadow:0 8px 32px rgba(0,217,126,0.15), 0 0 0 1px rgba(0,217,126,0.2);}
 .scard::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
 
-/* PREMIUM $149 — largest, golden border */
+/* PREMIUM $99 — largest, golden border */
 .scard.tier-premium{width:290px;margin:10px 8px;background:var(--bg3);border:1px solid rgba(251,191,36,.35);}
 .scard.tier-premium::before{background:linear-gradient(90deg,var(--yellow),var(--orange));}
 .scard.tier-premium .sc-body{padding:16px;}
@@ -106,7 +106,7 @@ nav{position:sticky;top:0;z-index:1000;background:rgba(7,9,15,0.97);backdrop-fil
 .scard.tier-premium .sc-name{font-size:16px;}
 .scard.tier-premium .sc-desc{font-size:13px;}
 
-/* GROWTH $79 — medium, purple border */
+/* GROWTH $49 — medium, purple border */
 .scard.tier-growth{width:230px;margin:10px 6px;background:var(--bg3);border:1px solid rgba(168,85,247,.3);}
 .scard.tier-growth::before{background:linear-gradient(90deg,var(--purple),var(--cyan));}
 .scard.tier-growth .sc-body{padding:14px;}
@@ -114,7 +114,7 @@ nav{position:sticky;top:0;z-index:1000;background:rgba(7,9,15,0.97);backdrop-fil
 .scard.tier-growth .sc-name{font-size:14px;}
 .scard.tier-growth .sc-desc{font-size:12px;}
 
-/* STARTER $29 — smallest, cyan border */
+/* STARTER $9 — smallest, cyan border */
 .scard.tier-starter{width:185px;margin:10px 5px;background:var(--bg3);border:1px solid rgba(59,180,255,.2);}
 .scard.tier-starter::before{background:var(--cyan);}
 .scard.tier-starter .sc-body{padding:12px;}
@@ -620,7 +620,7 @@ td.td-sc{font-family:var(--mono);font-size:11px;}
 <div class="top6-section">
   <div class="top6-hdr">
     <div class="top6-title">⭐ SPOTLIGHT SLOTS <span style="font-family:var(--mono);font-size:9px;color:var(--text3);font-weight:400">— priority positions 1–6</span></div>
-    <div class="top6-sub"><a href="/tools#advertise" style="color:var(--purple);text-decoration:none;font-family:var(--mono);font-size:10px">Buy a slot from $29 →</a></div>
+    <div class="top6-sub"><a href="/tools#advertise" style="color:var(--purple);text-decoration:none;font-family:var(--mono);font-size:10px">Buy a slot from $9 →</a></div>
   </div>
   <div class="top6-grid" id="home-top6-grid"></div>
 </div>
@@ -789,7 +789,7 @@ td.td-sc{font-family:var(--mono);font-size:11px;}
       <div class="promo-ad">
         <div class="promo-title">📣 Advertise Here</div>
         <div class="promo-sub">Put your AI tool in front of 10K+ developers comparing AI products daily.</div>
-        <div class="promo-price">from $29</div>
+        <div class="promo-price">from $9</div>
         <div class="promo-period">7 days · auto-expires · no account needed</div>
         <a href="/tools#advertise" class="btn-promo">Get Featured →</a>
       </div>
@@ -906,9 +906,9 @@ function buildSpotlight() {
 
   // Fill remaining with empty buy slots
   const empties=[
-    {tier:'premium',price:'$149/30d',label:'⭐ Premium Spot',feats:'#1 placement · All pages · Immediate'},
-    {tier:'growth', price:'$79/30d', label:'✦ Growth Spot', feats:'Slots 2-3 · Spotlight · Priority'},
-    {tier:'starter',price:'$29/7d',  label:'• Starter Spot', feats:'Slots 4-6 · Featured badge · 7 days'},
+    {tier:'premium',price:'$99/30d',label:'⭐ Premium Spot',feats:'#1 placement · All pages · Immediate'},
+    {tier:'growth', price:'$49/30d', label:'✦ Growth Spot', feats:'Slots 2-3 · Spotlight · Priority'},
+    {tier:'starter',price:'$9/7d',  label:'• Starter Spot', feats:'Slots 4-6 · Featured badge · 7 days'},
   ];
   const totalEntries = paid.length + tools.length;
   for(let i=0;i<Math.max(0,8-totalEntries);i++){
@@ -964,7 +964,7 @@ function buildAdShowcase() {
 
   function adCard(a, tier){
     const colors={premium:'linear-gradient(90deg,var(--yellow),var(--orange))',growth:'linear-gradient(90deg,var(--purple),var(--cyan))',starter:'var(--cyan)'};
-    const labels={premium:'⭐ PREMIUM · $149/30 days',growth:'✦ GROWTH · $79/30 days',starter:'• STARTER · $29/7 days'};
+    const labels={premium:'⭐ PREMIUM · $99/30 days',growth:'✦ GROWTH · $49/30 days',starter:'• STARTER · $9/7 days'};
     const ctaBg={premium:'linear-gradient(135deg,var(--yellow),var(--orange))',growth:'var(--purple)',starter:'var(--cyan)'};
     return`<a href="${a.url}?ref=aimodelranks" target="_blank" rel="noopener" class="adshow-card ${tier}">
       <div class="ac-bar" style="background:${colors[tier]}"></div>
@@ -979,9 +979,9 @@ function buildAdShowcase() {
 
   function emptyCard(tier){
     const config={
-      premium:{price:'$149',period:'/30 days',label:'⭐ Premium Spot',color:'var(--yellow)',feats:'Homepage hero placement\nTop of ALL pages\nImmediate review (<2h)\nNewsletter mention',co:CHECKOUT.premium},
-      growth:{price:'$79',period:'/30 days',label:'✦ Growth Spot',color:'var(--purple)',feats:'Spotlight carousel\nSidebar on all pages\nTicker mention\nPriority placement',co:CHECKOUT.growth},
-      starter:{price:'$29',period:'/7 days',label:'• Starter Spot',color:'var(--cyan)',feats:'Featured badge\nCategory placement\nTicker mention\n24h review',co:CHECKOUT.starter},
+      premium:{price:'$99',period:'/30 days',label:'⭐ Premium Spot',color:'var(--yellow)',feats:'Homepage hero placement\nTop of ALL pages\nImmediate review (<2h)\nNewsletter mention',co:CHECKOUT.premium},
+      growth:{price:'$49',period:'/30 days',label:'✦ Growth Spot',color:'var(--purple)',feats:'Spotlight carousel\nSidebar on all pages\nTicker mention\nPriority placement',co:CHECKOUT.growth},
+      starter:{price:'$9',period:'/7 days',label:'• Starter Spot',color:'var(--cyan)',feats:'Featured badge\nCategory placement\nTicker mention\n24h review',co:CHECKOUT.starter},
     }[tier];
     return`<div class="adshow-card empty" onclick="window.open('${config.co}','_blank')">
       <div class="ac-bar"></div>
@@ -1234,7 +1234,7 @@ function renderHomeTop6(){
     else if(s.plan==='starter' && !paidBySlot[5]) paidBySlot[5]=s;
     else if(s.plan==='starter' && !paidBySlot[6]) paidBySlot[6]=s;
   });
-  const prices={1:'$149/mo',2:'$79/mo',3:'$79/mo',4:'$29/wk',5:'$29/wk',6:'$29/wk'};
+  const prices={1:'$99/mo',2:'$49/mo',3:'$49/mo',4:'$9/wk',5:'$9/wk',6:'$9/wk'};
   const plans={1:'premium',2:'growth',3:'growth',4:'starter',5:'starter',6:'starter'};
   const dodo=window.OCTOPUS_CONFIG ? OCTOPUS_CONFIG.DODO : CHECKOUT;
 

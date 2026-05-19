@@ -24,8 +24,8 @@ window.OCTOPUS_CONFIG = {
     premium: 'https://checkout.dodopayments.com/buy/pdt_0NeuDicfvBmy8ws9vVtag?quantity=1',
   },
   SLOT_PRICES: {
-    1: '$149/mo', 2: '$79/mo', 3: '$79/mo',
-    4: '$29/wk', 5: '$29/wk', 6: '$29/wk'
+    1: '$99/mo', 2: '$49/mo', 3: '$49/mo',
+    4: '$9/wk', 5: '$9/wk', 6: '$9/wk'
   },
   SLOT_PLANS: {
     1: 'premium', 2: 'growth', 3: 'growth',
