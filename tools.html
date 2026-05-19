@@ -65,22 +65,45 @@ nav{position:sticky;top:0;z-index:1000;background:rgba(7,9,15,0.97);backdrop-fil
 .slot-card.empty{border-style:dashed;border-color:rgba(168,85,247,0.2);background:rgba(168,85,247,0.02);cursor:pointer;}
 .slot-card.empty:hover{border-color:var(--purple);background:rgba(168,85,247,0.05);}
 
-/* JOB CARDS */
-.job-card{border-radius:9px;overflow:hidden;border:1px solid var(--border);background:var(--bg2);display:flex;flex-direction:column;transition:transform 0.2s,border-color 0.2s;text-decoration:none;cursor:pointer;padding:12px;min-height:140px}
-.job-card:hover{transform:translateY(-2px);border-color:var(--cyan)}
-.job-card .jc-type{font-family:var(--mono);font-size:8px;text-transform:uppercase;letter-spacing:1px;padding:2px 8px;border-radius:100px;display:inline-block;margin-bottom:8px;align-self:flex-start}
-.job-card .jc-type.full-time{color:var(--green);border:1px solid rgba(0,217,126,0.3);background:rgba(0,217,126,0.05)}
-.job-card .jc-type.part-time{color:var(--cyan);border:1px solid rgba(59,180,255,0.3);background:rgba(59,180,255,0.05)}
-.job-card .jc-type.contract{color:var(--yellow);border:1px solid rgba(251,191,36,0.3);background:rgba(251,191,36,0.05)}
-.job-card .jc-type.freelance{color:var(--purple);border:1px solid rgba(168,85,247,0.3);background:rgba(168,85,247,0.05)}
-.job-card .jc-company{font-family:var(--sans);font-size:13px;font-weight:600;color:var(--text);margin-bottom:4px}
-.job-card .jc-title{font-family:var(--sans);font-size:14px;font-weight:700;color:var(--cyan);margin-bottom:6px}
-.job-card .jc-loc{font-family:var(--mono);font-size:10px;color:var(--text2);margin-bottom:4px}
-.job-card .jc-salary{font-family:var(--mono);font-size:10px;color:var(--green);margin-bottom:8px}
-.job-card .jc-desc{font-family:var(--sans);font-size:11px;color:var(--text3);line-height:1.4;flex:1;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
-.job-card .jc-footer{display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:8px;border-top:1px solid var(--border)}
-.job-card .jc-days{font-family:var(--mono);font-size:9px;color:var(--text3)}
-.job-card .jc-apply{font-family:var(--mono);font-size:10px;padding:4px 12px;border-radius:6px;background:var(--cyan);color:#000;text-decoration:none;font-weight:600}
+/* JOB CARDS — compact, click for modal */
+.job-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:9999;justify-content:center;align-items:center;padding:20px}
+.job-modal-overlay.open{display:flex}
+.job-modal{background:var(--bg2);border:1px solid var(--border2);border-radius:14px;padding:28px;max-width:520px;width:100%;max-height:85vh;overflow-y:auto;position:relative}
+.job-modal-close{position:absolute;top:10px;right:14px;background:none;border:none;color:var(--text3);font-size:22px;cursor:pointer;font-family:var(--mono)}
+.job-modal-close:hover{color:var(--red)}
+.job-modal .jm-type{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:1px;padding:3px 10px;border-radius:100px;display:inline-block;margin-bottom:12px}
+.job-modal .jm-type.full-time{color:var(--green);border:1px solid rgba(0,217,126,0.3);background:rgba(0,217,126,0.05)}
+.job-modal .jm-type.part-time{color:var(--cyan);border:1px solid rgba(59,180,255,0.3);background:rgba(59,180,255,0.05)}
+.job-modal .jm-type.contract{color:var(--yellow);border:1px solid rgba(251,191,36,0.3);background:rgba(251,191,36,0.05)}
+.job-modal .jm-type.freelance{color:var(--purple);border:1px solid rgba(168,85,247,0.3);background:rgba(168,85,247,0.05)}
+.job-modal .jm-company{font-family:var(--sans);font-size:15px;font-weight:700;color:var(--text);margin-bottom:4px}
+.job-modal .jm-title{font-family:var(--sans);font-size:20px;font-weight:800;color:var(--cyan);margin-bottom:12px;line-height:1.3}
+.job-modal .jm-meta{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:16px;font-family:var(--mono);font-size:11px;color:var(--text2)}
+.job-modal .jm-meta span{display:flex;align-items:center;gap:4px}
+.job-modal .jm-desc{font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+.job-modal .jm-salary{font-family:var(--mono);font-size:13px;color:var(--green);margin-bottom:16px}
+.job-modal .jm-apply{display:inline-block;background:var(--cyan);color:#000;padding:10px 24px;border-radius:8px;font-weight:700;font-size:14px;text-decoration:none;font-family:var(--sans)}
+.job-modal .jm-apply:hover{opacity:0.9}
+
+/* COMPACT CARDS — free tools + jobs in 8-col horizontal strip */
+.compact-strip{display:grid;grid-template-columns:repeat(8,1fr);gap:6px}
+.ccard{border-radius:8px;overflow:hidden;border:1px solid var(--border);background:var(--bg2);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:10px 6px;transition:transform 0.15s,border-color 0.15s;text-decoration:none;cursor:pointer;min-height:100px;gap:3px}
+.ccard:hover{transform:translateY(-2px);border-color:var(--purple)}
+.ccard .cc-emoji{font-size:26px;line-height:1}
+.ccard .cc-img{width:28px;height:28px;object-fit:contain;border-radius:6px;background:rgba(255,255,255,0.03)}
+.ccard .cc-name{font-size:10px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.ccard .cc-company{font-size:9px;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.ccard .cc-title{font-size:10px;font-weight:600;color:var(--cyan);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.ccard .cc-badge{font-family:var(--mono);font-size:7px;padding:1px 5px;border-radius:100px;text-transform:uppercase;letter-spacing:0.3px}
+.ccard .cc-badge.free{color:var(--green);border:1px solid rgba(0,217,126,0.2)}
+.ccard .cc-badge.freemium{color:var(--yellow);border:1px solid rgba(251,191,36,0.2)}
+.ccard .cc-badge.paid{color:var(--purple);border:1px solid rgba(168,85,247,0.2)}
+.ccard .cc-votes{font-family:var(--mono);font-size:8px;color:var(--text3)}
+.ccard.job-card-c .cc-type{font-family:var(--mono);font-size:7px;padding:1px 5px;border-radius:100px;text-transform:uppercase;letter-spacing:0.3px}
+.ccard.job-card-c .cc-type.full-time{color:var(--green);border:1px solid rgba(0,217,126,0.2)}
+.ccard.job-card-c .cc-type.part-time{color:var(--cyan);border:1px solid rgba(59,180,255,0.2)}
+.ccard.job-card-c .cc-type.contract{color:var(--yellow);border:1px solid rgba(251,191,36,0.2)}
+.ccard.job-card-c .cc-type.freelance{color:var(--purple);border:1px solid rgba(168,85,247,0.2)}
 
 .sc-body{padding:10px;flex:1;display:flex;flex-direction:column;}
 .sc-visual{position:relative;overflow:hidden;height:80px;display:flex;align-items:center;justify-content:center;background:var(--bg2);flex-shrink:0}
@@ -314,10 +337,10 @@ footer a{color:var(--text3);text-decoration:none;font-size:11px;font-family:var(
 footer a:hover{color:var(--cyan);}
 
 /* ══ RESPONSIVE ══ */
-@media(max-width:1200px){.slots-grid{grid-template-columns:repeat(3,1fr);}.layout{grid-template-columns:160px 1fr;}.sidebar-right{display:none;}}
-@media(max-width:900px){.slots-grid{grid-template-columns:repeat(2,1fr);}.layout{grid-template-columns:1fr;}.sidebar-left{display:none;}.mob-cats{display:flex;}.ap-grid{grid-template-columns:1fr 1fr;}}
-@media(max-width:768px){.nav-inner{padding:0 14px;}.nav-links{display:none;}.mob-nav{display:flex;}.slots-wrap{padding:12px 16px;}.main{padding:14px 16px;}.sub-form{grid-template-columns:1fr;}.full,.scam-notice,.btn-submit,.success-box{grid-column:1;}.tier-grid{grid-template-columns:repeat(2,1fr);}.ap-grid{grid-template-columns:1fr;}.post-pay-grid{grid-template-columns:1fr;}.hero{padding:22px 16px 16px;}footer{flex-direction:column;text-align:center;}}
-@media(max-width:480px){.slots-grid{grid-template-columns:1fr 1fr;}.hero h1{font-size:18px;}.hero-btns{flex-direction:column;align-items:stretch;}.btn-hero,.btn-hero-out{text-align:center;}.tools-grid{grid-template-columns:1fr;}}
+@media(max-width:1200px){.slots-grid{grid-template-columns:repeat(3,1fr);}.compact-strip{grid-template-columns:repeat(4,1fr);}.layout{grid-template-columns:160px 1fr;}.sidebar-right{display:none;}}
+@media(max-width:900px){.slots-grid{grid-template-columns:repeat(2,1fr);}.compact-strip{grid-template-columns:repeat(3,1fr);}.layout{grid-template-columns:1fr;}.sidebar-left{display:none;}.mob-cats{display:flex;}.ap-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:768px){.nav-inner{padding:0 14px;}.nav-links{display:none;}.mob-nav{display:flex;}.slots-wrap{padding:12px 16px;}.main{padding:14px 16px;}.sub-form{grid-template-columns:1fr;}.full,.scam-notice,.btn-submit,.success-box{grid-column:1;}.tier-grid{grid-template-columns:repeat(2,1fr);}.ap-grid{grid-template-columns:1fr;}.post-pay-grid{grid-template-columns:1fr;}.hero{padding:22px 16px 16px;}.hero h1{font-size:20px;}.ccard{min-height:80px;padding:8px 4px;}.ccard .cc-emoji{font-size:20px;}.ccard .cc-name{font-size:9px;}.ccard .cc-title{font-size:9px;}.ccard .cc-company{font-size:8px;}.job-modal{padding:20px;max-width:95vw;}.job-modal .jm-title{font-size:16px;}footer{flex-direction:column;text-align:center;}}
+@media(max-width:480px){.slots-grid{grid-template-columns:1fr 1fr;}.compact-strip{grid-template-columns:repeat(2,1fr);}.slot-card{min-height:130px;}.sc-visual{height:60px;}.sc-visual img{width:36px;height:36px;}.sc-visual .sc-emoji{font-size:24px;}.sc-name{font-size:10px;}.hero h1{font-size:18px;}.hero-btns{flex-direction:column;align-items:stretch;}.btn-hero,.btn-hero-out{text-align:center;}.tools-grid{grid-template-columns:1fr;}.ap-grid{grid-template-columns:1fr;}.tier-grid{grid-template-columns:1fr;}.ccard{min-height:70px;padding:6px 4px;}.ccard .cc-emoji{font-size:18px;}.ccard .cc-name{font-size:8px;}.ccard .cc-badge{font-size:6px;}.ccard .cc-votes{font-size:7px;}.mob-nav{font-size:11px;gap:4px;}.mob-nav a{padding:4px 8px;font-size:10px;}}
 </style>
 </head>
 <body>
@@ -386,7 +409,7 @@ footer a:hover{color:var(--cyan);}
     <div class="slots-title">🆓 Free Listings <span style="font-family:var(--mono);font-size:9px;color:var(--text3);font-weight:400">— community-voted tools</span></div>
     <a href="#submit-tool" style="color:var(--green);text-decoration:none;font-family:var(--mono);font-size:10px" onclick="document.getElementById('submit-tool').scrollIntoView({behavior:'smooth'});return false">Submit free →</a>
   </div>
-  <div class="tools-grid" id="free-tools-grid" style="padding-top:8px"></div>
+  <div class="compact-strip" id="free-tools-grid" style="padding-top:8px"></div>
 </div>
 
 <!-- JOBS SECTION -->
@@ -395,10 +418,18 @@ footer a:hover{color:var(--cyan);}
     <div class="slots-title">💼 AI Jobs Board <span style="font-family:var(--mono);font-size:9px;color:var(--text3);font-weight:400">— hire or get hired</span></div>
     <a href="#advertise" style="color:var(--cyan);text-decoration:none;font-family:var(--mono);font-size:10px" onclick="document.getElementById('advertise').scrollIntoView({behavior:'smooth'});return false">Post job $20 →</a>
   </div>
-  <div class="slots-grid" id="jobs-grid" style="padding-top:8px">
+  <div class="compact-strip" id="jobs-grid" style="padding-top:8px">
     <div style="grid-column:1/-1;text-align:center;padding:24px;color:var(--text3);font-family:var(--mono);font-size:12px;background:var(--bg2);border:1px dashed var(--border);border-radius:10px" id="jobs-empty">
       💼 No job listings yet — <a href="#post-job" style="color:var(--cyan)">be the first to post</a> · $20 for 30 days
     </div>
+  </div>
+</div>
+
+<!-- JOB DETAIL MODAL -->
+<div class="job-modal-overlay" id="job-modal" onclick="closeJobModal(event)">
+  <div class="job-modal" onclick="event.stopPropagation()">
+    <button class="job-modal-close" onclick="closeJobModal()">✕</button>
+    <div id="job-modal-content"></div>
   </div>
 </div>
 
@@ -863,25 +894,22 @@ function vote(id,btn){
 
 // ── FREE TOOLS GRID ──
 function renderFreeTools(){
-  const grid=document.getElementById('free-tools-grid');
+  var grid=document.getElementById('free-tools-grid');
   if(!grid) return;
-  const tools=ToolsDB.load().filter(function(t){
+  var tools=ToolsDB.load().filter(function(t){
     return t.approved!==false && (t.pricing==='free'||t.pricing==='freemium');
   }).sort(function(a,b){return b.votes-a.votes}).slice(0,8);
   if(!tools.length){ grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:24px;color:var(--text3);font-family:var(--mono);font-size:12px">No free tools yet — <a href="#submit-tool" style="color:var(--green)">submit yours</a></div>'; return; }
-  grid.innerHTML=tools.map(function(t,i){
+  grid.innerHTML=tools.map(function(t){
     var url=buildRefURL(t);
-    var catCls=catBgs[t.cat]||'cat-chat';
-    var isVoted=voted.has(t.id);
-    var imgHtml=t.image ? '<img class="tc-img" src="'+t.image+'" alt="'+t.name+'" loading="lazy" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">' : '';
-    var fallback='<div class="tc-img-fallback '+catCls+'" style="'+(t.image?'display:none':'')+'">'+(t.emoji||'🤖')+'</div>';
-    return '<a href="'+url+'" target="_blank" rel="noopener" class="tool-card'+(t.featured?' featured':'')+'">'+
-      '<div class="tc-img-wrap"><span class="tc-rank">#'+(i+1)+'</span>'+imgHtml+fallback+'</div>'+
-      '<div class="tc-body"><div class="tc-name">'+t.name+((t.daysAgo||0)<=7?'<span class="new-badge">NEW</span>':'')+'</div>'+
-      '<div class="tc-tagline">'+t.tagline+'</div>'+
-      '<div class="tc-meta"><span class="tc-pricing '+pricingCls(t.pricing)+'">'+pricingLbl(t.pricing)+'</span>'+
-      '<button class="vote-btn'+(isVoted?' voted':'')+'" onclick="event.preventDefault();event.stopPropagation();vote('+t.id+',this)">▲ <span class="vc">'+(t.votes||0).toLocaleString()+'</span></button></div>'+
-      '</div></a>';
+    var img=t.image?'<img class="cc-img" src="'+t.image+'" alt="'+t.name+'" loading="lazy" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'inline\'">':'';
+    var emoji=t.emoji||'🤖';
+    return '<a href="'+url+'" target="_blank" rel="noopener" class="ccard">'+
+      (t.image?'<div>'+img+'<span style="display:'+(t.image?'none':'inline')+';font-size:26px;line-height:1">'+emoji+'</span></div>':'<div class="cc-emoji">'+emoji+'</div>')+
+      '<div class="cc-name" title="'+t.name+'">'+t.name+'</div>'+
+      '<span class="cc-badge '+t.pricing+'">'+pricingLbl(t.pricing)+'</span>'+
+      '<div class="cc-votes">▲'+(t.votes||0).toLocaleString()+'</div>'+
+    '</a>';
   }).join('');
 }
 
@@ -1073,50 +1101,46 @@ setInterval(()=>{renderPaidSlots();},60000);
 
 // ── JOBS BOARD ──
 function renderJobs(){
-  const grid=document.getElementById('jobs-grid');
-  const empty=document.getElementById('jobs-empty');
+  var grid=document.getElementById('jobs-grid');
+  var empty=document.getElementById('jobs-empty');
   if(!grid) return;
-  const jobs=window.JobsDB ? JobsDB.active() : [];
+  var jobs=window.JobsDB ? JobsDB.active() : [];
   if(jobs.length===0){ if(empty) empty.style.display=''; return; }
   if(empty) empty.style.display='none';
   grid.innerHTML=jobs.map(function(j){
     var daysLeft=Math.max(0,Math.ceil((new Date(j.expiresAt)-new Date())/86400000));
-    return '<a href="'+j.url+'" target="_blank" class="job-card">'+
-      '<span class="jc-type '+j.type+'">'+j.type.replace('-',' ')+'</span>'+
-      '<div class="jc-company">'+(j.emoji||'💼')+' '+j.company+'</div>'+
-      '<div class="jc-title">'+j.title+'</div>'+
-      '<div class="jc-loc">📍 '+(j.location||'Remote')+'</div>'+
-      '<div class="jc-salary">💰 '+(j.salary||'Competitive')+'</div>'+
-      '<div class="jc-desc">'+j.description+'</div>'+
-      '<div class="jc-footer"><span class="jc-days">'+daysLeft+' days left</span><span class="jc-apply">Apply →</span></div>'+
-    '</a>';
+    return '<div class="ccard job-card-c" onclick="openJobModal('+j.id+')" title="Click for details">'+
+      '<div class="cc-emoji">'+(j.emoji||'💼')+'</div>'+
+      '<span class="cc-type '+j.type+'">'+j.type.replace('-',' ')+'</span>'+
+      '<div class="cc-company">'+j.company+'</div>'+
+      '<div class="cc-title">'+j.title+'</div>'+
+      '<div class="cc-votes">'+daysLeft+'d left</div>'+
+    '</div>';
   }).join('');
 }
 
-function submitJob(){
-  var btn=document.getElementById('btn-jf-submit');
-  var company=document.getElementById('jf-company').value.trim();
-  var title=document.getElementById('jf-title').value.trim();
-  var url=document.getElementById('jf-url').value.trim();
-  var desc=document.getElementById('jf-desc').value.trim();
-  var email=document.getElementById('jf-email').value.trim();
-  if(!company||!title||!url||!desc||!email){
-    btn.textContent='⚠ Fill all * fields'; btn.style.background='var(--red); color:#fff';
-    setTimeout(function(){ btn.textContent='💼 Post Job'; btn.style.background=''; btn.style.color=''; },2000);
-    return;
-  }
-  var job={ company:company, title:title, url:url, description:desc, email:email,
-    type:document.getElementById('jf-type').value,
-    location:document.getElementById('jf-location').value.trim()||'Remote',
-    salary:document.getElementById('jf-salary').value.trim()||'Competitive',
-    emoji:document.getElementById('jf-emoji').value.trim()||'💼' };
-  var result=window.JobsDB ? JobsDB.add(job) : null;
-  if(result){
-    document.getElementById('job-form').style.display='none';
-    document.getElementById('jf-success').style.display='block';
-    renderJobs();
-    document.getElementById('jobs').scrollIntoView({behavior:'smooth'});
-  } else { showToast('⚠ Error saving job'); }
+function openJobModal(id){
+  if(!window.JobsDB) return;
+  var jobs=JobsDB.load();
+  var j=jobs.find(function(x){return x.id===id});
+  if(!j) return;
+  var mc=document.getElementById('job-modal-content');
+  mc.innerHTML=
+    '<span class="jm-type '+j.type+'">'+j.type.replace('-',' ')+'</span>'+
+    '<div class="jm-company">'+(j.emoji||'💼')+' '+j.company+'</div>'+
+    '<div class="jm-title">'+j.title+'</div>'+
+    '<div class="jm-meta"><span>📍 '+(j.location||'Remote')+'</span><span>💰 '+(j.salary||'Competitive')+'</span></div>'+
+    '<div class="jm-desc">'+j.description+'</div>'+
+    '<div class="jm-salary">💰 '+(j.salary||'Competitive')+'</div>'+
+    '<a href="'+j.url+'?ref=aimodelranks" target="_blank" class="jm-apply">Apply Now →</a>';
+  document.getElementById('job-modal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function closeJobModal(e){
+  if(e&&e.target!==document.getElementById('job-modal')) return;
+  document.getElementById('job-modal').classList.remove('open');
+  document.body.style.overflow='';
 }
 
 // Latest Blog sidebar
