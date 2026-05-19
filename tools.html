@@ -59,12 +59,12 @@ nav{position:sticky;top:0;z-index:1000;background:rgba(7,9,15,0.97);backdrop-fil
 .slots-title{font-family:var(--hud);font-size:12px;color:var(--yellow);letter-spacing:1px;}
 .slots-sub{font-family:var(--mono);font-size:11px;color:var(--text3);}
 .slots-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;}
-.slot-card{border-radius:9px;overflow:hidden;border:1px solid var(--border);min-height:155px;display:flex;flex-direction:column;transition:transform 0.2s,border-color 0.2s;}
+.slot-card{border-radius:9px;overflow:hidden;border:1px solid var(--border);display:flex;flex-direction:column;transition:transform 0.2s,border-color 0.2s;text-decoration:none;}
 .slot-card:hover{transform:translateY(-2px);}
-.slot-card.filled{border-color:rgba(251,191,36,0.25);background:var(--bg3);text-decoration:none;}
-.slot-card.empty{border-style:dashed;border-color:rgba(168,85,247,0.2);background:rgba(168,85,247,0.02);align-items:center;justify-content:center;text-align:center;padding:12px;cursor:pointer;text-decoration:none;}
+.slot-card.filled{border-color:rgba(251,191,36,0.2);background:var(--bg3);cursor:pointer;}
+.slot-card.empty{border-style:dashed;border-color:rgba(168,85,247,0.2);background:rgba(168,85,247,0.02);cursor:pointer;}
 .slot-card.empty:hover{border-color:var(--purple);background:rgba(168,85,247,0.05);}
-.sc-bar{height:2px;flex-shrink:0;}
+
 .sc-body{padding:10px;flex:1;display:flex;flex-direction:column;}
 .sc-badge{font-family:var(--mono);font-size:8px;color:var(--yellow);letter-spacing:0.5px;margin-bottom:5px;}
 .sc-ico{font-size:18px;margin-bottom:4px;}
@@ -350,9 +350,31 @@ footer a:hover{color:var(--cyan);}
 <div class="slots-wrap">
   <div class="slots-hdr">
     <div class="slots-title">⭐ FEATURED AD SLOTS <span style="font-family:var(--mono);font-size:9px;color:var(--text3);font-weight:400">— priority positions 1–6</span></div>
-    <div class="slots-sub"><a href="#advertise" style="color:var(--purple);text-decoration:none;font-family:var(--mono);font-size:10px" onclick="document.getElementById('advertise').scrollIntoView({behavior:'smooth'});return false">Buy a slot from $29 →</a></div>
+    <div class="slots-sub"><a href="#advertise" style="color:var(--purple);text-decoration:none;font-family:var(--mono);font-size:10px" onclick="document.getElementById('advertise').scrollIntoView({behavior:'smooth'});return false">Buy a slot from $9 →</a></div>
   </div>
   <div class="slots-grid" id="paid-slots-grid"></div>
+</div>
+
+<!-- FREE LISTINGS SECTION -->
+<div class="section" style="margin-bottom:28px;padding-top:16px;border-top:1px solid var(--border)">
+  <div class="section-header">
+    <div class="slots-title">🆓 Free Listings <span style="font-family:var(--mono);font-size:9px;color:var(--text3);font-weight:400">— community-voted tools</span></div>
+    <a href="#submit-tool" style="color:var(--green);text-decoration:none;font-family:var(--mono);font-size:10px" onclick="document.getElementById('submit-tool').scrollIntoView({behavior:'smooth'});return false">Submit free →</a>
+  </div>
+  <div class="tools-grid" id="free-tools-grid" style="padding-top:8px"></div>
+</div>
+
+<!-- JOBS SECTION -->
+<div id="jobs" class="section" style="margin-bottom:28px;padding-top:16px;border-top:1px solid var(--border)">
+  <div class="section-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+    <div class="slots-title">💼 AI Jobs Board <span style="font-family:var(--mono);font-size:9px;color:var(--text3);font-weight:400">— hire or get hired</span></div>
+    <a href="#advertise" style="color:var(--cyan);text-decoration:none;font-family:var(--mono);font-size:10px" onclick="document.getElementById('advertise').scrollIntoView({behavior:'smooth'});return false">Post job $20 →</a>
+  </div>
+  <div class="slots-grid" id="jobs-grid" style="padding-top:8px">
+    <div style="grid-column:1/-1;text-align:center;padding:24px;color:var(--text3);font-family:var(--mono);font-size:12px;background:var(--bg2);border:1px dashed var(--border);border-radius:10px">
+      💼 No job listings yet — <a href="#advertise" style="color:var(--cyan)">be the first to post</a> · $20 for 30 days
+    </div>
+  </div>
 </div>
 
 <!-- SPOTLIGHT -->
@@ -388,7 +410,7 @@ footer a:hover{color:var(--cyan);}
     <div class="ap-grid">
       <div class="aplan">
         <div class="aplan-name">Starter</div>
-        <div class="aplan-price">$29<span>/7 days</span></div>
+        <div class="aplan-price">$9<span>/7 days</span></div>
         <div class="aplan-period">One-time · Auto-expires</div>
         <div class="aplan-slot">📍 Slots 4–6</div>
         <ul class="aplan-feats">
@@ -397,13 +419,13 @@ footer a:hover{color:var(--cyan);}
           <li>Spotlight carousel</li>
           <li>Email confirmation + expiry alert</li>
         </ul>
-        <a href="https://checkout.dodopayments.com/buy/pdt_0NeuDTWmUZGiP64pziSb4?quantity=1" target="_blank" class="btn-aplan" onclick="onPayClick('starter')" style="background:var(--cyan);color:#000">Buy Slot 4–6 — $29 →</a>
+        <a href="https://checkout.dodopayments.com/buy/pdt_0NeuDTWmUZGiP64pziSb4?quantity=1" target="_blank" class="btn-aplan" onclick="onPayClick('starter')" style="background:var(--cyan);color:#000">Buy Slot 4–6 — $9 →</a>
         <div class="aplan-note">DodoPayments · Secure checkout</div>
       </div>
       <div class="aplan popular">
         <div class="aplan-popular-badge">MOST POPULAR</div>
         <div class="aplan-name">Growth</div>
-        <div class="aplan-price">$79<span>/30 days</span></div>
+        <div class="aplan-price">$49<span>/30 days</span></div>
         <div class="aplan-period">One-time · Auto-expires</div>
         <div class="aplan-slot">📍 Slots 2–3</div>
         <ul class="aplan-feats">
@@ -412,12 +434,12 @@ footer a:hover{color:var(--cyan);}
           <li>Ticker + announcement bar</li>
           <li>Email confirmation + expiry + renew link</li>
         </ul>
-        <a href="https://checkout.dodopayments.com/buy/pdt_0NeuDc4euvgNHtJJynMUM?quantity=1" target="_blank" class="btn-aplan" onclick="onPayClick('growth')">Buy Slot 2–3 — $79 →</a>
+        <a href="https://checkout.dodopayments.com/buy/pdt_0NeuDc4euvgNHtJJynMUM?quantity=1" target="_blank" class="btn-aplan" onclick="onPayClick('growth')">Buy Slot 2–3 — $49 →</a>
         <div class="aplan-note">DodoPayments · Secure checkout</div>
       </div>
       <div class="aplan">
         <div class="aplan-name">Premium</div>
-        <div class="aplan-price">$149<span>/30 days</span></div>
+        <div class="aplan-price">$99<span>/30 days</span></div>
         <div class="aplan-period">One-time · Auto-expires</div>
         <div class="aplan-slot">📍 Slot #1 — Top Position</div>
         <ul class="aplan-feats">
@@ -426,7 +448,7 @@ footer a:hover{color:var(--cyan);}
           <li>All pages visibility</li>
           <li>Newsletter mention + immediate review</li>
         </ul>
-        <a href="https://checkout.dodopayments.com/buy/pdt_0NeuDicfvBmy8ws9vVtag?quantity=1" target="_blank" class="btn-aplan" onclick="onPayClick('premium')" style="background:linear-gradient(135deg,var(--purple),var(--cyan));color:#000">Buy Slot #1 — $149 →</a>
+        <a href="https://checkout.dodopayments.com/buy/pdt_0NeuDicfvBmy8ws9vVtag?quantity=1" target="_blank" class="btn-aplan" onclick="onPayClick('premium')" style="background:linear-gradient(135deg,var(--purple),var(--cyan));color:#000">Buy Slot #1 — $99 →</a>
         <div class="aplan-note">DodoPayments · Secure checkout</div>
       </div>
     </div>
@@ -443,9 +465,9 @@ footer a:hover{color:var(--cyan);}
         <div class="fg"><label class="fl">Plan Purchased *</label>
           <select class="fi" id="pp-plan">
             <option value="">Select plan...</option>
-            <option value="starter">Starter — $29 / 7 days (Slot 4–6)</option>
-            <option value="growth">Growth — $79 / 30 days (Slot 2–3)</option>
-            <option value="premium">Premium — $149 / 30 days (Slot #1)</option>
+            <option value="starter">Starter — $9 / 7 days (Slot 4–6)</option>
+            <option value="growth">Growth — $49 / 30 days (Slot 2–3)</option>
+            <option value="premium">Premium — $99 / 30 days (Slot #1)</option>
           </select>
         </div>
         <div class="fg"><label class="fl">Brand Color (hex)</label><input class="fi" id="pp-color" placeholder="#a855f7"></div>
@@ -548,17 +570,17 @@ footer a:hover{color:var(--cyan);}
                 <div class="tier-feats">Basic listing · Auto-approved · Below paid slots</div>
               </label>
               <label class="tier-opt" onclick="selTier('starter',this)"><input type="radio" name="tier" value="starter">
-                <div class="tier-name">Starter 7d</div><div class="tier-price">$29<span>/wk</span></div>
+                <div class="tier-name">Starter 7d</div><div class="tier-price">$9<span>/wk</span></div>
                 <div class="tier-feats">Slots 4–6 · Featured badge · 7 day trial</div>
               </label>
               <label class="tier-opt" style="position:relative" onclick="selTier('growth',this)">
                 <div class="tier-pop">POPULAR</div>
                 <input type="radio" name="tier" value="growth">
-                <div class="tier-name">Growth 30d</div><div class="tier-price">$79<span>/mo</span></div>
+                <div class="tier-name">Growth 30d</div><div class="tier-price">$49<span>/mo</span></div>
                 <div class="tier-feats">Slots 2–3 · Spotlight · 2h live</div>
               </label>
               <label class="tier-opt" onclick="selTier('premium',this)"><input type="radio" name="tier" value="premium">
-                <div class="tier-name">Premium</div><div class="tier-price">$149<span>/mo</span></div>
+                <div class="tier-name">Premium</div><div class="tier-price">$99<span>/mo</span></div>
                 <div class="tier-feats">Slot #1 · All pages</div>
               </label>
             </div>
@@ -581,7 +603,7 @@ footer a:hover{color:var(--cyan);}
         <div class="sb-ad-badge">ADVERTISE HERE</div>
         <div class="sb-ad-title">📣 Reach AI Builders</div>
         <div class="sb-ad-sub">Your tool in front of 10K+ developers comparing AI daily.</div>
-        <a href="#advertise" class="sb-ad-btn" onclick="document.getElementById('advertise').scrollIntoView({behavior:'smooth'});return false" style="background:linear-gradient(135deg,var(--purple),var(--cyan));color:#000">From $29 →</a>
+        <a href="#advertise" class="sb-ad-btn" onclick="document.getElementById('advertise').scrollIntoView({behavior:'smooth'});return false" style="background:linear-gradient(135deg,var(--purple),var(--cyan));color:#000">From $9 →</a>
       </div>
       <div class="sb-card">
         <div class="sb-hdr">📊 Live Model Prices <a href="/compare" class="sb-lnk">All →</a></div>
@@ -629,46 +651,41 @@ function fmtExpiry(ts){ const d=Math.ceil((ts-Date.now())/86400000); return d<=0
 // ── PAID SLOTS RENDER ──
 function renderPaidSlots(){
   const slots = AdsManager.load();
-  const slotPrice = {1:'$149/mo',2:'$79/mo',3:'$79/mo',4:'$29/wk',5:'$29/wk',6:'$29/wk'};
+  const slotPrice = {1:'$99/mo',2:'$49/mo',3:'$49/mo',4:'$9/wk',5:'$9/wk',6:'$9/wk'};
   const slotPlan  = {1:'premium',2:'growth',3:'growth',4:'starter',5:'starter',6:'starter'};
+  const slotLabel = {1:'Premium',2:'Growth',3:'Growth',4:'Starter',5:'Starter',6:'Starter'};
   const payLinks  = OCTOPUS_CONFIG.DODO;
 
   document.getElementById('paid-slots-grid').innerHTML = slots.map(s => {
-    if(s.filled && s.plan !== 'default'){
+    if(s.filled){
+      // Filled slot — product image first, subtle badge
       return `<a href="${s.url}?ref=aimodelranks" target="_blank" class="slot-card filled">
-        <div class="sc-bar" style="background:${s.color}"></div>
+        <div class="sc-visual">
+          ${s.image?`<img src="${s.image}" alt="${s.name}" loading="lazy" onerror="this.parentNode.innerHTML='<div class=sc-emoji>${s.emoji||'🚀'}</div>'">`:`<div class="sc-emoji">${s.emoji||'🚀'}</div>`}
+          <span class="sc-tierpill ${s.plan}" title="${slotLabel[s.slot]||'Ad'}">${slotLabel[s.slot]||'Ad'}</span>
+        </div>
         <div class="sc-body">
-          <div class="sc-badge">${s.plan.toUpperCase()} · SLOT ${s.slot}</div>
-          <div class="sc-ico"><img src="${s.image||''}" width="24" height="24" style="object-fit:contain;border-radius:4px" onerror="this.style.display='none'" loading="lazy"><span style="display:${s.image?"none":""}">${s.emoji}</span></div>
           <div class="sc-name">${s.name}</div>
           <div class="sc-desc">${s.desc}</div>
-          <div class="sc-cta" style="background:${s.color};color:#fff">${s.cta||'Visit →'}</div>
-          <div class="sc-expiry">${s.expiresAt?fmtExpiry(s.expiresAt):''}</div>
+          <div class="sc-cta" style="background:${s.color||'#a855f7'};color:#fff">${s.cta||'Visit →'}</div>
+          ${s.expiresAt?`<div class="sc-expiry">${fmtExpiry(s.expiresAt)}</div>`:''}
         </div>
-      </a>`;
-    } else if(s.filled && s.plan === 'default'){
-      return `<a href="${s.url}?ref=aimodelranks" target="_blank" class="slot-card filled">
-        <div class="sc-bar" style="background:${s.color}"></div>
-        <div class="sc-body">
-          <div class="sc-badge">DEFAULT · SLOT ${s.slot}</div>
-          <div class="sc-ico"><img src="${s.image||''}" width="24" height="24" style="object-fit:contain;border-radius:4px" onerror="this.style.display='none'" loading="lazy"><span style="display:${s.image?"none":""}">${s.emoji}</span></div>
-          <div class="sc-name">${s.name}</div>
-          <div class="sc-desc">${s.desc}</div>
-          <div class="sc-cta" style="background:${s.color};color:#fff">Visit →</div>
-        </div>
-      </a>`;
-    } else {
-      const plan = slotPlan[s.slot] || 'starter';
-      const price = slotPrice[s.slot] || '$29/wk';
-      return `<a href="${payLinks[plan]}" target="_blank" class="slot-card empty" onclick="onPayClick('${plan}')">
-        <div class="empty-ico">📣</div>
-        <div class="empty-label">SLOT ${s.slot} — OPEN</div>
-        <div class="empty-price">${price}</div>
-        <div class="empty-btn">Buy This Slot →</div>
       </a>`;
     }
+    // Empty slot — clean card with subtle pricing
+    return `<a href="${payLinks[slotPlan[s.slot]]}" target="_blank" class="slot-card empty">
+      <div class="sc-visual empty">
+        <div class="sc-emoji">📣</div>
+        <span class="sc-tierpill ${slotPlan[s.slot]}">${slotLabel[s.slot]}</span>
+      </div>
+      <div class="sc-body">
+        <div class="sc-name">Advertise Here</div>
+        <div class="sc-desc">Slot ${s.slot} — Reach AI developers</div>
+        <div class="sc-price">${slotPrice[s.slot]}</div>
+        <div class="sc-cta" style="background:linear-gradient(135deg,var(--cyan),var(--purple));color:#000">Claim Slot →</div>
+      </div>
+    </a>`;
   }).join('');
-
   // Update free slots count
   const stats = AdsManager.stats();
   document.getElementById('hs-free').textContent = stats.slotsFree;

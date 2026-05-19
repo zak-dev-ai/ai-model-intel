@@ -24,13 +24,19 @@ window.OCTOPUS_CONFIG = {
     premium: 'https://checkout.dodopayments.com/buy/pdt_0NeuDicfvBmy8ws9vVtag?quantity=1',
   },
   SLOT_PRICES: {
-    1: '$149/mo', 2: '$79/mo', 3: '$79/mo',
-    4: '$29/wk', 5: '$29/wk', 6: '$29/wk'
+    1: '$99/mo', 2: '$49/mo', 3: '$49/mo',
+    4: '$9/wk', 5: '$9/wk', 6: '$9/wk'
   },
   SLOT_PLANS: {
     1: 'premium', 2: 'growth', 3: 'growth',
     4: 'starter', 5: 'starter', 6: 'starter'
-  }
+  },
+  SLOT_DURATIONS: {
+    1: '30d', 2: '30d', 3: '30d',
+    4: '7d', 5: '7d', 6: '7d'
+  },
+  JOBS_PRICE: '$20/30d',
+  BLOG_POST_PRICE: '$20/post'
 };
 
 // ── Default seed ads (shown when no paid ads exist) ──────────────────

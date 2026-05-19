@@ -398,9 +398,11 @@ td{padding:12px 14px;vertical-align:middle;}
             ✅ No business registration needed<br>
             ✅ 5% + $0.50 per transaction
           </div>
-          <div class="setting-row"><label class="setting-label">Starter $29 Checkout URL</label><input class="setting-input" placeholder="https://yourstore.lemonsqueezy.com/checkout/..." id="cfg-pay-29"></div>
-          <div class="setting-row"><label class="setting-label">Growth $79 Checkout URL</label><input class="setting-input" placeholder="https://yourstore.lemonsqueezy.com/checkout/..." id="cfg-pay-79"></div>
-          <div class="setting-row"><label class="setting-label">Premium $149 Checkout URL</label><input class="setting-input" placeholder="https://yourstore.lemonsqueezy.com/checkout/..." id="cfg-pay-149"></div>
+          <div class="setting-row"><label class="setting-label">Starter $9/7d Checkout URL</label><input class="setting-input" placeholder="https://yourstore.lemonsqueezy.com/checkout/..." id="cfg-pay-9"></div>
+          <div class="setting-row"><label class="setting-label">Growth $49/mo Checkout URL</label><input class="setting-input" placeholder="https://yourstore.lemonsqueezy.com/checkout/..." id="cfg-pay-49"></div>
+          <div class="setting-row"><label class="setting-label">Premium $99/mo Checkout URL</label><input class="setting-input" placeholder="https://yourstore.lemonsqueezy.com/checkout/..." id="cfg-pay-99"></div>
+          <div class="setting-row"><label class="setting-label">💼 Job Listing $20/30d Checkout URL</label><input class="setting-input" placeholder="https://yourstore.lemonsqueezy.com/checkout/..." id="cfg-pay-job"></div>
+          <div class="setting-row"><label class="setting-label">📰 Blog Sponsored Post $20 Checkout URL</label><input class="setting-input" placeholder="https://yourstore.lemonsqueezy.com/checkout/..." id="cfg-pay-blog"></div>
           <button class="btn-save-setting" onclick="saveSettings()">Save URLs</button>
         </div>
       </div>
@@ -716,7 +718,7 @@ function renderAdSlots() {
       var exp = s.expiresAt ? new Date(s.expiresAt).toLocaleDateString() : 'No expiry';
       return '<div class="ad-slot filled"><div class="slot-num">SLOT ' + s.slot + ' · ' + (s.plan||'default').toUpperCase() + '</div><span class="badge b-approved slot-status">ACTIVE</span><div class="slot-name">' + (s.emoji||'⭐') + ' ' + s.name + '</div><div class="slot-url">' + s.url + '</div><div class="slot-exp">Expires: ' + exp + '</div></div>';
     }
-    return '<div class="ad-slot empty"><div class="slot-num">SLOT ' + s.slot + '</div><span class="badge b-pending slot-status">AVAILABLE</span><div class="slot-empty-txt">$29/wk or $79/mo</div></div>';
+    return '<div class="ad-slot empty"><div class="slot-num">SLOT ' + s.slot + '</div><span class="badge b-pending slot-status">AVAILABLE</span><div class="slot-empty-txt">$9/wk or $49/mo</div></div>';
   }).join('') || '<div style="padding:24px;color:var(--text3);font-family:var(--mono);text-align:center">No ad slots</div>';
 }
 
