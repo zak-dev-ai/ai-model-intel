@@ -365,6 +365,23 @@ window.ToolsDB = {
   count() { return this.load().length; },
 };
 
+// ── Jobs DB (shared across pages) ────────────────────────────────────
+window.JobsDB = {
+  load() {
+    try { return JSON.parse(localStorage.getItem('octopus_jobs')||'[]'); }
+    catch { return []; }
+  },
+  save(jobs) { try { localStorage.setItem('octopus_jobs',JSON.stringify(jobs)); } catch {} },
+  add(job) {
+    var jobs=this.load();
+    var newJob={...job,id:Date.now(),createdAt:new Date().toISOString(),expiresAt:new Date(Date.now()+30*86400000).toISOString(),active:true,approved:true};
+    jobs.unshift(newJob); this.save(jobs); return newJob;
+  },
+  approve(id) { var jobs=this.load(); var j=jobs.find(function(x){return x.id===id}); if(j){j.approved=true; this.save(jobs);} },
+  active() { return this.load().filter(function(j){return j.approved&&j.active&&new Date(j.expiresAt)>new Date()}); },
+  count() { return this.active().length; },
+};
+
 // ── Global REFERRAL_MAP for partner links ───────────────────────────
 window.REFERRAL_MAP = window.REFERRAL_MAP || {
   'Midjourney': 'https://midjourney.com?ref=aimodelranks',

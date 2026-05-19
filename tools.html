@@ -65,6 +65,23 @@ nav{position:sticky;top:0;z-index:1000;background:rgba(7,9,15,0.97);backdrop-fil
 .slot-card.empty{border-style:dashed;border-color:rgba(168,85,247,0.2);background:rgba(168,85,247,0.02);cursor:pointer;}
 .slot-card.empty:hover{border-color:var(--purple);background:rgba(168,85,247,0.05);}
 
+/* JOB CARDS */
+.job-card{border-radius:9px;overflow:hidden;border:1px solid var(--border);background:var(--bg2);display:flex;flex-direction:column;transition:transform 0.2s,border-color 0.2s;text-decoration:none;cursor:pointer;padding:12px;min-height:140px}
+.job-card:hover{transform:translateY(-2px);border-color:var(--cyan)}
+.job-card .jc-type{font-family:var(--mono);font-size:8px;text-transform:uppercase;letter-spacing:1px;padding:2px 8px;border-radius:100px;display:inline-block;margin-bottom:8px;align-self:flex-start}
+.job-card .jc-type.full-time{color:var(--green);border:1px solid rgba(0,217,126,0.3);background:rgba(0,217,126,0.05)}
+.job-card .jc-type.part-time{color:var(--cyan);border:1px solid rgba(59,180,255,0.3);background:rgba(59,180,255,0.05)}
+.job-card .jc-type.contract{color:var(--yellow);border:1px solid rgba(251,191,36,0.3);background:rgba(251,191,36,0.05)}
+.job-card .jc-type.freelance{color:var(--purple);border:1px solid rgba(168,85,247,0.3);background:rgba(168,85,247,0.05)}
+.job-card .jc-company{font-family:var(--sans);font-size:13px;font-weight:600;color:var(--text);margin-bottom:4px}
+.job-card .jc-title{font-family:var(--sans);font-size:14px;font-weight:700;color:var(--cyan);margin-bottom:6px}
+.job-card .jc-loc{font-family:var(--mono);font-size:10px;color:var(--text2);margin-bottom:4px}
+.job-card .jc-salary{font-family:var(--mono);font-size:10px;color:var(--green);margin-bottom:8px}
+.job-card .jc-desc{font-family:var(--sans);font-size:11px;color:var(--text3);line-height:1.4;flex:1;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.job-card .jc-footer{display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:8px;border-top:1px solid var(--border)}
+.job-card .jc-days{font-family:var(--mono);font-size:9px;color:var(--text3)}
+.job-card .jc-apply{font-family:var(--mono);font-size:10px;padding:4px 12px;border-radius:6px;background:var(--cyan);color:#000;text-decoration:none;font-weight:600}
+
 .sc-body{padding:10px;flex:1;display:flex;flex-direction:column;}
 .sc-badge{font-family:var(--mono);font-size:8px;color:var(--yellow);letter-spacing:0.5px;margin-bottom:5px;}
 .sc-ico{font-size:18px;margin-bottom:4px;}
@@ -371,8 +388,8 @@ footer a:hover{color:var(--cyan);}
     <a href="#advertise" style="color:var(--cyan);text-decoration:none;font-family:var(--mono);font-size:10px" onclick="document.getElementById('advertise').scrollIntoView({behavior:'smooth'});return false">Post job $20 →</a>
   </div>
   <div class="slots-grid" id="jobs-grid" style="padding-top:8px">
-    <div style="grid-column:1/-1;text-align:center;padding:24px;color:var(--text3);font-family:var(--mono);font-size:12px;background:var(--bg2);border:1px dashed var(--border);border-radius:10px">
-      💼 No job listings yet — <a href="#advertise" style="color:var(--cyan)">be the first to post</a> · $20 for 30 days
+    <div style="grid-column:1/-1;text-align:center;padding:24px;color:var(--text3);font-family:var(--mono);font-size:12px;background:var(--bg2);border:1px dashed var(--border);border-radius:10px" id="jobs-empty">
+      💼 No job listings yet — <a href="#post-job" style="color:var(--cyan)">be the first to post</a> · $20 for 30 days
     </div>
   </div>
 </div>
@@ -529,6 +546,29 @@ footer a:hover{color:var(--cyan);}
         </div>
       </div>
       <div class="tools-grid" id="tools-grid"></div>
+
+      <!-- POST JOB FORM -->
+      <div class="submit-section" id="post-job" style="margin-top:24px;border-color:rgba(59,180,255,0.15);background:linear-gradient(135deg,rgba(59,180,255,0.04),rgba(168,85,247,0.02))">
+        <div class="sub-title" style="color:var(--cyan)">💼 Post an AI Job</div>
+        <div class="sub-sub">Hire AI builders, researchers, or engineers. $20 for 30-day listing. Free to try — submit and we'll approve manually.</div>
+        <div class="sub-form" id="job-form">
+          <div class="fg"><label class="fl">Company Name *</label><input class="fi" id="jf-company" type="text" placeholder="Acme AI Inc." maxlength="60"></div>
+          <div class="fg"><label class="fl">Job Title *</label><input class="fi" id="jf-title" type="text" placeholder="Senior AI Engineer" maxlength="80"></div>
+          <div class="fg"><label class="fl">Location</label><input class="fi" id="jf-location" type="text" placeholder="Remote / San Francisco" maxlength="100"></div>
+          <div class="fg"><label class="fl">Type *</label><select class="fi" id="jf-type"><option value="full-time">Full-time</option><option value="part-time">Part-time</option><option value="contract">Contract</option><option value="freelance">Freelance</option></select></div>
+          <div class="fg"><label class="fl">Salary Range</label><input class="fi" id="jf-salary" type="text" placeholder="$150K–$250K / Competitive" maxlength="60"></div>
+          <div class="fg"><label class="fl">Apply URL *</label><input class="fi" id="jf-url" type="url" placeholder="https://careers.company.com"></div>
+          <div class="fg full"><label class="fl">Short Description *</label><input class="fi" id="jf-desc" type="text" placeholder="Building next-gen AI agents..." maxlength="120"></div>
+          <div class="fg full"><label class="fl">Your Email *</label><input class="fi" id="jf-email" type="email" placeholder="hr@company.com"></div>
+          <div class="fg full"><label class="fl">Emoji</label><input class="fi" id="jf-emoji" type="text" placeholder="🤖" maxlength="4"></div>
+          <div class="full" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+            <button class="btn-submit" onclick="submitJob()" id="btn-jf-submit">💼 Post Job</button>
+            <a href="https://checkout.dodopayments.com/buy/pdt_0NeuDTWmUZGiP64pziSb4?quantity=1" target="_blank" class="btn-submit" style="background:linear-gradient(135deg,var(--cyan),var(--purple));color:#000;text-decoration:none;display:inline-flex;align-items:center;gap:6px" id="btn-jf-pay">💳 Pay $20 First →</a>
+            <span style="font-family:var(--mono);font-size:10px;color:var(--text3)">Approval within 24h after payment</span>
+          </div>
+        </div>
+        <div class="success-box" id="jf-success" style="display:none">✅ Job posted! It will appear in the board after review. <a href="#jobs" onclick="document.getElementById('jobs').scrollIntoView({behavior:'smooth'});return false" style="color:var(--cyan)">View board →</a></div>
+      </div>
 
       <!-- SUBMIT FORM AT BOTTOM -->
       <div class="submit-section" id="submit-section">
@@ -994,8 +1034,57 @@ renderPaidSlots();
 renderSpotlight();
 renderTicker();
 renderTools();
+renderJobs();
 loadPrices();
-setInterval(()=>{renderPaidSlots();},60000); // re-check expiry every minute
+setInterval(()=>{renderPaidSlots();},60000);
+
+// ── JOBS BOARD ──
+function renderJobs(){
+  const grid=document.getElementById('jobs-grid');
+  const empty=document.getElementById('jobs-empty');
+  if(!grid) return;
+  const jobs=window.JobsDB ? JobsDB.active() : [];
+  if(jobs.length===0){ if(empty) empty.style.display=''; grid.innerHTML=''; return; }
+  if(empty) empty.style.display='none';
+  grid.innerHTML=jobs.map(function(j){
+    var daysLeft=Math.max(0,Math.ceil((new Date(j.expiresAt)-new Date())/86400000));
+    return '<a href="'+j.url+'" target="_blank" class="job-card">'+
+      '<span class="jc-type '+j.type+'">'+j.type.replace('-',' ')+'</span>'+
+      '<div class="jc-company">'+(j.emoji||'💼')+' '+j.company+'</div>'+
+      '<div class="jc-title">'+j.title+'</div>'+
+      '<div class="jc-loc">📍 '+(j.location||'Remote')+'</div>'+
+      '<div class="jc-salary">💰 '+(j.salary||'Competitive')+'</div>'+
+      '<div class="jc-desc">'+j.description+'</div>'+
+      '<div class="jc-footer"><span class="jc-days">'+daysLeft+' days left</span><span class="jc-apply">Apply →</span></div>'+
+    '</a>';
+  }).join('');
+}
+
+function submitJob(){
+  var btn=document.getElementById('btn-jf-submit');
+  var company=document.getElementById('jf-company').value.trim();
+  var title=document.getElementById('jf-title').value.trim();
+  var url=document.getElementById('jf-url').value.trim();
+  var desc=document.getElementById('jf-desc').value.trim();
+  var email=document.getElementById('jf-email').value.trim();
+  if(!company||!title||!url||!desc||!email){
+    btn.textContent='⚠ Fill all * fields'; btn.style.background='var(--red); color:#fff';
+    setTimeout(function(){ btn.textContent='💼 Post Job'; btn.style.background=''; btn.style.color=''; },2000);
+    return;
+  }
+  var job={ company:company, title:title, url:url, description:desc, email:email,
+    type:document.getElementById('jf-type').value,
+    location:document.getElementById('jf-location').value.trim()||'Remote',
+    salary:document.getElementById('jf-salary').value.trim()||'Competitive',
+    emoji:document.getElementById('jf-emoji').value.trim()||'💼' };
+  var result=window.JobsDB ? JobsDB.add(job) : null;
+  if(result){
+    document.getElementById('job-form').style.display='none';
+    document.getElementById('jf-success').style.display='block';
+    renderJobs();
+    document.getElementById('jobs').scrollIntoView({behavior:'smooth'});
+  } else { showToast('⚠ Error saving job'); }
+}
 
 // Latest Blog sidebar
 if(window.BlogModule){BlogModule.renderLatest('latest-blog',5)}else{setTimeout(function(){if(window.BlogModule)BlogModule.renderLatest('latest-blog',5)},500)}

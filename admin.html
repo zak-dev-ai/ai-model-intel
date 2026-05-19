@@ -233,6 +233,7 @@ td{padding:12px 14px;vertical-align:middle;}
       <button class="tab" id="tab-btn-pending" onclick="setTab('pending',this)">⏳ Pending</button>
       <button class="tab" onclick="setTab('ads',this)">📣 Ad Slots</button>
       <button class="tab" onclick="setTab('refs',this)">🔗 Referrals</button>
+      <button class="tab" onclick="setTab('jobs',this)">💼 Jobs</button>
       <button class="tab" onclick="setTab('analytics',this)">📊 Analytics</button>
       <button class="tab" onclick="setTab('settings',this)">⚙️ Settings</button>
     </div>
@@ -332,6 +333,21 @@ td{padding:12px 14px;vertical-align:middle;}
         • Changes are saved automatically to your browser storage
       </div>
       <div class="ref-stats" id="ref-stats"></div>
+    </div>
+
+    <!-- JOBS TAB -->
+    <div class="section" id="tab-jobs">
+      <div class="sec-hdr">
+        <div class="sec-title">💼 Jobs Board Manager</div>
+        <span style="font-family:var(--mono);font-size:12px;color:var(--text3)">Review and manage job listings. Jobs auto-expire after 30 days.</span>
+      </div>
+      <div style="display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap" id="jobs-stats-row">
+        <div class="ana-card" style="flex:1;min-width:120px"><div class="ana-num" id="jstat-total">0</div><div class="ana-lbl">Total Jobs</div></div>
+        <div class="ana-card" style="flex:1;min-width:120px"><div class="ana-num" style="color:var(--green)" id="jstat-active">0</div><div class="ana-lbl">Active</div></div>
+        <div class="ana-card" style="flex:1;min-width:120px"><div class="ana-num" style="color:var(--yellow)" id="jstat-pending">0</div><div class="ana-lbl">Pending</div></div>
+        <div class="ana-card" style="flex:1;min-width:120px"><div class="ana-num" style="color:var(--text3)" id="jstat-exp">0</div><div class="ana-lbl">Expired</div></div>
+      </div>
+      <div class="tbl-wrap" id="jobs-admin-table"></div>
     </div>
 
     <!-- ANALYTICS TAB -->
@@ -794,7 +810,43 @@ function initAdmin(){
   renderPending();
   renderAdSlots();
   renderRefs();
+  renderJobsAdmin();
   updateStats();
+}
+
+// ── JOBS ADMIN ──
+function renderJobsAdmin(){
+  var all=window.JobsDB?JobsDB.load():[];
+  var now=new Date();
+  var active=all.filter(function(j){return j.approved&&j.active&&new Date(j.expiresAt)>now});
+  var pending=all.filter(function(j){return !j.approved&&j.active});
+  var expired=all.filter(function(j){return !j.active||new Date(j.expiresAt)<=now});
+  document.getElementById('jstat-total').textContent=all.length;
+  document.getElementById('jstat-active').textContent=active.length;
+  document.getElementById('jstat-pending').textContent=pending.length;
+  document.getElementById('jstat-exp').textContent=expired.length;
+  var tb=document.getElementById('jobs-admin-table');
+  if(!tb) return;
+  if(!all.length){ tb.innerHTML='<p style="padding:24px;text-align:center;color:var(--text3);font-family:var(--mono);font-size:12px">No job listings yet.</p>'; return; }
+  tb.innerHTML='<table><thead><tr><th>Company</th><th>Title</th><th>Type</th><th>Location</th><th>Email</th><th>Status</th><th>Expires</th><th>Actions</th></tr></thead><tbody>'+all.map(function(j){
+    var isExpired=!j.active||new Date(j.expiresAt)<=now;
+    var status=isExpired?'<span style="color:var(--red)">Expired</span>':(j.approved?'<span style="color:var(--green)">Active</span>':'<span style="color:var(--yellow)">Pending</span>');
+    var expires=new Date(j.expiresAt).toLocaleDateString('en-US',{month:'short',day:'numeric'});
+    var act=!isExpired?(j.approved?('<button onclick="toggleJob('+j.id+',false)" style="background:var(--yellow);color:#000;border:none;padding:3px 8px;border-radius:4px;cursor:pointer;font-family:var(--mono);font-size:10px;margin-right:4px">Unapprove</button>'):('<button onclick="toggleJob('+j.id+',true)" style="background:var(--green);color:#000;border:none;padding:3px 8px;border-radius:4px;cursor:pointer;font-family:var(--mono);font-size:10px;margin-right:4px">Approve</button>'))+('<button onclick="deleteJob('+j.id+')" style="background:var(--red);color:#fff;border:none;padding:3px 8px;border-radius:4px;cursor:pointer;font-family:var(--mono);font-size:10px">Del</button>'):('—');
+    return '<tr><td style="font-weight:600">'+(j.emoji||'')+' '+j.company+'</td><td>'+j.title+'</td><td style="font-family:var(--mono);font-size:10px">'+j.type+'</td><td style="font-family:var(--mono);font-size:10px">'+j.location+'</td><td style="font-family:var(--mono);font-size:10px">'+j.email+'</td><td>'+status+'</td><td style="font-family:var(--mono);font-size:10px">'+expires+'</td><td>'+act+'</td></tr>';
+  }).join('')+'</tbody></table>';
+}
+function toggleJob(id,approve){
+  if(!window.JobsDB) return;
+  var jobs=JobsDB.load();
+  var j=jobs.find(function(x){return x.id===id});
+  if(j){ j.approved=approve; JobsDB.save(jobs); renderJobsAdmin(); }
+}
+function deleteJob(id){
+  if(!window.JobsDB) return;
+  if(!confirm('Delete this job listing?')) return;
+  var jobs=JobsDB.load().filter(function(x){return x.id!==id});
+  JobsDB.save(jobs); renderJobsAdmin();
 }
 </script>
 </body>
