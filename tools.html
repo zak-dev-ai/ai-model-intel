@@ -402,13 +402,13 @@ footer a:hover{color:var(--cyan);}
 
 /* BURGER MENU */
 .burger{display:none;background:none;border:none;color:var(--text);font-size:26px;cursor:pointer;padding:4px 10px;line-height:1;z-index:1001;flex-shrink:0}
-.mobile-menu{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(7,9,15,0.985);backdrop-filter:blur(20px);z-index:999;flex-direction:column;padding:80px 24px 30px;gap:4px;overflow-y:auto}
+.mobile-menu{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(7,9,15,0.985);backdrop-filter:blur(20px);z-index:1005;flex-direction:column;padding:80px 24px 30px;gap:4px;overflow-y:auto}
 .mobile-menu.open{display:flex}
 .mobile-menu a{color:var(--text);text-decoration:none;font-size:20px;font-weight:600;padding:14px 8px;border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;gap:10px;font-family:var(--sans)}
 .mobile-menu a:hover{color:var(--cyan)}
 .mobile-menu .mob-close{position:absolute;top:16px;right:20px;background:none;border:none;color:var(--text3);font-size:28px;cursor:pointer}
-@media(min-width:769px){.burger{display:none!important}.mobile-menu{display:none!important}}
-@media(max-width:768px){.burger{display:block}}
+@media(min-width:769px){.burger{display:none!important}.mobile-menu{display:none!important}.nav-right{display:flex!important}}
+@media(max-width:768px){.burger{display:block}.nav-right{display:none!important}.nav-search-wrap{max-width:140px}}
 
 </style>
 </head>
@@ -788,7 +788,7 @@ footer a:hover{color:var(--cyan);}
 
 <script>
 
-function toggleMenu(){document.getElementById('mobile-menu').classList.toggle('open');}
+function toggleMenu(){var m=document.getElementById('mobile-menu');m.classList.toggle('open');document.body.style.overflow=m.classList.contains('open')?'hidden':'';}
 
 // Referral map
 window.REFERRAL_MAP = {
@@ -854,14 +854,19 @@ function renderPaidSlots(){
 
 // ── SPOTLIGHT ──
 function renderSpotlight(){
-  const tools = ToolsDB.load().filter(t=>t.featured && t.approved!==false);
+  // Use pipeline — paid tools first, then featured free
+  const paidTools = ToolsDB.paidSpots ? ToolsDB.paidSpots() : [];
+  const featured = ToolsDB.load().filter(t=>t.featured && t.approved!==false && (!t.tier || t.tier==='free'));
+  const tools = [...paidTools, ...featured].slice(0,8);
   const html = tools.map(t=>{
     const url = buildRefURL(t);
-    return `<a href="${url}" target="_blank" class="scard">
-      <span class="scard-badge">FEATURED</span>
+    const tierBadge = t.tier && t.tier!=='free' ? (t.tier==='premium'?'👑 PREMIUM':t.tier==='growth'?'✦ GROWTH':'⭐ STARTER') : 'FEATURED';
+    const tierCls = t.tier && t.tier!=='free' ? 'tier-'+t.tier : '';
+    return `<a href="${url}" target="_blank" class="scard ${tierCls}">
+      <span class="scard-badge">${tierBadge}</span>
       ${t.image?`<img class="scard-img" src="${t.image}" alt="${t.name}" loading="lazy" onerror="this.style.display='none'">`:''}
       <div class="scard-body">
-        <div class="sp-name">${t.name}</div>
+        <div class="sp-name">${t.emoji||''} ${t.name}</div>
         <div class="sp-cat">${t.cat}</div>
         <div class="sp-desc">${(t.tagline||'').slice(0,60)}</div>
       </div>
@@ -902,12 +907,13 @@ function setView(v){
 
 function getFiltered(){
   const q=(document.getElementById('search-input').value||'').toLowerCase();
-  let t=ToolsDB.load().filter(x=>x.approved!==false);
+  // Use pipeline for tier-priority sorting
+  let t=(ToolsDB.pipeline ? ToolsDB.pipeline() : ToolsDB.load()).filter(x=>x.approved!==false);
   if(toolCat==='new') t=t.filter(x=>(x.daysAgo||0)<=7);
   else if(toolCat!=='all') t=t.filter(x=>x.cat===toolCat);
   if(toolPricing) t=t.filter(x=>x.pricing===toolPricing);
   if(q) t=t.filter(x=>x.name.toLowerCase().includes(q)||x.tagline.toLowerCase().includes(q)||x.cat.includes(q));
-  if(toolSort==='votes') t.sort((a,b)=>b.votes-a.votes);
+  if(toolSort==='votes'){/* pipeline already sorts by tier then votes */}
   else if(toolSort==='new') t.sort((a,b)=>(a.daysAgo||0)-(b.daysAgo||0));
   else if(toolSort==='name') t.sort((a,b)=>a.name.localeCompare(b.name));
   else if(toolSort==='featured') t.sort((a,b)=>(b.featured?1:0)-(a.featured?1:0));
@@ -978,9 +984,10 @@ function vote(id,btn){
 function renderFreeTools(){
   var grid=document.getElementById('free-tools-grid');
   if(!grid) return;
-  var tools=ToolsDB.load().filter(function(t){
+  // Use pipeline free tools for tier-priority display
+  var tools=(ToolsDB.freeTools ? ToolsDB.freeTools() : ToolsDB.load().filter(function(t){
     return t.approved!==false && (t.pricing==='free'||t.pricing==='freemium');
-  }).sort(function(a,b){return b.votes-a.votes}).slice(0,8);
+  })).slice(0,8);
   if(!tools.length){ grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:24px;color:var(--text3);font-family:var(--mono);font-size:12px">No free tools yet — <a href="#submit-tool" style="color:var(--green)">submit yours</a></div>'; return; }
   grid.innerHTML=tools.map(function(t){
     var url=buildRefURL(t);

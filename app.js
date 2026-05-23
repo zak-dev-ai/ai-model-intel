@@ -339,21 +339,72 @@ window.ToolsDB = {
     try { localStorage.setItem(TOOLS_KEY, JSON.stringify(tools)); } catch {}
   },
 
+  // Add tool with optional tier (free/starter/growth/premium) and expiry
   add(tool) {
     const tools = this.load();
     const newId = Math.max(...tools.map(t => t.id), 0) + 1;
+    const tier = tool.tier || 'free';
+    const expiresAt = tool.expiresAt || (tier !== 'free' ? new Date(Date.now() + (tool.days||7)*86400000).toISOString() : null);
     const newTool = {
       ...tool,
       id: newId,
-      votes: 0,
+      votes: tool.votes || 0,
       approved: true,
       daysAgo: 0,
-      image: tool.image || (tool.url ? `https://img.logo.dev/${new URL(tool.url).hostname}?token=pk_public&size=128` : ''),
-      submittedAt: new Date().toISOString(),
+      tier: tier,
+      expiresAt: expiresAt,
+      image: tool.image || (tool.url ? `https://icons.duckduckgo.com/ip3/${new URL(tool.url).hostname}.ico` : ''),
+      submittedAt: tool.submittedAt || new Date().toISOString(),
+      listedAt: new Date().toISOString(),
     };
     tools.unshift(newTool);
     this.save(tools);
     return newTool;
+  },
+
+  // Auto-expire paid tools: drop to 'free' tier when expired
+  expireCheck() {
+    const tools = this.load();
+    const now = new Date();
+    let changed = false;
+    tools.forEach(t => {
+      if (t.tier && t.tier !== 'free' && t.expiresAt && new Date(t.expiresAt) < now) {
+        t.tier = 'free';
+        t.expiresAt = null;
+        t.expiredFrom = t.tier; // track original tier
+        changed = true;
+      }
+    });
+    if (changed) this.save(tools);
+    return tools;
+  },
+
+  // Pipeline: returns tools sorted by tier priority
+  // premium → growth → starter → free + sorted by votes
+  pipeline() {
+    const tools = this.expireCheck();
+    const tierRank = { premium:0, growth:1, starter:2, free:3 };
+    return tools.sort((a,b) => {
+      const ra = tierRank[a.tier||'free'] ?? 3;
+      const rb = tierRank[b.tier||'free'] ?? 3;
+      if (ra !== rb) return ra - rb;
+      return (b.votes||0) - (a.votes||0);
+    });
+  },
+
+  // Get tools by tier
+  byTier(tier) {
+    return this.pipeline().filter(t => (t.tier||'free') === tier);
+  },
+
+  // Get paid ads for spotlight/slots
+  paidSpots() {
+    return this.pipeline().filter(t => t.tier && t.tier !== 'free' && t.approved !== false);
+  },
+
+  // Get free tools only (for free card slots)
+  freeTools() {
+    return this.pipeline().filter(t => (!t.tier || t.tier === 'free') && t.approved !== false);
   },
 
   vote(id) {
