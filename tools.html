@@ -1153,30 +1153,35 @@ async function loadPrices(){
 
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.opacity='1';clearTimeout(t._t);t._t=setTimeout(()=>t.style.opacity='0',3000);}
 
-// Check if returned from Dodo payment redirect
+// Check if returned from payment
 function checkPaymentReturn(){
-  const params=new URLSearchParams(window.location.search);
-  if(params.get('success')==='1'||params.get('payment_success')==='true'){
-    const pending=JSON.parse(localStorage.getItem('octopus_pending_submit')||'null');
+  // Always show post-pay form if there's a pending submission
+  try{
+    const pending = JSON.parse(localStorage.getItem('octopus_pending_submit')||'null');
     if(pending){
-      document.getElementById('pp-name').value=pending.name||'';
-      document.getElementById('pp-url').value=pending.url||'';
-      document.getElementById('pp-email').value=pending.email||'';
-      document.getElementById('pp-emoji').value=pending.emoji||'🚀';
-      document.getElementById('pp-desc').value=pending.desc||'';
-      document.getElementById('pp-plan').value=pending.plan||'growth';
+      document.getElementById('pp-name').value = pending.name || '';
+      document.getElementById('pp-url').value = pending.url || '';
+      document.getElementById('pp-email').value = pending.email || '';
+      document.getElementById('pp-emoji').value = pending.emoji || '🚀';
+      document.getElementById('pp-desc').value = pending.desc || '';
+      document.getElementById('pp-plan').value = pending.plan || 'growth';
+      // Show post-pay form immediately
+      setTimeout(function(){
+        document.getElementById('post-pay-wrap').style.display = 'block';
+        document.getElementById('post-pay-wrap').scrollIntoView({behavior:'smooth'});
+      }, 400);
     }
+  }catch(e){}
+  
+  const params = new URLSearchParams(window.location.search);
+  if(params.get('success')==='1'||params.get('payment_success')==='true'){
     history.replaceState({},'',window.location.pathname);
     return true;
   }
   return false;
 }
 
-// Check if returned from payment
-if(checkPaymentReturn()){
-  document.getElementById('pay-modal').classList.add('open');
-  setTimeout(showPostPayForm, 500);
-}
+checkPaymentReturn();
 
 renderPaidSlots();
 renderFreeTools();
