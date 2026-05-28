@@ -1,10 +1,12 @@
 /**
- * 🐙 OCTOPUS AI INTEL — Shared App System
- * app.js — include in every page: /, /tools, /compare, /blog, /admin
+ * 🐙 OCTOPUS AI INTEL — Shared Ad System
+ * ads.js — include in every page: /, /tools, /compare, /blog
+ *
+ * Reads from localStorage (works cross-page on same domain)
+ * Admin can manage via /admin page
+ * Auto-expires ads when time runs out
+ * Rotates sidebar ads every 30 seconds
  */
-
-// Mobile CSS fixes loaded via separate stylesheet for reliability
-// See /mobile-fixes.css
 
 const ADS_KEY = 'octopus_ads_v2';
 const TOOLS_KEY = 'octopus_tools_v2';
@@ -531,44 +533,8 @@ window.setupImgFallback = function(img) {
   };
 };
 
-// ── Global image error handler (captures all pages, including dynamic) ──
-window.addEventListener('error', function(e) {
-  if (e.target.tagName !== 'IMG') return;
-  var img = e.target;
-  // Already handled?
-  if (img.dataset.fallbackHandled === '1') return;
-  img.dataset.fallbackHandled = '1';
-  img.style.display = 'none';
-  // Try to show next fallback element
-  var fb = img.nextElementSibling;
-  if (fb && (fb.classList.contains('ht-img-fallback') || fb.classList.contains('tc-img-fallback'))) {
-    fb.style.display = 'flex';
-  }
-  // Also handle old-style span fallbacks
-  var altFb = img.parentElement && img.parentElement.querySelector('[style*="display:none"]');
-  if (altFb && altFb.tagName === 'SPAN') {
-    altFb.style.display = 'inline';
-  }
-}, true);
-
-// ── Fix broken images on visibility change (tab switch) ──
-document.addEventListener('visibilitychange', function() {
-  if (document.hidden) return;
-  document.querySelectorAll('img[src*="duckduckgo"], img[src*="logo.dev"], img[src*="clearbit"], img[src*="icons."]').forEach(function(img) {
-    if (!img.complete || img.naturalWidth === 0) {
-      img.style.display = 'none';
-      var fb = img.nextElementSibling;
-      if (fb && fb.classList.contains('ht-img-fallback')) fb.style.display = 'flex';
-    }
-  });
-});
-
 document.addEventListener('DOMContentLoaded', function() {
-  document.querySelectorAll('.ht-img, .tc-img, .scard-img, img[src*="logo.dev"], img[src*="duckduckgo"]').forEach(function(img) {
-    if (!img.complete || img.naturalWidth === 0) {
-      img.onerror && img.onerror();
-    }
-  });
+  document.querySelectorAll('.ht-img, .tc-img, .scard-img, img[src*="logo.dev"], img[src*="duckduckgo"]').forEach(window.setupImgFallback);
 });
 
 var _pv=parseInt(localStorage.getItem("octopus_pv")||0);localStorage.setItem("octopus_pv",_pv+1);
