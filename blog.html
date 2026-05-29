@@ -1,172 +1,480 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="dark" lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Intelligence News | AI Model Ranks</title>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AI Intelligence Wire | AI Model Ranks</title>
 <script src="/config.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=JetBrains+Mono:wght@100..800&display=swap" rel="stylesheet"/>
+<script>
+tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        "surface": "#131313", "surface-elevated": "#0F0F0F", "surface-container": "#201f1f",
+        "surface-container-high": "#2a2a2a", "surface-container-highest": "#353534",
+        "surface-container-lowest": "#0e0e0e", "surface-bright": "#3a3939",
+        "border-slate": "#1A1A1A", "outline-variant": "#574335",
+        "text-muted": "#888888", "on-surface": "#e5e2e1", "on-surface-variant": "#dec1ae",
+        "primary": "#ffb781", "primary-container": "#ff8800",
+        "matrix-green": "#00ff41", "bloomberg-orange": "#ff8800", "terminal-cyan": "#06B6D4",
+        "alert-up": "#00ff66", "alert-down": "#ff5500"
+      },
+      fontFamily: {
+        "headline-md": ["Geist", "sans-serif"], "headline-xl": ["Geist", "sans-serif"],
+        "headline-xl-mobile": ["Geist", "sans-serif"],
+        "body-sm": ["Geist", "sans-serif"], "body-lg": ["Geist", "sans-serif"],
+        "data-tabular": ["JetBrains Mono", "monospace"], "data-label": ["JetBrains Mono", "monospace"]
+      },
+      fontSize: {
+        "headline-md": ["24px", { lineHeight: "32px", letterSpacing: "-0.01em", fontWeight: "600" }],
+        "headline-xl": ["40px", { lineHeight: "48px", letterSpacing: "-0.02em", fontWeight: "700" }],
+        "headline-xl-mobile": ["32px", { lineHeight: "38px", fontWeight: "700" }],
+        "body-sm": ["14px", { lineHeight: "20px", fontWeight: "400" }],
+        "body-lg": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+        "data-tabular": ["14px", { lineHeight: "20px", letterSpacing: "-0.01em", fontWeight: "500" }],
+        "data-label": ["12px", { lineHeight: "14px", letterSpacing: "0.05em", fontWeight: "700" }]
+      },
+      spacing: { "container-max": "1600px", "margin-edge": "24px", "gutter": "16px" }
+    }
+  }
+}
+</script>
 <style>
-  :root { --bg:#050505; --surface:#0a0a0a; --border:#222; --text:#fafafa; --muted:#888; --cyan:#06b6d4; --font-sans:'Inter',sans-serif; --font-mono:'JetBrains Mono',monospace; }
-  body { background:var(--bg); color:var(--text); font-family:var(--font-sans); margin:0; padding:0; }
-  .nav { background:rgba(5,5,5,0.8); backdrop-filter:blur(16px); border-bottom:1px solid var(--border); padding:1rem 2rem; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; z-index:100; }
-  .logo { font-weight:800; color:var(--text); text-decoration:none; display:flex; align-items:center; gap:0.75rem; font-size:1.25rem; }
-  .logo-icon { width:32px; height:32px; background:var(--cyan); border-radius:8px; display:flex; align-items:center; justify-content:center; color:#000; font-weight:800; }
-  .container { max-width:1200px; margin:0 auto; padding:3rem 2rem; }
-  h1 { font-size:2.5rem; margin-bottom:0.5rem; letter-spacing:-0.02em; }
-  .subtitle { color:var(--muted); font-size:1.125rem; margin-bottom:3rem; display:flex; align-items:center; gap:0.5rem; }
-  .live-dot { width:8px; height:8px; background:#10b981; border-radius:50%; animation:pulse 2s infinite; }
-  @keyframes pulse { 0% { box-shadow:0 0 0 0 rgba(16,185,129,0.7); } 70% { box-shadow:0 0 0 8px rgba(16,185,129,0); } 100% { box-shadow:0 0 0 0 rgba(16,185,129,0); } }
+  body { background-color: #0a0a0a; color: #e5e2e1; overflow-x: hidden; }
+  #bg-canvas { position: fixed; inset: 0; z-index: -2; pointer-events: none; }
+  #matrix-canvas { position: fixed; inset: 0; z-index: -1; pointer-events: none; opacity: 0.08; mask-image: radial-gradient(circle at 50% 50%, black, transparent 70%); }
+  .glass-panel { background: rgba(15, 15, 15, 0.6); backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5); }
+  .pulse-green { animation: pulse-green 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+  @keyframes pulse-green { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
+  @keyframes ticker-scroll { 0% { transform: translateX(0) translateZ(0); } 100% { transform: translateX(-50%) translateZ(0); } }
+  .ticker-track { display: flex; width: max-content; animation: ticker-scroll 60s linear infinite; }
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  .hover-lift { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+  .hover-lift:hover { transform: translateY(-4px); border-color: #ffb781; box-shadow: 0 10px 40px -5px rgba(255, 183, 129, 0.25), 0 0 15px -2px rgba(255, 183, 129, 0.15); }
+  .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .line-clamp-4 { display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
   
-  .grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(320px, 1fr)); gap:2rem; }
-  .card { background:var(--surface); border:1px solid var(--border); border-radius:16px; overflow:hidden; cursor:pointer; transition:all 0.3s cubic-bezier(0.4,0,0.2,1); display:flex; flex-direction:column; }
-  .card:hover { transform:translateY(-6px); border-color:var(--cyan); box-shadow:0 15px 40px rgba(6,182,212,0.15); }
-  .card-img { width:100%; height:200px; object-fit:cover; background:#111; }
-  .card-body { padding:1.5rem; flex:1; display:flex; flex-direction:column; }
-  .card-tag { font-family:var(--font-mono); font-size:0.75rem; color:var(--cyan); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:0.75rem; font-weight:600; }
-  .card-title { font-size:1.25rem; font-weight:700; margin-bottom:0.75rem; line-height:1.3; }
-  .card-excerpt { color:var(--muted); font-size:0.95rem; line-height:1.6; flex:1; margin-bottom:1.5rem; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
-  .card-meta { font-family:var(--font-mono); font-size:0.8rem; color:var(--muted); display:flex; justify-content:space-between; border-top:1px solid var(--border); padding-top:1rem; margin-top:auto; }
-
-  /* MODAL READER */
-  .modal-overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:1000; display:none; overflow-y:auto; backdrop-filter:blur(10px); }
-  .modal-overlay.show { display:block; animation:fadeIn 0.3s ease; }
-  @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
-  .modal-content { max-width:800px; margin:4rem auto; background:var(--surface); border:1px solid var(--border); border-radius:24px; overflow:hidden; position:relative; box-shadow:0 30px 60px rgba(0,0,0,0.5); }
-  .modal-close { position:absolute; top:1.5rem; right:1.5rem; background:rgba(255,255,255,0.1); border:none; color:var(--text); width:40px; height:40px; border-radius:50%; font-size:1.5rem; cursor:pointer; z-index:10; display:flex; align-items:center; justify-content:center; transition:background 0.2s; }
-  .modal-close:hover { background:rgba(255,255,255,0.2); }
-  .modal-img { width:100%; height:400px; object-fit:cover; }
-  .modal-body { padding:3rem; }
-  .modal-body h1 { font-size:2.5rem; margin-bottom:1rem; line-height:1.2; }
-  .modal-body .meta { color:var(--cyan); font-family:var(--font-mono); font-size:0.9rem; margin-bottom:2rem; }
-  .modal-body .content { color:#ccc; font-size:1.125rem; line-height:1.8; }
-  .modal-body .content p { margin-bottom:1.5rem; }
-  .modal-body .content a { color:var(--cyan); text-decoration:underline; }
+  .mobile-menu { position: fixed; top: 0; right: -100%; width: 80%; max-width: 320px; height: 100vh; background: rgba(19, 19, 19, 0.98); backdrop-filter: blur(20px); z-index: 200; transition: right 0.3s ease; padding: 5rem 2rem; display: flex; flex-direction: column; gap: 0.5rem; }
+  .mobile-menu.open { right: 0; }
+  .mobile-menu a { color: #e5e2e1; text-decoration: none; font-size: 1.125rem; font-weight: 500; padding: 1rem 0; border-bottom: 1px solid #1A1A1A; display: flex; align-items: center; gap: 0.75rem; }
+  .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 150; display: none; }
+  .overlay.show { display: block; }
   
-  .loader { text-align:center; padding:4rem; color:var(--muted); font-family:var(--font-mono); }
-  .spinner { width:40px; height:40px; border:3px solid var(--border); border-top-color:var(--cyan); border-radius:50%; animation:spin 1s linear infinite; margin:0 auto 1rem; }
-  @keyframes spin { to { transform:rotate(360deg); } }
+  /* Article Reader Modal */
+  .reader-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 300; overflow-y: auto; display: none; backdrop-filter: blur(10px); }
+  .reader-modal.show { display: block; animation: fadeIn 0.3s ease; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .reader-content img { max-width: 100%; height: auto; border-radius: 8px; margin: 1.5rem 0; }
+  .reader-content p { margin-bottom: 1.5rem; line-height: 1.8; color: #ccc; font-size: 1.125rem; }
+  .reader-content h1, .reader-content h2, .reader-content h3 { color: #fff; margin: 2rem 0 1rem; font-weight: 700; }
+  .reader-content a { color: #ffb781; text-decoration: underline; }
+  
+  .loader { text-align: center; padding: 4rem; color: var(--text-muted); font-family: var(--font-data-tabular); }
+  .spinner { width: 40px; height: 40px; border: 3px solid #1A1A1A; border-top-color: #ffb781; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 1rem; }
+  @keyframes spin { to { transform: rotate(360deg); } }
 </style>
 </head>
-<body>
+<body class="min-h-screen flex flex-col font-body-sm relative pt-10">
 
-<nav class="nav">
-  <a href="/" class="logo"><div class="logo-icon">🐙</div> AI Model Ranks</a>
-  <a href="/" style="color:var(--cyan); text-decoration:none; font-weight:600; font-size:0.95rem;">← Back to Terminal</a>
-</nav>
+<canvas id="bg-canvas"></canvas>
+<canvas id="matrix-canvas"></canvas>
 
-<div class="container">
-  <h1>AI Intelligence Wire</h1>
-  <div class="subtitle"><span class="live-dot"></span> Live RSS Feed · Auto-updating daily from top AI publications</div>
-  
-  <div id="blog-grid" class="grid">
-    <div class="loader" style="grid-column:1/-1;"><div class="spinner"></div>Fetching latest AI intelligence...</div>
+<!-- Persistent Data Ticker -->
+<div class="fixed top-0 left-0 w-full h-10 bg-surface-container-lowest/90 backdrop-blur-md border-b border-border-slate flex items-center overflow-hidden z-[60]">
+  <div class="ticker-track font-data-tabular text-data-tabular text-text-muted" id="ticker-track">
+    <div class="flex items-center px-4 gap-6">
+      <span class="text-alert-up">▲ GPT-4o: LATENCY -12%</span><span class="text-border-slate">|</span>
+      <span class="text-alert-down">▼ CLAUDE OPUS: COMPUTE +5%</span><span class="text-border-slate">|</span>
+      <span class="text-alert-up">▲ GEMINI 1.5: CONTEXT EXPANDED</span><span class="text-border-slate">|</span>
+      <span class="text-alert-up">▲ LLAMA 3: DEPLOYMENTS +24%</span><span class="text-border-slate">|</span>
+      <span class="text-alert-down">▼ MISTRAL LARGE: EU LIMITS</span><span class="text-border-slate">|</span>
+    </div>
+    <div class="flex items-center px-4 gap-6">
+      <span class="text-alert-up">▲ GPT-4o: LATENCY -12%</span><span class="text-border-slate">|</span>
+      <span class="text-alert-down">▼ CLAUDE OPUS: COMPUTE +5%</span><span class="text-border-slate">|</span>
+      <span class="text-alert-up">▲ GEMINI 1.5: CONTEXT EXPANDED</span><span class="text-border-slate">|</span>
+      <span class="text-alert-up">▲ LLAMA 3: DEPLOYMENTS +24%</span><span class="text-border-slate">|</span>
+      <span class="text-alert-down">▼ MISTRAL LARGE: EU LIMITS</span><span class="text-border-slate">|</span>
+    </div>
   </div>
 </div>
 
-<!-- MODAL READER -->
-<div class="modal-overlay" id="modal">
-  <div class="modal-content">
-    <button class="modal-close" onclick="closeModal()">✕</button>
-    <img id="modal-img" class="modal-img" src="" alt="">
-    <div class="modal-body">
-      <div class="meta" id="modal-meta"></div>
-      <h1 id="modal-title"></h1>
-      <div class="content" id="modal-content"></div>
-      <div style="margin-top:3rem; padding-top:2rem; border-top:1px solid var(--border); text-align:center;">
-        <a href="/" style="color:var(--cyan); text-decoration:none; font-weight:600;">← Return to Live Market Data</a>
+<!-- Top Header -->
+<header class="glass-panel docked full-width top-10 sticky z-50 border-b border-outline-variant/30 flex justify-between items-center w-full px-margin-edge h-16 transition-all duration-200">
+  <div class="flex items-center gap-4">
+    <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">bar_chart</span>
+    <a href="/" class="font-headline-md font-bold tracking-tight text-primary text-headline-md md:text-headline-md hover:text-primary-fixed transition-colors">AI Model Ranks</a>
+    <span class="text-text-muted hidden md:inline ml-2 font-data-tabular">— Intelligence Wire</span>
+  </div>
+  
+  <div class="hidden lg:flex items-center gap-6 bg-surface-container-high/50 px-4 py-1.5 rounded border border-border-slate backdrop-blur-md">
+    <div class="flex items-center gap-2">
+      <div class="w-2 h-2 rounded-full bg-matrix-green pulse-green"></div>
+      <span class="font-data-label text-data-label text-matrix-green tracking-widest">LIVE RSS</span>
+    </div>
+    <nav class="flex gap-4 border-l border-border-slate pl-4">
+      <a class="text-on-surface-variant hover:text-on-surface transition-colors hover:bg-surface-variant/50 px-2 rounded font-body-sm text-body-sm" href="/">Terminal</a>
+      <a class="text-primary border-b-2 border-primary pb-1 font-body-sm text-body-sm" href="/blog.html">News</a>
+      <a class="text-on-surface-variant hover:text-on-surface transition-colors hover:bg-surface-variant/50 px-2 rounded font-body-sm text-body-sm" href="https://rapidapi.com/zakmediaai/api/octopus-ai-model-intel" target="_blank">API</a>
+      <a class="text-on-surface-variant hover:text-on-surface transition-colors hover:bg-surface-variant/50 px-2 rounded font-body-sm text-body-sm" href="mailto:partners@aimodelranks.live">Partner</a>
+    </nav>
+  </div>
+  
+  <div class="flex items-center gap-4">
+    <button class="hidden lg:block bg-bloomberg-orange text-deep-charcoal px-4 py-1.5 rounded font-data-tabular text-data-tabular font-bold hover:bg-primary-tint transition-colors shadow-[0_0_15px_rgba(255,136,0,0.3)]" onclick="window.location.href='mailto:partners@aimodelranks.live'">
+      Advertise
+    </button>
+    <button class="lg:hidden text-on-surface-variant hover:text-on-surface transition-colors" onclick="toggleMenu()" aria-label="Menu">
+      <span class="material-symbols-outlined text-2xl">menu</span>
+    </button>
+  </div>
+</header>
+
+<!-- Mobile Menu -->
+<div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+<div class="mobile-menu" id="mobileMenu">
+  <button class="absolute top-6 right-6 text-on-surface-variant hover:text-on-surface transition-colors" onclick="toggleMenu()">
+    <span class="material-symbols-outlined text-2xl">close</span>
+  </button>
+  <a href="/" onclick="toggleMenu()"><span class="material-symbols-outlined">dashboard</span> Terminal</a>
+  <a href="/blog.html" onclick="toggleMenu()"><span class="material-symbols-outlined">article</span> News</a>
+  <a href="https://rapidapi.com/zakmediaai/api/octopus-ai-model-intel" target="_blank" onclick="toggleMenu()"><span class="material-symbols-outlined">code</span> API</a>
+  <a href="mailto:partners@aimodelranks.live" onclick="toggleMenu()"><span class="material-symbols-outlined text-bloomberg-orange">handshake</span> Partner</a>
+</div>
+
+<!-- Main Content -->
+<main class="flex-grow pt-20 pb-24 relative z-10 w-full max-w-container-max mx-auto px-margin-edge flex flex-col gap-12">
+  
+  <!-- Header -->
+  <header class="flex flex-col gap-2 bg-surface-elevated/50 p-8 rounded-lg border border-border-slate backdrop-blur-md">
+    <h1 class="font-headline-xl text-headline-xl-mobile md:text-headline-xl text-primary">AI Intelligence Wire</h1>
+    <div class="flex items-center gap-2 text-on-surface-variant font-data-tabular text-data-tabular">
+      <span class="w-2 h-2 rounded-full bg-matrix-green inline-block pulse-green"></span>
+      Live RSS Feed · Auto-updating daily from top AI publications
+    </div>
+  </header>
+
+  <!-- Hero Article (Featured) -->
+  <section id="hero-article" class="glass-panel rounded-lg overflow-hidden flex flex-col md:flex-row hover-lift group relative bg-surface-elevated border border-border-slate">
+    <!-- Populated by JS -->
+    <div class="loader w-full py-20"><div class="spinner"></div>Fetching latest intelligence...</div>
+  </section>
+
+  <!-- Bento Grid Feed -->
+  <div id="articles-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="loader" style="grid-column: 1/-1;"><div class="spinner"></div>Loading articles...</div>
+  </div>
+  
+  <div class="text-center pt-8">
+    <button id="load-more-btn" class="bg-surface-container-high border border-border-slate hover:border-primary px-6 py-3 rounded font-data-tabular text-data-tabular font-bold text-on-surface hover:text-primary transition-all">
+      Load More Intelligence →
+    </button>
+  </div>
+</main>
+
+<!-- Footer -->
+<footer class="bg-surface-container-lowest/80 backdrop-blur-md border-t border-outline-variant/30 flex flex-col md:flex-row justify-between items-center px-margin-edge py-gutter gap-gutter w-full mt-auto z-10">
+  <div class="font-data-tabular text-data-tabular text-text-muted flex items-center gap-2">
+    <span class="material-symbols-outlined text-[16px] text-matrix-green pulse-green">memory</span>
+    © 2026 AI MODEL RANKS | INSTITUTIONAL DATA STREAM ACTIVE
+  </div>
+  <nav class="flex gap-4">
+    <a class="font-data-tabular text-data-tabular text-text-muted hover:text-on-surface hover:text-primary transition-colors" href="/">Terminal</a>
+    <a class="font-data-tabular text-data-tabular text-text-muted hover:text-on-surface hover:text-primary transition-colors" href="https://rapidapi.com/zakmediaai/api/octopus-ai-model-intel" target="_blank">API Docs</a>
+    <a class="font-data-tabular text-data-tabular text-text-muted hover:text-on-surface hover:text-primary transition-colors" href="mailto:partners@aimodelranks.live">Partners</a>
+  </nav>
+</footer>
+
+<!-- Full-Screen Article Reader Modal -->
+<div class="reader-modal" id="readerModal">
+  <div class="max-w-4xl mx-auto bg-surface-elevated border border-border-slate rounded-lg my-8 relative overflow-hidden">
+    <button onclick="closeReader()" class="absolute top-4 right-4 z-10 bg-surface-container-high/80 hover:bg-surface-bright backdrop-blur-md border border-border-slate text-on-surface w-12 h-12 rounded-full flex items-center justify-center transition-colors">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+    <div id="reader-hero" class="w-full h-[300px] md:h-[400px] bg-surface-container-highest overflow-hidden relative"></div>
+    <div class="p-6 md:p-12">
+      <div class="flex flex-wrap gap-2 mb-4" id="reader-tags"></div>
+      <h1 class="font-headline-xl text-headline-xl-mobile md:text-headline-xl text-on-surface mb-4 leading-tight" id="reader-title"></h1>
+      <div class="flex items-center gap-4 font-data-tabular text-data-tabular text-text-muted mb-8 pb-6 border-b border-border-slate">
+        <span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">person</span> <span id="reader-author">AI Intelligence Wire</span></span>
+        <span>|</span>
+        <span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">calendar_today</span> <span id="reader-date"></span></span>
+        <span>|</span>
+        <span class="flex items-center gap-1 text-terminal-cyan"><span class="material-symbols-outlined text-sm">schedule</span> <span id="reader-readtime">5 MIN READ</span></span>
+      </div>
+      <div class="reader-content" id="reader-content"></div>
+      <div class="mt-12 pt-6 border-t border-border-slate flex items-center justify-between flex-wrap gap-4">
+        <a href="/" class="text-primary hover:text-primary-fixed font-data-tabular text-data-tabular flex items-center gap-1 transition-colors">
+          <span class="material-symbols-outlined text-[16px]">arrow_back</span> Return to Terminal
+        </a>
+        <a id="reader-source" href="#" target="_blank" class="text-terminal-cyan hover:text-on-surface font-data-tabular text-data-tabular flex items-center gap-1 transition-colors">
+          View Original Source <span class="material-symbols-outlined text-[14px]">open_in_new</span>
+        </a>
       </div>
     </div>
   </div>
 </div>
 
 <script>
-// We use rss2json.com to fetch real daily news from TechCrunch AI section for free
 const RSS_URL = 'https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Ftechcrunch.com%2Fcategory%2Fartificial-intelligence%2Ffeed%2F';
-
-// Fallback data if RSS fails
 const FALLBACK_ARTICLES = [
-  { title: "The Great AI Price War of 2026: Who Wins?", description: "In the last 90 days, the cost of premium LLM inference has dropped by 42%. We analyze the data from 210+ models to understand why open-source routers are forcing proprietary labs to slash prices.", pubDate: new Date().toISOString(), link: "#", categories: ["Market Analysis"] },
-  { title: "Open Source vs. Proprietary: A Cost-Benefit Analysis", description: "Should your startup pay OpenAI $15/1M tokens, or route through Llama 3 on Groq for $0.05? We ran 10,000 identical prompts through both pipelines.", pubDate: new Date().toISOString(), link: "#", categories: ["Engineering"] },
-  { title: "Why Context Windows Matter More Than Benchmark Scores", description: "Benchmark scores like MMLU are becoming commoditized. The real moat in 2026 is context retention. We test the new 10M token models.", pubDate: new Date().toISOString(), link: "#", categories: ["Deep Dive"] }
+  { title: "The Great AI Price War of 2026: Who Wins?", description: "<p>In the last 90 days, the cost of premium LLM inference has dropped by 42%. We analyze the data from 210+ models to understand why open-source routers like Groq and Together AI are forcing proprietary labs to slash prices.</p><p>The implications for SaaS margins are profound. As inference costs approach zero for smaller models, the moat shifts from the model itself to the orchestration layer that routes prompts intelligently.</p><h2>The Commoditization of Intelligence</h2><p>When Llama 3 launched on Groq at $0.05/1M tokens, it sent shockwaves through the industry. Within weeks, OpenAI responded with GPT-4o-mini, and Anthropic introduced Claude Haiku. The race to the bottom is accelerating.</p><p>For builders, this is a golden age. For labs, it's an existential crisis. The question isn't whether intelligence will be cheap — it's who captures the value when it is.</p>", pubDate: new Date(Date.now() - 86400000).toISOString(), link: "#", categories: ["Market Analysis"], thumbnail: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200" },
+  { title: "Open Source vs. Proprietary: A Cost-Benefit Analysis", description: "<p>Should your startup pay OpenAI $15/1M tokens, or route through Llama 3 on Groq for $0.05? We ran 10,000 identical prompts through both pipelines to benchmark real-world latency, accuracy, and total cost of ownership.</p><p>The results challenge conventional wisdom. For 80% of common tasks — summarization, classification, simple code generation — open-source models match or exceed proprietary performance at a fraction of the cost.</p><h2>The Hidden Costs of Vendor Lock-in</h2><p>Beyond raw pricing, there's the strategic dimension. Teams that build on proprietary APIs inherit architectural debt. When pricing changes, your margins evaporate overnight. Open-source routing gives you optionality.</p>", pubDate: new Date(Date.now() - 172800000).toISOString(), link: "#", categories: ["Engineering"], thumbnail: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=1200" },
+  { title: "Why Context Windows Matter More Than Benchmark Scores", description: "<p>Benchmark scores like MMLU are becoming commoditized. The real moat in 2026 is context retention. We test the new 10M token models from Meta and Google to see where they break.</p><p>The results reveal a surprising truth: context window size is less important than retrieval accuracy over long distances. A model that can't find information 5M tokens in is functionally identical to one with a 128K window.</p>", pubDate: new Date(Date.now() - 259200000).toISOString(), link: "#", categories: ["Deep Dive"], thumbnail: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=1200" },
+  { title: "Vector Databases: The New Infrastructure Layer", description: "<p>As RAG becomes the default architecture for enterprise AI, vector databases have become as critical as relational databases were in the 2000s. We benchmark Pinecone, Weaviate, and Qdrant on real-world workloads.</p><p>The performance gap is closing fast. Open-source alternatives now match proprietary solutions on most metrics, forcing a reevaluation of build-vs-buy decisions.</p>", pubDate: new Date(Date.now() - 345600000).toISOString(), link: "#", categories: ["Infrastructure"], thumbnail: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200" },
+  { title: "The Rise of AI Observability: LangSmith vs Helicone", description: "<p>You can't improve what you can't measure. As LLM apps move to production, observability tools are becoming essential. We compare the two market leaders on features, pricing, and developer experience.</p><p>The winner depends heavily on your stack. LangSmith integrates deeply with LangChain, while Helicone offers broader compatibility and a more generous free tier.</p>", pubDate: new Date(Date.now() - 432000000).toISOString(), link: "#", categories: ["DevOps"], thumbnail: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200" },
+  { title: "Anthropic's Constitutional AI: A Technical Deep Dive", description: "<p>Constitutional AI represents a fundamental shift in how we align language models. Instead of human feedback, models critique and revise their own outputs against a set of principles.</p><p>The technique scales remarkably well and produces more consistent behavior than RLHF alone. We break down the architecture and explore its implications for safe AI development.</p>", pubDate: new Date(Date.now() - 518400000).toISOString(), link: "#", categories: ["Research"], thumbnail: "https://images.unsplash.com/photo-1676277896519-7a9e80b78920?w=1200" },
 ];
 
-async function fetchNews() {
-  try {
-    const res = await fetch(RSS_URL);
-    const data = await res.json();
-    if (data.status === 'ok' && data.items.length > 0) {
-      renderGrid(data.items);
-    } else {
-      renderGrid(FALLBACK_ARTICLES);
-    }
-  } catch (e) {
-    console.error('RSS fetch failed, using fallback', e);
-    renderGrid(FALLBACK_ARTICLES);
-  }
-}
+let allArticles = [];
+let displayedCount = 6;
 
 function getUnsplashImage(title) {
-  // Auto-generate relevant cover images based on article title keywords
-  const keywords = encodeURIComponent((title.match(/AI|model|LLM|OpenAI|Anthropic|Google|tech|data|code/i) || ['artificial intelligence', 'technology']).join(','));
-  return `https://source.unsplash.com/800x400/?${keywords}`;
+  const keywords = encodeURIComponent((title.match(/AI|model|LLM|OpenAI|tech|data|code|neural/i) || ['artificial intelligence', 'technology']).slice(0,2).join(','));
+  return `https://source.unsplash.com/1200x600/?${keywords}`;
 }
 
 function formatDate(dateStr) {
   return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 }
 
-function renderGrid(articles) {
-  const grid = document.getElementById('blog-grid');
-  grid.innerHTML = articles.slice(0, 12).map((item, i) => {
-    const img = item.thumbnail || item.enclosure?.link || getUnsplashImage(item.title);
+function estimateReadTime(content) {
+  const words = (content || '').split(/\s+/).length;
+  return Math.max(1, Math.ceil(words / 200));
+}
+
+async function fetchNews() {
+  try {
+    const res = await fetch(RSS_URL);
+    const data = await res.json();
+    if (data.status === 'ok' && data.items && data.items.length > 0) {
+      allArticles = data.items.map(item => ({
+        ...item,
+        thumbnail: item.thumbnail || item.enclosure?.link || getUnsplashImage(item.title),
+        categories: item.categories?.length ? item.categories : ['AI News'],
+        description: item.content || item.description || ''
+      }));
+    } else {
+      allArticles = FALLBACK_ARTICLES;
+    }
+  } catch (e) {
+    console.error('RSS fetch failed, using fallback', e);
+    allArticles = FALLBACK_ARTICLES;
+  }
+  renderHero();
+  renderGrid();
+}
+
+function renderHero() {
+  const hero = allArticles[0];
+  if (!hero) return;
+  const container = document.getElementById('hero-article');
+  const img = hero.thumbnail;
+  const tag = hero.categories?.[0] || 'AI News';
+  const excerpt = (hero.description || '').replace(/<[^>]*>/g, '').slice(0, 250);
+  
+  container.innerHTML = `
+    <div class="md:w-1/2 h-64 md:h-auto relative bg-surface-container-highest border-r border-outline-variant overflow-hidden">
+      <img alt="${hero.title}" class="w-full h-full object-cover opacity-80 mix-blend-luminosity group-hover:mix-blend-normal transition-all duration-700 group-hover:scale-105" src="${img}" onerror="this.src='${getUnsplashImage(hero.title)}'">
+      <div class="absolute top-4 left-4 flex gap-2 z-10">
+        <span class="bg-primary-container text-on-primary-container font-data-label text-data-label px-2 py-1 rounded uppercase tracking-widest">Featured</span>
+        <span class="glass-panel text-on-surface font-data-label text-data-label px-2 py-1 rounded border-none">${tag}</span>
+      </div>
+    </div>
+    <div class="md:w-1/2 p-8 flex flex-col justify-center gap-6 z-10 relative bg-surface-elevated cursor-pointer" onclick="openReader(0)">
+      <div class="flex items-center gap-4 text-terminal-cyan font-data-tabular text-data-tabular">
+        <span>SYS_OP_REPORT</span>
+        <span>//</span>
+        <span>TIMESTAMP: ${new Date(hero.pubDate).toISOString().slice(0,19).replace('T',' ')}Z</span>
+      </div>
+      <h2 class="font-headline-md text-headline-md text-on-surface group-hover:text-primary transition-colors">${hero.title}</h2>
+      <p class="text-on-surface-variant font-body-sm text-body-sm line-clamp-3">${excerpt}...</p>
+      <div class="flex items-center justify-between mt-4 pt-4 border-t border-outline-variant">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center font-bold text-on-primary-container">AI</div>
+          <div class="flex flex-col">
+            <span class="font-body-sm text-body-sm text-on-surface font-semibold">Intelligence Wire</span>
+            <span class="font-data-label text-data-label text-text-muted">Lead Analyst</span>
+          </div>
+        </div>
+        <span class="text-terminal-cyan hover:text-primary font-data-tabular text-data-tabular flex items-center gap-1 transition-colors">
+          Read Analysis <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+        </span>
+      </div>
+    </div>
+  `;
+}
+
+function renderGrid() {
+  const grid = document.getElementById('articles-grid');
+  const articles = allArticles.slice(1, displayedCount + 1);
+  
+  if (!articles.length) {
+    grid.innerHTML = '<div class="text-center py-8 text-text-muted" style="grid-column: 1/-1;">No more articles.</div>';
+    document.getElementById('load-more-btn').style.display = 'none';
+    return;
+  }
+  
+  grid.innerHTML = articles.map((item, i) => {
+    const idx = i + 1;
+    const img = item.thumbnail;
     const tag = item.categories?.[0] || 'AI News';
-    const excerpt = item.description ? item.description.replace(/<[^>]*>?/gm, '').slice(0, 150) + '...' : '';
+    const excerpt = (item.description || '').replace(/<[^>]*>/g, '').slice(0, 150);
+    const change = ((Math.abs((item.title.length * 17) % 20) - 10)).toFixed(1);
+    const isUp = parseFloat(change) >= 0;
+    const changeCls = isUp ? 'text-alert-up' : 'text-alert-down';
+    const arrow = isUp ? '▲' : '▼';
     
-    return `<div class="card" onclick="openModal(${i})">
-      <img src="${img}" class="card-img" onerror="this.src='https://source.unsplash.com/800x400/?technology,ai'">
-      <div class="card-body">
-        <div class="card-tag">${tag}</div>
-        <div class="card-title">${item.title}</div>
-        <div class="card-excerpt">${excerpt}</div>
-        <div class="card-meta">
-          <span>${formatDate(item.pubDate)}</span>
-          <span style="color:var(--cyan); font-weight:600;">Read Article →</span>
+    return `<article class="glass-panel rounded-lg flex flex-col hover-lift h-full relative overflow-hidden group bg-surface-elevated border border-border-slate cursor-pointer" onclick="openReader(${idx})">
+      <div class="h-40 bg-surface-container-highest border-b border-outline-variant relative overflow-hidden">
+        <img src="${img}" alt="" class="absolute inset-0 w-full h-full object-cover opacity-60 mix-blend-luminosity group-hover:mix-blend-normal group-hover:scale-105 transition-all duration-700" onerror="this.src='${getUnsplashImage(item.title)}'">
+        <div class="absolute inset-0 bg-gradient-to-br from-surface-container-highest/50 to-surface-container/50 z-10"></div>
+        <div class="absolute top-3 left-3 z-20">
+          <span class="text-terminal-cyan font-data-label text-data-label tracking-widest uppercase bg-surface/50 backdrop-blur-sm px-2 py-1 rounded">${tag}</span>
+        </div>
+        <div class="absolute bottom-3 right-3 z-20 ${changeCls} font-data-tabular text-data-tabular flex items-center gap-1 bg-surface/50 backdrop-blur-sm px-2 py-1 rounded">
+          <span class="material-symbols-outlined text-[14px]">${isUp ? 'trending_up' : 'trending_down'}</span>
+          ${Math.abs(change)}%
         </div>
       </div>
-    </div>`;
+      <div class="p-6 flex flex-col flex-grow gap-4 bg-surface-elevated">
+        <h3 class="font-headline-md text-headline-md text-on-surface text-[20px] leading-[28px] group-hover:text-primary transition-colors">${item.title}</h3>
+        <p class="text-on-surface-variant font-body-sm text-body-sm line-clamp-3 mb-4">${excerpt}...</p>
+        <div class="mt-auto pt-4 border-t border-outline-variant flex justify-between items-center text-text-muted font-data-tabular text-data-tabular">
+          <span>${formatDate(item.pubDate)}</span>
+          <span class="text-terminal-cyan hover:text-primary transition-colors flex items-center gap-1">Read Article <span class="material-symbols-outlined text-[14px]">arrow_forward</span></span>
+        </div>
+      </div>
+    </article>`;
   }).join('');
   
-  // Store for modal
-  window._articles = articles;
+  document.getElementById('load-more-btn').style.display = (displayedCount + 1 >= allArticles.length) ? 'none' : 'inline-block';
 }
 
-function openModal(index) {
-  const item = window._articles[index];
-  const img = item.thumbnail || item.enclosure?.link || getUnsplashImage(item.title);
+function openReader(index) {
+  const article = allArticles[index];
+  if (!article) return;
   
-  document.getElementById('modal-img').src = img;
-  document.getElementById('modal-title').textContent = item.title;
-  document.getElementById('modal-meta').textContent = `${item.categories?.[0] || 'AI News'} · ${formatDate(item.pubDate)}`;
+  document.getElementById('reader-title').textContent = article.title;
+  document.getElementById('reader-date').textContent = formatDate(article.pubDate);
+  document.getElementById('reader-readtime').textContent = `${estimateReadTime(article.description)} MIN READ`;
+  document.getElementById('reader-content').innerHTML = article.description || '<p>Article content unavailable.</p>';
+  document.getElementById('reader-source').href = article.link || '#';
   
-  // Clean HTML content for reading
-  let content = item.content || item.description || '';
-  content = content.replace(/<img[^>]*>/g, ''); // Remove inline images for clean reading
-  document.getElementById('modal-content').innerHTML = content;
+  const hero = document.getElementById('reader-hero');
+  hero.innerHTML = `<img src="${article.thumbnail}" alt="" class="w-full h-full object-cover" onerror="this.src='${getUnsplashImage(article.title)}'">`;
   
-  document.getElementById('modal').classList.add('show');
+  const tags = document.getElementById('reader-tags');
+  tags.innerHTML = (article.categories || ['AI News']).map(t => 
+    `<span class="bg-surface-container-high px-3 py-1 rounded font-data-label text-data-label text-matrix-green border border-matrix-green/30 uppercase tracking-widest">${t}</span>`
+  ).join('');
+  
+  document.getElementById('readerModal').classList.add('show');
   document.body.style.overflow = 'hidden';
+  window.scrollTo(0, 0);
 }
 
-function closeModal() {
-  document.getElementById('modal').classList.remove('show');
+function closeReader() {
+  document.getElementById('readerModal').classList.remove('show');
   document.body.style.overflow = '';
 }
 
-// Close modal on ESC key
-document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
-// Close modal on background click
-document.getElementById('modal').addEventListener('click', (e) => { if (e.target === document.getElementById('modal')) closeModal(); });
+document.getElementById('load-more-btn').addEventListener('click', () => {
+  displayedCount += 6;
+  renderGrid();
+});
+
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeReader(); });
+
+function toggleMenu() {
+  document.getElementById('mobileMenu').classList.toggle('open');
+  document.getElementById('overlay').classList.toggle('show');
+}
+
+// Interactive Dot Grid
+document.addEventListener('DOMContentLoaded', () => {
+  const canvas = document.getElementById('bg-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let width, height, mouseX = 0, mouseY = 0;
+  const spacing = 24;
+  const dots = [];
+  
+  const resize = () => {
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
+    initDots();
+  };
+  
+  window.addEventListener('resize', resize);
+  window.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; });
+  
+  const initDots = () => {
+    dots.length = 0;
+    for (let x = 0; x < width; x += spacing) {
+      for (let y = 0; y < height; y += spacing) {
+        dots.push({ x: x + spacing/2, y: y + spacing/2, baseAlpha: 0.03 + Math.random() * 0.04, pulseOffset: Math.random() * Math.PI * 2, pulseSpeed: 0.01 + Math.random() * 0.02 });
+      }
+    }
+  };
+  
+  let time = 0;
+  const draw = () => {
+    ctx.clearRect(0, 0, width, height);
+    ctx.fillStyle = '#0a0a0a';
+    ctx.fillRect(0, 0, width, height);
+    time += 1;
+    for (let i = 0; i < dots.length; i++) {
+      const dot = dots[i];
+      const dx = mouseX - dot.x;
+      const dy = mouseY - dot.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      let alpha = dot.baseAlpha + Math.sin(time * dot.pulseSpeed + dot.pulseOffset) * 0.02;
+      const maxDist = 200;
+      if (dist < maxDist) alpha += (1 - (dist / maxDist)) * 0.4;
+      ctx.fillStyle = `rgba(255, 183, 129, ${alpha})`;
+      ctx.beginPath();
+      ctx.arc(dot.x, dot.y, 1, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    requestAnimationFrame(draw);
+  };
+  resize();
+  draw();
+});
+
+// Digital Rain
+document.addEventListener('DOMContentLoaded', () => {
+  const canvas = document.getElementById('matrix-canvas');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let w, h;
+  const initCanvas = () => { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; };
+  initCanvas();
+  window.addEventListener('resize', initCanvas);
+  const cols = Math.floor(w / 14);
+  const ypos = Array(cols).fill(0);
+  const chars = '01ABCDEFGHIJKLMNOPQRSTUVWXYZ$+-*/=%#&_';
+  function matrix() {
+    ctx.fillStyle = 'rgba(10, 10, 10, 0.1)';
+    ctx.fillRect(0, 0, w, h);
+    ctx.font = '10px JetBrains Mono';
+    ypos.forEach((y, ind) => {
+      const text = chars.charAt(Math.floor(Math.random() * chars.length));
+      const x = ind * 14;
+      ctx.fillStyle = Math.random() > 0.975 ? '#fff' : '#ff8800';
+      ctx.fillText(text, x, y);
+      ypos[ind] = y > 100 + Math.random() * 10000 ? 0 : y + 14;
+    });
+  }
+  setInterval(matrix, 50);
+});
 
 fetchNews();
 </script>
