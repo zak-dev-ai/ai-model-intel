@@ -741,5 +741,66 @@ document.addEventListener('DOMContentLoaded', () => {
 fetchData();
 setInterval(fetchData, 60000);
 </script>
+<script>
+// Analytics tracking with Supabase
+const SUPABASE_URL = 'https://jkoxrftlslylfmugjomd.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imprb3hyZnRsc2x5bGZtdWdqb21kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4MjAzNTEsImV4cCI6MjA5MzM5NjM1MX0.1LVo1a2K2V8QZPX94bVTBmzIxUskKp0mR7RmNwgOdcI';
+
+// Track page view
+async function trackPageView() {
+  try {
+    await fetch(`${SUPABASE_URL}/rest/v1/page_views`, {
+      method: 'POST',
+      headers: {
+        'apikey': SUPABASE_ANON,
+        'Authorization': `Bearer ${SUPABASE_ANON}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify({
+        page: window.location.pathname,
+        referrer: document.referrer || null,
+        user_agent: navigator.userAgent,
+        country: Intl.DateTimeFormat().resolvedOptions().timeZone
+      })
+    });
+  } catch (e) {
+    console.error('Page view tracking failed:', e);
+  }
+}
+
+// Track referral click
+async function trackReferralClick(provider) {
+  try {
+    await fetch(`${SUPABASE_URL}/rest/v1/referral_clicks`, {
+      method: 'POST',
+      headers: {
+        'apikey': SUPABASE_ANON,
+        'Authorization': `Bearer ${SUPABASE_ANON}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify({
+        provider: provider,
+        page: window.location.pathname
+      })
+    });
+  } catch (e) {
+    console.error('Referral tracking failed:', e);
+  }
+}
+
+// Track page view on load
+trackPageView();
+
+// Track referral clicks (add this to your Get API button onclick)
+document.addEventListener('click', function(e) {
+  if (e.target.classList.contains('btn-api') || e.target.closest('.btn-api')) {
+    const btn = e.target.classList.contains('btn-api') ? e.target : e.target.closest('.btn-api');
+    const provider = btn.getAttribute('data-provider') || 'unknown';
+    trackReferralClick(provider);
+  }
+});
+</script>  
 </body>
 </html>
