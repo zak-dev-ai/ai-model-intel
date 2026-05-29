@@ -4,6 +4,7 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>AI Model Ranks — Live Terminal</title>
+<meta name="description" content="The Bloomberg Terminal for AI. Track real-time pricing, context windows, and ROI across 210+ LLMs.">
 <script src="/config.js"></script>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
@@ -21,13 +22,13 @@ tailwind.config = {
         "text-muted": "#888888", "on-surface": "#e5e2e1", "on-surface-variant": "#dec1ae",
         "primary": "#ffb781", "primary-container": "#ff8800",
         "matrix-green": "#00ff41", "bloomberg-orange": "#ff8800", "terminal-cyan": "#06B6D4",
-        "alert-up": "#00ff66", "alert-down": "#ff5500"
+        "alert-up": "#00ff66", "alert-down": "#ff5500", "deep-charcoal": "#131313"
       },
       fontFamily: {
         "headline-md": ["Geist", "sans-serif"], "headline-xl": ["Geist", "sans-serif"],
-        "headline-xl-mobile": ["Geist", "sans-serif"],
-        "body-sm": ["Geist", "sans-serif"], "body-lg": ["Geist", "sans-serif"],
-        "data-tabular": ["JetBrains Mono", "monospace"], "data-label": ["JetBrains Mono", "monospace"]
+        "headline-xl-mobile": ["Geist", "sans-serif"], "body-sm": ["Geist", "sans-serif"],
+        "body-lg": ["Geist", "sans-serif"], "data-tabular": ["JetBrains Mono", "monospace"],
+        "data-label": ["JetBrains Mono", "monospace"]
       },
       fontSize: {
         "headline-md": ["24px", { lineHeight: "32px", letterSpacing: "-0.01em", fontWeight: "600" }],
@@ -46,58 +47,37 @@ tailwind.config = {
 <style>
   body { background-color: #0a0a0a; color: #e5e2e1; overflow-x: hidden; }
   
-  /* FIXED: Matrix canvas now covers full screen with better visibility */
   #bg-canvas { position: fixed; inset: 0; z-index: -2; pointer-events: none; }
-  #matrix-canvas { 
-    position: fixed; 
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: -1; 
-    pointer-events: none; 
-    opacity: 0.35; 
-  }
+  #matrix-canvas { position: fixed; inset: 0; z-index: -1; pointer-events: none; opacity: 0.15; mask-image: radial-gradient(circle at 50% 30%, black, transparent 70%); -webkit-mask-image: radial-gradient(circle at 50% 30%, black, transparent 70%); }
   
   .shimmer-text { background: linear-gradient(90deg, #e5e2e1 0%, #ffb781 50%, #e5e2e1 100%); background-size: 200% auto; color: transparent; -webkit-background-clip: text; background-clip: text; animation: shimmer 3s linear infinite; }
   @keyframes shimmer { to { background-position: 200% center; } }
+  
   .pulse-border { animation: pulse-border 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
   @keyframes pulse-border { 0%, 100% { border-color: rgba(255, 136, 0, 0.2); } 50% { border-color: rgba(255, 136, 0, 0.6); } }
+  
   .pulse-green { animation: pulse-green 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
   @keyframes pulse-green { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
+  
   .glass-panel { background: rgba(15, 15, 15, 0.6); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5); }
+  
   @keyframes ticker-scroll { 0% { transform: translateX(0) translateZ(0); } 100% { transform: translateX(-50%) translateZ(0); } }
   .ticker-track { display: flex; width: max-content; animation: ticker-scroll 60s linear infinite; will-change: transform; }
   
   .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
   
-  /* FIXED: Table row hover animation */
-  .table-row-hover {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  .table-row-hover:hover {
-    background-color: rgba(255, 183, 129, 0.08) !important;
-    transform: translateX(4px);
-    box-shadow: -4px 0 0 0 #ffb781;
-  }
+  /* PREMIUM HOVER ANIMATIONS */
+  .table-row-hover { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+  .table-row-hover:hover { background-color: rgba(255, 183, 129, 0.08) !important; transform: translateX(4px); box-shadow: -4px 0 0 0 #ffb781; }
   
-  /* FIXED: Card hover animation */
-  .card-hover {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  .card-hover:hover {
-    transform: translateY(-4px);
-    border-color: #ffb781 !important;
-    box-shadow: 0 10px 40px -5px rgba(255, 183, 129, 0.25), 0 0 15px -2px rgba(255, 183, 129, 0.15);
-  }
-  
+  .card-hover { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+  .card-hover:hover { transform: translateY(-4px); border-color: #ffb781 !important; box-shadow: 0 10px 40px -5px rgba(255, 183, 129, 0.25), 0 0 15px -2px rgba(255, 183, 129, 0.15); }
+
   .mobile-menu { position: fixed; top: 0; right: -100%; width: 80%; max-width: 320px; height: 100vh; background: rgba(19, 19, 19, 0.98); backdrop-filter: blur(20px); z-index: 200; transition: right 0.3s ease; padding: 5rem 2rem; display: flex; flex-direction: column; gap: 0.5rem; box-shadow: -10px 0 30px rgba(0,0,0,0.5); }
   .mobile-menu.open { right: 0; }
   .mobile-menu a { color: #e5e2e1; text-decoration: none; font-size: 1.125rem; font-weight: 500; padding: 1rem 0; border-bottom: 1px solid #1A1A1A; display: flex; align-items: center; gap: 0.75rem; }
   .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 150; display: none; }
   .overlay.show { display: block; }
-  
-  .mobile-card { background: rgba(15, 15, 15, 0.7); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 0.5rem; padding: 1.25rem; }
   
   .provider-logo { width: 24px; height: 24px; border-radius: 4px; background: #fff; padding: 2px; box-shadow: 0 2px 6px rgba(0,0,0,0.3); }
   .provider-logo-lg { width: 32px; height: 32px; border-radius: 6px; }
@@ -115,7 +95,22 @@ tailwind.config = {
 
 <!-- Persistent Data Ticker -->
 <div class="fixed top-0 left-0 w-full h-10 bg-surface-container-lowest/90 backdrop-blur-md border-b border-border-slate flex items-center overflow-hidden z-[60]">
-  <div class="ticker-track font-data-tabular text-data-tabular text-text-muted" id="ticker-track"></div>
+  <div class="ticker-track font-data-tabular text-data-tabular text-text-muted" id="ticker-track">
+    <div class="flex items-center px-4 gap-6">
+      <span>GPT-4o: <span class="text-alert-up">$5.00/1M</span></span><span class="text-border-slate font-bold">|</span>
+      <span>Llama 3: <span class="text-alert-up">$0.59/1M</span></span><span class="text-border-slate font-bold">|</span>
+      <span>Claude 3.5: <span class="text-alert-down">$3.00/1M</span></span><span class="text-border-slate font-bold">|</span>
+      <span>Gemini 1.5: <span class="text-alert-up">$7.00/1M</span></span><span class="text-border-slate font-bold">|</span>
+      <span>Mistral Large: <span class="text-alert-down">$2.50/1M</span></span><span class="text-border-slate font-bold">|</span>
+    </div>
+    <div class="flex items-center px-4 gap-6">
+      <span>GPT-4o: <span class="text-alert-up">$5.00/1M</span></span><span class="text-border-slate font-bold">|</span>
+      <span>Llama 3: <span class="text-alert-up">$0.59/1M</span></span><span class="text-border-slate font-bold">|</span>
+      <span>Claude 3.5: <span class="text-alert-down">$3.00/1M</span></span><span class="text-border-slate font-bold">|</span>
+      <span>Gemini 1.5: <span class="text-alert-up">$7.00/1M</span></span><span class="text-border-slate font-bold">|</span>
+      <span>Mistral Large: <span class="text-alert-down">$2.50/1M</span></span><span class="text-border-slate font-bold">|</span>
+    </div>
+  </div>
 </div>
 
 <!-- Top Header -->
@@ -135,7 +130,7 @@ tailwind.config = {
       <a class="text-primary border-b-2 border-primary pb-1 font-body-sm text-body-sm" href="/">Terminal</a>
       <a class="text-on-surface-variant hover:text-on-surface transition-colors hover:bg-surface-variant/50 px-2 rounded font-body-sm text-body-sm" href="/blog.html">News</a>
       <a class="text-on-surface-variant hover:text-on-surface transition-colors hover:bg-surface-variant/50 px-2 rounded font-body-sm text-body-sm" href="https://rapidapi.com/zakmediaai/api/octopus-ai-model-intel" target="_blank">API</a>
-      <a class="text-on-surface-variant hover:text-on-surface transition-colors hover:bg-surface-variant/50 px-2 rounded font-body-sm text-body-sm" href="#" onclick="openPartnerModal(); return false;">Partner</a>
+      <a class="text-on-surface-variant hover:text-on-surface transition-colors hover:bg-surface-variant/50 px-2 rounded font-body-sm text-body-sm cursor-pointer" onclick="openPartnerModal()">Partner</a>
     </nav>
   </div>
   
@@ -241,9 +236,7 @@ tailwind.config = {
           </tr>
         </thead>
         <tbody id="table-body" class="font-data-tabular text-data-tabular divide-y divide-border-slate/50">
-          <tr><td colspan="7" class="px-4 py-12 text-center text-text-muted">
-            <div class="inline-flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-matrix-green pulse-green"></div>Connecting to data fabric...</div>
-          </td></tr>
+          <tr><td colspan="7" class="px-4 py-12 text-center text-text-muted"><div class="inline-flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-matrix-green pulse-green"></div>Connecting to data fabric...</div></td></tr>
         </tbody>
       </table>
     </div>
@@ -293,7 +286,7 @@ tailwind.config = {
   <nav class="flex gap-4">
     <a class="font-data-tabular text-data-tabular text-text-muted hover:text-on-surface hover:text-primary transition-colors" href="/blog.html">News</a>
     <a class="font-data-tabular text-data-tabular text-text-muted hover:text-on-surface hover:text-primary transition-colors" href="https://rapidapi.com/zakmediaai/api/octopus-ai-model-intel" target="_blank">API Docs</a>
-    <a class="font-data-tabular text-data-tabular text-text-muted hover:text-on-surface hover:text-primary transition-colors" href="#" onclick="openPartnerModal(); return false;">Partners</a>
+    <a class="font-data-tabular text-data-tabular text-text-muted hover:text-on-surface hover:text-primary transition-colors cursor-pointer" onclick="openPartnerModal()">Partners</a>
   </nav>
 </footer>
 
@@ -306,7 +299,7 @@ tailwind.config = {
   </div>
 </div>
 
-<!-- Partner Modal -->
+<!-- Partner Application Modal -->
 <div id="partnerModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[200] hidden items-center justify-center p-4">
   <div class="glass-panel rounded-lg border border-bloomberg-orange/30 max-w-md w-full p-6 relative">
     <button onclick="closePartnerModal()" class="absolute top-4 right-4 text-text-muted hover:text-on-surface">
@@ -320,11 +313,10 @@ tailwind.config = {
     <form id="partnerForm" onsubmit="submitPartner(event)" class="flex flex-col gap-3">
       <input type="hidden" name="access_key" value="206ea04f-da37-40ea-994d-29b8967177bf">
       <input type="checkbox" name="botcheck" class="hidden" style="display:none !important" tabindex="-1" autocomplete="off">
-      <input type="text" id="p-company" placeholder="Company Name" required class="bg-surface-container-high border border-border-slate rounded px-3 py-2 text-on-surface focus:outline-none focus:border-primary">
-      <input type="url" id="p-website" placeholder="Website URL" required class="bg-surface-container-high border border-border-slate rounded px-3 py-2 text-on-surface focus:outline-none focus:border-primary">
-      <input type="email" id="p-email" placeholder="Contact Email" required class="bg-surface-container-high border border-border-slate rounded px-3 py-2 text-on-surface focus:outline-none focus:border-primary">
-      <textarea id="p-proposal" placeholder="Briefly describe your proposal..." rows="3" required class="bg-surface-container-high border border-border-slate rounded px-3 py-2 text-on-surface focus:outline-none focus:border-primary"></textarea>
-      <input type="checkbox" name="botcheck" class="hidden" style="display:none !important" tabindex="-1" autocomplete="off">
+      <input type="text" id="p-company" name="company" placeholder="Company Name" required class="bg-surface-container-high border border-border-slate rounded px-3 py-2 text-on-surface focus:outline-none focus:border-primary">
+      <input type="url" id="p-website" name="website" placeholder="Website URL" required class="bg-surface-container-high border border-border-slate rounded px-3 py-2 text-on-surface focus:outline-none focus:border-primary">
+      <input type="email" id="p-email" name="email" placeholder="Contact Email" required class="bg-surface-container-high border border-border-slate rounded px-3 py-2 text-on-surface focus:outline-none focus:border-primary">
+      <textarea id="p-proposal" name="proposal" placeholder="Briefly describe your proposal..." rows="3" required class="bg-surface-container-high border border-border-slate rounded px-3 py-2 text-on-surface focus:outline-none focus:border-primary"></textarea>
       <button type="submit" class="bg-bloomberg-orange text-deep-charcoal px-4 py-2 rounded font-data-tabular text-data-tabular font-bold hover:opacity-90 transition-opacity">
         Submit Application →
       </button>
@@ -363,7 +355,8 @@ function getApiLink(provider) {
     if (link && link !== '#') return link;
   }
   const domain = PROVIDER_DOMAINS[(provider||'').toLowerCase()] || 'openrouter.ai';
-  return `https://${domain}`;
+  const base = `https://${domain}`;
+  return base + (base.includes('?') ? '&' : '?') + 'ref=aimodelranks';
 }
 
 function get7DChange(name) {
@@ -520,7 +513,7 @@ function renderTable() {
     const inCost = m.input_cost_per_mtok || 0;
     const outCost = m.output_cost_per_mtok || 0;
 
-    return `<div class="mobile-card card-hover">
+    return `<div class="mobile-card card-hover glass-panel border border-outline-variant/30 rounded-lg p-5">
       <div class="flex items-center gap-3 mb-3">
         <img src="${getLogo(provider)}" class="provider-logo provider-logo-lg" onerror="this.style.display='none'">
         <div class="flex-1 min-w-0">
@@ -583,6 +576,7 @@ function closePartnerModal() {
   m.classList.add('hidden');
   m.classList.remove('flex');
 }
+
 async function submitPartner(e) {
   e.preventDefault();
   const btn = e.target.querySelector('button[type="submit"]');
@@ -590,18 +584,15 @@ async function submitPartner(e) {
   btn.innerHTML = 'Transmitting...';
   btn.disabled = true;
 
-  // 👇 PASTE YOUR WEB3FORMS ACCESS KEY HERE (Keep the quotes):
-  const ACCESS_KEY = '206ea04f-da37-40ea-994d-29b8967177bf'; 
-
   const data = {
-    access_key: ACCESS_KEY,
+    access_key: '206ea04f-da37-40ea-994d-29b8967177bf',
     subject: `New Partner App: ${document.getElementById('p-company').value}`,
     from_name: 'AI Model Ranks Terminal',
     company: document.getElementById('p-company').value,
     website: document.getElementById('p-website').value,
     email: document.getElementById('p-email').value,
     proposal: document.getElementById('p-proposal').value,
-    botcheck: '' // Honeypot for spam protection
+    botcheck: ''
   };
 
   try {
@@ -623,6 +614,7 @@ async function submitPartner(e) {
       throw new Error('Submission failed');
     }
   } catch (err) {
+    console.error('Form submission error:', err);
     btn.innerHTML = 'Error. Try Again.';
     btn.disabled = false;
   }
@@ -638,38 +630,27 @@ function addTerminalLog(msg) {
 }
 
 const fakeMessages = [
-  "> Llama 3 cost updated: $0.02/1M",
+  "> Llama 3 cost updated: $0.02",
   "> Ping OpenAI API: 200 OK",
   "> Market shift detected: -0.5% avg",
   "> Re-indexing context windows...",
-  "> Groq inference: 12ms latency",
-  "> DeepSeek price drop confirmed"
+  "> Data stream synced."
 ];
 setInterval(() => {
   const msg = fakeMessages[Math.floor(Math.random() * fakeMessages.length)];
   addTerminalLog(msg);
 }, 4000);
 
-// Interactive Dot Grid
+// Interactive Dot Grid Background
 document.addEventListener('DOMContentLoaded', () => {
   const canvas = document.getElementById('bg-canvas');
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
-  let width, height, mouseX = 0, mouseY = 0;
-  const spacing = 24;
-  const dots = [];
-  
-  const resize = () => {
-    width = window.innerWidth;
-    height = window.innerHeight;
-    canvas.width = width;
-    canvas.height = height;
-    initDots();
-  };
-  
+  let width = window.innerWidth, height = window.innerHeight, mouseX = width / 2, mouseY = height / 2;
+  const spacing = 24, dots = [];
+  const resize = () => { width = window.innerWidth; height = window.innerHeight; canvas.width = width; canvas.height = height; initDots(); };
   window.addEventListener('resize', resize);
   window.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; });
-  
   const initDots = () => {
     dots.length = 0;
     for (let x = 0; x < width; x += spacing) {
@@ -678,54 +659,36 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
   };
-  
   let time = 0;
   const draw = () => {
     ctx.clearRect(0, 0, width, height);
-    ctx.fillStyle = '#0a0a0a';
-    ctx.fillRect(0, 0, width, height);
+    ctx.fillStyle = '#0a0a0a'; ctx.fillRect(0, 0, width, height);
     time += 1;
     for (let i = 0; i < dots.length; i++) {
       const dot = dots[i];
-      const dx = mouseX - dot.x;
-      const dy = mouseY - dot.y;
-      const dist = Math.sqrt(dx * dx + dy * dy);
+      const dx = mouseX - dot.x, dy = mouseY - dot.y, dist = Math.sqrt(dx * dx + dy * dy);
       let alpha = dot.baseAlpha + Math.sin(time * dot.pulseSpeed + dot.pulseOffset) * 0.02;
-      const maxDist = 200;
-      if (dist < maxDist) {
-        const intensity = 1 - (dist / maxDist);
-        alpha += intensity * 0.4;
-      }
+      if (dist < 200) alpha += (1 - (dist / 200)) * 0.4;
       ctx.fillStyle = `rgba(255, 183, 129, ${alpha})`;
-      ctx.beginPath();
-      ctx.arc(dot.x, dot.y, 1, 0, Math.PI * 2);
-      ctx.fill();
+      ctx.beginPath(); ctx.arc(dot.x, dot.y, 1, 0, Math.PI * 2); ctx.fill();
     }
     requestAnimationFrame(draw);
   };
-  resize();
-  draw();
+  resize(); draw();
 });
 
-// FIXED: Digital Rain - now covers full screen properly
+// Digital Rain Overlay
 document.addEventListener('DOMContentLoaded', () => {
   const canvas = document.getElementById('matrix-canvas');
   if(!canvas) return;
   const ctx = canvas.getContext('2d');
   let w, h;
-  const initCanvas = () => { 
-    w = canvas.width = window.innerWidth; 
-    h = canvas.height = window.innerHeight; 
-  };
-  initCanvas();
-  window.addEventListener('resize', initCanvas);
-  const cols = Math.floor(w / 14);
-  const ypos = Array(cols).fill(0);
-  const chars = '01ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$+-*/=%#&_';
-  
+  const initCanvas = () => { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; };
+  initCanvas(); window.addEventListener('resize', initCanvas);
+  const cols = Math.floor(w / 14), ypos = Array(cols).fill(0);
+  const chars = '01ABCDEFGHIJKLMNOPQRSTUVWXYZ$+-*/=%#&_';
   function matrix() {
-    ctx.fillStyle = 'rgba(10, 10, 10, 0.05)';
-    ctx.fillRect(0, 0, w, h);
+    ctx.fillStyle = 'rgba(10, 10, 10, 0.1)'; ctx.fillRect(0, 0, w, h);
     ctx.font = '12px JetBrains Mono';
     ypos.forEach((y, ind) => {
       const text = chars.charAt(Math.floor(Math.random() * chars.length));
@@ -738,69 +701,21 @@ document.addEventListener('DOMContentLoaded', () => {
   setInterval(matrix, 50);
 });
 
+// Supabase Analytics Tracking
+(function() {
+  const SUPABASE_URL = 'https://jkoxrftlslylfmugjomd.supabase.co';
+  const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imprb3hyZnRsc2x5bGZtdWdqb21kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4MjAzNTEsImV4cCI6MjA5MzM5NjM1MX0.1LVo1a2K2V8QZPX94bVTBmzIxUskKp0mR7RmNwgOdcI';
+  try {
+    fetch(SUPABASE_URL + '/rest/v1/analytics', {
+      method: 'POST',
+      headers: { 'apikey': SUPABASE_ANON, 'Authorization': 'Bearer ' + SUPABASE_ANON, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+      body: JSON.stringify({ event: 'pageview', page: window.location.pathname, value: 1, created_at: new Date().toISOString() })
+    }).catch(() => {});
+  } catch(e) {}
+})();
+
 fetchData();
 setInterval(fetchData, 60000);
 </script>
-<script>
-// Analytics tracking with Supabase
-const SUPABASE_URL = 'https://jkoxrftlslylfmugjomd.supabase.co';
-const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imprb3hyZnRsc2x5bGZtdWdqb21kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4MjAzNTEsImV4cCI6MjA5MzM5NjM1MX0.1LVo1a2K2V8QZPX94bVTBmzIxUskKp0mR7RmNwgOdcI';
-
-// Track page view
-async function trackPageView() {
-  try {
-    await fetch(`${SUPABASE_URL}/rest/v1/page_views`, {
-      method: 'POST',
-      headers: {
-        'apikey': SUPABASE_ANON,
-        'Authorization': `Bearer ${SUPABASE_ANON}`,
-        'Content-Type': 'application/json',
-        'Prefer': 'return=minimal'
-      },
-      body: JSON.stringify({
-        page: window.location.pathname,
-        referrer: document.referrer || null,
-        user_agent: navigator.userAgent,
-        country: Intl.DateTimeFormat().resolvedOptions().timeZone
-      })
-    });
-  } catch (e) {
-    console.error('Page view tracking failed:', e);
-  }
-}
-
-// Track referral click
-async function trackReferralClick(provider) {
-  try {
-    await fetch(`${SUPABASE_URL}/rest/v1/referral_clicks`, {
-      method: 'POST',
-      headers: {
-        'apikey': SUPABASE_ANON,
-        'Authorization': `Bearer ${SUPABASE_ANON}`,
-        'Content-Type': 'application/json',
-        'Prefer': 'return=minimal'
-      },
-      body: JSON.stringify({
-        provider: provider,
-        page: window.location.pathname
-      })
-    });
-  } catch (e) {
-    console.error('Referral tracking failed:', e);
-  }
-}
-
-// Track page view on load
-trackPageView();
-
-// Track referral clicks (add this to your Get API button onclick)
-document.addEventListener('click', function(e) {
-  if (e.target.classList.contains('btn-api') || e.target.closest('.btn-api')) {
-    const btn = e.target.classList.contains('btn-api') ? e.target : e.target.closest('.btn-api');
-    const provider = btn.getAttribute('data-provider') || 'unknown';
-    trackReferralClick(provider);
-  }
-});
-</script>  
 </body>
 </html>
