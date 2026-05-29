@@ -5,464 +5,88 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AI Model Ranks — The Bloomberg Terminal for AI</title>
 <meta name="description" content="Track real-time pricing, context windows, and ROI across 210+ LLMs. Stop overpaying for AI infrastructure.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<script src="/config.js"></script>
+<script src="/ads.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg: #09090b;
-  --surface: #18181b;
-  --surface-2: #27272a;
-  --border: #27272a;
-  --text: #fafafa;
-  --text-muted: #a1a1aa;
-  --cyan: #06b6d4;
-  --green: #10b981;
-  --red: #ef4444;
-  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
-}
-
-* { margin: 0; padding: 0; box-sizing: border-box; }
-html { scroll-behavior: smooth; }
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: var(--font-sans);
-  line-height: 1.5;
-  -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
-}
-
-/* ── NAVIGATION ── */
-.nav {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: rgba(9, 9, 11, 0.8);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border);
-}
-.nav-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1.5rem;
-  height: 64px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.logo {
-  font-weight: 800;
-  font-size: 1.25rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  text-decoration: none;
-  color: var(--text);
-}
-.logo-icon {
-  width: 28px;
-  height: 28px;
-  background: var(--cyan);
-  border-radius: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #000;
-  font-size: 16px;
-}
-.nav-link {
-  color: var(--text-muted);
-  text-decoration: none;
-  font-size: 0.875rem;
-  font-weight: 500;
-  transition: color 0.2s;
-}
-.nav-link:hover { color: var(--text); }
-
-/* ── TICKER ── */
-.ticker-wrap {
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
-  overflow: hidden;
-  padding: 0.75rem 0;
-  position: relative;
-}
-.ticker-track {
-  display: flex;
-  width: max-content;
-  animation: ticker 40s linear infinite;
-}
-.ticker-item {
-  padding: 0 2rem;
-  font-family: var(--font-mono);
-  font-size: 0.875rem;
-  color: var(--text-muted);
-  white-space: nowrap;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-@keyframes ticker {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-
-/* ── HERO & CALCULATOR ── */
-.hero {
-  padding: 4rem 1.5rem;
-  background: radial-gradient(circle at 50% 0%, rgba(6, 182, 212, 0.15), transparent 50%);
-  border-bottom: 1px solid var(--border);
-}
-.hero-grid {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 3rem;
-  align-items: center;
-}
-@media (max-width: 900px) {
-  .hero-grid { grid-template-columns: 1fr; text-align: center; }
-  .hero-text p { margin-left: auto; margin-right: auto; }
-}
-.hero-text h1 {
-  font-size: clamp(2rem, 5vw, 3.5rem);
-  font-weight: 800;
-  line-height: 1.1;
-  margin-bottom: 1.5rem;
-  letter-spacing: -0.02em;
-}
-.text-cyan { color: var(--cyan); }
-.hero-text p {
-  font-size: 1.125rem;
-  color: var(--text-muted);
-  margin-bottom: 2rem;
-  max-width: 500px;
-}
-.badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  background: rgba(16, 185, 129, 0.1);
-  color: var(--green);
-  padding: 0.25rem 0.75rem;
-  border-radius: 100px;
-  font-size: 0.875rem;
-  font-weight: 500;
-  border: 1px solid rgba(16, 185, 129, 0.2);
-  margin-bottom: 1.5rem;
-}
-.calc-box {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 2rem;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-}
-.calc-box h3 {
-  font-size: 1.25rem;
-  margin-bottom: 1.5rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-.calc-inputs {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-}
-.calc-inputs label {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  font-size: 0.875rem;
-  color: var(--text-muted);
-  text-align: left;
-}
-.calc-inputs select {
-  background: var(--bg);
-  border: 1px solid var(--border);
-  color: var(--text);
-  padding: 0.75rem;
-  border-radius: 8px;
-  font-family: var(--font-sans);
-  font-size: 1rem;
-}
-.calc-results {
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 1.5rem;
-  margin-bottom: 1.5rem;
-}
-.calc-result-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.75rem 0;
-  border-bottom: 1px solid var(--border);
-}
-.calc-result-item:last-child { border-bottom: none; }
-.calc-result-item.highlight {
-  background: rgba(16, 185, 129, 0.05);
-  margin: 0 -1.5rem;
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-  border: 1px solid rgba(16, 185, 129, 0.2);
-}
-.calc-label { font-weight: 500; }
-.calc-value { font-family: var(--font-mono); font-weight: 700; font-size: 1.25rem; }
-.text-green { color: var(--green); }
-.text-red { color: var(--red); }
-.btn-primary {
-  display: block;
-  width: 100%;
-  text-align: center;
-  background: linear-gradient(135deg, var(--cyan), #0891b2);
-  color: #000;
-  font-weight: 600;
-  padding: 0.875rem;
-  border-radius: 8px;
-  border: none;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: transform 0.2s;
-}
-.btn-primary:hover { transform: translateY(-2px); }
-
-/* ── MAIN CONTENT ── */
-.main-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 3rem 1.5rem;
-}
-.controls {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-  flex-wrap: wrap;
-}
-.search-box { flex: 1; min-width: 250px; position: relative; }
-.search-input {
-  width: 100%;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  color: var(--text);
-  padding: 0.75rem 1rem 0.75rem 2.5rem;
-  border-radius: 8px;
-  font-size: 1rem;
-}
-.search-icon {
-  position: absolute;
-  left: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--text-muted);
-}
-.tabs {
-  display: flex;
-  gap: 0.5rem;
-  overflow-x: auto;
-  padding-bottom: 0.5rem;
-  margin-bottom: 1.5rem;
-  scrollbar-width: none;
-}
-.tabs::-webkit-scrollbar { display: none; }
-.tab {
-  padding: 0.5rem 1rem;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 100px;
-  color: var(--text-muted);
-  font-size: 0.875rem;
-  font-weight: 500;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: all 0.2s;
-}
-.tab.active {
-  background: var(--cyan);
-  color: #000;
-  border-color: var(--cyan);
-}
-
-/* ── DATA TABLE (DESKTOP) ── */
-.table-wrap {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  overflow: hidden;
-  display: block;
-}
-.data-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.875rem;
-}
-.data-table th {
-  text-align: left;
-  padding: 1rem;
-  background: var(--surface-2);
-  color: var(--text-muted);
-  font-weight: 500;
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  border-bottom: 1px solid var(--border);
-}
-.data-table td {
-  padding: 1rem;
-  border-bottom: 1px solid var(--border);
-}
-.data-table tr:last-child td { border-bottom: none; }
-.data-table tr:hover { background: rgba(255,255,255,0.02); }
-.mono { font-family: var(--font-mono); }
-.font-bold { font-weight: 600; }
-.provider-badge {
-  font-size: 0.75rem;
-  font-weight: 600;
-  padding: 0.25rem 0.5rem;
-  border-radius: 6px;
-  background: var(--surface-2);
-  color: var(--text-muted);
-}
-.btn-sm {
-  display: inline-block;
-  padding: 0.25rem 0.75rem;
-  background: var(--surface-2);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  color: var(--cyan);
-  text-decoration: none;
-  font-size: 0.75rem;
-  font-weight: 500;
-  transition: all 0.2s;
-}
-.btn-sm:hover { background: var(--cyan); color: #000; border-color: var(--cyan); }
-
-@media (max-width: 768px) {
-  .table-wrap { display: none; }
-  .cards-grid { display: grid !important; }
-}
-
-/* ── SMART CARDS (MOBILE) ── */
-.cards-grid {
-  display: none;
-  grid-template-columns: 1fr;
-  gap: 1rem;
-}
-.model-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 1.25rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.rank { color: var(--text-muted); font-size: 0.875rem; }
-.model-name { font-size: 1.25rem; font-weight: 700; }
-.card-stats {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 0.5rem;
-}
-.stat {
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 0.75rem;
-  text-align: center;
-}
-.stat-label {
-  display: block;
-  font-size: 0.75rem;
-  color: var(--text-muted);
-  margin-bottom: 0.25rem;
-}
-.stat-value {
-  display: block;
-  font-family: var(--font-mono);
-  font-weight: 600;
-  font-size: 0.875rem;
-}
-.btn-api {
-  display: block;
-  text-align: center;
-  background: linear-gradient(135deg, var(--cyan), #0891b2);
-  color: #000;
-  font-weight: 600;
-  padding: 0.875rem;
-  border-radius: 8px;
-  text-decoration: none;
-  margin-top: auto;
-  box-shadow: 0 4px 12px rgba(6, 182, 212, 0.2);
-}
-
-/* ── B2B PARTNERSHIP SECTION ── */
-.b2b-section {
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-  background: var(--surface);
-  padding: 4rem 1.5rem;
-  text-align: center;
-  margin-top: 3rem;
-}
-.b2b-container { max-width: 600px; margin: 0 auto; }
-.b2b-container h2 { font-size: 2rem; margin-bottom: 1rem; }
-.b2b-container p { color: var(--text-muted); margin-bottom: 2rem; font-size: 1.125rem; }
-.btn-b2b {
-  display: inline-block;
-  padding: 1rem 2rem;
-  background: var(--text);
-  color: var(--bg);
-  font-weight: 600;
-  border-radius: 8px;
-  text-decoration: none;
-  transition: transform 0.2s;
-}
-.btn-b2b:hover { transform: translateY(-2px); }
+  :root { --bg:#09090b; --surface:#18181b; --surface-2:#27272a; --border:#27272a; --text:#fafafa; --muted:#a1a1aa; --cyan:#06b6d4; --green:#10b981; --red:#ef4444; --font-sans:'Inter',sans-serif; --font-mono:'JetBrains Mono',monospace; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:var(--font-sans); line-height:1.5; -webkit-font-smoothing:antialiased; }
+  .nav { position:sticky; top:0; z-index:100; background:rgba(9,9,11,0.8); backdrop-filter:blur(12px); border-bottom:1px solid var(--border); }
+  .nav-container { max-width:1200px; margin:0 auto; padding:0 1.5rem; height:64px; display:flex; align-items:center; justify-content:space-between; }
+  .logo { font-weight:800; font-size:1.25rem; display:flex; align-items:center; gap:0.5rem; text-decoration:none; color:var(--text); }
+  .logo-icon { width:28px; height:28px; background:var(--cyan); border-radius:6px; display:flex; align-items:center; justify-content:center; color:#000; font-size:16px; }
+  .nav-link { color:var(--muted); text-decoration:none; font-size:0.875rem; font-weight:500; }
+  .nav-link:hover { color:var(--text); }
+  .hero { padding:4rem 1.5rem; background:radial-gradient(circle at 50% 0%, rgba(6,182,212,0.15), transparent 50%); border-bottom:1px solid var(--border); }
+  .hero-grid { max-width:1200px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:3rem; align-items:center; }
+  @media(max-width:900px) { .hero-grid { grid-template-columns:1fr; text-align:center; } }
+  .hero-text h1 { font-size:clamp(2rem,5vw,3.5rem); font-weight:800; line-height:1.1; margin-bottom:1.5rem; letter-spacing:-0.02em; }
+  .text-cyan { color:var(--cyan); }
+  .hero-text p { font-size:1.125rem; color:var(--muted); margin-bottom:2rem; max-width:500px; }
+  @media(max-width:900px) { .hero-text p { margin:0 auto 2rem; } }
+  .badge { display:inline-flex; align-items:center; gap:0.5rem; background:rgba(16,185,129,0.1); color:var(--green); padding:0.25rem 0.75rem; border-radius:100px; font-size:0.875rem; font-weight:500; border:1px solid rgba(16,185,129,0.2); margin-bottom:1.5rem; }
+  .calc-box { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:2rem; box-shadow:0 20px 40px rgba(0,0,0,0.4); }
+  .calc-box h3 { font-size:1.25rem; margin-bottom:1.5rem; display:flex; align-items:center; gap:0.5rem; }
+  .calc-inputs { display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1.5rem; }
+  .calc-inputs label { display:flex; flex-direction:column; gap:0.5rem; font-size:0.875rem; color:var(--muted); text-align:left; }
+  .calc-inputs select { background:var(--bg); border:1px solid var(--border); color:var(--text); padding:0.75rem; border-radius:8px; font-family:var(--font-sans); }
+  .calc-results { background:var(--bg); border:1px solid var(--border); border-radius:12px; padding:1.5rem; margin-bottom:1.5rem; }
+  .calc-result-item { display:flex; justify-content:space-between; align-items:center; padding:0.75rem 0; border-bottom:1px solid var(--border); }
+  .calc-result-item:last-child { border-bottom:none; }
+  .calc-result-item.highlight { background:rgba(16,185,129,0.05); margin:0 -1.5rem; padding:0.75rem 1.5rem; border-radius:8px; border:1px solid rgba(16,185,129,0.2); }
+  .calc-value { font-family:var(--font-mono); font-weight:700; font-size:1.25rem; }
+  .text-green { color:var(--green); } .text-red { color:var(--red); }
+  .btn-primary { display:block; width:100%; text-align:center; background:linear-gradient(135deg, var(--cyan), #0891b2); color:#000; font-weight:600; padding:0.875rem; border-radius:8px; border:none; font-size:1rem; cursor:pointer; }
+  .main-container { max-width:1200px; margin:0 auto; padding:3rem 1.5rem; }
+  .controls { display:flex; gap:1rem; margin-bottom:1.5rem; flex-wrap:wrap; }
+  .search-box { flex:1; min-width:250px; position:relative; }
+  .search-input { width:100%; background:var(--surface); border:1px solid var(--border); color:var(--text); padding:0.75rem 1rem 0.75rem 2.5rem; border-radius:8px; font-size:1rem; }
+  .search-icon { position:absolute; left:1rem; top:50%; transform:translateY(-50%); color:var(--muted); }
+  .tabs { display:flex; gap:0.5rem; overflow-x:auto; padding-bottom:0.5rem; margin-bottom:1.5rem; scrollbar-width:none; }
+  .tabs::-webkit-scrollbar { display:none; }
+  .tab { padding:0.5rem 1rem; background:var(--surface); border:1px solid var(--border); border-radius:100px; color:var(--muted); font-size:0.875rem; font-weight:500; cursor:pointer; white-space:nowrap; }
+  .tab.active { background:var(--cyan); color:#000; border-color:var(--cyan); }
+  .table-wrap { background:var(--surface); border:1px solid var(--border); border-radius:12px; overflow:hidden; display:block; }
+  .data-table { width:100%; border-collapse:collapse; font-size:0.875rem; }
+  .data-table th { text-align:left; padding:1rem; background:var(--surface-2); color:var(--muted); font-weight:500; font-size:0.75rem; text-transform:uppercase; border-bottom:1px solid var(--border); }
+  .data-table td { padding:1rem; border-bottom:1px solid var(--border); }
+  .data-table tr:hover { background:rgba(255,255,255,0.02); }
+  .mono { font-family:var(--font-mono); }
+  .font-bold { font-weight:600; }
+  .provider-badge { font-size:0.75rem; font-weight:600; padding:0.25rem 0.5rem; border-radius:6px; background:var(--surface-2); color:var(--muted); }
+  .btn-sm { display:inline-block; padding:0.25rem 0.75rem; background:var(--surface-2); border:1px solid var(--border); border-radius:6px; color:var(--cyan); text-decoration:none; font-size:0.75rem; font-weight:500; }
+  @media(max-width:768px) { .table-wrap { display:none; } .cards-grid { display:grid !important; } }
+  .cards-grid { display:none; grid-template-columns:1fr; gap:1rem; }
+  .model-card { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:1.25rem; display:flex; flex-direction:column; gap:1rem; }
+  .card-header { display:flex; justify-content:space-between; align-items:center; }
+  .model-name { font-size:1.25rem; font-weight:700; }
+  .card-stats { display:grid; grid-template-columns:1fr 1fr 1fr; gap:0.5rem; }
+  .stat { background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:0.75rem; text-align:center; }
+  .stat-label { display:block; font-size:0.75rem; color:var(--muted); margin-bottom:0.25rem; }
+  .stat-value { display:block; font-family:var(--font-mono); font-weight:600; font-size:0.875rem; }
+  .btn-api { display:block; text-align:center; background:linear-gradient(135deg, var(--cyan), #0891b2); color:#000; font-weight:600; padding:0.875rem; border-radius:8px; text-decoration:none; margin-top:auto; }
+  .api-section { padding:3rem 1.5rem; text-align:center; background:linear-gradient(180deg, var(--surface), var(--bg)); border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
+  .api-container { max-width:800px; margin:0 auto; }
+  .api-container h2 { font-size:1.75rem; margin-bottom:1rem; }
+  .api-container p { color:var(--muted); margin-bottom:2rem; }
+  .code-block { background:var(--bg); border:1px solid var(--border); border-radius:10px; padding:1.5rem; text-align:left; font-family:var(--font-mono); font-size:0.875rem; overflow-x:auto; margin-bottom:1.5rem; }
+  .b2b-section { padding:4rem 1.5rem; text-align:center; }
+  .b2b-container { max-width:600px; margin:0 auto; }
+  .b2b-container h2 { font-size:2rem; margin-bottom:1rem; }
+  .b2b-container p { color:var(--muted); margin-bottom:2rem; font-size:1.125rem; }
+  .btn-b2b { display:inline-block; padding:1rem 2rem; background:var(--text); color:var(--bg); font-weight:600; border-radius:8px; text-decoration:none; }
 </style>
 </head>
 <body>
 
-<!-- NAV -->
 <nav class="nav">
   <div class="nav-container">
-    <a href="/" class="logo">
-      <div class="logo-icon">🐙</div>
-      AI Model Ranks
-    </a>
+    <a href="/" class="logo"><div class="logo-icon">🐙</div> AI Model Ranks</a>
     <a href="mailto:partners@aimodelranks.live" class="nav-link">Partner With Us</a>
   </div>
 </nav>
 
-<!-- TICKER -->
-<div class="ticker-wrap">
-  <div class="ticker-track">
-    <div class="ticker-item">🟢 LIVE: Mistral Large 3 — $0.50/1M</div>
-    <div class="ticker-item">📉 gemini-1.5-flash — $0.075/1M (Best Budget)</div>
-    <div class="ticker-item">🚀 llama-4-scout — 10M token context</div>
-    <div class="ticker-item">💰 ministral-3b — $0.04/1M (Cheapest Tracked)</div>
-    <div class="ticker-item">🧠 Magistral Medium rivals o3 at 37% cheaper</div>
-    <!-- Duplicated for seamless loop -->
-    <div class="ticker-item">🟢 LIVE: Mistral Large 3 — $0.50/1M</div>
-    <div class="ticker-item">📉 gemini-1.5-flash — $0.075/1M (Best Budget)</div>
-    <div class="ticker-item">🚀 llama-4-scout — 10M token context</div>
-    <div class="ticker-item">💰 ministral-3b — $0.04/1M (Cheapest Tracked)</div>
-    <div class="ticker-item">🧠 Magistral Medium rivals o3 at 37% cheaper</div>
-  </div>
-</div>
-
-<!-- HERO -->
 <section class="hero">
   <div class="hero-grid">
     <div class="hero-text">
@@ -470,65 +94,52 @@ body {
       <h1>The <span class="text-cyan">Bloomberg Terminal</span><br>for AI Models</h1>
       <p>Track real-time pricing, context windows, and ROI across 210+ LLMs. Stop overpaying for AI infrastructure.</p>
     </div>
-    
     <div class="calc-box">
       <h3>⚡ AI ROI Calculator</h3>
       <div class="calc-inputs">
-        <label>Monthly Tokens
-          <select id="calc-tokens">
-            <option value="1000000">1 Million</option>
-            <option value="10000000" selected>10 Million</option>
-            <option value="100000000">100 Million</option>
-          </select>
-        </label>
-        <label>Primary Task
-          <select id="calc-task">
-            <option value="chat">General Chat</option>
-            <option value="code">Coding</option>
-            <option value="reasoning">Complex Reasoning</option>
-          </select>
-        </label>
+        <label>Monthly Tokens <select id="calc-tokens"><option value="1000000">1M</option><option value="10000000" selected>10M</option><option value="100000000">100M</option></select></label>
+        <label>Primary Task <select id="calc-task"><option value="chat">Chat</option><option value="code">Coding</option><option value="reasoning">Reasoning</option></select></label>
       </div>
       <div class="calc-results">
-        <div class="calc-result-item">
-          <span class="calc-label">GPT-4o</span>
-          <span class="calc-value text-red" id="res-gpt">$50.00</span>
-        </div>
-        <div class="calc-result-item highlight">
-          <span class="calc-label">Llama 3 (Groq)</span>
-          <span class="calc-value text-green" id="res-llama">$0.50</span>
-        </div>
+        <div class="calc-result-item"><span>GPT-4o</span><span class="calc-value text-red" id="res-gpt">$50.00</span></div>
+        <div class="calc-result-item highlight"><span>Llama 3 (Groq)</span><span class="calc-value text-green" id="res-llama">$0.50</span></div>
       </div>
-      <button class="btn-primary" onclick="scrollToModels()">Find My Best Model →</button>
+      <button class="btn-primary" onclick="document.getElementById('models-section').scrollIntoView({behavior:'smooth'})">Find My Best Model →</button>
     </div>
   </div>
 </section>
 
-<!-- MAIN CONTENT -->
 <main class="main-container" id="models-section">
   <div class="controls">
-    <div class="search-box">
-      <span class="search-icon">⌕</span>
-      <input type="text" id="search-input" class="search-input" placeholder="Search 210+ AI models...">
-    </div>
+    <div class="search-box"><span class="search-icon">⌕</span><input type="text" id="search-input" class="search-input" placeholder="Search 210+ AI models..."></div>
   </div>
-  
   <div class="tabs">
     <div class="tab active" data-tab="all">🔥 All Models</div>
     <div class="tab" data-tab="budget">💰 Budget</div>
     <div class="tab" data-tab="vision">👁 Vision</div>
     <div class="tab" data-tab="code">💻 Code</div>
-    <div class="tab" data-tab="reasoning">🧠 Reasoning</div>
   </div>
-
   <div class="table-wrap" id="table-container"></div>
   <div class="cards-grid" id="cards-container"></div>
 </main>
 
-<!-- B2B PARTNERSHIP -->
+<section class="api-section">
+  <div class="api-container">
+    <h2>🚀 AI Cost & Routing API</h2>
+    <p>Integrate live AI pricing into your backend. Dynamically route prompts to the most cost-effective model.</p>
+    <div class="code-block">
+      <span style="color:var(--muted)">// Calculate optimal routing via RapidAPI</span><br>
+      <span style="color:var(--cyan)">fetch</span>(<span style="color:var(--green)">'https://octopus-ai-model-intel.rapidapi.com/best-value'</span>, {<br>
+      &nbsp;&nbsp;headers: { <span style="color:var(--green)">'X-RapidAPI-Key'</span>: <span style="color:var(--green)">'YOUR_KEY'</span> }<br>
+      })
+    </div>
+    <a href="https://rapidapi.com/zakmediaai/api/octopus-ai-model-intel" target="_blank" class="btn-primary" style="display:inline-block; width:auto; padding:0.75rem 2rem;">Access Developer Docs →</a>
+  </div>
+</section>
+
 <section class="b2b-section">
   <div class="b2b-container">
-    <h2>🚀 AI Infrastructure Providers</h2>
+    <h2>🤝 AI Infrastructure Partners</h2>
     <p>Reach 10,000+ AI engineers daily. Native integrations, category sponsorships, and API routing partnerships.</p>
     <a href="mailto:partners@aimodelranks.live?subject=Partnership%20Inquiry" class="btn-b2b">Become a Partner →</a>
   </div>
@@ -537,152 +148,66 @@ body {
 <script>
 const API = 'https://ai-model-intel.zak-media-ai.workers.dev';
 let allModels = [];
-let filteredModels = [];
-
-const searchInput = document.getElementById('search-input');
-const tabs = document.querySelectorAll('.tab');
-const tableContainer = document.getElementById('table-container');
-const cardsContainer = document.getElementById('cards-container');
-const calcTokens = document.getElementById('calc-tokens');
-const calcTask = document.getElementById('calc-task');
-const resGpt = document.getElementById('res-gpt');
-const resLlama = document.getElementById('res-llama');
 
 async function init() {
-    await fetchModels();
-    setupEventListeners();
-    updateCalc();
-}
-
-async function fetchModels() {
-    try {
-        const r = await fetch(`${API}/pricing`, {mode: 'cors'});
-        const d = await r.json();
-        allModels = d.pricing || [];
-        applyFilters();
-    } catch (e) {
-        console.error('Failed to fetch models', e);
-        tableContainer.innerHTML = '<p style="padding:2rem;text-align:center;color:var(--red)">Failed to load data. Please refresh.</p>';
-    }
-}
-
-function setupEventListeners() {
-    searchInput.addEventListener('input', applyFilters);
-    tabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            tabs.forEach(t => t.classList.remove('active'));
-            tab.classList.add('active');
-            applyFilters();
-        });
-    });
-    calcTokens.addEventListener('change', updateCalc);
-    calcTask.addEventListener('change', updateCalc);
+  try {
+    const r = await fetch(`${API}/pricing`, {mode:'cors'});
+    const d = await r.json();
+    allModels = d.pricing || [];
+    applyFilters();
+  } catch(e) { console.error(e); }
+  
+  document.getElementById('search-input').addEventListener('input', applyFilters);
+  document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', e => {
+    document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+    e.target.classList.add('active');
+    applyFilters();
+  }));
+  
+  document.getElementById('calc-tokens').addEventListener('change', updateCalc);
+  document.getElementById('calc-task').addEventListener('change', updateCalc);
+  updateCalc();
 }
 
 function applyFilters() {
-    const query = searchInput.value.toLowerCase();
-    const activeTab = document.querySelector('.tab.active').dataset.tab;
-    
-    filteredModels = allModels.filter(m => {
-        const name = (m.model || '').toLowerCase();
-        const provider = (m.provider || '').toLowerCase();
-        const matchesQuery = name.includes(query) || provider.includes(query);
-        let matchesTab = true;
-        
-        if (activeTab === 'budget') matchesTab = (m.input_cost_per_mtok || 999) <= 0.5;
-        else if (activeTab === 'vision') matchesTab = m.supports_vision;
-        else if (activeTab === 'code') matchesTab = name.includes('code') || m.supports_functions;
-        else if (activeTab === 'reasoning') matchesTab = name.includes('reason') || name.includes('o1') || name.includes('o3');
-        
-        return matchesQuery && matchesTab;
-    });
-    
-    filteredModels.sort((a, b) => (a.input_cost_per_mtok || 999) - (b.input_cost_per_mtok || 999));
-    renderModels(filteredModels);
+  const q = document.getElementById('search-input').value.toLowerCase();
+  const tab = document.querySelector('.tab.active').dataset.tab;
+  let filtered = allModels.filter(m => {
+    const matchQ = m.model.toLowerCase().includes(q) || m.provider.toLowerCase().includes(q);
+    let matchT = true;
+    if(tab==='budget') matchT = m.input_cost_per_mtok <= 0.5;
+    if(tab==='vision') matchT = m.supports_vision;
+    if(tab==='code') matchT = m.model.toLowerCase().includes('code');
+    return matchQ && matchT;
+  });
+  filtered.sort((a,b) => a.input_cost_per_mtok - b.input_cost_per_mtok);
+  render(filtered);
 }
 
-function formatContext(ctx) {
-    if (!ctx) return '—';
-    if (ctx >= 1000000) return (ctx / 1000000).toFixed(1) + 'M';
-    if (ctx >= 1000) return Math.round(ctx / 1000) + 'K';
-    return ctx;
-}
-
-function renderModels(models) {
-    let tableHtml = `<table class="data-table">
-        <thead><tr>
-            <th>#</th><th>Model</th><th>Provider</th>
-            <th>Input $/1M</th><th>Output $/1M</th>
-            <th>Context</th><th>Action</th>
-        </tr></thead><tbody>`;
-        
-    let cardsHtml = '';
-    
-    models.slice(0, 50).forEach((m, i) => { 
-        const provider = m.provider || 'Unknown';
-        const name = m.model || 'Unknown Model';
-        const inPrice = m.input_cost_per_mtok || 0;
-        const outPrice = m.output_cost_per_mtok || 0;
-        const ctx = m.context_window || 0;
-        const apiLink = m.api_url || `https://www.google.com/search?q=${encodeURIComponent(name + ' API pricing')}`;
-        
-        const inClass = inPrice < 1 ? 'text-green' : '';
-        
-        tableHtml += `<tr>
-            <td class="mono">${i+1}</td>
-            <td class="font-bold">${name}</td>
-            <td><span class="provider-badge">${provider}</span></td>
-            <td class="mono ${inClass}">$${inPrice.toFixed(2)}</td>
-            <td class="mono">$${outPrice.toFixed(2)}</td>
-            <td class="mono">${formatContext(ctx)}</td>
-            <td><a href="${apiLink}" target="_blank" class="btn-sm">Get API</a></td>
-        </tr>`;
-        
-        cardsHtml += `<div class="model-card">
-            <div class="card-header">
-                <span class="provider-badge">${provider}</span>
-                <span class="rank mono">#${i+1}</span>
-            </div>
-            <h3 class="model-name">${name}</h3>
-            <div class="card-stats">
-                <div class="stat"><span class="stat-label">Input / 1M</span><span class="stat-value ${inClass}">$${inPrice.toFixed(2)}</span></div>
-                <div class="stat"><span class="stat-label">Output / 1M</span><span class="stat-value">$${outPrice.toFixed(2)}</span></div>
-                <div class="stat"><span class="stat-label">Context</span><span class="stat-value">${formatContext(ctx)}</span></div>
-            </div>
-            <a href="${apiLink}" target="_blank" class="btn-api">Get API Key →</a>
-        </div>`;
-    });
-    
-    tableHtml += `</tbody></table>`;
-    
-    if(models.length === 0) {
-        tableHtml = '<p style="padding:2rem;text-align:center;color:var(--text-muted)">No models found matching your criteria.</p>';
-        cardsHtml = tableHtml;
-    }
-    
-    tableContainer.innerHTML = tableHtml;
-    cardsContainer.innerHTML = cardsHtml;
+function render(models) {
+  const fmt = n => n>=1e6 ? (n/1e6).toFixed(1)+'M' : n>=1e3 ? Math.round(n/1e3)+'K' : n;
+  let table = `<table class="data-table"><thead><tr><th>#</th><th>Model</th><th>Provider</th><th>Input/1M</th><th>Output/1M</th><th>Context</th><th>Action</th></tr></thead><tbody>`;
+  let cards = '';
+  
+  models.slice(0,50).forEach((m,i) => {
+    const link = window.ConfigManager ? ConfigManager.getReferral(m.provider) : '#';
+    const cls = m.input_cost_per_mtok < 1 ? 'text-green' : '';
+    table += `<tr><td class="mono">${i+1}</td><td class="font-bold">${m.model}</td><td><span class="provider-badge">${m.provider}</span></td><td class="mono ${cls}">$${m.input_cost_per_mtok.toFixed(2)}</td><td class="mono">$${m.output_cost_per_mtok.toFixed(2)}</td><td class="mono">${fmt(m.context_window)}</td><td><a href="${link}" target="_blank" class="btn-sm">Get API</a></td></tr>`;
+    cards += `<div class="model-card"><div class="card-header"><span class="provider-badge">${m.provider}</span><span class="mono">#${i+1}</span></div><h3 class="model-name">${m.model}</h3><div class="card-stats"><div class="stat"><span class="stat-label">Input</span><span class="stat-value ${cls}">$${m.input_cost_per_mtok.toFixed(2)}</span></div><div class="stat"><span class="stat-label">Output</span><span class="stat-value">$${m.output_cost_per_mtok.toFixed(2)}</span></div><div class="stat"><span class="stat-label">Context</span><span class="stat-value">${fmt(m.context_window)}</span></div></div><a href="${link}" target="_blank" class="btn-api">Get API Key →</a></div>`;
+  });
+  
+  document.getElementById('table-container').innerHTML = table + `</tbody></table>`;
+  document.getElementById('cards-container').innerHTML = cards;
 }
 
 function updateCalc() {
-    const tokens = parseInt(calcTokens.value) / 1000000;
-    const task = calcTask.value;
-    
-    let gptPrice = 5.00; 
-    let llamaPrice = 0.05; 
-    
-    if (task === 'code') { gptPrice = 10.00; llamaPrice = 0.59; }
-    if (task === 'reasoning') { gptPrice = 15.00; llamaPrice = 0.59; }
-    
-    const gptTotal = (tokens * gptPrice).toFixed(2);
-    const llamaTotal = (tokens * llamaPrice).toFixed(2);
-    
-    resGpt.textContent = `$${gptTotal}`;
-    resLlama.textContent = `$${llamaTotal}`;
-}
-
-function scrollToModels() {
-    document.getElementById('models-section').scrollIntoView({behavior: 'smooth'});
+  const tokens = parseInt(document.getElementById('calc-tokens').value) / 1e6;
+  const task = document.getElementById('calc-task').value;
+  let gpt = 5.0, llama = 0.05;
+  if(task==='code') { gpt=10.0; llama=0.59; }
+  if(task==='reasoning') { gpt=15.0; llama=0.59; }
+  document.getElementById('res-gpt').textContent = `$${(tokens*gpt).toFixed(2)}`;
+  document.getElementById('res-llama').textContent = `$${(tokens*llama).toFixed(2)}`;
 }
 
 init();
