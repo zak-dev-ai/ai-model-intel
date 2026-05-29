@@ -1,13 +1,9 @@
-/**
- * AI Model Ranks — Global Configuration
- * Manages routing, referrals, and site settings.
- */
-
 const DEFAULT_CONFIG = {
   site: {
     name: 'AI Model Ranks',
     domain: 'https://www.aimodelranks.live',
-    rapidapi: 'https://octopus-ai-model-intel.rapidapi.com'
+    rapidapi: 'https://octopus-ai-model-intel.rapidapi.com',
+    refTag: 'aimodelranks' // Your referral tag
   },
   referrals: {
     'openai': 'https://platform.openai.com/api-keys',
@@ -42,7 +38,15 @@ window.ConfigManager = {
   get: () => DEFAULT_CONFIG,
   getReferral: (provider) => {
     const key = (provider || '').toLowerCase().trim();
-    return DEFAULT_CONFIG.referrals[key] || DEFAULT_CONFIG.referrals['openrouter'] || '#';
+    let url = DEFAULT_CONFIG.referrals[key] || DEFAULT_CONFIG.referrals['openrouter'] || '#';
+    
+    // Auto-append referral tag
+    if (url && url !== '#') {
+      const separator = url.includes('?') ? '&' : '?';
+      url = `${url}${separator}ref=${DEFAULT_CONFIG.site.refTag}`;
+    }
+    
+    return url;
   },
   getRapidApiUrl: () => DEFAULT_CONFIG.site.rapidapi
 };
