@@ -3,1489 +3,689 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Model Ranks — Live AI Model Price Rankings & Tools</title>
-<meta name="description" content="The Bloomberg Terminal for AI. Live prices for 200+ AI models. Compare GPT-4o, Claude, Gemini, Mistral in real time.">
+<title>AI Model Ranks — The Bloomberg Terminal for AI</title>
+<meta name="description" content="Track real-time pricing, context windows, and ROI across 210+ LLMs. Stop overpaying for AI infrastructure.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700;800&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
-<script src="/app.js?v=2"></script>
-<script src="/blog-module.js?v=2" defer></script>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-:root{
-  --bg:#07090f;--bg2:#0d1117;--bg3:#131b2a;--bg4:#1a2438;
-  --border:#1e2d42;--b2:rgba(59,180,255,0.2);
-  --cyan:#3bb4ff;--green:#00d97e;--red:#ff4d6d;
-  --yellow:#fbbf24;--purple:#a855f7;--orange:#f97316;
-  --text:#f0f4f8;--text2:#94a3b8;--text3:#4a5a6e;
-  --mono:'IBM Plex Mono',monospace;
-  --sans:'Space Grotesk',sans-serif;
-  --hud:'Orbitron',monospace;
-}
-*{margin:0;padding:0;box-sizing:border-box;}
-html{scroll-behavior:smooth;}
-body{background:var(--bg);color:var(--text);font-family:var(--sans);overflow-x:hidden;}
-
-/* ── ANN BAR ── */
-.ann{background:linear-gradient(90deg,#0a1628,#0d1f3c,#0a1628);border-bottom:1px solid var(--border);padding:8px 24px;display:flex;align-items:center;justify-content:center;gap:14px;font-size:13px;color:var(--text2);flex-wrap:wrap;}
-.ann strong{color:var(--cyan);}
-.ann a{color:var(--cyan);text-decoration:none;font-weight:600;}
-.ann-sep{color:var(--text3);}
-
-/* ── NAV ── */
-nav{position:sticky;top:0;z-index:1000;background:rgba(7,9,15,0.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
-.nav-top{display:flex;align-items:center;gap:12px;padding:0 24px;height:58px;}
-.nav-logo{font-family:var(--hud);font-size:15px;color:var(--cyan);letter-spacing:1px;text-decoration:none;flex-shrink:0;text-shadow:0 0 20px rgba(59,180,255,0.3);}
-.nav-sw{flex:1;max-width:360px;position:relative;}
-.nav-search{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:9px 14px 9px 36px;font-size:14px;color:var(--text);outline:none;font-family:var(--sans);transition:border-color .2s;}
-.nav-search:focus{border-color:var(--cyan);}
-.nav-search::placeholder{color:var(--text3);}
-.sico{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:14px;pointer-events:none;}
-.nav-right{display:flex;align-items:center;gap:5px;margin-left:auto;flex-shrink:0;}
-.nav-link{color:var(--text2);text-decoration:none;font-size:13px;font-weight:500;padding:6px 9px;border-radius:6px;transition:all .2s;white-space:nowrap;}
-.nav-link:hover,.nav-link.act{color:var(--cyan);}
-.btn-api{background:var(--cyan);color:#000;padding:7px 15px;border-radius:7px;font-size:13px;font-weight:700;text-decoration:none;white-space:nowrap;transition:opacity .2s;}
-.btn-api:hover{opacity:.85;}
-.nav-tabs{display:flex;padding:0 24px;border-top:1px solid var(--border);overflow-x:auto;scrollbar-width:none;}
-.nav-tabs::-webkit-scrollbar{display:none;}
-.ntab{padding:9px 15px;font-size:13px;font-weight:600;color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;background:none;border-top:none;border-left:none;border-right:none;font-family:var(--sans);transition:all .2s;}
-.ntab:hover{color:var(--text);}
-.ntab.act{color:var(--cyan);border-bottom-color:var(--cyan);}
-
-/* ══════════════════════════════════════════
-   MARQUEE ENGINE — one source of truth
-   All strips use class="mq-wrap" > "mq-track"
-   Speed is set via --spd CSS var on .mq-track
-   ══════════════════════════════════════════ */
-.mq-wrap{overflow:hidden;position:relative;}
-.mq-wrap::before,.mq-wrap::after{content:'';position:absolute;top:0;bottom:0;width:80px;z-index:2;pointer-events:none;}
-.mq-wrap::before{left:0;}
-.mq-wrap::after{right:0;}
-/* each strip overrides its own gradient colors via inline style */
-.mq-track{display:flex;width:max-content;will-change:transform;}
-/* CSS animation — translate3d GPU-composited, smooth on all devices */
-@keyframes mq{from{transform:translate3d(0,0,0)}to{transform:translate3d(-50%,0,0)}}
-@-webkit-keyframes mq{from{-webkit-transform:translate3d(0,0,0)}to{-webkit-transform:translate3d(-50%,0,0)}}
-.mq-track{animation:mq var(--spd,60s) linear infinite;-webkit-animation:mq var(--spd,60s) linear infinite;}
-.mq-track:hover{animation-play-state:paused;-webkit-animation-play-state:paused;}
-
-/* ── ROW 1 — Model price cards ── */
-.mcards-wrap{background:var(--bg2);border-bottom:1px solid var(--border);}
-.mcards-wrap::before{background:linear-gradient(to right,var(--bg2),transparent);}
-.mcards-wrap::after{background:linear-gradient(to left,var(--bg2),transparent);}
-.mc{flex-shrink:0;width:195px;padding:13px 16px;border-right:1px solid var(--border);}
-.mc-lbl{font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:.5px;text-transform:uppercase;margin-bottom:4px;}
-.mc-val{font-size:17px;font-weight:800;color:var(--text);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.mc-sub{font-family:var(--mono);font-size:11px;}
-.mc-sub.dn{color:var(--green);} .mc-sub.up{color:var(--red);} .mc-sub.nt{color:var(--text3);}
-
-/* ── ROW 2 — Live price ticker ── */
-.ticker-row{background:var(--bg);border-bottom:1px solid var(--border);padding:8px 0;position:relative;}
-.ticker-row::before{background:linear-gradient(to right,var(--bg),transparent);}
-.ticker-row::after{background:linear-gradient(to left,var(--bg),transparent);}
-.tk-label{position:absolute;left:0;top:0;bottom:0;z-index:3;background:var(--bg2);border-right:1px solid var(--border);padding:0 12px;display:flex;align-items:center;font-family:var(--mono);font-size:10px;color:var(--cyan);letter-spacing:1px;white-space:nowrap;}
-.tick{font-family:var(--mono);font-size:12px;display:inline-flex;align-items:center;gap:5px;padding:0 20px;flex-shrink:0;}
-.tick.g{color:var(--green);} .tick.y{color:var(--yellow);} .tick.m{color:var(--text3);}
-
-/* ── ROW 3 — Paid ad spotlight (PREMIUM > GROWTH > STARTER) ── */
-.spotlight-wrap{background:var(--bg2);border-bottom:2px solid rgba(251,191,36,.18);position:relative;}
-.spotlight-wrap::before{background:linear-gradient(to right,var(--bg2),transparent);}
-.spotlight-wrap::after{background:linear-gradient(to left,var(--bg2),transparent);}
-.spot-hdr{display:flex;align-items:center;justify-content:space-between;padding:10px 24px 8px;border-bottom:1px solid rgba(251,191,36,.1);}
-.spot-hdr-l{font-family:var(--mono);font-size:10px;color:var(--yellow);letter-spacing:2px;text-transform:uppercase;display:flex;align-items:center;gap:8px;}
-.spot-hdr-r{font-family:var(--mono);font-size:11px;color:var(--text3);}
-.spot-hdr-r a{color:var(--purple);text-decoration:none;}
-
-/* Ad card tiers */
-.scard{flex-shrink:0;border-radius:10px;position:relative;overflow:hidden;text-decoration:none;display:block;cursor:pointer;transition:transform .3s,box-shadow .3s;box-shadow:0 4px 24px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.04);}
-.scard:hover{transform:translateY(-4px);box-shadow:0 8px 32px rgba(0,217,126,0.15), 0 0 0 1px rgba(0,217,126,0.2);}
-.scard::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
-
-/* PREMIUM $99 — largest, golden border */
-.scard.tier-premium{width:290px;margin:10px 8px;background:var(--bg3);border:1px solid rgba(251,191,36,.35);}
-.scard.tier-premium::before{background:linear-gradient(90deg,var(--yellow),var(--orange));}
-.scard.tier-premium .sc-body{padding:16px;}
-.scard.tier-premium .sc-badge{background:linear-gradient(135deg,var(--yellow),var(--orange));color:#000;}
-.scard.tier-premium .sc-name{font-size:16px;}
-.scard.tier-premium .sc-desc{font-size:13px;}
-
-/* GROWTH $49 — medium, purple border */
-.scard.tier-growth{width:230px;margin:10px 6px;background:var(--bg3);border:1px solid rgba(168,85,247,.3);}
-.scard.tier-growth::before{background:linear-gradient(90deg,var(--purple),var(--cyan));}
-.scard.tier-growth .sc-body{padding:14px;}
-.scard.tier-growth .sc-badge{background:rgba(168,85,247,.15);border:1px solid rgba(168,85,247,.3);color:var(--purple);}
-.scard.tier-growth .sc-name{font-size:14px;}
-.scard.tier-growth .sc-desc{font-size:12px;}
-
-/* STARTER $9 — smallest, cyan border */
-.scard.tier-starter{width:185px;margin:10px 5px;background:var(--bg3);border:1px solid rgba(59,180,255,.2);}
-.scard.tier-starter::before{background:var(--cyan);}
-.scard.tier-starter .sc-body{padding:12px;}
-.scard.tier-starter .sc-badge{background:rgba(59,180,255,.1);border:1px solid rgba(59,180,255,.2);color:var(--cyan);}
-.scard.tier-starter .sc-name{font-size:13px;}
-.scard.tier-starter .sc-desc{font-size:11px;}
-
-/* EMPTY slot */
-.scard.tier-empty{width:185px;margin:10px 5px;background:transparent;border:1px dashed rgba(255,255,255,.08);}
-.scard.tier-empty::before{background:transparent;}
-.scard.tier-empty .sc-body{padding:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100px;}
-.scard.tier-empty .sc-empty-ico{font-size:20px;margin-bottom:6px;opacity:.3;}
-.scard.tier-empty .sc-empty-txt{font-family:var(--mono);font-size:10px;color:var(--text3);text-align:center;line-height:1.6;}
-.scard.tier-empty .sc-empty-price{font-family:var(--hud);font-size:13px;color:rgba(251,191,36,.6);margin-top:4px;}
-
-.sc-body{position:relative;}
-.sc-badge{display:inline-flex;align-items:center;gap:4px;font-size:8px;font-weight:700;padding:3px 10px;border-radius:100px;font-family:var(--mono);margin-bottom:10px;letter-spacing:1px;text-transform:uppercase;}
-.sc-name{font-weight:700;color:var(--text);margin-bottom:6px;font-size:14px;text-align:center;}
-.sc-desc{color:var(--text2);line-height:1.4;margin-bottom:10px;font-size:11px;text-align:center;max-width:180px;}
-.sc-cta{display:block;padding:8px 16px;border-radius:8px;font-size:12px;font-weight:700;text-decoration:none;text-align:center;margin-top:auto;transition:all 0.2s;width:100%;}
-
-/* ── ROW 4 — Live AI tools ticker ── */
-.tools-ticker{background:rgba(168,85,247,.04);border-bottom:1px solid rgba(168,85,247,.1);padding:8px 0;position:relative;}
-.tools-ticker::before{background:linear-gradient(to right,var(--bg),transparent);}
-.tools-ticker::after{background:linear-gradient(to left,var(--bg),transparent);}
-.tl-label{position:absolute;left:0;top:0;bottom:0;z-index:3;background:var(--bg2);border-right:1px solid var(--border);padding:0 12px;display:flex;align-items:center;font-family:var(--mono);font-size:10px;color:var(--purple);letter-spacing:1px;white-space:nowrap;}
-.ttick{font-family:var(--mono);font-size:12px;display:inline-flex;align-items:center;gap:6px;padding:0 20px;flex-shrink:0;color:var(--text2);}
-.ttick:hover{color:var(--purple);}
-.ttick .votes{color:var(--text3);font-size:10px;}
-
-/* ── ROW 5 — AI tool product cards ── */
-.toolcards-wrap{background:var(--bg);border-bottom:1px solid var(--border);}
-.toolcards-wrap::before{background:linear-gradient(to right,var(--bg),transparent);}
-.toolcards-wrap::after{background:linear-gradient(to left,var(--bg),transparent);}
-.tool-hdr{display:flex;align-items:center;justify-content:space-between;padding:10px 24px 8px;}
-.tool-hdr-l{font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:2px;text-transform:uppercase;}
-.tool-hdr-r a{font-family:var(--mono);font-size:11px;color:var(--purple);text-decoration:none;}
-.tc{flex-shrink:0;width:210px;margin:8px 5px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden;text-decoration:none;display:block;transition:border-color .2s,transform .2s;}
-.tc:hover{border-color:rgba(168,85,247,.3);transform:translateY(-2px);}
-.tc.paid{border-color:rgba(251,191,36,.25);}
-.tc-thumb{height:110px;display:flex;align-items:center;justify-content:center;font-size:32px;position:relative;}
-.tc-rank{position:absolute;top:6px;left:6px;font-family:var(--hud);font-size:9px;color:rgba(255,255,255,.35);background:rgba(0,0,0,.4);padding:1px 6px;border-radius:3px;}
-.tc-body{padding:10px;}
-.tc-name{font-size:12px;font-weight:700;color:var(--text);margin-bottom:2px;}
-.tc-cat{font-family:var(--mono);font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
-.tc-footer{display:flex;align-items:center;justify-content:space-between;}
-.tc-pr{font-size:9px;font-family:var(--mono);padding:2px 6px;border-radius:100px;}
-.tc-votes{font-family:var(--mono);font-size:10px;color:var(--green);}
-.tc-sp{background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.2);color:var(--yellow);font-size:8px;padding:1px 5px;border-radius:3px;font-family:var(--mono);}
-.cat-image{background:linear-gradient(135deg,#1a0a2e,#2d1b69);}
-.cat-video{background:linear-gradient(135deg,#0a0a28,#1a1a50);}
-.cat-coding{background:linear-gradient(135deg,#0a1e00,#1a3800);}
-.cat-writing{background:linear-gradient(135deg,#1a0a00,#2e1800);}
-.cat-chat{background:linear-gradient(135deg,#001828,#003060);}
-.cat-audio{background:linear-gradient(135deg,#1a001a,#300030);}
-.cat-research{background:linear-gradient(135deg,#001a28,#002850);}
-.pr-free{background:rgba(0,217,126,.08);color:var(--green);border:1px solid rgba(0,217,126,.2);}
-.pr-freemium{background:rgba(59,180,255,.08);color:var(--cyan);border:1px solid rgba(59,180,255,.2);}
-.pr-paid{background:rgba(255,77,109,.08);color:var(--red);border:1px solid rgba(255,77,109,.2);}
-
-/* ── HERO ── */
-.hero{padding:48px 24px 36px;text-align:center;position:relative;overflow:hidden;background:radial-gradient(ellipse at 50% -10%,rgba(59,180,255,.08),transparent 60%);}
-.hero-grid{position:absolute;inset:0;opacity:.025;background-image:linear-gradient(rgba(59,180,255,1) 1px,transparent 1px),linear-gradient(90deg,rgba(59,180,255,1) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;}
-.live-dot{width:7px;height:7px;background:var(--green);border-radius:50%;display:inline-block;animation:ldot 1.4s infinite;}
-@keyframes ldot{0%,100%{opacity:1;}50%{opacity:.3;}}
-.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(59,180,255,.06);border:1px solid var(--b2);padding:6px 14px;border-radius:100px;font-family:var(--mono);font-size:11px;color:var(--cyan);margin-bottom:18px;position:relative;}
-.hero h1{font-family:var(--hud);font-size:clamp(22px,5vw,50px);color:#fff;letter-spacing:1px;line-height:1.1;margin-bottom:14px;position:relative;}
-.hl-c{color:var(--cyan);}
-.hl-g{color:var(--green);}
-.hero-sub{font-size:clamp(13px,2vw,17px);color:var(--text2);max-width:560px;margin:0 auto 28px;line-height:1.7;position:relative;}
-.hero-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;position:relative;margin-bottom:32px;}
-.btn-hp{background:linear-gradient(135deg,var(--cyan),#2a8fd4);color:#000;padding:12px 24px;border-radius:8px;font-size:14px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:7px;box-shadow:0 0 28px rgba(59,180,255,.2);}
-.btn-hp:hover{opacity:.88;}
-.btn-hs{border:1px solid rgba(168,85,247,.35);color:var(--purple);padding:12px 24px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:7px;}
-.btn-hs:hover{background:rgba(168,85,247,.06);}
-.btn-ha{border:1px solid var(--b2);color:var(--cyan);padding:12px 24px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:7px;}
-.btn-ha:hover{background:rgba(59,180,255,.06);}
-.hero-stats{display:flex;gap:0;justify-content:center;max-width:680px;margin:0 auto;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:12px;overflow:hidden;position:relative;}
-.hstat{padding:14px 24px;text-align:center;border-right:1px solid var(--border);flex:1;min-width:100px;}
-.hstat:last-child{border-right:none;}
-.hstat-num{font-family:var(--hud);font-size:clamp(18px,3vw,26px);color:var(--cyan);margin-bottom:2px;}
-.hstat-lbl{font-size:10px;color:var(--text3);font-family:var(--mono);}
-
-/* ── TOP 6 PAID SLOTS ── */
-.top6-section{padding:16px 24px;background:var(--bg2);border-bottom:1px solid var(--border);}
-.top6-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:6px;}
-.top6-title{font-family:var(--hud);font-size:12px;color:var(--yellow);letter-spacing:1px;display:flex;align-items:center;gap:7px;}
-.top6-sub{font-family:var(--mono);font-size:10px;color:var(--text3);}
-.top6-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;}
-.top6-card{border-radius:9px;overflow:hidden;border:1px solid var(--border);min-height:145px;display:flex;flex-direction:column;transition:transform 0.2s,border-color 0.2s;text-decoration:none;}
-.top6-card:hover{transform:translateY(-2px);}
-.top6-card.filled{border-color:rgba(251,191,36,0.25);background:var(--bg3);}
-.top6-card.empty{border-style:dashed;border-color:rgba(168,85,247,0.2);background:rgba(168,85,247,0.02);align-items:center;justify-content:center;text-align:center;padding:12px;cursor:pointer;}
-.top6-card.empty:hover{border-color:var(--purple);background:rgba(168,85,247,0.05);}
-.t6-bar{height:2px;flex-shrink:0;}
-.t6-body{padding:10px;flex:1;display:flex;flex-direction:column;}
-.t6-badge{font-family:var(--mono);font-size:8px;color:var(--yellow);letter-spacing:0.5px;margin-bottom:4px;}
-.t6-ico{font-size:18px;margin-bottom:3px;}
-.t6-name{font-size:11px;font-weight:700;color:var(--text);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.t6-desc{font-size:10px;color:var(--text2);line-height:1.4;flex:1;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
-.t6-cta{display:block;text-align:center;padding:4px;border-radius:5px;font-size:10px;font-weight:700;text-decoration:none;margin-top:5px;}
-.t6-expiry{font-family:var(--mono);font-size:8px;color:var(--text3);text-align:center;margin-top:2px;}
-.empty-ico{font-size:20px;opacity:0.4;margin-bottom:4px;}
-.empty-label{font-family:var(--hud);font-size:9px;color:var(--purple);margin-bottom:2px;letter-spacing:0.5px;}
-.empty-price{font-family:var(--mono);font-size:10px;color:var(--text3);margin-bottom:5px;}
-.empty-btn{background:rgba(168,85,247,0.1);border:1px solid rgba(168,85,247,0.25);color:var(--purple);font-size:9px;font-weight:700;padding:4px 8px;border-radius:4px;font-family:var(--mono);}
-
-/* ── TOOLS GRID (home page) ── */
-.tools-section{padding:20px 0;border-bottom:1px solid var(--border);}
-.ts-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px;}
-.ts-title{font-family:var(--hud);font-size:14px;color:var(--text);letter-spacing:0.5px;display:flex;align-items:center;gap:8px;}
-.ts-link{font-size:11px;color:var(--cyan);text-decoration:none;font-family:var(--mono);}
-.cat-pills{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:0 0 12px;}
-.cat-pills::-webkit-scrollbar{display:none;}
-.cat-pill{padding:5px 12px;border-radius:100px;border:1px solid var(--border);background:transparent;font-size:12px;color:var(--text2);cursor:pointer;font-family:var(--sans);white-space:nowrap;flex-shrink:0;transition:all 0.2s;}
-.cat-pill:hover{border-color:var(--purple);color:var(--text);}
-.cat-pill.active{background:rgba(168,85,247,0.08);border-color:var(--purple);color:var(--purple);}
-.ts-toolbar{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
-.ts-count{font-family:var(--mono);font-size:12px;color:var(--text2);}
-.ts-sort select{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:6px 10px;font-size:12px;color:var(--text2);cursor:pointer;outline:none;font-family:var(--sans);}
-.home-tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px;}
-.ht-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden;transition:all 0.2s;text-decoration:none;display:block;position:relative;}
-.ht-card:hover{border-color:rgba(168,85,247,0.25);transform:translateY(-2px);}
-.ht-card.featured{border-color:rgba(251,191,36,0.25);}
-.ht-card.featured::after{content:'⭐ FEATURED';position:absolute;top:7px;right:7px;background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.2);color:var(--yellow);font-size:8px;padding:2px 6px;border-radius:3px;font-family:var(--mono);z-index:1;}
-.ht-img-wrap{width:100%;height:100px;background:#111827;border-radius:10px 10px 0 0;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;background:var(--bg3);}
-.ht-img{width:64px;height:64px;object-fit:contain;border-radius:8px;}
-.ht-img-fallback{font-size:40px;line-height:1;}
-.ht-rank{position:absolute;top:6px;left:6px;font-family:var(--hud);font-size:10px;color:rgba(255,255,255,0.6);background:rgba(0,0,0,0.5);padding:2px 6px;border-radius:3px;}
-.ht-body{padding:10px;}
-.ht-name{font-size:13px;font-weight:700;color:var(--text);margin-bottom:2px;display:flex;align-items:center;gap:4px;flex-wrap:wrap;}
-.ht-new-badge{background:rgba(0,217,126,0.1);border:1px solid rgba(0,217,126,0.2);color:var(--green);font-size:8px;padding:1px 4px;border-radius:3px;font-family:var(--mono);}
-.ht-tagline{font-size:11px;color:var(--text2);margin-bottom:6px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
-.ht-meta{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:4px;}
-.ht-pricing{font-size:10px;font-family:var(--mono);padding:2px 7px;border-radius:100px;}
-.ht-votes{font-size:10px;font-family:var(--mono);color:var(--green);}
-
-/* ── AD TIER SHOWCASE (below hero) ── */
-.ad-showcase{padding:24px;background:linear-gradient(180deg,rgba(7,9,15,0) 0%,rgba(251,191,36,.03) 100%);border-bottom:1px solid rgba(251,191,36,.1);}
-.outer{max-width:1400px;margin:0 auto;padding:0 24px;}
-.ashow-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
-.ashow-title{font-family:var(--hud);font-size:13px;color:var(--yellow);letter-spacing:.5px;display:flex;align-items:center;gap:8px;}
-.ashow-sub{font-family:var(--mono);font-size:11px;color:var(--text3);}
-.ashow-sub a{color:var(--purple);text-decoration:none;}
-.tier-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
-@media(max-width:1100px){.top6-grid{grid-template-columns:repeat(3,1fr);}}
-@media(max-width:768px){
-  .spotlight-wrap .mq-track,.toolcards-wrap .mq-track{--spd:45s;gap:12px!important;padding:10px!important;}
-  .top6-grid{grid-template-columns:repeat(2,1fr);}}
-@media(max-width:500px){.top6-grid{grid-template-columns:1fr 1fr;}.card-grid{grid-template-columns:1fr;}.mcards-track{gap:8px;}.mc{min-width:100px;padding:10px;}.mc-val{font-size:18px;}
-.tier-row{grid-template-columns:repeat(2,1fr)!important;gap:4px;}
-.adshow-card .ac-name{font-size:10px;}
-.adshow-card .ac-desc{font-size:9px;}}
-@media(max-width:900px){.tier-row{grid-template-columns:1fr 1fr;}}
-@media(max-width:580px){.tier-row{grid-template-columns:repeat(3,1fr);gap:6px;}
-.adshow-card .ac-body{padding:10px;}
-.adshow-card .ac-name{font-size:12px;}
-.adshow-card .ac-desc{font-size:10px;}
-.adshow-card .ac-cta{padding:6px 10px;font-size:10px;}
-.adshow-card.empty .ac-body{min-height:120px;}}
-
-/* Premium ad display card */
-.adshow-card{border-radius:12px;overflow:hidden;position:relative;text-decoration:none;display:block;transition:transform .2s;}
-.adshow-card:hover{transform:translateY(-3px);}
-.adshow-card .ac-bar{height:4px;}
-.adshow-card .ac-body{padding:20px;}
-.adshow-card .ac-label{font-family:var(--hud);font-size:9px;letter-spacing:1.5px;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
-.adshow-card .ac-name{font-size:16px;font-weight:700;color:var(--text);margin-bottom:4px;}
-.adshow-card .ac-desc{font-size:13px;color:var(--text2);margin-bottom:12px;line-height:1.5;}
-.adshow-card .ac-cta{display:inline-block;padding:9px 18px;border-radius:7px;font-size:13px;font-weight:700;text-decoration:none;}
-
-/* premium */
-.adshow-card.premium{background:var(--bg3);border:1px solid rgba(251,191,36,.4);box-shadow:0 0 40px rgba(251,191,36,.06);}
-.adshow-card.premium .ac-bar{background:linear-gradient(90deg,var(--yellow),var(--orange));}
-.adshow-card.premium .ac-label{color:var(--yellow);}
-/* growth */
-.adshow-card.growth{background:var(--bg3);border:1px solid rgba(168,85,247,.3);}
-.adshow-card.growth .ac-bar{background:linear-gradient(90deg,var(--purple),var(--cyan));}
-.adshow-card.growth .ac-label{color:var(--purple);}
-/* starter */
-.adshow-card.starter{background:var(--bg2);border:1px solid rgba(59,180,255,.2);}
-.adshow-card.starter .ac-bar{background:var(--cyan);}
-.adshow-card.starter .ac-label{color:var(--cyan);}
-/* empty */
-.adshow-card.empty{background:transparent;border:1px dashed rgba(255,255,255,.07);cursor:pointer;}
-.adshow-card.empty .ac-bar{background:transparent;}
-.adshow-card.empty .ac-body{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:160px;text-align:center;}
-.empty-ico{font-size:28px;margin-bottom:10px;opacity:.3;}
-.empty-price{font-family:var(--hud);font-size:20px;margin-bottom:4px;}
-.empty-period{font-family:var(--mono);font-size:11px;color:var(--text3);margin-bottom:12px;}
-.empty-feats{font-family:var(--mono);font-size:11px;color:var(--text3);line-height:1.8;margin-bottom:12px;}
-.empty-btn{display:inline-block;padding:8px 18px;border-radius:7px;font-size:12px;font-weight:700;text-decoration:none;}
-
-/* ── PAGE GRID ── */
-.page-grid{display:grid;grid-template-columns:1fr 294px;gap:22px;padding:20px 0 32px;}
-@media(max-width:1100px){.page-grid{grid-template-columns:1fr;}}
-
-/* ── SEC HEADER ── */
-.sec-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:6px;}
-.sec-title{font-family:var(--hud);font-size:13px;color:var(--text);letter-spacing:.5px;display:flex;align-items:center;gap:7px;}
-.sec-lnk{font-family:var(--mono);font-size:11px;color:var(--cyan);text-decoration:none;}
-
-/* ── PROV PILLS ── */
-.prov-pills{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:11px;}
-.ppill{padding:5px 12px;border-radius:100px;border:1px solid var(--border);background:transparent;font-size:12px;font-weight:500;color:var(--text2);cursor:pointer;transition:all .2s;font-family:var(--sans);}
-.ppill:hover{border-color:var(--cyan);color:var(--cyan);}
-.ppill.act{border-color:var(--cyan);color:var(--cyan);background:rgba(59,180,255,.07);}
-
-/* ── CONTROLS ── */
-.ctrl-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:11px;flex-wrap:wrap;}
-select.dd{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:7px 11px;font-size:12px;color:var(--text2);cursor:pointer;outline:none;font-family:var(--sans);}
-.vt-toggle{display:flex;background:var(--bg3);border:1px solid var(--border);border-radius:6px;overflow:hidden;}
-.vtb{padding:6px 10px;background:transparent;border:none;cursor:pointer;color:var(--text3);font-size:14px;transition:all .2s;}
-.vtb.act{background:var(--bg4);color:var(--cyan);}
-
-/* ── COMPARE ── */
-.cmp-bar{display:none;background:rgba(59,180,255,.04);border:1px solid var(--b2);border-radius:8px;padding:10px 13px;margin-bottom:11px;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
-.cmp-bar.show{display:flex;}
-.chips{display:flex;gap:5px;flex-wrap:wrap;}
-.chip{display:inline-flex;align-items:center;gap:4px;background:rgba(59,180,255,.08);border:1px solid var(--b2);padding:3px 8px;border-radius:100px;font-size:11px;color:var(--cyan);font-family:var(--mono);}
-.chip-x{cursor:pointer;opacity:.5;}
-.chip-x:hover{opacity:1;}
-.btn-cmp{background:linear-gradient(135deg,var(--cyan),var(--purple));color:#000;border:none;padding:7px 15px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer;}
-.btn-clr{background:transparent;border:1px solid var(--border);color:var(--text2);padding:7px 10px;border-radius:6px;font-size:12px;cursor:pointer;}
-.btn-clr:hover{border-color:var(--red);color:var(--red);}
-.cmp-panel{display:none;background:var(--bg2);border:1px solid var(--b2);border-radius:10px;padding:18px;margin-bottom:13px;}
-.cmp-panel.show{display:block;}
-.cmp-title{font-family:var(--hud);font-size:12px;color:var(--text);margin-bottom:3px;}
-.cmp-sub{font-family:var(--mono);font-size:11px;color:var(--text2);margin-bottom:14px;}
-.cmp-cols{display:grid;gap:9px;}
-.cmp-col{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:13px;position:relative;}
-.cmp-col.win{border-color:var(--cyan);}
-.cmp-col.win::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),var(--purple));border-radius:8px 8px 0 0;}
-.wb{display:inline-block;background:linear-gradient(135deg,var(--cyan),var(--purple));color:#000;font-size:9px;font-weight:700;padding:2px 8px;border-radius:100px;letter-spacing:1px;margin-bottom:5px;font-family:var(--mono);}
-.cn{font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px;word-break:break-word;}
-.cr{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:12px;}
-.cr:last-child{border-bottom:none;}
-.cl{color:var(--text2);font-family:var(--mono);}
-.cv{font-weight:600;color:var(--text);font-family:var(--mono);}
-.cv.best{color:var(--green);} .cv.worst{color:var(--red);}
-.cmp-pills{display:flex;gap:5px;flex-wrap:wrap;margin-top:12px;padding-top:11px;border-top:1px solid var(--border);}
-.cpill{display:flex;align-items:center;gap:5px;background:rgba(59,180,255,.04);border:1px solid var(--border);padding:5px 11px;border-radius:100px;font-size:11px;}
-.cpl{color:var(--text3);font-family:var(--mono);}
-.cpv{font-weight:600;color:var(--cyan);font-family:var(--mono);}
-
-/* ── TABLE ── */
-.tbl-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden;overflow-x:auto;}
-table{width:100%;border-collapse:collapse;font-size:13px;}
-thead tr{background:var(--bg3);}
-th{padding:10px 12px;text-align:left;font-family:var(--mono);font-size:10px;letter-spacing:.8px;text-transform:uppercase;color:var(--text3);border-bottom:1px solid var(--border);white-space:nowrap;cursor:pointer;user-select:none;}
-th:hover{color:var(--text2);}
-th.sorted{color:var(--cyan);}
-tbody tr{border-bottom:1px solid rgba(30,45,66,.4);transition:background .15s;cursor:pointer;}
-tbody tr:last-child{border-bottom:none;}
-tbody tr:hover{background:rgba(59,180,255,.03);}
-tbody tr.sel{background:rgba(59,180,255,.05);}
-td{padding:11px 12px;vertical-align:middle;}
-td.td-s{width:28px;padding:11px 6px;}
-.rchk{width:15px;height:15px;border-radius:4px;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;}
-tr.sel .rchk{border-color:var(--cyan);background:rgba(59,180,255,.15);}
-td.td-r{font-family:var(--mono);font-size:11px;color:var(--text3);width:38px;text-align:right;}
-td.td-n{min-width:175px;}
-.nw{display:flex;align-items:center;gap:8px;}
-.pico{width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;font-family:var(--mono);flex-shrink:0;}
-.pm{font-size:12px;font-weight:600;color:var(--text);}
-.ps{font-family:var(--mono);font-size:10px;color:var(--text3);max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.pbg{font-family:var(--mono);font-size:10px;padding:2px 6px;border-radius:100px;border:1px solid;}
-.pb-openai{background:rgba(16,163,127,.1);color:#0d9e6e;border-color:rgba(16,163,127,.2);}
-.pb-anthropic{background:rgba(200,96,48,.1);color:#d05030;border-color:rgba(200,96,48,.2);}
-.pb-google{background:rgba(66,133,244,.1);color:#4285f4;border-color:rgba(66,133,244,.2);}
-.pb-mistral{background:rgba(255,107,0,.1);color:#ff6b00;border-color:rgba(255,107,0,.2);}
-.pb-xai{background:rgba(160,160,160,.08);color:#aaa;border-color:rgba(160,160,160,.15);}
-.pb-meta{background:rgba(24,119,242,.1);color:#1877f2;border-color:rgba(24,119,242,.2);}
-.pb-deepseek{background:rgba(120,120,255,.1);color:#9090ff;border-color:rgba(120,120,255,.2);}
-.pb-cohere{background:rgba(255,200,0,.08);color:#eeb800;border-color:rgba(255,200,0,.15);}
-td.tp{font-family:var(--mono);font-size:12px;font-weight:700;}
-td.tp.cheap{color:var(--green);}td.tp.mid{color:var(--cyan);}td.tp.exp{color:#ff8866;}
-td.td-ctx{font-family:var(--mono);font-size:11px;color:var(--text2);}
-td.td-sc{font-family:var(--mono);font-size:11px;}
-.srow{display:flex;align-items:center;gap:6px;}
-.sbar{width:46px;height:4px;border-radius:2px;background:rgba(59,180,255,.1);}
-.sfill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--cyan),var(--purple));}
-.msp{width:64px;height:24px;}
-.ctags{display:flex;gap:3px;}
-.ct{font-size:9px;padding:1px 5px;border-radius:3px;}
-.ct-v{background:rgba(168,85,247,.1);color:#c084fc;border:1px solid rgba(168,85,247,.2);}
-.ct-r{background:rgba(251,191,36,.1);color:#fbbf24;border:1px solid rgba(251,191,36,.2);}
-.ct-c{background:rgba(59,130,246,.1);color:#60a5fa;border:1px solid rgba(59,130,246,.2);}
-.ct-n{background:rgba(0,217,126,.1);color:#00d97e;border:1px solid rgba(0,217,126,.2);}
-.ld{text-align:center;padding:40px;font-family:var(--mono);font-size:12px;color:var(--text3);}
-.spin{display:inline-block;width:12px;height:12px;border:2px solid var(--border);border-top-color:var(--cyan);border-radius:50%;animation:sp .7s linear infinite;vertical-align:middle;margin-right:6px;}
-@keyframes sp{to{transform:rotate(360deg);}}
-.card-grid{display:none;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;}
-.card-grid.show{display:grid;}
-.mcard{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px;cursor:pointer;transition:border-color .2s,transform .2s;}
-.mcard:hover{border-color:rgba(59,180,255,.25);transform:translateY(-2px);}
-.mcard.sel{border-color:var(--cyan);}
-.gc-top{display:flex;justify-content:space-between;margin-bottom:8px;}
-.gc-rk{font-family:var(--mono);font-size:10px;color:var(--text3);}
-.gc-ck{width:16px;height:16px;border-radius:4px;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;}
-.mcard.sel .gc-ck{border-color:var(--cyan);background:rgba(59,180,255,.15);}
-.gc-ico{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;font-family:var(--mono);margin-bottom:8px;}
-.gc-nm{font-size:12px;font-weight:700;color:var(--text);margin-bottom:3px;}
-.gc-pv{margin-bottom:9px;}
-.gc-m{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:9px;}
-.gm{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.05);border-radius:5px;padding:6px 8px;}
-.gml{font-family:var(--mono);font-size:9px;color:var(--text3);margin-bottom:1px;text-transform:uppercase;}
-.gmv{font-family:var(--mono);font-size:12px;font-weight:700;}
-.gmv.cheap{color:var(--green);}.gmv.mid{color:var(--cyan);}.gmv.exp{color:#ff8866;}
-.gc-ft{display:flex;align-items:center;justify-content:space-between;font-size:10px;}
-.gc-ctx{color:var(--text2);font-family:var(--mono);}
-.tierp{padding:2px 7px;border-radius:100px;font-size:9px;font-family:var(--mono);}
-.tp-b{background:rgba(0,217,126,.08);color:var(--green);border:1px solid rgba(0,217,126,.2);}
-.tp-m{background:rgba(59,180,255,.08);color:var(--cyan);border:1px solid rgba(59,180,255,.2);}
-.tp-p{background:rgba(255,136,102,.08);color:#ff8866;border:1px solid rgba(255,136,102,.2);}
-
-/* ── SIDEBAR ── */
-.right-col{display:flex;flex-direction:column;gap:13px;}
-.sb-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden;}
-.sb-hdr{padding:11px 13px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
-.sb-title{font-family:var(--hud);font-size:11px;color:var(--text);letter-spacing:.5px;}
-.sb-link{font-family:var(--mono);font-size:10px;color:var(--cyan);text-decoration:none;}
-.sb-body{padding:11px 13px;}
-.wi{display:flex;align-items:center;gap:9px;padding:8px 0;border-bottom:1px solid rgba(30,45,66,.5);}
-.wi:last-child{border-bottom:none;}
-.wi-ico{font-size:15px;width:24px;text-align:center;flex-shrink:0;}
-.wi-inf{flex:1;min-width:0;}
-.wi-lbl{font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:.5px;text-transform:uppercase;margin-bottom:1px;}
-.wi-model{font-size:11px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.wi-val{font-family:var(--mono);font-size:11px;font-weight:700;flex-shrink:0;}
-.wi-val.cheap{color:var(--green);}.wi-val.exp{color:#ff8866;}.wi-val.val{color:var(--yellow);}.wi-val.ctx{color:var(--cyan);}
-.twitter-btn{display:flex;align-items:center;justify-content:center;gap:6px;background:rgba(29,161,242,.08);border:1px solid rgba(29,161,242,.2);color:#1da1f2;padding:8px;border-radius:7px;font-family:var(--mono);font-size:11px;cursor:pointer;width:100%;margin-top:9px;}
-.twitter-btn:hover{background:rgba(29,161,242,.15);}
-.sb-ad{background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden;text-decoration:none;display:block;}
-.sb-ad:hover{border-color:rgba(59,180,255,.2);}
-.sb-ad-bar{height:2px;}
-.sb-ad-body{padding:12px;}
-.sb-ad-badge{display:inline-block;background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.15);color:var(--yellow);font-size:9px;padding:2px 6px;border-radius:3px;font-family:var(--mono);margin-bottom:7px;}
-.sb-ad-name{font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px;}
-.sb-ad-desc{font-size:11px;color:var(--text2);margin-bottom:8px;line-height:1.5;}
-.sb-ad-btn{display:block;text-align:center;padding:7px;border-radius:6px;font-size:11px;font-weight:700;text-decoration:none;}
-.sb-ad-btn:hover{opacity:.85;}
-.ti{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid rgba(30,45,66,.5);text-decoration:none;}
-.ti:last-child{border-bottom:none;}
-.ti-ico{width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
-.ti-inf{flex:1;min-width:0;}
-.ti-nm{font-size:11px;font-weight:600;color:var(--text);}
-.ti-cat{font-family:var(--mono);font-size:9px;color:var(--text3);text-transform:uppercase;}
-.ti-votes{font-family:var(--mono);font-size:10px;color:var(--green);}
-.blog-item{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid rgba(30,45,66,.5);text-decoration:none;align-items:center;}
-.blog-item:last-child{border-bottom:none;}
-.blog-item-thumb{width:44px;height:44px;border-radius:6px;object-fit:cover;flex-shrink:0;background:var(--bg3);}
-.blog-item-content{flex:1;min-width:0;}
-.blog-item-title{font-size:11px;font-weight:600;color:var(--text);line-height:1.4;margin-bottom:2px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
-.blog-item:hover .blog-item-title{color:var(--cyan);}
-.blog-item-meta{font-family:var(--mono);font-size:9px;color:var(--text3);}
-.promo-ad{background:linear-gradient(135deg,rgba(59,180,255,.06),rgba(168,85,247,.06));border:1px solid var(--b2);border-radius:10px;padding:14px;text-align:center;}
-.promo-title{font-family:var(--hud);font-size:11px;color:var(--text);margin-bottom:4px;}
-.promo-sub{font-size:11px;color:var(--text2);margin-bottom:11px;line-height:1.5;}
-.promo-price{font-family:var(--hud);font-size:20px;color:var(--cyan);margin-bottom:2px;}
-.promo-period{font-size:9px;color:var(--text3);font-family:var(--mono);margin-bottom:11px;}
-.btn-promo{display:block;background:linear-gradient(135deg,var(--cyan),var(--purple));color:#000;padding:9px;border-radius:7px;font-size:12px;font-weight:700;text-decoration:none;text-align:center;}
-.btn-promo:hover{opacity:.88;}
-
-/* ── STATS STRIP ── */
-.stats-strip{display:flex;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none;}
-.stats-strip::-webkit-scrollbar{display:none;}
-.ss{display:flex;align-items:center;gap:5px;padding:0 13px;border-right:1px solid var(--border);font-family:var(--mono);font-size:11px;color:var(--text2);white-space:nowrap;flex-shrink:0;}
-.ss:first-child{padding-left:0;}
-.ss strong{color:var(--text);}
-.ss-up{color:var(--green);}
-.ss-dn{color:var(--red);}
-
-/* ── MOBILE ADS ── */
-.mob-ads{display:none;}
-@media(max-width:1100px){.mob-ads{display:block;margin:14px 0;}}
-.mob-ad{background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:10px;text-decoration:none;display:flex;align-items:center;gap:12px;}
-.mob-ad-bar{width:3px;align-self:stretch;flex-shrink:0;}
-.mob-ad-body{padding:10px;flex:1;}
-.mob-ad-badge{font-family:var(--mono);font-size:9px;color:var(--yellow);margin-bottom:3px;}
-.mob-ad-name{font-size:12px;font-weight:700;color:var(--text);margin-bottom:2px;}
-.mob-ad-desc{font-size:10px;color:var(--text2);}
-.mob-ad-btn{flex-shrink:0;padding:7px 12px;margin-right:10px;border-radius:6px;font-size:10px;font-weight:700;text-decoration:none;}
-
-#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--bg3);border:1px solid var(--b2);color:var(--cyan);font-family:var(--mono);font-size:12px;padding:9px 18px;border-radius:8px;z-index:9999;opacity:0;transition:opacity .2s;pointer-events:none;white-space:nowrap;}
-
-@media(max-width:768px){
-  .nav-top{padding:0 14px;}
-  .outer{padding:0 14px;}
-  .ad-showcase{padding:16px;}
-  .hero{padding:32px 14px 24px;}
-  table th:nth-child(n+8),table td:nth-child(n+8){display:none;}
-  .right-col{display:none;}
-  .hstat{padding:10px 14px;}
-}
-@media(max-width:500px){
-  table th:nth-child(n+6),table td:nth-child(n+6){display:none;}
-  .nav-link{display:none;}
-  .nav-link.act,.nav-link:last-of-type{display:flex;}
+:root {
+  --bg: #09090b;
+  --surface: #18181b;
+  --surface-2: #27272a;
+  --border: #27272a;
+  --text: #fafafa;
+  --text-muted: #a1a1aa;
+  --cyan: #06b6d4;
+  --green: #10b981;
+  --red: #ef4444;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
 }
 
-/* UNIFORM COMPACT CARDS for mobile — keep marquee animation running */
-@media(max-width:768px){
-  .mq-track{animation:mq var(--spd,60s) linear infinite!important;-webkit-animation:mq var(--spd,60s) linear infinite!important;gap:8px!important;padding:10px 12px!important}
-  .mq-track>*{flex-shrink:0!important}
-  
-  /* Spotlight scards — all same compact size but animation runs */
-  .scard,.scard.tier-premium,.scard.tier-growth,.scard.tier-starter,.scard.tier-empty,.scard.tier-featured{width:185px!important;margin:0!important;min-width:185px!important}
-  .scard .sc-body,.scard.tier-premium .sc-body,.scard.tier-growth .sc-body,.scard.tier-starter .sc-body{padding:12px!important}
-  .scard .sc-badge{font-size:8px!important;padding:2px 7px!important;margin-bottom:8px!important}
-  .scard .sc-name,.scard.tier-premium .sc-name,.scard.tier-growth .sc-name,.scard.tier-starter .sc-name{font-size:13px!important}
-  .scard .sc-desc,.scard.tier-premium .sc-desc,.scard.tier-growth .sc-desc,.scard.tier-starter .sc-desc{font-size:11px!important}
-  .scard .sc-cta{padding:6px 12px!important;font-size:11px!important}
-  .scard img{width:44px!important;height:44px!important}
-  .scard .sc-card-name{font-size:12px!important}
-  .scard .sc-card-desc{font-size:10px!important}
-  
-  /* Tool cards — wider, animation runs */
-  .tc,.tool-card{width:190px!important;min-width:190px!important;margin:0!important}
-  .tc .tc-name,.tool-card .tc-name{font-size:11px!important}
-  .tc .tc-rank{font-size:9px!important}
-  .tc .tc-pr,.tc-pricing{font-size:9px!important;padding:2px 5px!important}
-  .tc .tc-votes,.vote-btn{font-size:10px!important}
-  .tc .tc-body{padding:9px!important}
-  .tc img,.tool-card img{width:40px!important;height:40px!important}
-  .tc-thumb{padding:8px!important;height:80px!important}
-  .tc-img-wrap{height:80px!important}
-  
-  /* Tool cards in grid — 3 per row when not marquee */
-  .tools-grid{grid-template-columns:repeat(3,1fr)!important;gap:8px!important}
-  .tools-grid .tool-card{width:auto!important;min-width:0!important}
-  .tools-grid .tc-img-wrap{height:60px!important}
-  .tools-grid .tc-img-wrap img{width:32px!important;height:32px!important}
-  .tools-grid .tc-name{font-size:10px!important}
-  .tools-grid .tc-tagline{font-size:9px!important}
-  .tools-grid .tc-meta{flex-direction:column!important;gap:2px!important}
-  .tools-grid .tc-pricing,.tools-grid .tc-votes{font-size:8px!important}
-  
-  /* HOME PAGE tools grid — 3 cards per row */
-  .home-tools-grid{grid-template-columns:repeat(3,1fr)!important;gap:8px!important}
-  .home-tools-grid .ht-card{width:auto!important;min-width:0!important}
-  .home-tools-grid .ht-img-wrap{height:70px!important}
-  .home-tools-grid .ht-img{width:40px!important;height:40px!important}
-  .home-tools-grid .ht-img-fallback{font-size:30px!important}
-  .home-tools-grid .ht-body{padding:8px!important}
-  .home-tools-grid .ht-name{font-size:10px!important}
-  .home-tools-grid .ht-tagline{font-size:9px!important;-webkit-line-clamp:2!important}
-  .home-tools-grid .ht-meta{flex-wrap:wrap!important;gap:3px!important}
-  .home-tools-grid .ht-pricing{font-size:8px!important;padding:2px 5px!important}
-  .home-tools-grid .ht-votes{font-size:8px!important}
-  .home-tools-grid .ht-rank{font-size:8px!important}
-  .home-tools-grid .ht-new-badge{font-size:7px!important}
-}
-@media(max-width:480px){
-  .scard,.scard.tier-premium,.scard.tier-growth,.scard.tier-starter,.scard.tier-empty{width:160px!important;min-width:160px!important}
-  .tc,.tool-card{width:155px!important;min-width:155px!important}
-  .tools-grid{grid-template-columns:repeat(2,1fr)!important}
-  .home-tools-grid{grid-template-columns:repeat(2,1fr)!important}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
-/* BURGER MENU */
-.burger{display:none;background:none;border:none;color:var(--text);font-size:26px;cursor:pointer;padding:4px 10px;line-height:1;z-index:1001;flex-shrink:0}
-.mobile-menu{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(7,9,15,0.985);backdrop-filter:blur(20px);z-index:1002;flex-direction:column;padding:80px 24px 30px;gap:4px;overflow-y:auto}
-.mobile-menu.open{display:flex}
-.mobile-menu a{color:var(--text);text-decoration:none;font-size:20px;font-weight:600;padding:14px 8px;border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;gap:10px;font-family:var(--sans)}
-.mobile-menu a:hover{color:var(--cyan)}
-.mobile-menu .mob-close{position:absolute;top:16px;right:20px;background:none;border:none;color:var(--text3);font-size:28px;cursor:pointer;z-index:1003}
-@media(min-width:769px){.burger{display:none!important}.mobile-menu{display:none!important}.nav-right{display:flex!important}}
-@media(max-width:768px){.burger{display:block}.nav-right{display:none!important}}
+/* ── NAVIGATION ── */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(9, 9, 11, 0.8);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.logo {
+  font-weight: 800;
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  color: var(--text);
+}
+.logo-icon {
+  width: 28px;
+  height: 28px;
+  background: var(--cyan);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #000;
+  font-size: 16px;
+}
+.nav-link {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+.nav-link:hover { color: var(--text); }
 
-/* === 📱 MOBILE UI RESCUE === */
+/* ── TICKER ── */
+.ticker-wrap {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  overflow: hidden;
+  padding: 0.75rem 0;
+  position: relative;
+}
+.ticker-track {
+  display: flex;
+  width: max-content;
+  animation: ticker 40s linear infinite;
+}
+.ticker-item {
+  padding: 0 2rem;
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+@keyframes ticker {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ── HERO & CALCULATOR ── */
+.hero {
+  padding: 4rem 1.5rem;
+  background: radial-gradient(circle at 50% 0%, rgba(6, 182, 212, 0.15), transparent 50%);
+  border-bottom: 1px solid var(--border);
+}
+.hero-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: center;
+}
+@media (max-width: 900px) {
+  .hero-grid { grid-template-columns: 1fr; text-align: center; }
+  .hero-text p { margin-left: auto; margin-right: auto; }
+}
+.hero-text h1 {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.02em;
+}
+.text-cyan { color: var(--cyan); }
+.hero-text p {
+  font-size: 1.125rem;
+  color: var(--text-muted);
+  margin-bottom: 2rem;
+  max-width: 500px;
+}
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(16, 185, 129, 0.1);
+  color: var(--green);
+  padding: 0.25rem 0.75rem;
+  border-radius: 100px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  margin-bottom: 1.5rem;
+}
+.calc-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+}
+.calc-box h3 {
+  font-size: 1.25rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.calc-inputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.calc-inputs label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  text-align: left;
+}
+.calc-inputs select {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 0.75rem;
+  border-radius: 8px;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+}
+.calc-results {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+.calc-result-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--border);
+}
+.calc-result-item:last-child { border-bottom: none; }
+.calc-result-item.highlight {
+  background: rgba(16, 185, 129, 0.05);
+  margin: 0 -1.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+.calc-label { font-weight: 500; }
+.calc-value { font-family: var(--font-mono); font-weight: 700; font-size: 1.25rem; }
+.text-green { color: var(--green); }
+.text-red { color: var(--red); }
+.btn-primary {
+  display: block;
+  width: 100%;
+  text-align: center;
+  background: linear-gradient(135deg, var(--cyan), #0891b2);
+  color: #000;
+  font-weight: 600;
+  padding: 0.875rem;
+  border-radius: 8px;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.btn-primary:hover { transform: translateY(-2px); }
+
+/* ── MAIN CONTENT ── */
+.main-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem;
+}
+.controls {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+.search-box { flex: 1; min-width: 250px; position: relative; }
+.search-input {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 0.75rem 1rem 0.75rem 2.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+.search-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+}
+.tabs {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1.5rem;
+  scrollbar-width: none;
+}
+.tabs::-webkit-scrollbar { display: none; }
+.tab {
+  padding: 0.5rem 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+.tab.active {
+  background: var(--cyan);
+  color: #000;
+  border-color: var(--cyan);
+}
+
+/* ── DATA TABLE (DESKTOP) ── */
+.table-wrap {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  display: block;
+}
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+.data-table th {
+  text-align: left;
+  padding: 1rem;
+  background: var(--surface-2);
+  color: var(--text-muted);
+  font-weight: 500;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid var(--border);
+}
+.data-table td {
+  padding: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+.data-table tr:last-child td { border-bottom: none; }
+.data-table tr:hover { background: rgba(255,255,255,0.02); }
+.mono { font-family: var(--font-mono); }
+.font-bold { font-weight: 600; }
+.provider-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  background: var(--surface-2);
+  color: var(--text-muted);
+}
+.btn-sm {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--cyan);
+  text-decoration: none;
+  font-size: 0.75rem;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+.btn-sm:hover { background: var(--cyan); color: #000; border-color: var(--cyan); }
+
 @media (max-width: 768px) {
-  /* 1. Hide scrolling marquees to save screen space and CPU */
-  .mcards-wrap, .ticker-row, .spotlight-wrap, .tools-ticker, .toolcards-wrap {
-    display: none !important;
-  }
-
-  /* 2. Hide the broken table, force the Card Grid to be the default */
-  .tbl-wrap { display: none !important; }
-  .card-grid {
-    display: grid !important;
-    grid-template-columns: 1fr !important;
-    gap: 16px !important;
-  }
-
-  /* 3. Hide the Table/Grid toggle buttons since we only want cards on mobile */
-  .vt-toggle { display: none !important; }
-
-  /* 4. Make the Hero section compact and punchy */
-  .hero { padding: 24px 16px !important; }
-  .hero h1 { font-size: 28px !important; line-height: 1.2 !important; }
-  .hero-sub { font-size: 14px !important; margin-bottom: 20px !important; }
-  .hero-btns { flex-direction: column; gap: 12px !important; }
-  .btn-hp, .btn-hs, .btn-ha { width: 100%; justify-content: center; }
-
-  /* 5. Stack the Hero Stats vertically */
-  .hero-stats { flex-direction: column; }
-  .hstat { border-right: none !important; border-bottom: 1px solid var(--border); padding: 12px !important; }
-  .hstat:last-child { border-bottom: none; }
-
-  /* 6. Hide the massive Top 6 Ad grid and Ad Showcase on mobile */
-  .top6-section, .ad-showcase { display: none !important; }
+  .table-wrap { display: none; }
+  .cards-grid { display: grid !important; }
 }
 
+/* ── SMART CARDS (MOBILE) ── */
+.cards-grid {
+  display: none;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+.model-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.rank { color: var(--text-muted); font-size: 0.875rem; }
+.model-name { font-size: 1.25rem; font-weight: 700; }
+.card-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0.5rem;
+}
+.stat {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.75rem;
+  text-align: center;
+}
+.stat-label {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-bottom: 0.25rem;
+}
+.stat-value {
+  display: block;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+.btn-api {
+  display: block;
+  text-align: center;
+  background: linear-gradient(135deg, var(--cyan), #0891b2);
+  color: #000;
+  font-weight: 600;
+  padding: 0.875rem;
+  border-radius: 8px;
+  text-decoration: none;
+  margin-top: auto;
+  box-shadow: 0 4px 12px rgba(6, 182, 212, 0.2);
+}
+
+/* ── B2B PARTNERSHIP SECTION ── */
+.b2b-section {
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  padding: 4rem 1.5rem;
+  text-align: center;
+  margin-top: 3rem;
+}
+.b2b-container { max-width: 600px; margin: 0 auto; }
+.b2b-container h2 { font-size: 2rem; margin-bottom: 1rem; }
+.b2b-container p { color: var(--text-muted); margin-bottom: 2rem; font-size: 1.125rem; }
+.btn-b2b {
+  display: inline-block;
+  padding: 1rem 2rem;
+  background: var(--text);
+  color: var(--bg);
+  font-weight: 600;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: transform 0.2s;
+}
+.btn-b2b:hover { transform: translateY(-2px); }
 </style>
 </head>
 <body>
-<div id="toast"></div>
-
-<!-- ANN BAR -->
-<div class="ann">
-  <span>🐙 <strong>AI Model Ranks</strong> — Bloomberg Terminal for AI</span>
-  <span class="ann-sep">·</span>
-  <span id="ann-count">212</span> models · 8 providers
-  <span class="ann-sep">·</span>
-  <a href="https://rapidapi.com/zakmediaai/api/octopus-ai-model-intel" target="_blank">Get API →</a>
-</div>
 
 <!-- NAV -->
-<nav>
-  <div class="nav-top">
-    <button class="burger" onclick="toggleMenu()" aria-label="Menu">☰</button>
-    <a href="/" class="nav-logo">🐙 AI MODEL RANKS</a>
-    <div class="nav-sw">
-      <span class="sico">⌕</span>
-      <input class="nav-search" id="search-input" type="text" placeholder="Search 210+ AI models..." oninput="render()">
-    </div>
-    <div class="nav-right">
-      <a href="/" class="nav-link act">🏠 Home</a>
-      <a href="/compare" class="nav-link">📊 Models</a>
-      <a href="/tools" class="nav-link">🛠 Tools</a>
-      <a href="/blog" class="nav-link">📰 Blog</a>
-      <a href="https://rapidapi.com/zakmediaai/api/octopus-ai-model-intel" target="_blank" class="btn-api">Get API</a>
-    </div>
-  </div>
-  <div class="nav-tabs">
-    <button class="ntab act" onclick="setTab('all',this)">🔥 All Models</button>
-    <button class="ntab" onclick="setTab('budget',this)">💰 Budget</button>
-    <button class="ntab" onclick="setTab('vision',this)">👁 Vision</button>
-    <button class="ntab" onclick="setTab('code',this)">💻 Code</button>
-    <button class="ntab" onclick="setTab('reasoning',this)">🧠 Reasoning</button>
-    <button class="ntab" onclick="setTab('context',this)">📄 Long Context</button>
-    <button class="ntab" onclick="setTab('new',this)">🆕 New</button>
-    <button class="ntab" onclick="setTab('mistral',this)">🔥 Mistral</button>
+<nav class="nav">
+  <div class="nav-container">
+    <a href="/" class="logo">
+      <div class="logo-icon">🐙</div>
+      AI Model Ranks
+    </a>
+    <a href="mailto:partners@aimodelranks.live" class="nav-link">Partner With Us</a>
   </div>
 </nav>
 
-<!-- MOBILE MENU OVERLAY -->
-<div class="mobile-menu" id="mobile-menu">
-  <button class="mob-close" onclick="toggleMenu()">✕</button>
-  <a href="/" onclick="toggleMenu()">🏠 Home</a>
-  <a href="/compare" onclick="toggleMenu()">📊 Models</a>
-  <a href="/tools" onclick="toggleMenu()">🛠 Tools</a>
-  <a href="/blog" onclick="toggleMenu()">📰 Blog</a>
-  <a href="https://rapidapi.com/zakmediaai/api/octopus-ai-model-intel" target="_blank">⚡ Get API Key</a>
-</div>
-
-<!-- ROW 1: MODEL PRICE CARDS (marquee) -->
-<div class="mq-wrap mcards-wrap">
-  <div class="mq-track" id="mcards-track" style="--spd:55s"><!-- JS fills --></div>
-</div>
-
-<!-- ROW 2: LIVE PRICE TICKER -->
-<div class="mq-wrap ticker-row">
-  <div class="tk-label">📡 LIVE</div>
-  <div class="mq-track" style="--spd:60s;padding-left:100px">
-    <span class="tick g">🆕 Mistral Large 3 — $0.50/1M · 60% cheaper than GPT-4o output</span>
-    <span class="tick m">➡️ gemini-1.5-flash — $0.075/1M · best budget</span>
-    <span class="tick g">💰 ministral-3b — $0.04/1M · cheapest tracked</span>
-    <span class="tick y">🧠 Magistral Medium rivals o3 at 37% cheaper output</span>
-    <span class="tick m">➡️ deepseek-chat — $0.14/1M</span>
-    <span class="tick g">🆕 llama-4-scout — 10M token context</span>
-    <span class="tick m">➡️ gpt-4.1-nano — $0.10/1M</span>
-    <span class="tick g">🆕 Mistral Large 3 — $0.50/1M · 60% cheaper than GPT-4o output</span>
-    <span class="tick m">➡️ gemini-1.5-flash — $0.075/1M · best budget</span>
-    <span class="tick g">💰 ministral-3b — $0.04/1M · cheapest tracked</span>
-    <span class="tick y">🧠 Magistral Medium rivals o3 at 37% cheaper output</span>
-    <span class="tick m">➡️ deepseek-chat — $0.14/1M</span>
-    <span class="tick g">🆕 llama-4-scout — 10M token context</span>
-    <span class="tick m">➡️ gpt-4.1-nano — $0.10/1M</span>
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-track">
+    <div class="ticker-item">🟢 LIVE: Mistral Large 3 — $0.50/1M</div>
+    <div class="ticker-item">📉 gemini-1.5-flash — $0.075/1M (Best Budget)</div>
+    <div class="ticker-item">🚀 llama-4-scout — 10M token context</div>
+    <div class="ticker-item">💰 ministral-3b — $0.04/1M (Cheapest Tracked)</div>
+    <div class="ticker-item">🧠 Magistral Medium rivals o3 at 37% cheaper</div>
+    <!-- Duplicated for seamless loop -->
+    <div class="ticker-item">🟢 LIVE: Mistral Large 3 — $0.50/1M</div>
+    <div class="ticker-item">📉 gemini-1.5-flash — $0.075/1M (Best Budget)</div>
+    <div class="ticker-item">🚀 llama-4-scout — 10M token context</div>
+    <div class="ticker-item">💰 ministral-3b — $0.04/1M (Cheapest Tracked)</div>
+    <div class="ticker-item">🧠 Magistral Medium rivals o3 at 37% cheaper</div>
   </div>
-</div>
-
-<!-- ROW 3: PAID AD SPOTLIGHT CAROUSEL (premium > growth > starter) -->
-<div class="mq-wrap spotlight-wrap">
-  <div class="spot-hdr">
-    <div class="spot-hdr-l">⭐ FEATURED TOOLS <span style="background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.2);padding:2px 7px;border-radius:3px;font-size:9px">SPONSORED</span></div>
-    <div class="spot-hdr-r"><a href="/tools#advertise">Get featured here →</a></div>
-  </div>
-  <div class="mq-track" id="spot-track" style="--spd:50s;padding:12px 8px;gap:14px;display:flex"><!-- JS fills --></div>
-</div>
-
-<!-- ROW 4: AI TOOLS TICKER -->
-<div class="mq-wrap tools-ticker">
-  <div class="tl-label">🛠 AI TOOLS</div>
-  <div class="mq-track" id="tools-ticker-track" style="--spd:52s;padding-left:100px"><!-- JS fills --></div>
-</div>
-
-<!-- ROW 5: AI TOOL PRODUCT CARDS -->
-<div class="mq-wrap toolcards-wrap">
-  <div class="tool-hdr">
-    <div class="tool-hdr-l">🔥 TRENDING AI TOOLS</div>
-    <div class="tool-hdr-r"><a href="/tools">See all + submit yours →</a></div>
-  </div>
-  <div class="mq-track" id="toolcards-track" style="--spd:50s;padding:0 4px 10px"><!-- JS fills --></div>
 </div>
 
 <!-- HERO -->
-<div class="hero">
-  <div class="hero-grid"></div>
-  <div class="hero-badge"><span class="live-dot"></span> Live · 212 models · Updated every 30 min</div>
-  <h1>The <span class="hl-c">Bloomberg Terminal</span><br>for <span class="hl-g">AI Models</span></h1>
-  <p class="hero-sub">Live prices for 200+ AI models from OpenAI, Anthropic, Google, Mistral and more. Compare costs, context windows and value scores in real time.</p>
-  <div class="hero-btns">
-    <a href="/compare" class="btn-hp">📊 Compare Models →</a>
-    <a href="/tools" class="btn-hs">🛠 AI Tools Directory</a>
-    <a href="https://rapidapi.com/zakmediaai/api/octopus-ai-model-intel" target="_blank" class="btn-ha">⚡ Get API Key</a>
-  </div>
-  <div class="hero-stats">
-    <div class="hstat"><div class="hstat-num" id="h-models">212</div><div class="hstat-lbl">Models Tracked</div></div>
-    <div class="hstat"><div class="hstat-num">8</div><div class="hstat-lbl">Providers</div></div>
-    <div class="hstat"><div class="hstat-num" id="h-cheap">$0.04</div><div class="hstat-lbl">Cheapest/1M</div></div>
-    <div class="hstat"><div class="hstat-num">30m</div><div class="hstat-lbl">Update Freq</div></div>
-  </div>
-</div>
-
-<!-- TOP 6 PAID SLOTS -->
-<div class="top6-section">
-  <div class="top6-hdr">
-    <div class="top6-title">⭐ SPOTLIGHT SLOTS <span style="font-family:var(--mono);font-size:9px;color:var(--text3);font-weight:400">— priority positions 1–6</span></div>
-    <div class="top6-sub"><a href="/tools#advertise" style="color:var(--purple);text-decoration:none;font-family:var(--mono);font-size:10px">Buy a slot from $9 →</a></div>
-  </div>
-  <div class="top6-grid" id="home-top6-grid"></div>
-</div>
-
-<!-- AD TIER SHOWCASE (always visible — shows paid first, empty slots with buy CTA) -->
-<div class="ad-showcase">
-  <div class="outer">
-    <div class="ashow-hdr">
-      <div class="ashow-title">📣 Featured Spots <span style="font-family:var(--mono);font-size:9px;background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.15);padding:2px 7px;border-radius:3px;color:var(--yellow);">SPONSORED</span></div>
-      <div class="ashow-sub">Reach 10K+ AI developers daily · <a href="/tools#advertise">Buy a spot →</a></div>
+<section class="hero">
+  <div class="hero-grid">
+    <div class="hero-text">
+      <div class="badge">🟢 Live Data · Updated every 30m</div>
+      <h1>The <span class="text-cyan">Bloomberg Terminal</span><br>for AI Models</h1>
+      <p>Track real-time pricing, context windows, and ROI across 210+ LLMs. Stop overpaying for AI infrastructure.</p>
     </div>
-    <div class="tier-row" id="ad-showcase-grid"><!-- JS fills --></div>
-  </div>
-</div>
-
-<!-- AI TOOLS GRID -->
-<div class="tools-section outer">
-  <div class="ts-hdr">
-    <div class="ts-title">🛠 AI Tools & Products</div>
-    <a href="/tools" class="ts-link">View all tools →</a>
-  </div>
-  <div class="cat-pills" id="home-cat-pills">
-    <span class="cat-pill active" onclick="homeSetCat('all',this)">🔥 All</span>
-    <span class="cat-pill" onclick="homeSetCat('image',this)">🎨 Image</span>
-    <span class="cat-pill" onclick="homeSetCat('video',this)">🎬 Video</span>
-    <span class="cat-pill" onclick="homeSetCat('coding',this)">💻 Code</span>
-    <span class="cat-pill" onclick="homeSetCat('chat',this)">💬 Chat</span>
-    <span class="cat-pill" onclick="homeSetCat('audio',this)">🎵 Audio</span>
-    <span class="cat-pill" onclick="homeSetCat('writing',this)">✍️ Writing</span>
-    <span class="cat-pill" onclick="homeSetCat('research',this)">🔬 Research</span>
-    <span class="cat-pill" onclick="homeSetCat('new',this)">🆕 New</span>
-  </div>
-  <div class="ts-toolbar">
-    <div class="ts-count" id="home-tools-count">Loading...</div>
-    <div class="ts-sort">
-      <select onchange="homeSetSort(this.value)">
-        <option value="votes">Most Voted</option>
-        <option value="new">Newest</option>
-        <option value="name">Name A–Z</option>
-      </select>
+    
+    <div class="calc-box">
+      <h3>⚡ AI ROI Calculator</h3>
+      <div class="calc-inputs">
+        <label>Monthly Tokens
+          <select id="calc-tokens">
+            <option value="1000000">1 Million</option>
+            <option value="10000000" selected>10 Million</option>
+            <option value="100000000">100 Million</option>
+          </select>
+        </label>
+        <label>Primary Task
+          <select id="calc-task">
+            <option value="chat">General Chat</option>
+            <option value="code">Coding</option>
+            <option value="reasoning">Complex Reasoning</option>
+          </select>
+        </label>
+      </div>
+      <div class="calc-results">
+        <div class="calc-result-item">
+          <span class="calc-label">GPT-4o</span>
+          <span class="calc-value text-red" id="res-gpt">$50.00</span>
+        </div>
+        <div class="calc-result-item highlight">
+          <span class="calc-label">Llama 3 (Groq)</span>
+          <span class="calc-value text-green" id="res-llama">$0.50</span>
+        </div>
+      </div>
+      <button class="btn-primary" onclick="scrollToModels()">Find My Best Model →</button>
     </div>
   </div>
-  <div class="home-tools-grid" id="home-tools-grid"></div>
-</div>
+</section>
 
-<!-- MAIN PAGE GRID -->
-<div class="outer">
-  <div class="stats-strip">
-    <div class="ss">Models: <strong id="ss-cnt">—</strong></div>
-    <div class="ss">Providers: <strong id="ss-pvs">—</strong></div>
-    <div class="ss">Cheapest: <strong class="ss-up" id="ss-cheap">—</strong></div>
-    <div class="ss">Most expensive: <strong class="ss-dn" id="ss-exp">—</strong></div>
-    <div class="ss">Avg: <strong id="ss-avg">—</strong></div>
-    <div class="ss">Best value: <strong class="ss-up" id="ss-val">—</strong></div>
-    <div class="ss">Updated: <strong id="ss-upd">—</strong></div>
-  </div>
-
-  <!-- MOBILE ADS -->
-  <div class="mob-ads" id="mob-ads"></div>
-
-  <div class="page-grid">
-    <!-- LEFT: TABLE -->
-    <div>
-      <div class="sec-hdr">
-        <div class="sec-title"><span class="live-dot"></span> AI Model Price Rankings</div>
-        <a href="/compare" class="sec-lnk">Full compare →</a>
-      </div>
-      <div class="prov-pills">
-        <button class="ppill act" onclick="setProv('',this)">All</button>
-        <button class="ppill" onclick="setProv('openai',this)">OpenAI</button>
-        <button class="ppill" onclick="setProv('anthropic',this)">Anthropic</button>
-        <button class="ppill" onclick="setProv('google',this)">Google</button>
-        <button class="ppill" onclick="setProv('mistral',this)">Mistral 🔥</button>
-        <button class="ppill" onclick="setProv('meta',this)">Meta</button>
-        <button class="ppill" onclick="setProv('deepseek',this)">DeepSeek</button>
-        <button class="ppill" onclick="setProv('xai',this)">xAI</button>
-        <button class="ppill" onclick="setProv('cohere',this)">Cohere</button>
-      </div>
-      <div class="ctrl-row">
-        <select class="dd" onchange="setSort(this.value)">
-          <option value="cheap">Cheapest first</option>
-          <option value="exp">Most expensive</option>
-          <option value="context">Most context</option>
-          <option value="value">Best value</option>
-          <option value="name">A–Z</option>
-        </select>
-        <div style="display:flex;align-items:center;gap:7px">
-          <span style="font-family:var(--mono);font-size:11px;color:var(--text3)" id="result-info"></span>
-          <div class="vt-toggle">
-            <button class="vtb act" id="vb-tbl" onclick="setView('table')">☰</button>
-            <button class="vtb" id="vb-grid" onclick="setView('grid')">⊞</button>
-          </div>
-        </div>
-      </div>
-      <div class="cmp-bar" id="cmp-bar">
-        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
-          <span style="font-family:var(--mono);font-size:11px;color:var(--text2)">Compare:</span>
-          <div class="chips" id="chips"></div>
-        </div>
-        <div style="display:flex;gap:5px">
-          <button class="btn-cmp" onclick="doCompare()">⚡ Compare</button>
-          <button class="btn-clr" onclick="clearAll()">Clear</button>
-        </div>
-      </div>
-      <div class="cmp-panel" id="cmp-panel">
-        <div class="cmp-title">⚡ SIDE-BY-SIDE COMPARISON</div>
-        <div class="cmp-sub" id="cmp-sub"></div>
-        <div class="cmp-cols" id="cmp-cols"></div>
-        <div class="cmp-pills" id="cmp-pills"></div>
-      </div>
-      <div class="tbl-wrap" id="tbl-wrap">
-        <table>
-          <thead><tr>
-            <th class="td-s"></th><th onclick="setSort('rank')" class="sorted">#</th>
-            <th onclick="setSort('name')">Model</th><th>Provider</th>
-            <th onclick="setSort('cheap')">Input $/1M</th><th onclick="setSort('exp')">Output $/1M</th>
-            <th onclick="setSort('context')">Context</th><th onclick="setSort('value')">Score</th>
-            <th>7d</th><th>Chart</th><th>Tags</th>
-          </tr></thead>
-          <tbody id="tbl-body"><tr><td colspan="11" class="ld"><span class="spin"></span>Loading 210+ AI models...</td></tr></tbody>
-        </table>
-      </div>
-      <div class="card-grid" id="card-grid"></div>
-    </div>
-
-    <!-- RIGHT SIDEBAR -->
-    <div class="right-col">
-      <div class="sb-card">
-        <div class="sb-hdr">
-          <div class="sb-title">🏆 Today's Winners</div>
-          <span style="font-family:var(--mono);font-size:9px;color:var(--text3)" id="today-date"></span>
-        </div>
-        <div class="sb-body">
-          <div class="wi"><div class="wi-ico">💰</div><div class="wi-inf"><div class="wi-lbl">Cheapest Input</div><div class="wi-model" id="w-cheap-m">Loading...</div></div><div class="wi-val cheap" id="w-cheap-v">—</div></div>
-          <div class="wi"><div class="wi-ico">💎</div><div class="wi-inf"><div class="wi-lbl">Most Premium</div><div class="wi-model" id="w-exp-m">—</div></div><div class="wi-val exp" id="w-exp-v">—</div></div>
-          <div class="wi"><div class="wi-ico">⭐</div><div class="wi-inf"><div class="wi-lbl">Best Value</div><div class="wi-model" id="w-val-m">—</div></div><div class="wi-val val" id="w-val-v">—</div></div>
-          <div class="wi"><div class="wi-ico">📄</div><div class="wi-inf"><div class="wi-lbl">Largest Context</div><div class="wi-model" id="w-ctx-m">—</div></div><div class="wi-val ctx" id="w-ctx-v">—</div></div>
-          <button class="twitter-btn" onclick="copyTwitter()">🐦 Copy Today's Twitter Post</button>
-        </div>
-      </div>
-
-      <!-- Sidebar live ads (from worker) -->
-      <div id="sidebar-ads"></div>
-
-      <!-- Trending AI tools in sidebar -->
-      <div class="sb-card">
-        <div class="sb-hdr">
-          <div class="sb-title">🛠 Trending AI Tools</div>
-          <a href="/tools" class="sb-link">See all →</a>
-        </div>
-        <div class="sb-body" id="sb-trending-tools"><!-- JS fills --></div>
-      </div>
-
-      <!-- Latest Blog (dynamic via blog-module.js) -->
-      <div class="sb-card">
-        <div class="sb-hdr">
-          <div class="sb-title">📰 Latest Blog</div>
-          <a href="/blog" class="sb-link">Read all →</a>
-        </div>
-        <div class="sb-body" id="latest-blog">
-          <div style="padding:12px 0;text-align:center;color:var(--text3);font-family:var(--mono);font-size:11px">Loading articles…</div>
-        </div>
-      </div>
-
-      <!-- Advertise CTA -->
-      <div class="promo-ad">
-        <div class="promo-title">📣 Advertise Here</div>
-        <div class="promo-sub">Put your AI tool in front of 10K+ developers comparing AI products daily.</div>
-        <div class="promo-price">from $9</div>
-        <div class="promo-period">7 days · auto-expires · no account needed</div>
-        <a href="/tools#advertise" class="btn-promo">Get Featured →</a>
-      </div>
+<!-- MAIN CONTENT -->
+<main class="main-container" id="models-section">
+  <div class="controls">
+    <div class="search-box">
+      <span class="search-icon">⌕</span>
+      <input type="text" id="search-input" class="search-input" placeholder="Search 210+ AI models...">
     </div>
   </div>
-</div>
+  
+  <div class="tabs">
+    <div class="tab active" data-tab="all">🔥 All Models</div>
+    <div class="tab" data-tab="budget">💰 Budget</div>
+    <div class="tab" data-tab="vision">👁 Vision</div>
+    <div class="tab" data-tab="code">💻 Code</div>
+    <div class="tab" data-tab="reasoning">🧠 Reasoning</div>
+  </div>
+
+  <div class="table-wrap" id="table-container"></div>
+  <div class="cards-grid" id="cards-container"></div>
+</main>
+
+<!-- B2B PARTNERSHIP -->
+<section class="b2b-section">
+  <div class="b2b-container">
+    <h2>🚀 AI Infrastructure Providers</h2>
+    <p>Reach 10,000+ AI engineers daily. Native integrations, category sponsorships, and API routing partnerships.</p>
+    <a href="mailto:partners@aimodelranks.live?subject=Partnership%20Inquiry" class="btn-b2b">Become a Partner →</a>
+  </div>
+</section>
 
 <script>
+const API = 'https://ai-model-intel.zak-media-ai.workers.dev';
+let allModels = [];
+let filteredModels = [];
 
-// ── CONFIG ────────────────────────────────────────────────────────
-const API      = 'https://ai-model-intel.zak-media-ai.workers.dev';
-const SITE_URL = 'https://www.aimodelranks.live/';
-const CHECKOUT = window.OCTOPUS_CONFIG ? {
-  premium: window.OCTOPUS_CONFIG.DODO.premium,
-  growth: window.OCTOPUS_CONFIG.DODO.growth,
-  starter: window.OCTOPUS_CONFIG.DODO.starter,
-} : {
-  premium: 'mailto:partners@aimodelranks.live?subject=Premium%20Sponsorship',
-  growth:  'mailto:partners@aimodelranks.live?subject=Growth%20Sponsorship',
-  starter: 'mailto:partners@aimodelranks.live?subject=Starter%20Sponsorship',
-};
+const searchInput = document.getElementById('search-input');
+const tabs = document.querySelectorAll('.tab');
+const tableContainer = document.getElementById('table-container');
+const cardsContainer = document.getElementById('cards-container');
+const calcTokens = document.getElementById('calc-tokens');
+const calcTask = document.getElementById('calc-task');
+const resGpt = document.getElementById('res-gpt');
+const resLlama = document.getElementById('res-llama');
 
-// ── STATIC TOOL DATA ──────────────────────────────────────────────
-const TOOLS_DATA=[
-  {id:1,name:'Midjourney',emoji:'🎨',cat:'image',pricing:'paid',tagline:'AI image generation',votes:2847,url:'https://midjourney.com',featured:false},
-  {id:2,name:'ChatGPT',emoji:'💬',cat:'chat',pricing:'freemium',tagline:"OpenAI conversational AI",votes:5230,url:'https://chat.openai.com',featured:false},
-  {id:3,name:'Cursor',emoji:'💻',cat:'coding',pricing:'freemium',tagline:'AI code editor',votes:1923,url:'https://cursor.sh',featured:false},
-  {id:4,name:'Runway Gen-4',emoji:'🎬',cat:'video',pricing:'freemium',tagline:'AI video generation',votes:1432,url:'https://runwayml.com',featured:false},
-  {id:5,name:'Gemini',emoji:'✨',cat:'chat',pricing:'freemium',tagline:"Google 1M context AI",votes:1287,url:'https://gemini.google.com',featured:false},
-  {id:6,name:'GitHub Copilot',emoji:'🐙',cat:'coding',pricing:'paid',tagline:'AI pair programmer',votes:3102,url:'https://github.com/features/copilot',featured:false},
-  {id:7,name:'ElevenLabs',emoji:'🎵',cat:'audio',pricing:'freemium',tagline:'AI voice cloning',votes:1876,url:'https://elevenlabs.io',featured:false},
-  {id:8,name:'Perplexity AI',emoji:'🔬',cat:'research',pricing:'freemium',tagline:'AI search engine',votes:2341,url:'https://perplexity.ai',featured:false},
-  {id:9,name:'Sora',emoji:'🎥',cat:'video',pricing:'freemium',tagline:'OpenAI text-to-video',votes:2109,url:'https://openai.com/sora',featured:false},
-  {id:10,name:'Mistral Chat',emoji:'🔥',cat:'chat',pricing:'free',tagline:'Mistral open models',votes:654,url:'https://chat.mistral.ai',featured:false},
-  {id:11,name:'DeepSeek Chat',emoji:'🔍',cat:'chat',pricing:'free',tagline:'Ultra-cheap AI chat',votes:1876,url:'https://chat.deepseek.com',featured:false},
-  {id:12,name:'Devin AI',emoji:'🤖',cat:'coding',pricing:'paid',tagline:'Autonomous AI engineer',votes:1432,url:'https://devin.ai',featured:false},
-];
-const catBgs={image:'cat-image',video:'cat-video',coding:'cat-coding',writing:'cat-writing',chat:'cat-chat',audio:'cat-audio',research:'cat-research'};
-
-// ── MODEL STATE ───────────────────────────────────────────────────
-let allModels=[],sel=new Set(),view='table',srt='cheap',prov='',tab='all',dir=1,twitterText='';
-
-// ── HELPERS ───────────────────────────────────────────────────────
-const PC={openai:{bg:'rgba(16,163,127,.12)',c:'#0d9e6e',l:'G'},anthropic:{bg:'rgba(200,96,48,.12)',c:'#d05030',l:'A'},google:{bg:'rgba(66,133,244,.12)',c:'#4285f4',l:'G'},mistral:{bg:'rgba(255,107,0,.12)',c:'#ff6b00',l:'M'},xai:{bg:'rgba(160,160,160,.08)',c:'#aaa',l:'X'},meta:{bg:'rgba(24,119,242,.12)',c:'#1877f2',l:'L'},deepseek:{bg:'rgba(120,120,255,.12)',c:'#9090ff',l:'D'},cohere:{bg:'rgba(255,200,0,.08)',c:'#eeb800',l:'C'}};
-const pc=p=>PC[p]||{bg:'rgba(100,100,100,.1)',c:'#888',l:'?'};
-const fmtC=n=>(!n||n===0)?'<span style="color:var(--green)">Free</span>':'$'+n;
-const fmtCtx=n=>{if(!n)return'—';if(n>=1e7)return(n/1e6).toFixed(0)+'M';if(n>=1e6)return(n/1e6).toFixed(1)+'M';if(n>=1e3)return Math.round(n/1e3)+'K';return n;};
-const cc=n=>(!n||n<=0.2)?'cheap':n<=2?'mid':'exp';
-const tier=n=>(!n||n<=0.2)?['Budget','tp-b']:n<=2?['Mid','tp-m']:['Premium','tp-p'];
-const vs=m=>{const c=1/((m.input_cost_per_mtok||0.01)+0.01),x=Math.log10((m.context_window||4096)/1000+1);return Math.round((c*.6+x*.4)*1000)/1000;};
-const isNew=m=>m.release_date&&(Date.now()-new Date(m.release_date).getTime())<90*86400000;
-const isReason=m=>/magistral|reasoner|o1|o3|thinking|r1/.test((m.model||'').toLowerCase());
-const isCode=m=>/codestral|devstral/.test((m.model||'').toLowerCase());
-function seed(s){let h=0;for(let i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h|=0;}return Math.abs(h);}
-const capTags=m=>{let t='';if(m.supports_vision)t+='<span class="ct ct-v">Vision</span>';if(isReason(m))t+='<span class="ct ct-r">Reason</span>';if(isCode(m))t+='<span class="ct ct-c">Code</span>';if(isNew(m))t+='<span class="ct ct-n">New</span>';return t||'<span style="color:var(--text3);font-size:10px">—</span>';};
-function miniSVG(name,col){const s=seed(name),pts=[];let h=s%60+20;for(let i=0;i<8;i++){h=Math.abs((h*1103515245+12345)&0x7fff)%55+12;pts.push(h);}const mn=Math.min(...pts),mx=Math.max(...pts),rng=mx-mn||1,W=64,H=24;const ps=pts.map((v,i)=>`${(i/(pts.length-1))*W},${H-((v-mn)/rng)*(H-6)-3}`).join(' ');return`<svg class="msp" viewBox="0 0 ${W} ${H}"><polyline points="${ps}" fill="none" stroke="${col}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`;}
-
-// ── MARQUEE BUILDER — duplicates content for seamless loop ────────
-function buildMarquee(trackEl, items) {
-  trackEl.innerHTML = items + items; // double for infinite loop, no gaps
+async function init() {
+    await fetchModels();
+    setupEventListeners();
+    updateCalc();
 }
 
-// ── ROW 1: MODEL PRICE CARDS ──────────────────────────────────────
-function buildModelCards(m) {
-  if (!m.length) return;
-  const sorted=[...m].sort((a,b)=>a.input_cost_per_mtok-b.input_cost_per_mtok);
-  const bv=[...m].sort((a,b)=>vs(b)-vs(a))[0];
-  const bigCtx=[...m].sort((a,b)=>(b.context_window||0)-(a.context_window||0))[0];
-  const avg=m.reduce((s,x)=>s+(x.input_cost_per_mtok||0),0)/m.length;
-  const cards=[
-    {l:'💰 Cheapest Today',v:(sorted[0]?.model||'—').slice(0,16),s:'$'+(sorted[0]?.input_cost_per_mtok||0)+'/1M',c:'dn'},
-    {l:'📊 Models Tracked',v:m.length+'+',s:[...new Set(m.map(x=>x.provider))].length+' providers',c:'nt'},
-    {l:'⭐ Best Value',v:(bv?.model||'—').slice(0,16),s:'Score '+vs(bv||m[0]).toFixed(1),c:'dn'},
-    {l:'📄 Largest Context',v:fmtCtx(bigCtx?.context_window||0),s:(bigCtx?.model||'').slice(0,16),c:'nt'},
-    {l:'💎 Most Premium',v:(sorted[sorted.length-1]?.model||'—').slice(0,16),s:'$'+(sorted[sorted.length-1]?.input_cost_per_mtok||0)+'/1M',c:'up'},
-    {l:'📈 Avg Input Price',v:'$'+avg.toFixed(3),s:'per 1M tokens',c:'nt'},
-    {l:'🔥 Mistral Trending',v:'Mistral Large 3',s:'$0.50/1M · new',c:'dn'},
-    {l:'🆕 Biggest Context',v:'llama-4-scout',s:'10M tokens',c:'nt'},
-  ];
-  const html=cards.map(card=>`<div class="mc"><div class="mc-lbl">${card.l}</div><div class="mc-val">${card.v}</div><div class="mc-sub ${card.c}">${card.s}</div></div>`).join('');
-  buildMarquee(document.getElementById('mcards-track'), html);
-  document.getElementById('h-models').textContent=m.length+'+';
-  document.getElementById('h-cheap').textContent='$'+(sorted[0]?.input_cost_per_mtok||0);
-  document.getElementById('ann-count').textContent=m.length+'+';
-}
-
-// ── ROW 3: SPOTLIGHT CAROUSEL ─────────────────────────────────────
-function buildSpotlight() {
-  // Use ToolsDB pipeline for paid tools (tier-based priority)
-  const paidTools = window.ToolsDB ? ToolsDB.paidSpots() : [];
-  let html=paidTools.map(t=>{
-    const href = window.buildRefURL ? buildRefURL(t) : t.url + ((t.url||'').includes('?')?'&':'?') + 'ref=aimodelranks';
-    const tierColors = {premium:'linear-gradient(135deg,var(--yellow),var(--orange))',growth:'linear-gradient(135deg,var(--purple),var(--cyan))',starter:'var(--cyan)'};
-    const tierBadges = {premium:'👑 PREMIUM',growth:'✦ GROWTH',starter:'⭐ STARTER'};
-    const tier = t.tier || 'starter';
-    return`<a href="${href}" target="_blank" rel="noopener" class="scard tier-${tier}">
-      <div class="sc-body">
-        <div class="sc-badge" style="${tier==='premium'?'background:linear-gradient(135deg,var(--yellow),var(--orange));color:#000':''}">${tierBadges[tier]||'⭐ FEATURED'}</div>
-        ${t.image?`<img src="${t.image}" width="52" height="52" style="object-fit:contain;border-radius:12px;margin-bottom:12px;background:rgba(255,255,255,0.03);display:block;padding:6px" onerror="this.style.display='none'" loading="lazy">`:''}
-        <div class="sc-name">${t.emoji||''} ${t.name}</div>
-        <div class="sc-desc">${(t.tagline||t.desc||'').slice(0,28)}</div>
-        <span class="sc-cta" style="background:${tier==='premium'?'linear-gradient(135deg,var(--yellow),var(--orange))':tier==='growth'?'var(--purple)':'var(--cyan)'};color:${tier==='premium'||tier==='growth'?'#fff':'#000'}">Visit →</span>
-      </div>
-    </a>`;
-  }).join('');
-
-  // Fill with featured tools from ToolsDB if not enough paid ads
-  const tools = window.ToolsDB ? ToolsDB.load().filter(t => t.featured && t.approved !== false).slice(0,8) : [];
-  tools.forEach(t => {
-    const tHref = window.buildRefURL ? buildRefURL(t) : t.url + (t.url.includes('?')?'&':'?') + 'ref=aimodelranks';
-    html+=`<a href="${tHref}" target="_blank" rel="noopener" class="scard tier-featured">
-      <div class="sc-body">
-        <div class="sc-badge" style="color:var(--green);border-color:rgba(0,217,126,0.2)">FEATURED TOOL</div>
-        <img src="${t.image||''}" width="52" height="52" style="object-fit:contain;border-radius:12px;margin-bottom:12px;background:rgba(255,255,255,0.03);display:block;padding:6px" onerror="this.style.display="none"" loading="lazy">
-        <div class="sc-name">${t.name}</div>
-        <div class="sc-desc">${(t.tagline||"").slice(0,28)}</div>
-        <span class="sc-cta" style="background:linear-gradient(135deg,var(--green),#00b86e);color:#000;box-shadow:0 2px 10px rgba(0,217,126,0.25)">Try It →</span>
-      </div>
-    </a>`;
-  });
-
-  // Fill remaining with empty buy slots
-  const empties=[
-    {tier:'premium',price:'$99/30d',label:'⭐ Premium Spot',feats:'#1 placement · All pages · Immediate'},
-    {tier:'growth', price:'$49/30d', label:'✦ Growth Spot', feats:'Slots 2-3 · Spotlight · Priority'},
-    {tier:'starter',price:'$9/7d',  label:'• Starter Spot', feats:'Slots 4-6 · Featured badge · 7 days'},
-  ];
-  const totalEntries = paid.length + tools.length;
-  for(let i=0;i<Math.max(0,8-totalEntries);i++){
-    const e=empties[i%3];
-    html+=`<a href="${CHECKOUT[e.tier]}" target="_blank" rel="noopener" class="scard tier-empty">
-      <div class="sc-body">
-        <div class="sc-empty-ico">📣</div>
-        <div class="sc-empty-txt">${e.label}<br>${e.feats}</div>
-        <div class="sc-empty-price">${e.price}</div>
-      </div>
-    </a>`;
-  }
-  buildMarquee(document.getElementById('spot-track'), html);
-}
-
-// ── ROW 4: TOOLS TICKER ───────────────────────────────────────────
-function buildToolsTicker(tools) {
-  const items=tools.map(t=>`<span class="ttick"><img src="${t.image||''}" width="20" height="20" style="border-radius:3px;object-fit:contain;vertical-align:middle;background:#1a1a2e;margin-right:5px;display:none" onload="this.style.display='inline-block'" onerror="this.style.display='none'" loading="lazy"><span style="${t.image?'display:none;':'display:inline;'}margin-right:5px">${t.emoji}</span>${t.name} ▲${t.votes.toLocaleString()}</span>`);
-  buildMarquee(document.getElementById('tools-ticker-track'), [...items,...items].join(''));
-}
-
-// ── ROW 5: TOOL PRODUCT CARDS ─────────────────────────────────────
-function buildToolCards() {
-  // Use pipeline for tier-priority ordering
-  const tools = window.ToolsDB ? ToolsDB.pipeline().filter(t => t.approved !== false) : TOOLS_DATA;
-  const toolCards=tools.map((t,i)=>{
-    const href = window.buildRefURL ? buildRefURL(t) : t.url + (t.url.includes('?')?'&':'?') + 'ref=aimodelranks';
-    return`
-    <a href="${href}" target="_blank" rel="noopener" class="tc">
-      <div class="tc-thumb ${catBgs[t.cat]||'cat-chat'}" style="display:flex;align-items:center;justify-content:center;gap:6px">
-        <span class="tc-rank">#${i+1}</span>
-        ${t.image?`<img src="${t.image}" alt="${t.name}" style="width:50px;height:50px;object-fit:contain;border-radius:8px;background:rgba(0,0,0,0.2)" onerror="this.style.display='none';this.nextSibling.style.display='block'" /><span style="display:none;font-size:32px;line-height:1">${t.emoji}</span>`:`<span style="font-size:32px;line-height:1">${t.emoji}</span>`}</div>
-      <div class="tc-body">
-        <div class="tc-name">${t.name}</div>
-        <div class="tc-cat">${t.cat} AI</div>
-        <div class="tc-footer">
-          <span class="tc-pr ${t.pricing==='free'?'pr-free':t.pricing==='freemium'?'pr-freemium':'pr-paid'}">${t.pricing==='free'?'Free':t.pricing==='freemium'?'Freemium':'Paid'}</span>
-          <span class="tc-votes">▲${t.votes.toLocaleString()}</span>
-        </div>
-      </div>
-    </a>`;
-  }).join('');
-
-  buildMarquee(document.getElementById('toolcards-track'), toolCards);
-}
-
-// ── AD SHOWCASE (3-column tier grid) — uses AdsManager ────────
-function buildAdShowcase() {
-  const grid=document.getElementById('ad-showcase-grid');
-  if(!grid) return;
-  const slots = (window.AdsManager ? AdsManager.load().filter(a => a.plan && a.plan !== 'default') : []);
-  const premium = slots.find(a => a.plan === 'premium');
-  const growth = slots.find(a => a.plan === 'growth');
-  const starter = slots.find(a => a.plan === 'starter');
-
-  function adCard(a, tier){
-    const colors={premium:'linear-gradient(90deg,var(--yellow),var(--orange))',growth:'linear-gradient(90deg,var(--purple),var(--cyan))',starter:'var(--cyan)'};
-    const labels={premium:'⭐ PREMIUM · $99/30 days',growth:'✦ GROWTH · $49/30 days',starter:'• STARTER · $9/7 days'};
-    const ctaBg={premium:'linear-gradient(135deg,var(--yellow),var(--orange))',growth:'var(--purple)',starter:'var(--cyan)'};
-    return`<a href="${a.url}?ref=aimodelranks" target="_blank" rel="noopener" class="adshow-card ${tier}">
-      <div class="ac-bar" style="background:${colors[tier]}"></div>
-      <div class="ac-body">
-        <div class="ac-label">${labels[tier]}</div>
-        <div class="ac-name">${a.emoji||'⭐'} ${a.name}</div>
-        <div class="ac-desc">${a.desc}</div>
-        <span class="ac-cta" style="background:${ctaBg[tier]};color:${tier==='premium'?'#000':'#fff'}">Visit Site →</span>
-      </div>
-    </a>`;
-  }
-
-  function emptyCard(tier){
-    const config={
-      premium:{price:'$99',period:'/30 days',label:'⭐ Premium Spot',color:'var(--yellow)',feats:'Homepage hero placement\nTop of ALL pages\nImmediate review (<2h)\nNewsletter mention',co:CHECKOUT.premium},
-      growth:{price:'$49',period:'/30 days',label:'✦ Growth Spot',color:'var(--purple)',feats:'Spotlight carousel\nSidebar on all pages\nTicker mention\nPriority placement',co:CHECKOUT.growth},
-      starter:{price:'$9',period:'/7 days',label:'• Starter Spot',color:'var(--cyan)',feats:'Featured badge\nCategory placement\nTicker mention\n24h review',co:CHECKOUT.starter},
-    }[tier];
-    return`<div class="adshow-card empty" onclick="window.open('${config.co}','_blank')">
-      <div class="ac-bar"></div>
-      <div class="ac-body">
-        <div class="empty-ico">📣</div>
-        <div class="ac-label" style="color:${config.color};justify-content:center">${config.label}</div>
-        <div class="empty-price" style="color:${config.color}">${config.price}<span style="font-size:13px;color:var(--text3);font-family:var(--mono)">${config.period}</span></div>
-        <div class="empty-feats">${config.feats.split('\n').map(f=>'✓ '+f).join('<br>')}</div>
-        <span class="empty-btn" style="background:${config.color};color:#000">Buy This Spot →</span>
-      </div>
-    </div>`;
-  }
-
-  grid.innerHTML=(premium?adCard(premium,'premium'):emptyCard('premium'))+
-                 (growth?adCard(growth,'growth'):emptyCard('growth'))+
-                 (starter?adCard(starter,'starter'):emptyCard('starter'));
-}
-
-// ── SIDEBAR ADS — uses AdsManager ────────────────────────────────
-function buildSidebarAds() {
-  const sidebar=document.getElementById('sidebar-ads');
-  const mobAds=document.getElementById('mob-ads');
-  if(!sidebar) return;
-  const ads = window.AdsManager ? AdsManager.sidebar() : [];
-  const sorted = ads.slice(0,3);
-  sidebar.innerHTML=sorted.map(a=>`
-    <a href="${a.url}?ref=aimodelranks" target="_blank" rel="noopener" class="sb-ad">
-      <div class="sb-ad-bar" style="background:${a.color||'#a855f7'}"></div>
-      <div class="sb-ad-body">
-        <div class="sb-ad-badge">SPONSORED</div>
-        <div class="sb-ad-name">${a.name}</div>
-        <div class="sb-ad-desc">${a.tagline||a.desc}</div>
-        <span class="sb-ad-btn" style="background:${a.color||'#a855f7'};color:#fff">Visit ${a.name} →</span>
-      </div>
-    </a>`).join('<div style="height:10px"></div>');
-  if(mobAds) mobAds.innerHTML=sorted.slice(0,2).map(a=>`
-    <a href="${a.url}?ref=aimodelranks" target="_blank" rel="noopener" class="mob-ad">
-      <div class="mob-ad-bar" style="background:${a.color||'#a855f7'}"></div>
-      <div class="mob-ad-body">
-        <div class="mob-ad-badge">SPONSORED</div>
-        <div class="mob-ad-name">${a.name}</div>
-        <div class="mob-ad-desc">${(a.tagline||a.desc||'').slice(0,60)}</div>
-      </div>
-      <span class="mob-ad-btn" style="background:${a.color||'#a855f7'};color:#fff">→</span>
-    </a>`).join('');
-}
-
-// ── STATS / WINNERS ───────────────────────────────────────────────
-function updateStats(m){
-  if(!m.length)return;
-  const sorted=[...m].sort((a,b)=>a.input_cost_per_mtok-b.input_cost_per_mtok);
-  const avg=m.reduce((s,x)=>s+(x.input_cost_per_mtok||0),0)/m.length;
-  const bv=[...m].sort((a,b)=>vs(b)-vs(a))[0];
-  document.getElementById('ss-cnt').textContent=m.length;
-  document.getElementById('ss-pvs').textContent=[...new Set(m.map(x=>x.provider))].length;
-  document.getElementById('ss-cheap').textContent=(sorted[0]?.model||'').slice(0,15)+' $'+(sorted[0]?.input_cost_per_mtok||0)+'/1M';
-  document.getElementById('ss-exp').textContent=(sorted[sorted.length-1]?.model||'').slice(0,15)+' $'+(sorted[sorted.length-1]?.input_cost_per_mtok||0)+'/1M';
-  document.getElementById('ss-avg').textContent='$'+avg.toFixed(3)+'/1M';
-  document.getElementById('ss-val').textContent=(bv?.model||'').slice(0,15);
-  document.getElementById('ss-upd').textContent=new Date().toLocaleTimeString();
-}
-
-function updateWinners(m){
-  if(!m.length)return;
-  const sorted=[...m].sort((a,b)=>a.input_cost_per_mtok-b.input_cost_per_mtok);
-  const cheap=sorted[0],expn=sorted[sorted.length-1];
-  const bv=[...m].sort((a,b)=>vs(b)-vs(a))[0];
-  const bigCtx=[...m].sort((a,b)=>(b.context_window||0)-(a.context_window||0))[0];
-  const today=new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
-  document.getElementById('today-date').textContent=today;
-  document.getElementById('w-cheap-m').textContent=cheap?.model||'—';
-  document.getElementById('w-cheap-v').textContent='$'+(cheap?.input_cost_per_mtok||0)+'/1M';
-  document.getElementById('w-exp-m').textContent=expn?.model||'—';
-  document.getElementById('w-exp-v').textContent='$'+(expn?.input_cost_per_mtok||0)+'/1M';
-  document.getElementById('w-val-m').textContent=bv?.model||'—';
-  document.getElementById('w-val-v').textContent=vs(bv||m[0]).toFixed(1)+'pts';
-  document.getElementById('w-ctx-m').textContent=bigCtx?.model||'—';
-  document.getElementById('w-ctx-v').textContent=fmtCtx(bigCtx?.context_window||0);
-  twitterText=`🐙 AI Model Intel — ${today}\n\n💰 Cheapest: ${cheap?.model} $${cheap?.input_cost_per_mtok}/1M\n💎 Premium: ${expn?.model} $${expn?.input_cost_per_mtok}/1M\n⭐ Best value: ${bv?.model}\n📄 Largest context: ${bigCtx?.model} ${fmtCtx(bigCtx?.context_window)}\n\nFull live rankings → ${SITE_URL}\n\n#AI #AIModels #LLM #BuildInPublic`;
-}
-
-function copyTwitter(){if(!twitterText){showToast('Loading...');return;}navigator.clipboard.writeText(twitterText).then(()=>showToast('✅ Twitter post copied!')).catch(()=>{const ta=document.createElement('textarea');ta.value=twitterText;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);showToast('✅ Copied!');});}
-
-// ── MODEL TABLE/GRID ──────────────────────────────────────────────
-function setTab(t,el){tab=t;document.querySelectorAll('.ntab').forEach(b=>b.classList.remove('act'));el.classList.add('act');render();}
-function setProv(p,el){prov=p;document.querySelectorAll('.ppill').forEach(b=>b.classList.remove('act'));el.classList.add('act');render();}
-function setSort(s){if(srt===s)dir*=-1;else{srt=s;dir=1;}render();}
-function setView(v){view=v;document.getElementById('vb-tbl').classList.toggle('act',v==='table');document.getElementById('vb-grid').classList.toggle('act',v==='grid');document.getElementById('tbl-wrap').style.display=v==='table'?'block':'none';const g=document.getElementById('card-grid');g.style.display=v==='grid'?'grid':'none';if(v==='grid')g.classList.add('show');else g.classList.remove('show');render();}
-
-function getFiltered(){
-  const q=(document.getElementById('search-input').value||'').toLowerCase();
-  let m=[...allModels];
-  if(tab==='budget')m=m.filter(x=>(x.input_cost_per_mtok||0)<=0.5);
-  else if(tab==='vision')m=m.filter(x=>x.supports_vision);
-  else if(tab==='code')m=m.filter(x=>x.supports_functions||isCode(x));
-  else if(tab==='reasoning')m=m.filter(x=>isReason(x));
-  else if(tab==='context')m=m.filter(x=>(x.context_window||0)>=200000);
-  else if(tab==='new')m=m.filter(x=>isNew(x));
-  else if(tab==='mistral')m=m.filter(x=>x.provider==='mistral');
-  if(prov)m=m.filter(x=>x.provider===prov);
-  if(q)m=m.filter(x=>(x.model||'').toLowerCase().includes(q)||(x.provider||'').toLowerCase().includes(q)||(x.notes||'').toLowerCase().includes(q));
-  m.sort((a,b)=>{
-    if(srt==='cheap'||srt==='rank')return((a.input_cost_per_mtok||0)-(b.input_cost_per_mtok||0))*dir;
-    if(srt==='exp')return((b.input_cost_per_mtok||0)-(a.input_cost_per_mtok||0))*dir;
-    if(srt==='context')return((b.context_window||0)-(a.context_window||0))*dir;
-    if(srt==='value')return(vs(b)-vs(a))*dir;
-    if(srt==='name')return(a.model||'').localeCompare(b.model||'')*dir;
-    return 0;
-  });
-  return m;
-}
-
-function render(){
-  const models=getFiltered();
-  document.getElementById('result-info').textContent=models.length+' shown';
-  if(view==='table')renderTable(models);else renderGrid(models);
-}
-
-function renderTable(models){
-  const tb=document.getElementById('tbl-body');
-  if(!models.length){tb.innerHTML='<tr><td colspan="11" class="ld">No models found.</td></tr>';return;}
-  tb.innerHTML=models.map((m,i)=>{
-    const rank=i+1,p=pc(m.provider||''),isSel=sel.has(m.model);
-    const sc=vs(m),pct=Math.min(sc/12*100,100);
-    const s=seed(m.model||'x'),scol=(m.input_cost_per_mtok||0)<=0.5?'#00d97e':(m.input_cost_per_mtok||0)<=2?'#3bb4ff':'#ff8866';
-    const fd=((s%31)-15),ds=fd===0?'—':(fd>0?'▲':'▼')+Math.abs(fd).toFixed(1)+'%';
-    const dc=fd===0?'':'color:'+(fd>0?'var(--red)':'var(--green)');
-    return`<tr class="${isSel?'sel':''}" onclick="rc('${(m.model||'').replace(/'/g,"\\'")}')">
-      <td class="td-s"><div class="rchk">${isSel?'<svg width="9" height="7" viewBox="0 0 10 8"><path d="M1 4l2.5 2.5L9 1" stroke="var(--cyan)" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>':''}</div></td>
-      <td class="td-r">${rank===1?'👑':rank}</td>
-      <td class="td-n"><div class="nw"><div class="pico" style="background:${p.bg};color:${p.c}">${p.l}</div><div><div class="pm">${m.model||'—'}</div><div class="ps">${(m.notes||'').slice(0,28)}${(m.notes||'').length>28?'…':''}</div></div></div></td>
-      <td><span class="pbg pb-${m.provider||''}">${m.provider||'—'}</span></td>
-      <td class="tp ${cc(m.input_cost_per_mtok||0)}">${fmtC(m.input_cost_per_mtok)}</td>
-      <td class="tp ${cc(m.output_cost_per_mtok||0)}">${fmtC(m.output_cost_per_mtok)}</td>
-      <td class="td-ctx">${fmtCtx(m.context_window)}</td>
-      <td class="td-sc"><div class="srow"><span style="color:var(--cyan);min-width:26px;font-family:var(--mono);font-size:11px">${sc.toFixed(1)}</span><div class="sbar"><div class="sfill" style="width:${pct}%"></div></div></div></td>
-      <td style="font-family:var(--mono);font-size:10px;${dc}">${ds}</td>
-      <td>${miniSVG(m.model||'x',scol)}</td>
-      <td><div class="ctags">${capTags(m)}</div></td>
-    </tr>`;
-  }).join('');
-}
-
-function renderGrid(models){
-  const g=document.getElementById('card-grid');
-  if(!models.length){g.innerHTML='<div style="text-align:center;padding:40px;color:var(--text3);font-family:var(--mono)">No models found.</div>';return;}
-  g.innerHTML=models.map((m,i)=>{
-    const p=pc(m.provider||''),isSel=sel.has(m.model);
-    const[tt,tc]=tier(m.input_cost_per_mtok||0);
-    const apiLink = m.api_url || 'https://www.google.com/search?q='+encodeURIComponent(m.model+' API pricing');
-    return`<div class="mcard${isSel?' sel':''}" style="display:flex;flex-direction:column;">
-      <div class="gc-top" onclick="rc('${(m.model||'').replace(/'/g,"\\'")}')"><span class="gc-rk">#${i+1}${i===0?' 👑':''}</span><div class="gc-ck">${isSel?'<svg width="9" height="7" viewBox="0 0 10 8"><path d="M1 4l2.5 2.5L9 1" stroke="var(--cyan)" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>':''}</div></div>
-      <div onclick="rc('${(m.model||'').replace(/'/g,"\\'")}')">
-        <div class="gc-ico" style="background:${p.bg};color:${p.c}">${p.l}</div>
-        <div class="gc-nm" style="font-size:18px;margin-bottom:8px;font-weight:800;">${m.model||'—'}</div>
-        <div class="gc-pv" style="margin-bottom:16px;"><span class="pbg pb-${m.provider||''}">${m.provider||'—'}</span></div>
-        <div class="gc-m" style="margin-bottom:16px;grid-template-columns:1fr 1fr;">
-          <div class="gm"><div class="gml">Input/1M</div><div class="gmv ${cc(m.input_cost_per_mtok||0)}">${fmtC(m.input_cost_per_mtok)}</div></div>
-          <div class="gm"><div class="gml">Output/1M</div><div class="gmv ${cc(m.output_cost_per_mtok||0)}">${fmtC(m.output_cost_per_mtok)}</div></div>
-          <div class="gm"><div class="gml">Context</div><div class="gmv mid">${fmtCtx(m.context_window)}</div></div>
-          <div class="gm"><div class="gml">Score</div><div class="gmv mid">${vs(m).toFixed(1)}</div></div>
-        </div>
-        <div class="ctags" style="margin-bottom:20px;">${capTags(m)}</div>
-      </div>
-      <a href="${apiLink}" target="_blank" rel="noopener" onclick="event.stopPropagation();" style="display:block;text-align:center;background:linear-gradient(135deg,var(--cyan),#2a8fd4);color:#000;padding:14px;border-radius:8px;font-weight:800;font-size:14px;text-decoration:none;font-family:var(--sans);margin-top:auto;box-shadow:0 4px 12px rgba(59,180,255,0.2);">Get API Key →</a>
-    </div>`;
-  }).join('');
-}
-
-function rc(name){if(sel.has(name))sel.delete(name);else{if(sel.size>=4){showToast('Max 4 models');return;}sel.add(name);}updateBar();render();}
-function updateBar(){const bar=document.getElementById('cmp-bar'),ch=document.getElementById('chips');if(sel.size===0){bar.classList.remove('show');return;}bar.classList.add('show');ch.innerHTML=[...sel].map(s=>`<span class="chip">${s.length>18?s.slice(0,16)+'…':s}<span class="chip-x" onclick="event.stopPropagation();ds('${s.replace(/'/g,"\\'")}')">✕</span></span>`).join('');}
-function ds(n){sel.delete(n);updateBar();render();}
-function clearAll(){sel.clear();updateBar();document.getElementById('cmp-panel').classList.remove('show');render();}
-
-function doCompare(){
-  if(sel.size<2){showToast('Select at least 2 models');return;}
-  const models=[...sel].map(s=>allModels.find(m=>m.model===s)).filter(Boolean);
-  const minIn=Math.min(...models.map(m=>m.input_cost_per_mtok||0));
-  const maxIn=Math.max(...models.map(m=>m.input_cost_per_mtok||0));
-  const maxCtx=Math.max(...models.map(m=>m.context_window||0));
-  const minCtx=Math.min(...models.map(m=>m.context_window||0));
-  const cheapest=[...models].sort((a,b)=>(a.input_cost_per_mtok||0)-(b.input_cost_per_mtok||0))[0];
-  const bigCtx=[...models].sort((a,b)=>(b.context_window||0)-(a.context_window||0))[0];
-  const bv=[...models].sort((a,b)=>vs(b)-vs(a))[0];
-  document.getElementById('cmp-cols').style.gridTemplateColumns=`repeat(${models.length},1fr)`;
-  document.getElementById('cmp-sub').textContent='Comparing '+models.length+' models';
-  document.getElementById('cmp-cols').innerHTML=models.map(m=>{
-    const isW=m.model===cheapest.model,p=pc(m.provider||'');
-    const inC=(m.input_cost_per_mtok||0)===minIn?'best':(m.input_cost_per_mtok||0)===maxIn?'worst':'';
-    const ctxC=(m.context_window||0)===maxCtx?'best':(m.context_window||0)===minCtx?'worst':'';
-    return`<div class="cmp-col${isW?' win':''}">
-      ${isW?'<div class="wb">BEST VALUE</div>':''}
-      <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px"><div class="pico" style="background:${p.bg};color:${p.c};width:24px;height:24px;font-size:11px;border-radius:5px">${p.l}</div><div class="cn">${m.model}</div></div>
-      <span class="pbg pb-${m.provider||''}">${m.provider}</span>
-      <div style="margin-top:9px">
-        <div class="cr"><span class="cl">Input/1M</span><span class="cv ${inC}">${fmtC(m.input_cost_per_mtok)}</span></div>
-        <div class="cr"><span class="cl">Output/1M</span><span class="cv">${fmtC(m.output_cost_per_mtok)}</span></div>
-        <div class="cr"><span class="cl">Context</span><span class="cv ${ctxC}">${fmtCtx(m.context_window)}</span></div>
-        <div class="cr"><span class="cl">Score</span><span class="cv">${vs(m).toFixed(1)}</span></div>
-        <div class="cr"><span class="cl">Vision</span><span class="cv">${m.supports_vision?'✅':'—'}</span></div>
-        <div class="cr"><span class="cl">Reasoning</span><span class="cv">${isReason(m)?'✅':'—'}</span></div>
-      </div>
-    </div>`;
-  }).join('');
-  document.getElementById('cmp-pills').innerHTML=`<div class="cpill"><span class="cpl">Cheapest</span><span class="cpv">${cheapest.model}</span></div><div class="cpill"><span class="cpl">Largest ctx</span><span class="cpv">${bigCtx.model}</span></div><div class="cpill"><span class="cpl">Best value</span><span class="cpv">${bv.model}</span></div>`;
-  document.getElementById('cmp-panel').classList.add('show');
-  setTimeout(()=>document.getElementById('cmp-panel').scrollIntoView({behavior:'smooth',block:'start'}),50);
-}
-
-function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.opacity='1';clearTimeout(t._t);t._t=setTimeout(()=>t.style.opacity='0',2200);}
-
-// ── SIDEBAR TRENDING TOOLS ────────────────────────────────────────
-function renderSidebarTrending(){
-  var sb=document.getElementById('sb-trending-tools');
-  if(!sb) return;
-  var tools=window.ToolsDB?ToolsDB.load().filter(function(t){return t.approved!==false}) : TOOLS_DATA;
-  tools.sort(function(a,b){return b.votes-a.votes});
-  sb.innerHTML=tools.slice(0,5).map(function(t,i){
-    var href=window.buildRefURL?buildRefURL(t):t.url;
-    return '<a class="ti" href="'+href+'" target="_blank" rel="noopener"><div class="ti-ico" style="background:rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:center;overflow:hidden">'+(t.image?'<img src="'+t.image+'" width="24" height="24" style="object-fit:contain;border-radius:4px" onerror="this.style.display=\'none\'" loading="lazy">':'')+'<span style="font-size:16px;'+(t.image?'display:none':'')+'">'+(t.emoji||'🤖')+'</span></div><div class="ti-inf"><div class="ti-nm">'+t.name+'</div><div class="ti-cat">'+t.cat+' AI</div></div><div class="ti-votes">▲'+(t.votes||0).toLocaleString()+'</div></a>';
-  }).join('');
-}
-
-// ── ADS FROM AdsManager ────────────────────────────────────────────
-function loadAdsFromManager(){
-  // Use ToolsDB for spotlight + tool cards (shows default tools with images)
-  const tools = window.ToolsDB ? ToolsDB.load().filter(t => t.approved !== false) : TOOLS_DATA;
-  // Build sections — pass empty ads array for 'ads' param since we use AdsManager internally now
-  buildSpotlight();
-  buildAdShowcase();
-  buildSidebarAds();
-  buildToolCards();
-  buildToolsTicker(tools);
-  renderHomeTop6();
-  renderHomeTools();
-  renderSidebarTrending();
-  // Load latest blog articles
-  if(window.BlogModule){BlogModule.renderLatest('latest-blog',3)}else{setTimeout(function(){if(window.BlogModule)BlogModule.renderLatest('latest-blog',3)},500)}
-}
-
-// ── HOME PAGE TOP 6 SLOTS ────────────────────────────────────────────
-function renderHomeTop6(){
-  const grid=document.getElementById('home-top6-grid');
-  if(!grid) return;
-  const slots=window.AdsManager ? AdsManager.load() : [];
-  const planToSlot={premium:1,growth:[2,3],starter:[4,5,6]};
-  const paidBySlot={};
-  slots.forEach(s=>{
-    if(s.plan==='premium') paidBySlot[1]=s;
-    else if(s.plan==='growth' && !paidBySlot[2]) paidBySlot[2]=s;
-    else if(s.plan==='growth' && !paidBySlot[3]) paidBySlot[3]=s;
-    else if(s.plan==='starter' && !paidBySlot[4]) paidBySlot[4]=s;
-    else if(s.plan==='starter' && !paidBySlot[5]) paidBySlot[5]=s;
-    else if(s.plan==='starter' && !paidBySlot[6]) paidBySlot[6]=s;
-  });
-  const prices={1:'$99/mo',2:'$49/mo',3:'$49/mo',4:'$9/wk',5:'$9/wk',6:'$9/wk'};
-  const plans={1:'premium',2:'growth',3:'growth',4:'starter',5:'starter',6:'starter'};
-  const dodo=window.OCTOPUS_CONFIG ? OCTOPUS_CONFIG.DODO : CHECKOUT;
-
-  let html='';
-  for(let i=1;i<=6;i++){
-    const s=paidBySlot[i];
-    if(s && s.plan!=='default'){
-      const daysLeft=s.expiresAt?Math.ceil((s.expiresAt-Date.now())/86400000):'—';
-      html+=`<a href="${s.url}?ref=aimodelranks" target="_blank" class="top6-card filled">
-        <div class="t6-bar" style="background:${s.color||'#a855f7'}"></div>
-        <div class="t6-body">
-          <div class="t6-badge">${s.plan.toUpperCase()} · SLOT ${i}</div>
-          <div class="t6-ico">${s.emoji||'🚀'}</div>
-          <div class="t6-name">${s.name}</div>
-          <div class="t6-desc">${(s.desc||'').slice(0,50)}</div>
-          <div class="t6-cta" style="background:${s.color||'#a855f7'};color:#fff">${s.cta||'Visit →'}</div>
-          ${s.expiresAt?'<div class="t6-expiry">'+daysLeft+'d left</div>':''}
-        </div>
-      </a>`;
-    } else {
-      const plan=plans[i];
-      const link=dodo?dodo[plan]:'#';
-      html+=`<a href="${link}" target="_blank" class="top6-card empty">
-        <div class="empty-ico">📣</div>
-        <div class="empty-label">SLOT ${i} — OPEN</div>
-        <div class="empty-price">${prices[i]}</div>
-        <div class="empty-btn">Buy This Slot →</div>
-      </a>`;
+async function fetchModels() {
+    try {
+        const r = await fetch(`${API}/pricing`, {mode: 'cors'});
+        const d = await r.json();
+        allModels = d.pricing || [];
+        applyFilters();
+    } catch (e) {
+        console.error('Failed to fetch models', e);
+        tableContainer.innerHTML = '<p style="padding:2rem;text-align:center;color:var(--red)">Failed to load data. Please refresh.</p>';
     }
-  }
-  grid.innerHTML=html;
 }
 
-// ── HOME PAGE TOOLS GRID ─────────────────────────────────────────────
-let homeCat='all', homeSort='votes';
-function homeSetCat(cat,el){
-  homeCat=cat;
-  document.querySelectorAll('#home-cat-pills .cat-pill').forEach(b=>b.classList.remove('active'));
-  el.classList.add('active');
-  renderHomeTools();
-}
-function homeSetSort(s){ homeSort=s; renderHomeTools(); }
-
-function renderHomeTools(){
-  const grid=document.getElementById('home-tools-grid');
-  if(!grid) return;
-  // Use pipeline for tier-priority sorting (premium→growth→starter→free)
-  const allTools=window.ToolsDB ? ToolsDB.pipeline().filter(t=>t.approved!==false) : TOOLS_DATA;
-  let filtered=allTools;
-  if(homeCat==='new') filtered=filtered.filter(t=>(t.daysAgo||0)<=7);
-  else if(homeCat!=='all') filtered=filtered.filter(t=>t.cat===homeCat);
-
-  // Within same tier, sort by selected option
-  if(homeSort==='votes'){/* pipeline already sorts by tier then votes */}
-  else if(homeSort==='new') filtered.sort((a,b)=>(a.daysAgo||0)-(b.daysAgo||0));
-  else if(homeSort==='name') filtered.sort((a,b)=>a.name.localeCompare(b.name));
-
-  document.getElementById('home-tools-count').textContent=filtered.length+' AI tool'+(filtered.length!==1?'s':'');
-  if(!filtered.length){
-    grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--text3);font-family:var(--mono);font-size:13px">No tools found in this category.</div>';
-    return;
-  }
-  const catBg={image:'#1a0a2e',video:'#0a0a28',coding:'#0a1e00',writing:'#1a0a00',chat:'#001828',audio:'#1a001a',research:'#001a28',productivity:'#1a1400',data:'#001428',design:'#280014',marketing:'#1a0a00'};
-
-  grid.innerHTML=filtered.map((t,i)=>{
-    const href = window.buildRefURL ? buildRefURL(t) : t.url + (t.url.includes('?')?'&':'?') + 'ref=aimodelranks';
-    const bg=catBg[t.cat]||'#001828';
-    return`<a href="${href}" target="_blank" rel="noopener" class="ht-card${t.featured?' featured':''}" data-emoji="${t.emoji||'🤖'}">
-      <div class="ht-img-wrap">
-        <span class="ht-rank">#${i+1}</span>
-        ${t.image?`<img class="ht-img" src="${t.image}" alt="${t.name}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`:''}
-        <div class="ht-img-fallback" style="background:${bg};${t.image?'display:none':''}">${t.emoji||'🤖'}</div>
-      </div>
-      <div class="ht-body">
-        <div class="ht-name">${t.name}${(t.daysAgo||0)<=7?'<span class="ht-new-badge">NEW</span>':''}</div>
-        <div class="ht-tagline">${t.tagline||''}</div>
-        <div class="ht-meta">
-          <span class="ht-pricing ${t.pricing==='free'?'pr-free':t.pricing==='freemium'?'pr-freemium':'pr-paid'}">${t.pricing==='free'?'Free':t.pricing==='freemium'?'Freemium':'Paid'}</span>
-          <span class="ht-votes">▲${(t.votes||0).toLocaleString()}</span>
-        </div>
-      </div>
-    </a>`;
-  }).join('');
+function setupEventListeners() {
+    searchInput.addEventListener('input', applyFilters);
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            tabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            applyFilters();
+        });
+    });
+    calcTokens.addEventListener('change', updateCalc);
+    calcTask.addEventListener('change', updateCalc);
 }
 
-async function loadModels(){
-  try{
-    const r=await fetch(API+'/pricing',{mode:'cors'});
-    const d=await r.json();
-    allModels=d.pricing||[];
-    buildModelCards(allModels);
-    updateStats(allModels);
-    updateWinners(allModels);
-    render();
-  }catch(e){
-    document.getElementById('tbl-body').innerHTML='<tr><td colspan="11" class="ld">Could not load data. Please refresh.</td></tr>';
-  }
+function applyFilters() {
+    const query = searchInput.value.toLowerCase();
+    const activeTab = document.querySelector('.tab.active').dataset.tab;
+    
+    filteredModels = allModels.filter(m => {
+        const name = (m.model || '').toLowerCase();
+        const provider = (m.provider || '').toLowerCase();
+        const matchesQuery = name.includes(query) || provider.includes(query);
+        let matchesTab = true;
+        
+        if (activeTab === 'budget') matchesTab = (m.input_cost_per_mtok || 999) <= 0.5;
+        else if (activeTab === 'vision') matchesTab = m.supports_vision;
+        else if (activeTab === 'code') matchesTab = name.includes('code') || m.supports_functions;
+        else if (activeTab === 'reasoning') matchesTab = name.includes('reason') || name.includes('o1') || name.includes('o3');
+        
+        return matchesQuery && matchesTab;
+    });
+    
+    filteredModels.sort((a, b) => (a.input_cost_per_mtok || 999) - (b.input_cost_per_mtok || 999));
+    renderModels(filteredModels);
 }
 
-// Burger menu toggle
-function toggleMenu() {
-  const menu = document.getElementById('mobile-menu');
-  menu.classList.toggle('open');
-  document.body.style.overflow = menu.classList.contains('open') ? 'hidden' : '';
+function formatContext(ctx) {
+    if (!ctx) return '—';
+    if (ctx >= 1000000) return (ctx / 1000000).toFixed(1) + 'M';
+    if (ctx >= 1000) return Math.round(ctx / 1000) + 'K';
+    return ctx;
 }
 
-// Init
-document.getElementById('card-grid').style.display='none';
-document.getElementById('today-date').textContent=new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
-try { loadAdsFromManager(); } catch(e) { console.error('loadAdsFromManager:', e); }
-loadModels();
-setInterval(function(){ try { loadModels(); } catch(e){} }, 60000);
-setInterval(function(){ try { loadAdsFromManager(); } catch(e){} }, 120000);
+function renderModels(models) {
+    let tableHtml = `<table class="data-table">
+        <thead><tr>
+            <th>#</th><th>Model</th><th>Provider</th>
+            <th>Input $/1M</th><th>Output $/1M</th>
+            <th>Context</th><th>Action</th>
+        </tr></thead><tbody>`;
+        
+    let cardsHtml = '';
+    
+    models.slice(0, 50).forEach((m, i) => { 
+        const provider = m.provider || 'Unknown';
+        const name = m.model || 'Unknown Model';
+        const inPrice = m.input_cost_per_mtok || 0;
+        const outPrice = m.output_cost_per_mtok || 0;
+        const ctx = m.context_window || 0;
+        const apiLink = m.api_url || `https://www.google.com/search?q=${encodeURIComponent(name + ' API pricing')}`;
+        
+        const inClass = inPrice < 1 ? 'text-green' : '';
+        
+        tableHtml += `<tr>
+            <td class="mono">${i+1}</td>
+            <td class="font-bold">${name}</td>
+            <td><span class="provider-badge">${provider}</span></td>
+            <td class="mono ${inClass}">$${inPrice.toFixed(2)}</td>
+            <td class="mono">$${outPrice.toFixed(2)}</td>
+            <td class="mono">${formatContext(ctx)}</td>
+            <td><a href="${apiLink}" target="_blank" class="btn-sm">Get API</a></td>
+        </tr>`;
+        
+        cardsHtml += `<div class="model-card">
+            <div class="card-header">
+                <span class="provider-badge">${provider}</span>
+                <span class="rank mono">#${i+1}</span>
+            </div>
+            <h3 class="model-name">${name}</h3>
+            <div class="card-stats">
+                <div class="stat"><span class="stat-label">Input / 1M</span><span class="stat-value ${inClass}">$${inPrice.toFixed(2)}</span></div>
+                <div class="stat"><span class="stat-label">Output / 1M</span><span class="stat-value">$${outPrice.toFixed(2)}</span></div>
+                <div class="stat"><span class="stat-label">Context</span><span class="stat-value">${formatContext(ctx)}</span></div>
+            </div>
+            <a href="${apiLink}" target="_blank" class="btn-api">Get API Key →</a>
+        </div>`;
+    });
+    
+    tableHtml += `</tbody></table>`;
+    
+    if(models.length === 0) {
+        tableHtml = '<p style="padding:2rem;text-align:center;color:var(--text-muted)">No models found matching your criteria.</p>';
+        cardsHtml = tableHtml;
+    }
+    
+    tableContainer.innerHTML = tableHtml;
+    cardsContainer.innerHTML = cardsHtml;
+}
+
+function updateCalc() {
+    const tokens = parseInt(calcTokens.value) / 1000000;
+    const task = calcTask.value;
+    
+    let gptPrice = 5.00; 
+    let llamaPrice = 0.05; 
+    
+    if (task === 'code') { gptPrice = 10.00; llamaPrice = 0.59; }
+    if (task === 'reasoning') { gptPrice = 15.00; llamaPrice = 0.59; }
+    
+    const gptTotal = (tokens * gptPrice).toFixed(2);
+    const llamaTotal = (tokens * llamaPrice).toFixed(2);
+    
+    resGpt.textContent = `$${gptTotal}`;
+    resLlama.textContent = `$${llamaTotal}`;
+}
+
+function scrollToModels() {
+    document.getElementById('models-section').scrollIntoView({behavior: 'smooth'});
+}
+
+init();
 </script>
 </body>
 </html>
