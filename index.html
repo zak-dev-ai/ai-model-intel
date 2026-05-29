@@ -318,6 +318,8 @@ tailwind.config = {
     </div>
     <p class="text-text-muted text-body-sm mb-4">Reach 10,000+ AI engineers daily. Our partnerships team will review within 24 hours.</p>
     <form id="partnerForm" onsubmit="submitPartner(event)" class="flex flex-col gap-3">
+      <input type="hidden" name="access_key" value="206ea04f-da37-40ea-994d-29b8967177bf">
+      <input type="checkbox" name="botcheck" class="hidden" style="display:none !important" tabindex="-1" autocomplete="off">
       <input type="text" id="p-company" placeholder="Company Name" required class="bg-surface-container-high border border-border-slate rounded px-3 py-2 text-on-surface focus:outline-none focus:border-primary">
       <input type="url" id="p-website" placeholder="Website URL" required class="bg-surface-container-high border border-border-slate rounded px-3 py-2 text-on-surface focus:outline-none focus:border-primary">
       <input type="email" id="p-email" placeholder="Contact Email" required class="bg-surface-container-high border border-border-slate rounded px-3 py-2 text-on-surface focus:outline-none focus:border-primary">
