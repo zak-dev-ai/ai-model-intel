@@ -118,13 +118,11 @@ tailwind.config = {
       <a class="text-on-surface-variant hover:text-on-surface transition-colors hover:bg-surface-variant/50 px-2 rounded font-body-sm text-body-sm" href="/">Terminal</a>
       <a class="text-primary border-b-2 border-primary pb-1 font-body-sm text-body-sm" href="/blog.html">News</a>
       <a class="text-on-surface-variant hover:text-on-surface transition-colors hover:bg-surface-variant/50 px-2 rounded font-body-sm text-body-sm" href="https://rapidapi.com/zakmediaai/api/octopus-ai-model-intel" target="_blank">API</a>
-      <!-- FIXED: Opens Partner Modal -->
       <a class="text-on-surface-variant hover:text-on-surface transition-colors hover:bg-surface-variant/50 px-2 rounded font-body-sm text-body-sm cursor-pointer" onclick="openPartnerModal()">Partner</a>
     </nav>
   </div>
   
   <div class="flex items-center gap-4">
-    <!-- FIXED: Opens Partner Modal -->
     <button class="hidden lg:block bg-bloomberg-orange text-deep-charcoal px-4 py-1.5 rounded font-data-tabular text-data-tabular font-bold hover:bg-primary-tint transition-colors shadow-[0_0_15px_rgba(255,136,0,0.3)]" onclick="openPartnerModal()">
       Advertise
     </button>
@@ -215,7 +213,7 @@ tailwind.config = {
   </div>
 </div>
 
-<!-- FIXED: Partner Application Modal -->
+<!-- Partner Application Modal -->
 <div id="partnerModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[200] hidden items-center justify-center p-4">
   <div class="glass-panel rounded-lg border border-bloomberg-orange/30 max-w-md w-full p-6 relative">
     <button onclick="closePartnerModal()" class="absolute top-4 right-4 text-text-muted hover:text-on-surface">
@@ -271,7 +269,13 @@ function estimateReadTime(content) {
 
 async function fetchNews() {
   try {
-    const res = await fetch(RSS_URL);
+    // Add timeout to prevent hanging
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 8000);
+    
+    const res = await fetch(RSS_URL, { signal: controller.signal });
+    clearTimeout(timeoutId);
+    
     const data = await res.json();
     if (data.status === 'ok' && data.items && data.items.length > 0) {
       allArticles = data.items.map(item => ({
@@ -281,12 +285,15 @@ async function fetchNews() {
         description: item.content || item.description || ''
       }));
     } else {
+      console.warn('RSS feed returned no items, using fallback');
       allArticles = FALLBACK_ARTICLES.map(a => ({...a, thumbnail: getReliableImage(a.title)}));
     }
   } catch (e) {
     console.error('RSS fetch failed, using fallback', e);
     allArticles = FALLBACK_ARTICLES.map(a => ({...a, thumbnail: getReliableImage(a.title)}));
   }
+  
+  // Always render, even if fetch failed
   renderHero();
   renderGrid();
 }
@@ -461,7 +468,18 @@ async function submitPartner(e) {
       setTimeout(() => {
         closePartnerModal();
         e.target.reset();
-        btn.innerHTML = original
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+      }, 2000);
+    } else {
+      throw new Error('Submission failed');
+    }
+  } catch (err) {
+    console.error('Form submission error:', err);
+    btn.innerHTML = 'Error. Try Again.';
+    btn.disabled = false;
+  }
+}
 
 // Background Animations (Untouched)
 document.addEventListener('DOMContentLoaded', () => {
@@ -526,6 +544,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setInterval(matrix, 50);
 });
 
+// Initialize on load
 fetchNews();
 </script>
 </body>
