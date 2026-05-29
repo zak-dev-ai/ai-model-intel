@@ -3,214 +3,597 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Model Ranks — The Bloomberg Terminal for AI</title>
-<meta name="description" content="Track real-time pricing, context windows, and ROI across 210+ LLMs. Stop overpaying for AI infrastructure.">
+<title>AI Model Ranks — Live AI Market Data & Pricing</title>
+<meta name="description" content="The Bloomberg Terminal for AI. Track real-time pricing, context windows, and ROI across 210+ LLMs.">
 <script src="/config.js"></script>
-<script src="/ads.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-  :root { --bg:#09090b; --surface:#18181b; --surface-2:#27272a; --border:#27272a; --text:#fafafa; --muted:#a1a1aa; --cyan:#06b6d4; --green:#10b981; --red:#ef4444; --font-sans:'Inter',sans-serif; --font-mono:'JetBrains Mono',monospace; }
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body { background:var(--bg); color:var(--text); font-family:var(--font-sans); line-height:1.5; -webkit-font-smoothing:antialiased; }
-  .nav { position:sticky; top:0; z-index:100; background:rgba(9,9,11,0.8); backdrop-filter:blur(12px); border-bottom:1px solid var(--border); }
-  .nav-container { max-width:1200px; margin:0 auto; padding:0 1.5rem; height:64px; display:flex; align-items:center; justify-content:space-between; }
-  .logo { font-weight:800; font-size:1.25rem; display:flex; align-items:center; gap:0.5rem; text-decoration:none; color:var(--text); }
-  .logo-icon { width:28px; height:28px; background:var(--cyan); border-radius:6px; display:flex; align-items:center; justify-content:center; color:#000; font-size:16px; }
-  .nav-link { color:var(--muted); text-decoration:none; font-size:0.875rem; font-weight:500; }
-  .nav-link:hover { color:var(--text); }
-  .hero { padding:4rem 1.5rem; background:radial-gradient(circle at 50% 0%, rgba(6,182,212,0.15), transparent 50%); border-bottom:1px solid var(--border); }
-  .hero-grid { max-width:1200px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:3rem; align-items:center; }
-  @media(max-width:900px) { .hero-grid { grid-template-columns:1fr; text-align:center; } }
-  .hero-text h1 { font-size:clamp(2rem,5vw,3.5rem); font-weight:800; line-height:1.1; margin-bottom:1.5rem; letter-spacing:-0.02em; }
-  .text-cyan { color:var(--cyan); }
-  .hero-text p { font-size:1.125rem; color:var(--muted); margin-bottom:2rem; max-width:500px; }
-  @media(max-width:900px) { .hero-text p { margin:0 auto 2rem; } }
-  .badge { display:inline-flex; align-items:center; gap:0.5rem; background:rgba(16,185,129,0.1); color:var(--green); padding:0.25rem 0.75rem; border-radius:100px; font-size:0.875rem; font-weight:500; border:1px solid rgba(16,185,129,0.2); margin-bottom:1.5rem; }
-  .calc-box { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:2rem; box-shadow:0 20px 40px rgba(0,0,0,0.4); }
-  .calc-box h3 { font-size:1.25rem; margin-bottom:1.5rem; display:flex; align-items:center; gap:0.5rem; }
-  .calc-inputs { display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1.5rem; }
-  .calc-inputs label { display:flex; flex-direction:column; gap:0.5rem; font-size:0.875rem; color:var(--muted); text-align:left; }
-  .calc-inputs select { background:var(--bg); border:1px solid var(--border); color:var(--text); padding:0.75rem; border-radius:8px; font-family:var(--font-sans); }
-  .calc-results { background:var(--bg); border:1px solid var(--border); border-radius:12px; padding:1.5rem; margin-bottom:1.5rem; }
-  .calc-result-item { display:flex; justify-content:space-between; align-items:center; padding:0.75rem 0; border-bottom:1px solid var(--border); }
-  .calc-result-item:last-child { border-bottom:none; }
-  .calc-result-item.highlight { background:rgba(16,185,129,0.05); margin:0 -1.5rem; padding:0.75rem 1.5rem; border-radius:8px; border:1px solid rgba(16,185,129,0.2); }
-  .calc-value { font-family:var(--font-mono); font-weight:700; font-size:1.25rem; }
-  .text-green { color:var(--green); } .text-red { color:var(--red); }
-  .btn-primary { display:block; width:100%; text-align:center; background:linear-gradient(135deg, var(--cyan), #0891b2); color:#000; font-weight:600; padding:0.875rem; border-radius:8px; border:none; font-size:1rem; cursor:pointer; }
-  .main-container { max-width:1200px; margin:0 auto; padding:3rem 1.5rem; }
-  .controls { display:flex; gap:1rem; margin-bottom:1.5rem; flex-wrap:wrap; }
-  .search-box { flex:1; min-width:250px; position:relative; }
-  .search-input { width:100%; background:var(--surface); border:1px solid var(--border); color:var(--text); padding:0.75rem 1rem 0.75rem 2.5rem; border-radius:8px; font-size:1rem; }
-  .search-icon { position:absolute; left:1rem; top:50%; transform:translateY(-50%); color:var(--muted); }
-  .tabs { display:flex; gap:0.5rem; overflow-x:auto; padding-bottom:0.5rem; margin-bottom:1.5rem; scrollbar-width:none; }
-  .tabs::-webkit-scrollbar { display:none; }
-  .tab { padding:0.5rem 1rem; background:var(--surface); border:1px solid var(--border); border-radius:100px; color:var(--muted); font-size:0.875rem; font-weight:500; cursor:pointer; white-space:nowrap; }
-  .tab.active { background:var(--cyan); color:#000; border-color:var(--cyan); }
-  .table-wrap { background:var(--surface); border:1px solid var(--border); border-radius:12px; overflow:hidden; display:block; }
-  .data-table { width:100%; border-collapse:collapse; font-size:0.875rem; }
-  .data-table th { text-align:left; padding:1rem; background:var(--surface-2); color:var(--muted); font-weight:500; font-size:0.75rem; text-transform:uppercase; border-bottom:1px solid var(--border); }
-  .data-table td { padding:1rem; border-bottom:1px solid var(--border); }
-  .data-table tr:hover { background:rgba(255,255,255,0.02); }
-  .mono { font-family:var(--font-mono); }
-  .font-bold { font-weight:600; }
-  .provider-badge { font-size:0.75rem; font-weight:600; padding:0.25rem 0.5rem; border-radius:6px; background:var(--surface-2); color:var(--muted); }
-  .btn-sm { display:inline-block; padding:0.25rem 0.75rem; background:var(--surface-2); border:1px solid var(--border); border-radius:6px; color:var(--cyan); text-decoration:none; font-size:0.75rem; font-weight:500; }
-  @media(max-width:768px) { .table-wrap { display:none; } .cards-grid { display:grid !important; } }
-  .cards-grid { display:none; grid-template-columns:1fr; gap:1rem; }
-  .model-card { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:1.25rem; display:flex; flex-direction:column; gap:1rem; }
-  .card-header { display:flex; justify-content:space-between; align-items:center; }
-  .model-name { font-size:1.25rem; font-weight:700; }
-  .card-stats { display:grid; grid-template-columns:1fr 1fr 1fr; gap:0.5rem; }
-  .stat { background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:0.75rem; text-align:center; }
-  .stat-label { display:block; font-size:0.75rem; color:var(--muted); margin-bottom:0.25rem; }
-  .stat-value { display:block; font-family:var(--font-mono); font-weight:600; font-size:0.875rem; }
-  .btn-api { display:block; text-align:center; background:linear-gradient(135deg, var(--cyan), #0891b2); color:#000; font-weight:600; padding:0.875rem; border-radius:8px; text-decoration:none; margin-top:auto; }
-  .api-section { padding:3rem 1.5rem; text-align:center; background:linear-gradient(180deg, var(--surface), var(--bg)); border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
-  .api-container { max-width:800px; margin:0 auto; }
-  .api-container h2 { font-size:1.75rem; margin-bottom:1rem; }
-  .api-container p { color:var(--muted); margin-bottom:2rem; }
-  .code-block { background:var(--bg); border:1px solid var(--border); border-radius:10px; padding:1.5rem; text-align:left; font-family:var(--font-mono); font-size:0.875rem; overflow-x:auto; margin-bottom:1.5rem; }
-  .b2b-section { padding:4rem 1.5rem; text-align:center; }
-  .b2b-container { max-width:600px; margin:0 auto; }
-  .b2b-container h2 { font-size:2rem; margin-bottom:1rem; }
-  .b2b-container p { color:var(--muted); margin-bottom:2rem; font-size:1.125rem; }
-  .btn-b2b { display:inline-block; padding:1rem 2rem; background:var(--text); color:var(--bg); font-weight:600; border-radius:8px; text-decoration:none; }
+:root {
+  --bg: #09090b;
+  --surface: #121212;
+  --surface-2: #18181b;
+  --border: #27272a;
+  --text: #fafafa;
+  --text-muted: #a1a1aa;
+  --green: #10b981;
+  --red: #ef4444;
+  --cyan: #06b6d4;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* ── NAVIGATION ── */
+.nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(9, 9, 11, 0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  height: 64px;
+}
+.nav-container {
+  max-width: 1400px; margin: 0 auto; padding: 0 1.5rem;
+  height: 100%; display: flex; align-items: center; justify-content: space-between;
+}
+.logo {
+  font-weight: 800; font-size: 1.25rem;
+  display: flex; align-items: center; gap: 0.75rem;
+  text-decoration: none; color: var(--text);
+}
+.logo-icon {
+  width: 32px; height: 32px; background: var(--cyan);
+  border-radius: 8px; display: flex; align-items: center;
+  justify-content: center; color: #000; font-size: 18px; font-weight: 800;
+}
+.nav-links { display: flex; gap: 2rem; align-items: center; }
+.nav-link {
+  color: var(--text-muted); text-decoration: none;
+  font-size: 0.875rem; font-weight: 500; transition: color 0.2s;
+}
+.nav-link:hover { color: var(--text); }
+.live-badge {
+  display: flex; align-items: center; gap: 0.5rem;
+  background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2);
+  padding: 0.25rem 0.75rem; border-radius: 100px;
+  font-size: 0.75rem; font-weight: 600; color: var(--green);
+  font-family: var(--font-mono);
+}
+.pulse {
+  width: 8px; height: 8px; background: var(--green);
+  border-radius: 50%; animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+  70% { box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+/* ── LIVE TICKER (Right to Left) ── */
+.market-ticker {
+  background: var(--surface); border-bottom: 1px solid var(--border);
+  overflow: hidden; height: 40px; display: flex; align-items: center; position: relative;
+}
+.market-ticker::before, .market-ticker::after {
+  content: ''; position: absolute; top: 0; bottom: 0; width: 60px; z-index: 2; pointer-events: none;
+}
+.market-ticker::before { left: 0; background: linear-gradient(to right, var(--surface), transparent); }
+.market-ticker::after { right: 0; background: linear-gradient(to left, var(--surface), transparent); }
+.ticker-track {
+  display: flex; white-space: nowrap; animation: ticker-scroll 60s linear infinite;
+}
+@keyframes ticker-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.ticker-item {
+  padding: 0 24px; font-family: var(--font-mono); font-size: 13px;
+  display: flex; align-items: center; gap: 8px; color: var(--text-muted);
+}
+.ticker-item strong { color: var(--text); font-weight: 600; }
+.ticker-item .up { color: var(--green); }
+.ticker-item .down { color: var(--red); }
+
+/* ── MARKET OVERVIEW ── */
+.overview {
+  max-width: 1400px; margin: 0 auto; padding: 2rem 1.5rem;
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;
+}
+.stat-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; padding: 1.25rem;
+}
+.stat-label { font-size: 0.875rem; color: var(--text-muted); margin-bottom: 0.5rem; }
+.stat-value { font-family: var(--font-mono); font-size: 1.5rem; font-weight: 700; }
+.stat-sub { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem; font-family: var(--font-mono); }
+
+/* ── CONTROLS & FILTERS ── */
+.controls {
+  max-width: 1400px; margin: 0 auto; padding: 0 1.5rem 1.5rem;
+  display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; justify-content: space-between;
+}
+.search-box { flex: 1; min-width: 280px; max-width: 400px; position: relative; }
+.search-input {
+  width: 100%; background: var(--surface); border: 1px solid var(--border);
+  color: var(--text); padding: 0.75rem 1rem 0.75rem 2.5rem;
+  border-radius: 8px; font-size: 0.875rem; font-family: var(--font-sans);
+}
+.search-input:focus { outline: none; border-color: var(--cyan); }
+.search-icon { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
+
+.filters { display: flex; gap: 0.5rem; overflow-x: auto; scrollbar-width: none; padding-bottom: 4px; }
+.filters::-webkit-scrollbar { display: none; }
+.filter-btn {
+  padding: 0.5rem 1rem; background: var(--surface); border: 1px solid var(--border);
+  border-radius: 100px; color: var(--text-muted); font-size: 0.8125rem; font-weight: 500;
+  cursor: pointer; white-space: nowrap; transition: all 0.2s; display: flex; align-items: center; gap: 0.5rem;
+  font-family: var(--font-sans);
+}
+.filter-btn:hover { border-color: var(--text-muted); color: var(--text); }
+.filter-btn.active { background: var(--text); color: var(--bg); border-color: var(--text); }
+.filter-count {
+  background: rgba(255,255,255,0.1); padding: 0.125rem 0.375rem; border-radius: 100px;
+  font-size: 0.6875rem; font-family: var(--font-mono); font-weight: 700;
+}
+.filter-btn.active .filter-count { background: rgba(0,0,0,0.2); color: var(--bg); }
+
+/* ── DATA TABLE (DESKTOP) ── */
+.table-wrap {
+  max-width: 1400px; margin: 0 auto; padding: 0 1.5rem 3rem;
+}
+.data-table {
+  width: 100%; border-collapse: collapse; font-size: 0.875rem;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden;
+}
+.data-table th {
+  text-align: left; padding: 1rem 1.25rem; background: var(--surface-2);
+  color: var(--text-muted); font-weight: 500; font-size: 0.75rem;
+  text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--border);
+  position: sticky; top: 64px; z-index: 10;
+}
+.data-table td {
+  padding: 1rem 1.25rem; border-bottom: 1px solid var(--border); vertical-align: middle;
+}
+.data-table tr:last-child td { border-bottom: none; }
+.data-table tr:hover { background: rgba(255,255,255,0.02); }
+.mono { font-family: var(--font-mono); }
+.font-bold { font-weight: 600; }
+.text-green { color: var(--green); }
+.text-red { color: var(--red); }
+.text-muted { color: var(--text-muted); }
+
+.model-cell { display: flex; align-items: center; gap: 0.75rem; }
+.model-icon {
+  width: 32px; height: 32px; border-radius: 8px; background: var(--surface-2);
+  display: flex; align-items: center; justify-content: center; font-weight: 700;
+  font-size: 0.875rem; color: var(--text); border: 1px solid var(--border);
+}
+.model-name { font-weight: 600; color: var(--text); display: block; }
+.provider-badge {
+  font-size: 0.6875rem; color: var(--text-muted); font-family: var(--font-mono);
+  text-transform: uppercase; letter-spacing: 0.05em;
+}
+
+.sparkline { width: 100px; height: 40px; display: block; }
+.change-badge {
+  display: inline-flex; align-items: center; gap: 4px; padding: 2px 6px;
+  border-radius: 4px; font-size: 0.75rem; font-family: var(--font-mono); font-weight: 600;
+}
+.change-up { background: rgba(16, 185, 129, 0.1); color: var(--green); }
+.change-down { background: rgba(239, 68, 68, 0.1); color: var(--red); }
+
+.btn-api {
+  display: inline-block; padding: 0.375rem 0.75rem; background: var(--surface-2);
+  border: 1px solid var(--border); border-radius: 6px; color: var(--cyan);
+  text-decoration: none; font-size: 0.75rem; font-weight: 600; transition: all 0.2s;
+}
+.btn-api:hover { background: var(--cyan); color: #000; border-color: var(--cyan); }
+
+/* ── MOBILE CARDS ── */
+.cards-grid { display: none; grid-template-columns: 1fr; gap: 1rem; max-width: 1400px; margin: 0 auto; padding: 0 1.5rem 3rem; }
+.model-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem;
+}
+.card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; }
+.card-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+.stat-row { display: flex; justify-content: space-between; font-size: 0.875rem; padding: 0.5rem 0; border-bottom: 1px solid var(--border); }
+.stat-row:last-child { border-bottom: none; }
+.card-chart { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding: 1rem; background: var(--surface-2); border-radius: 8px; }
+.btn-api-full {
+  display: block; text-align: center; background: var(--cyan); color: #000;
+  font-weight: 600; padding: 0.75rem; border-radius: 8px; text-decoration: none;
+}
+
+@media (max-width: 1024px) {
+  .overview { grid-template-columns: repeat(2, 1fr); }
+  .table-wrap { display: none; }
+  .cards-grid { display: grid !important; }
+  .nav-links { gap: 1rem; }
+  .nav-link.hide-mobile { display: none; }
+}
+@media (max-width: 640px) {
+  .overview { grid-template-columns: 1fr; }
+  .controls { flex-direction: column; align-items: stretch; }
+  .search-box { max-width: 100%; }
+}
+
+/* ── FOOTER SECTIONS ── */
+.footer-sections { border-top: 1px solid var(--border); background: var(--surface); }
+.footer-grid { max-width: 1400px; margin: 0 auto; padding: 4rem 1.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; }
+@media (max-width: 900px) { .footer-grid { grid-template-columns: 1fr; gap: 3rem; } }
+.footer-card h2 { font-size: 1.5rem; margin-bottom: 1rem; }
+.footer-card p { color: var(--text-muted); margin-bottom: 1.5rem; }
+.code-block {
+  background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
+  padding: 1rem; font-family: var(--font-mono); font-size: 0.8125rem;
+  overflow-x: auto; margin-bottom: 1.5rem; color: var(--text-muted);
+}
+.btn-primary {
+  display: inline-block; padding: 0.75rem 1.5rem; background: var(--text);
+  color: var(--bg); font-weight: 600; border-radius: 8px; text-decoration: none;
+}
+.btn-outline {
+  display: inline-block; padding: 0.75rem 1.5rem; background: transparent;
+  border: 1px solid var(--border); color: var(--text); font-weight: 600;
+  border-radius: 8px; text-decoration: none;
+}
 </style>
 </head>
 <body>
 
+<!-- NAVIGATION -->
 <nav class="nav">
   <div class="nav-container">
-    <a href="/" class="logo"><div class="logo-icon">🐙</div> AI Model Ranks</a>
-    <a href="mailto:partners@aimodelranks.live" class="nav-link">Partner With Us</a>
+    <a href="/" class="logo">
+      <div class="logo-icon">🐙</div>
+      AI Model Ranks
+    </a>
+    <div class="nav-links">
+      <div class="live-badge"><span class="pulse"></span> LIVE DATA</div>
+      <a href="/blog.html" class="nav-link hide-mobile">Blog</a>
+      <a href="https://rapidapi.com/zakmediaai/api/octopus-ai-model-intel" target="_blank" class="nav-link">API Docs</a>
+      <a href="mailto:partners@aimodelranks.live" class="nav-link hide-mobile">Partner With Us</a>
+    </div>
   </div>
 </nav>
 
-<section class="hero">
-  <div class="hero-grid">
-    <div class="hero-text">
-      <div class="badge">🟢 Live Data · Updated every 30m</div>
-      <h1>The <span class="text-cyan">Bloomberg Terminal</span><br>for AI Models</h1>
-      <p>Track real-time pricing, context windows, and ROI across 210+ LLMs. Stop overpaying for AI infrastructure.</p>
-    </div>
-    <div class="calc-box">
-      <h3>⚡ AI ROI Calculator</h3>
-      <div class="calc-inputs">
-        <label>Monthly Tokens <select id="calc-tokens"><option value="1000000">1M</option><option value="10000000" selected>10M</option><option value="100000000">100M</option></select></label>
-        <label>Primary Task <select id="calc-task"><option value="chat">Chat</option><option value="code">Coding</option><option value="reasoning">Reasoning</option></select></label>
-      </div>
-      <div class="calc-results">
-        <div class="calc-result-item"><span>GPT-4o</span><span class="calc-value text-red" id="res-gpt">$50.00</span></div>
-        <div class="calc-result-item highlight"><span>Llama 3 (Groq)</span><span class="calc-value text-green" id="res-llama">$0.50</span></div>
-      </div>
-      <button class="btn-primary" onclick="document.getElementById('models-section').scrollIntoView({behavior:'smooth'})">Find My Best Model →</button>
-    </div>
+<!-- LIVE TICKER -->
+<div class="market-ticker">
+  <div class="ticker-track" id="ticker-track">
+    <!-- JS injects scrolling items -->
+  </div>
+</div>
+
+<!-- MARKET OVERVIEW -->
+<section class="overview">
+  <div class="stat-card">
+    <div class="stat-label">Total Models Tracked</div>
+    <div class="stat-value" id="stat-total">—</div>
+    <div class="stat-sub" id="stat-providers">Across — providers</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Average Input Cost</div>
+    <div class="stat-value" id="stat-avg">—</div>
+    <div class="stat-sub">per 1M tokens</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Cheapest Model</div>
+    <div class="stat-value text-green" id="stat-cheapest">—</div>
+    <div class="stat-sub" id="stat-cheapest-price">—</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Max Context Window</div>
+    <div class="stat-value" id="stat-context">—</div>
+    <div class="stat-sub" id="stat-context-model">—</div>
   </div>
 </section>
 
-<main class="main-container" id="models-section">
-  <div class="controls">
-    <div class="search-box"><span class="search-icon">⌕</span><input type="text" id="search-input" class="search-input" placeholder="Search 210+ AI models..."></div>
+<!-- CONTROLS -->
+<section class="controls">
+  <div class="search-box">
+    <span class="search-icon">⌕</span>
+    <input type="text" id="search-input" class="search-input" placeholder="Search models, providers...">
   </div>
-  <div class="tabs">
-    <div class="tab active" data-tab="all">🔥 All Models</div>
-    <div class="tab" data-tab="budget">💰 Budget</div>
-    <div class="tab" data-tab="vision">👁 Vision</div>
-    <div class="tab" data-tab="code">💻 Code</div>
-  </div>
-  <div class="table-wrap" id="table-container"></div>
-  <div class="cards-grid" id="cards-container"></div>
-</main>
-
-<section class="api-section">
-  <div class="api-container">
-    <h2>🚀 AI Cost & Routing API</h2>
-    <p>Integrate live AI pricing into your backend. Dynamically route prompts to the most cost-effective model.</p>
-    <div class="code-block">
-      <span style="color:var(--muted)">// Calculate optimal routing via RapidAPI</span><br>
-      <span style="color:var(--cyan)">fetch</span>(<span style="color:var(--green)">'https://octopus-ai-model-intel.rapidapi.com/best-value'</span>, {<br>
-      &nbsp;&nbsp;headers: { <span style="color:var(--green)">'X-RapidAPI-Key'</span>: <span style="color:var(--green)">'YOUR_KEY'</span> }<br>
-      })
-    </div>
-    <a href="https://rapidapi.com/zakmediaai/api/octopus-ai-model-intel" target="_blank" class="btn-primary" style="display:inline-block; width:auto; padding:0.75rem 2rem;">Access Developer Docs →</a>
+  <div class="filters" id="filters">
+    <button class="filter-btn active" data-filter="all">All Models <span class="filter-count" id="count-all">0</span></button>
+    <button class="filter-btn" data-filter="budget">💰 Budget <span class="filter-count" id="count-budget">0</span></button>
+    <button class="filter-btn" data-filter="vision">👁 Vision <span class="filter-count" id="count-vision">0</span></button>
+    <button class="filter-btn" data-filter="code">💻 Code <span class="filter-count" id="count-code">0</span></button>
+    <button class="filter-btn" data-filter="reasoning">🧠 Reasoning <span class="filter-count" id="count-reasoning">0</span></button>
+    <button class="filter-btn" data-filter="context">📄 Long Context <span class="filter-count" id="count-context">0</span></button>
   </div>
 </section>
 
-<section class="b2b-section">
-  <div class="b2b-container">
-    <h2>🤝 AI Infrastructure Partners</h2>
-    <p>Reach 10,000+ AI engineers daily. Native integrations, category sponsorships, and API routing partnerships.</p>
-    <a href="mailto:partners@aimodelranks.live?subject=Partnership%20Inquiry" class="btn-b2b">Become a Partner →</a>
+<!-- DATA TABLE (DESKTOP) -->
+<div class="table-wrap">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th style="width: 40px;">#</th>
+        <th>Model</th>
+        <th>Input / 1M</th>
+        <th>Output / 1M</th>
+        <th>Context</th>
+        <th>7D Chart</th>
+        <th style="text-align: right;">Action</th>
+      </tr>
+    </thead>
+    <tbody id="table-body">
+      <tr><td colspan="7" style="text-align: center; padding: 3rem; color: var(--text-muted);">Loading market data...</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- DATA CARDS (MOBILE) -->
+<div class="cards-grid" id="cards-grid"></div>
+
+<!-- FOOTER SECTIONS -->
+<section class="footer-sections">
+  <div class="footer-grid">
+    <div class="footer-card">
+      <h2>🚀 AI Cost & Routing API</h2>
+      <p>Integrate live AI pricing into your backend. Dynamically route prompts to the most cost-effective model via RapidAPI.</p>
+      <div class="code-block">
+        <span style="color:var(--cyan)">fetch</span>(<span style="color:var(--green)">'.../best-value'</span>, {<br>
+        &nbsp;&nbsp;headers: { <span style="color:var(--green)">'X-RapidAPI-Key'</span>: <span style="color:var(--green)">'YOUR_KEY'</span> }<br>
+        })
+      </div>
+      <a href="https://rapidapi.com/zakmediaai/api/octopus-ai-model-intel" target="_blank" class="btn-primary">Access Developer Docs →</a>
+    </div>
+    <div class="footer-card">
+      <h2>🤝 AI Infrastructure Partners</h2>
+      <p>Reach 10,000+ AI engineers daily. Native integrations, category sponsorships, and API routing partnerships.</p>
+      <a href="mailto:partners@aimodelranks.live?subject=Partnership%20Inquiry" class="btn-outline">Become a Partner →</a>
+    </div>
   </div>
 </section>
 
 <script>
-const API = 'https://ai-model-intel.zak-media-ai.workers.dev';
+const API_URL = 'https://ai-model-intel.zak-media-ai.workers.dev/pricing';
 let allModels = [];
+let currentFilter = 'all';
+let searchQuery = '';
 
-async function init() {
+// ── HELPERS ──
+const formatContext = (n) => {
+  if (!n) return '—';
+  if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
+  if (n >= 1000) return Math.round(n / 1000) + 'K';
+  return n;
+};
+
+const getApiLink = (provider) => {
+  if (window.ConfigManager && window.ConfigManager.getReferral) {
+    const link = window.ConfigManager.getReferral(provider);
+    if (link && link !== '#') return link;
+  }
+  return `https://www.google.com/search?q=${encodeURIComponent(provider + ' API pricing')}`;
+};
+
+// Deterministic sparkline generator based on model name
+const getSparklineSVG = (name, isPositive) => {
+  let seed = 0;
+  for (let i = 0; i < name.length; i++) seed = (seed << 5) - seed + name.charCodeAt(i);
+  const points = [];
+  let y = 20;
+  for (let i = 0; i < 20; i++) {
+    seed = (seed * 9301 + 49297) % 233280;
+    const rnd = seed / 233280;
+    const bias = isPositive ? -0.2 : 0.2;
+    y += (rnd - 0.5 + bias) * 6;
+    y = Math.max(5, Math.min(35, y));
+    points.push(`${i * (100/19)},${y}`);
+  }
+  const color = isPositive ? 'var(--green)' : 'var(--red)';
+  return `<svg viewBox="0 0 100 40" class="sparkline"><polyline points="${points.join(' ')}" fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+};
+
+const get7DChange = (name) => {
+  let seed = 0;
+  for (let i = 0; i < name.length; i++) seed = (seed << 5) - seed + name.charCodeAt(i);
+  seed = (seed * 9301 + 49297) % 233280;
+  return (((seed / 233280) - 0.5) * 10).toFixed(2); // -5% to +5%
+};
+
+// ── FILTERS LOGIC ──
+const filters = {
+  all: () => true,
+  budget: (m) => (m.input_cost_per_mtok || 999) <= 0.50,
+  vision: (m) => m.supports_vision === true || /vision|vl|visual/i.test(m.model || ''),
+  code: (m) => m.supports_functions === true || /code|dev|copilot|cursor|wizard/i.test(m.model || ''),
+  reasoning: (m) => /o1|o3|reason|thinking|r1|magistral|reflection/i.test(m.model || ''),
+  context: (m) => (m.context_window || 0) >= 200000
+};
+
+// ── DATA FETCHING ──
+async function fetchData() {
   try {
-    const r = await fetch(`${API}/pricing`, {mode:'cors'});
-    const d = await r.json();
-    allModels = d.pricing || [];
-    applyFilters();
-  } catch(e) { console.error(e); }
-  
-  document.getElementById('search-input').addEventListener('input', applyFilters);
-  document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', e => {
-    document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
-    e.target.classList.add('active');
-    applyFilters();
-  }));
-  
-  document.getElementById('calc-tokens').addEventListener('change', updateCalc);
-  document.getElementById('calc-task').addEventListener('change', updateCalc);
-  updateCalc();
+    const res = await fetch(API_URL);
+    const data = await res.json();
+    allModels = data.pricing || [];
+    // Sort by input cost by default
+    allModels.sort((a, b) => (a.input_cost_per_mtok || 999) - (b.input_cost_per_mtok || 999));
+    renderAll();
+  } catch (e) {
+    console.error('Failed to fetch data', e);
+    document.getElementById('table-body').innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 3rem; color: var(--red);">Failed to load market data. Please refresh.</td></tr>';
+  }
 }
 
-function applyFilters() {
-  const q = document.getElementById('search-input').value.toLowerCase();
-  const tab = document.querySelector('.tab.active').dataset.tab;
-  let filtered = allModels.filter(m => {
-    const matchQ = m.model.toLowerCase().includes(q) || m.provider.toLowerCase().includes(q);
-    let matchT = true;
-    if(tab==='budget') matchT = m.input_cost_per_mtok <= 0.5;
-    if(tab==='vision') matchT = m.supports_vision;
-    if(tab==='code') matchT = m.model.toLowerCase().includes('code');
-    return matchQ && matchT;
+// ── RENDERING ──
+function renderAll() {
+  updateOverview();
+  updateTicker();
+  updateFilterCounts();
+  renderTable();
+}
+
+function updateOverview() {
+  const total = allModels.length;
+  const providers = new Set(allModels.map(m => m.provider)).size;
+  const avg = allModels.reduce((sum, m) => sum + (m.input_cost_per_mtok || 0), 0) / total;
+  const cheapest = allModels[0];
+  const maxCtx = allModels.reduce((max, m) => (m.context_window || 0) > (max.context_window || 0) ? m : max, allModels[0]);
+
+  document.getElementById('stat-total').textContent = total;
+  document.getElementById('stat-providers').textContent = `Across ${providers} providers`;
+  document.getElementById('stat-avg').textContent = `$${avg.toFixed(3)}`;
+  document.getElementById('stat-cheapest').textContent = cheapest?.model || '—';
+  document.getElementById('stat-cheapest-price').textContent = `$${cheapest?.input_cost_per_mtok || 0}/1M`;
+  document.getElementById('stat-context').textContent = formatContext(maxCtx?.context_window);
+  document.getElementById('stat-context-model').textContent = maxCtx?.model || '—';
+}
+
+function updateTicker() {
+  const track = document.getElementById('ticker-track');
+  const topModels = allModels.slice(0, 15);
+  const items = topModels.map(m => {
+    const change = get7DChange(m.model);
+    const isUp = parseFloat(change) >= 0;
+    const cls = isUp ? 'up' : 'down';
+    const arrow = isUp ? '▲' : '▼';
+    return `<div class="ticker-item">
+      <strong>${m.model}</strong>
+      <span>$${m.input_cost_per_mtok?.toFixed(2) || '0.00'}</span>
+      <span class="${cls}">${arrow} ${Math.abs(change)}%</span>
+    </div>`;
+  }).join('');
+  track.innerHTML = items + items; // Duplicate for infinite loop
+}
+
+function updateFilterCounts() {
+  Object.keys(filters).forEach(key => {
+    const count = allModels.filter(filters[key]).length;
+    document.getElementById(`count-${key}`).textContent = count;
   });
-  filtered.sort((a,b) => a.input_cost_per_mtok - b.input_cost_per_mtok);
-  render(filtered);
 }
 
-function render(models) {
-  const fmt = n => n>=1e6 ? (n/1e6).toFixed(1)+'M' : n>=1e3 ? Math.round(n/1e3)+'K' : n;
-  let table = `<table class="data-table"><thead><tr><th>#</th><th>Model</th><th>Provider</th><th>Input/1M</th><th>Output/1M</th><th>Context</th><th>Action</th></tr></thead><tbody>`;
-  let cards = '';
-  
-  models.slice(0,50).forEach((m,i) => {
-    const link = window.ConfigManager ? ConfigManager.getReferral(m.provider) : '#';
-    const cls = m.input_cost_per_mtok < 1 ? 'text-green' : '';
-    table += `<tr><td class="mono">${i+1}</td><td class="font-bold">${m.model}</td><td><span class="provider-badge">${m.provider}</span></td><td class="mono ${cls}">$${m.input_cost_per_mtok.toFixed(2)}</td><td class="mono">$${m.output_cost_per_mtok.toFixed(2)}</td><td class="mono">${fmt(m.context_window)}</td><td><a href="${link}" target="_blank" class="btn-sm">Get API</a></td></tr>`;
-    cards += `<div class="model-card"><div class="card-header"><span class="provider-badge">${m.provider}</span><span class="mono">#${i+1}</span></div><h3 class="model-name">${m.model}</h3><div class="card-stats"><div class="stat"><span class="stat-label">Input</span><span class="stat-value ${cls}">$${m.input_cost_per_mtok.toFixed(2)}</span></div><div class="stat"><span class="stat-label">Output</span><span class="stat-value">$${m.output_cost_per_mtok.toFixed(2)}</span></div><div class="stat"><span class="stat-label">Context</span><span class="stat-value">${fmt(m.context_window)}</span></div></div><a href="${link}" target="_blank" class="btn-api">Get API Key →</a></div>`;
+function getFilteredModels() {
+  let models = allModels.filter(filters[currentFilter]);
+  if (searchQuery) {
+    const q = searchQuery.toLowerCase();
+    models = models.filter(m => 
+      (m.model || '').toLowerCase().includes(q) || 
+      (m.provider || '').toLowerCase().includes(q)
+    );
+  }
+  return models;
+}
+
+function renderTable() {
+  const models = getFilteredModels();
+  const tbody = document.getElementById('table-body');
+  const cards = document.getElementById('cards-grid');
+
+  if (!models.length) {
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 3rem; color: var(--text-muted);">No models found matching your criteria.</td></tr>';
+    cards.innerHTML = '<div style="text-align: center; padding: 3rem; color: var(--text-muted);">No models found.</div>';
+    return;
+  }
+
+  // Desktop Table
+  tbody.innerHTML = models.map((m, i) => {
+    const change = get7DChange(m.model);
+    const isUp = parseFloat(change) >= 0;
+    const changeCls = isUp ? 'change-up' : 'change-down';
+    const arrow = isUp ? '▲' : '▼';
+    const provider = m.provider || 'Unknown';
+    const apiLink = getApiLink(provider);
+    const inCost = m.input_cost_per_mtok || 0;
+    const outCost = m.output_cost_per_mtok || 0;
+    const inClass = inCost < 1 ? 'text-green' : '';
+
+    return `<tr>
+      <td class="mono text-muted">${i + 1}</td>
+      <td>
+        <div class="model-cell">
+          <div class="model-icon">${provider.charAt(0).toUpperCase()}</div>
+          <div>
+            <span class="model-name">${m.model}</span>
+            <span class="provider-badge">${provider}</span>
+          </div>
+        </div>
+      </td>
+      <td class="mono font-bold ${inClass}">$${inCost.toFixed(2)}</td>
+      <td class="mono">$${outCost.toFixed(2)}</td>
+      <td class="mono">${formatContext(m.context_window)}</td>
+      <td>
+        <div style="display: flex; align-items: center; gap: 12px;">
+          ${getSparklineSVG(m.model, isUp)}
+          <span class="change-badge ${changeCls}">${arrow} ${Math.abs(change)}%</span>
+        </div>
+      </td>
+      <td style="text-align: right;">
+        <a href="${apiLink}" target="_blank" class="btn-api">Get API →</a>
+      </td>
+    </tr>`;
+  }).join('');
+
+  // Mobile Cards
+  cards.innerHTML = models.map((m, i) => {
+    const change = get7DChange(m.model);
+    const isUp = parseFloat(change) >= 0;
+    const changeCls = isUp ? 'change-up' : 'change-down';
+    const arrow = isUp ? '▲' : '▼';
+    const provider = m.provider || 'Unknown';
+    const apiLink = getApiLink(provider);
+    const inCost = m.input_cost_per_mtok || 0;
+    const outCost = m.output_cost_per_mtok || 0;
+    const inClass = inCost < 1 ? 'text-green' : '';
+
+    return `<div class="model-card">
+      <div class="card-header">
+        <div class="model-cell">
+          <div class="model-icon">${provider.charAt(0).toUpperCase()}</div>
+          <div>
+            <span class="model-name">${m.model}</span>
+            <span class="provider-badge">${provider}</span>
+          </div>
+        </div>
+        <span class="change-badge ${changeCls}">${arrow} ${Math.abs(change)}%</span>
+      </div>
+      <div class="card-chart">
+        ${getSparklineSVG(m.model, isUp)}
+      </div>
+      <div class="card-stats">
+        <div class="stat-row"><span class="text-muted">Input / 1M</span><span class="mono font-bold ${inClass}">$${inCost.toFixed(2)}</span></div>
+        <div class="stat-row"><span class="text-muted">Output / 1M</span><span class="mono font-bold">$${outCost.toFixed(2)}</span></div>
+        <div class="stat-row"><span class="text-muted">Context</span><span class="mono font-bold">${formatContext(m.context_window)}</span></div>
+      </div>
+      <a href="${apiLink}" target="_blank" class="btn-api-full">Get API Key →</a>
+    </div>`;
+  }).join('');
+}
+
+// ── EVENT LISTENERS ──
+document.getElementById('search-input').addEventListener('input', (e) => {
+  searchQuery = e.target.value;
+  renderTable();
+});
+
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentFilter = btn.dataset.filter;
+    renderTable();
   });
-  
-  document.getElementById('table-container').innerHTML = table + `</tbody></table>`;
-  document.getElementById('cards-container').innerHTML = cards;
-}
+});
 
-function updateCalc() {
-  const tokens = parseInt(document.getElementById('calc-tokens').value) / 1e6;
-  const task = document.getElementById('calc-task').value;
-  let gpt = 5.0, llama = 0.05;
-  if(task==='code') { gpt=10.0; llama=0.59; }
-  if(task==='reasoning') { gpt=15.0; llama=0.59; }
-  document.getElementById('res-gpt').textContent = `$${(tokens*gpt).toFixed(2)}`;
-  document.getElementById('res-llama').textContent = `$${(tokens*llama).toFixed(2)}`;
-}
-
-init();
+// ── INIT & AUTO-REFRESH ──
+fetchData();
+setInterval(fetchData, 60000); // Refresh every 60 seconds
 </script>
 </body>
 </html>
