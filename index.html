@@ -8,157 +8,105 @@
 <script src="/config.js"></script>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com" rel="preconnect"/>
-<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=JetBrains+Mono:wght@100..800&display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
+<script>
 tailwind.config = {
   darkMode: "class",
   theme: {
     extend: {
-      "colors": {
-        "surface-tint": "#ffb781", "on-secondary-container": "#007117", "primary-fixed-dim": "#ffb781",
-        "secondary": "#ecffe3", "surface-container": "#201f1f", "secondary-container": "#13ff43",
-        "surface-container-high": "#2a2a2a", "on-background": "#e5e2e1", "on-secondary-fixed-variant": "#00530e",
-        "secondary-fixed": "#72ff70", "tertiary-fixed": "#ffdad7", "on-tertiary": "#68000a",
-        "surface": "#131313", "primary-fixed": "#ffdcc4", "on-tertiary-container": "#80000f",
-        "outline-variant": "#574335", "inverse-surface": "#e5e2e1", "surface-bright": "#3a3939",
-        "on-tertiary-fixed-variant": "#930013", "text-muted": "#888888", "surface-elevated": "#0F0F0F",
-        "secondary-fixed-dim": "#00e639", "on-primary-container": "#613000",
-        "surface-container-highest": "#353534", "on-secondary": "#003907", "primary-container": "#ff8800",
-        "inverse-on-surface": "#313030", "background": "#131313", "tertiary-container": "#ff837c",
-        "on-error": "#690005", "on-primary-fixed": "#2f1400", "terminal-cyan": "#06B6D4",
-        "border-slate": "#1A1A1A", "error-container": "#93000a", "on-primary": "#4e2600",
-        "surface-container-lowest": "#0e0e0e", "outline": "#a58c7b", "on-tertiary-fixed": "#410004",
-        "on-secondary-fixed": "#002203", "on-surface-variant": "#dec1ae", "tertiary": "#ffb3ad",
-        "surface-dim": "#131313", "on-primary-fixed-variant": "#6f3800", "error": "#ffb4ab",
-        "on-surface": "#e5e2e1", "surface-variant": "#353534", "surface-container-low": "#1c1b1b",
-        "inverse-primary": "#924c00", "tertiary-fixed-dim": "#ffb3ad", "primary": "#ffb781",
-        "on-error-container": "#ffdad6", "matrix-green": "#00ff88", "bloomberg-orange": "#ff8800",
-        "deep-charcoal": "#131313"
+      colors: {
+        "surface": "#131313", "surface-elevated": "#0F0F0F", "surface-container": "#201f1f",
+        "surface-container-high": "#2a2a2a", "surface-container-highest": "#353534",
+        "surface-container-lowest": "#0e0e0e", "surface-bright": "#3a3939",
+        "border-slate": "#1A1A1A", "outline-variant": "#574335",
+        "text-muted": "#888888", "on-surface": "#e5e2e1", "on-surface-variant": "#dec1ae",
+        "primary": "#ffb781", "primary-container": "#ff8800",
+        "matrix-green": "#00ff41", "bloomberg-orange": "#ff8800", "terminal-cyan": "#06B6D4",
+        "alert-up": "#00ff66", "alert-down": "#ff5500"
       },
-      "borderRadius": { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" },
-      "spacing": { "grid-column-gap": "1px", "unit": "4px", "container-max": "1600px", "margin-edge": "24px", "gutter": "16px" },
-      "fontFamily": {
-        "headline-md": ["Geist", "sans-serif"], "body-sm": ["Geist", "sans-serif"],
-        "data-tabular": ["JetBrains Mono", "monospace"], "body-lg": ["Geist", "sans-serif"],
-        "data-label": ["JetBrains Mono", "monospace"], "headline-xl": ["Geist", "sans-serif"],
-        "headline-xl-mobile": ["Geist", "sans-serif"]
+      fontFamily: {
+        "headline-md": ["Geist", "sans-serif"], "headline-xl": ["Geist", "sans-serif"],
+        "headline-xl-mobile": ["Geist", "sans-serif"],
+        "body-sm": ["Geist", "sans-serif"], "body-lg": ["Geist", "sans-serif"],
+        "data-tabular": ["JetBrains Mono", "monospace"], "data-label": ["JetBrains Mono", "monospace"]
       },
-      "fontSize": {
-        "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
-        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
-        "data-tabular": ["13px", { "lineHeight": "16px", "letterSpacing": "-0.01em", "fontWeight": "500" }],
-        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
-        "data-label": ["11px", { "lineHeight": "12px", "letterSpacing": "0.05em", "fontWeight": "700" }],
-        "headline-xl": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
-        "headline-xl-mobile": ["32px", { "lineHeight": "38px", "fontWeight": "700" }]
+      fontSize: {
+        "headline-md": ["24px", { lineHeight: "32px", letterSpacing: "-0.01em", fontWeight: "600" }],
+        "headline-xl": ["40px", { lineHeight: "48px", letterSpacing: "-0.02em", fontWeight: "700" }],
+        "headline-xl-mobile": ["32px", { lineHeight: "38px", fontWeight: "700" }],
+        "body-sm": ["14px", { lineHeight: "20px", fontWeight: "400" }],
+        "body-lg": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+        "data-tabular": ["14px", { lineHeight: "20px", letterSpacing: "-0.01em", fontWeight: "500" }],
+        "data-label": ["12px", { lineHeight: "14px", letterSpacing: "0.05em", fontWeight: "700" }]
       },
-      backgroundImage: { 'dot-pattern': 'radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px)' }
+      spacing: { "container-max": "1600px", "margin-edge": "24px", "gutter": "16px" }
     }
   }
 }
 </script>
 <style>
-body { background-color: #131313; color: #e5e2e1; }
-.bg-dot-grid { background-image: radial-gradient(circle, rgba(255, 255, 255, 0.05) 1px, transparent 1px); background-size: 20px 20px; }
-.shimmer-text {
-  background: linear-gradient(90deg, #e5e2e1 0%, #ffb781 50%, #e5e2e1 100%);
-  background-size: 200% auto; color: transparent;
-  -webkit-background-clip: text; background-clip: text;
-  animation: shimmer 3s linear infinite;
-}
-@keyframes shimmer { to { background-position: 200% center; } }
-.pulse-border { animation: pulse-border 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
-@keyframes pulse-border {
-  0%, 100% { border-color: rgba(255, 136, 0, 0.2); }
-  50% { border-color: rgba(255, 136, 0, 0.6); }
-}
-.pulse-green { animation: pulse-green 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
-@keyframes pulse-green { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
-.material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
-.glass-panel {
-  background: rgba(15, 15, 15, 0.7); backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1);
-}
-@keyframes ticker-scroll {
-  0% { transform: translateX(0) translateZ(0); }
-  100% { transform: translateX(-50%) translateZ(0); }
-}
-.ticker-track { display: flex; width: max-content; animation: ticker-scroll 40s linear infinite; will-change: transform; }
-
-/* Mobile menu */
-.mobile-menu {
-  position: fixed; top: 0; right: -100%; width: 80%; max-width: 320px; height: 100vh;
-  background: rgba(19, 19, 19, 0.98); backdrop-filter: blur(20px); z-index: 200;
-  transition: right 0.3s ease; padding: 5rem 2rem; display: flex; flex-direction: column;
-  gap: 0.5rem; box-shadow: -10px 0 30px rgba(0,0,0,0.5);
-}
-.mobile-menu.open { right: 0; }
-.mobile-menu a {
-  color: #e5e2e1; text-decoration: none; font-size: 1.125rem; font-weight: 500;
-  padding: 1rem 0; border-bottom: 1px solid #1A1A1A; display: flex; align-items: center; gap: 0.75rem;
-}
-.mobile-menu a:hover { color: #ffb781; }
-.overlay {
-  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-  background: rgba(0,0,0,0.6); z-index: 150; display: none;
-}
-.overlay.show { display: block; }
-
-/* Mobile cards */
-.mobile-card {
-  background: rgba(15, 15, 15, 0.7); backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 0.5rem;
-  padding: 1.25rem; transition: all 0.2s;
-}
-.mobile-card:hover { border-color: #ffb781; transform: translateY(-2px); }
-
-/* Provider logo */
-.provider-logo {
-  width: 24px; height: 24px; border-radius: 4px; background: #fff; padding: 2px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-}
-.provider-logo-lg { width: 32px; height: 32px; border-radius: 6px; }
-
-/* Sparkline */
-.sparkline { width: 80px; height: 32px; display: block; }
-
-/* Scrollbar */
-::-webkit-scrollbar { width: 8px; height: 8px; }
-::-webkit-scrollbar-track { background: #131313; }
-::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 4px; }
-::-webkit-scrollbar-thumb:hover { background: #3a3939; }
+  body { background-color: #0a0a0a; color: #e5e2e1; overflow-x: hidden; }
+  #bg-canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -2; pointer-events: none; }
+  #matrix-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; opacity: 0.12; mask-image: radial-gradient(circle at 50% 50%, black, transparent 70%); -webkit-mask-image: radial-gradient(circle at 50% 50%, black, transparent 70%); }
+  .shimmer-text { background: linear-gradient(90deg, #e5e2e1 0%, #ffb781 50%, #e5e2e1 100%); background-size: 200% auto; color: transparent; -webkit-background-clip: text; background-clip: text; animation: shimmer 3s linear infinite; }
+  @keyframes shimmer { to { background-position: 200% center; } }
+  .pulse-border { animation: pulse-border 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+  @keyframes pulse-border { 0%, 100% { border-color: rgba(255, 136, 0, 0.2); } 50% { border-color: rgba(255, 136, 0, 0.6); } }
+  .pulse-green { animation: pulse-green 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+  @keyframes pulse-green { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
+  .glass-panel { background: rgba(15, 15, 15, 0.6); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5); }
+  @keyframes ticker-scroll { 0% { transform: translateX(0) translateZ(0); } 100% { transform: translateX(-50%) translateZ(0); } }
+  .ticker-track { display: flex; width: max-content; animation: ticker-scroll 60s linear infinite; will-change: transform; }
+  
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  
+  /* Mobile menu */
+  .mobile-menu { position: fixed; top: 0; right: -100%; width: 80%; max-width: 320px; height: 100vh; background: rgba(19, 19, 19, 0.98); backdrop-filter: blur(20px); z-index: 200; transition: right 0.3s ease; padding: 5rem 2rem; display: flex; flex-direction: column; gap: 0.5rem; box-shadow: -10px 0 30px rgba(0,0,0,0.5); }
+  .mobile-menu.open { right: 0; }
+  .mobile-menu a { color: #e5e2e1; text-decoration: none; font-size: 1.125rem; font-weight: 500; padding: 1rem 0; border-bottom: 1px solid #1A1A1A; display: flex; align-items: center; gap: 0.75rem; }
+  .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 150; display: none; }
+  .overlay.show { display: block; }
+  
+  /* Mobile cards */
+  .mobile-card { background: rgba(15, 15, 15, 0.7); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 0.5rem; padding: 1.25rem; transition: all 0.2s; }
+  .mobile-card:hover { border-color: #ffb781; transform: translateY(-2px); }
+  
+  .provider-logo { width: 24px; height: 24px; border-radius: 4px; background: #fff; padding: 2px; box-shadow: 0 2px 6px rgba(0,0,0,0.3); }
+  .provider-logo-lg { width: 32px; height: 32px; border-radius: 6px; }
+  .sparkline { width: 80px; height: 32px; display: block; }
+  
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: #131313; }
+  ::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: #3a3939; }
 </style>
 </head>
-<body class="min-h-screen flex flex-col font-body-sm relative overflow-x-hidden bg-dot-grid pt-8">
+<body class="min-h-screen flex flex-col font-body-sm relative pt-10">
+
+<canvas id="bg-canvas"></canvas>
+<canvas id="matrix-canvas"></canvas>
 
 <!-- Persistent Data Ticker -->
-<div class="fixed top-0 left-0 w-full h-8 bg-surface-container-highest border-b border-border-slate flex items-center overflow-hidden z-[60]">
-  <div class="ticker-track font-data-tabular text-data-tabular text-text-muted text-xs" id="ticker-track">
-    <!-- JS injects -->
-  </div>
+<div class="fixed top-0 left-0 w-full h-10 bg-surface-container-lowest/90 backdrop-blur-md border-b border-border-slate flex items-center overflow-hidden z-[60]">
+  <div class="ticker-track font-data-tabular text-data-tabular text-text-muted" id="ticker-track"></div>
 </div>
 
-<!-- Radial Pulse Background Overlay -->
-<div class="fixed inset-0 pointer-events-none z-[-1]" style="background: radial-gradient(circle at 50% 0%, rgba(255,136,0,0.05) 0%, transparent 50%);"></div>
-
 <!-- Top Header -->
-<header class="bg-surface/70 backdrop-blur-md docked full-width top-8 sticky z-50 border-b border-outline-variant/30 flex justify-between items-center w-full px-margin-edge h-16 transition-all duration-200">
+<header class="glass-panel docked full-width top-10 sticky z-50 border-b border-outline-variant/30 flex justify-between items-center w-full px-margin-edge h-16 transition-all duration-200">
   <div class="flex items-center gap-4">
     <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">bar_chart</span>
     <a href="/" class="font-headline-md font-bold tracking-tight text-primary text-headline-md md:text-headline-md hover:text-primary-fixed transition-colors">AI Model Ranks</a>
-    <span class="text-text-muted hidden md:inline ml-2">- Live Terminal</span>
+    <span class="text-text-muted hidden md:inline ml-2 font-data-tabular">— Live Terminal</span>
   </div>
   
-  <div class="hidden lg:flex items-center gap-6 bg-surface-container-high px-4 py-1.5 rounded border border-border-slate">
+  <div class="hidden lg:flex items-center gap-6 bg-surface-container-high/50 px-4 py-1.5 rounded border border-border-slate backdrop-blur-md">
     <div class="flex items-center gap-2">
       <div class="w-2 h-2 rounded-full bg-matrix-green pulse-green"></div>
       <span class="font-data-label text-data-label text-matrix-green tracking-widest">LIVE DATA</span>
     </div>
     <nav class="flex gap-4 border-l border-border-slate pl-4">
       <a class="text-primary border-b-2 border-primary pb-1 font-body-sm text-body-sm" href="/">Terminal</a>
-      <a class="text-on-surface-variant hover:text-on-surface transition-colors hover:bg-surface-variant/50 px-2 rounded font-body-sm text-body-sm" href="/blog.html">Research</a>
+      <a class="text-on-surface-variant hover:text-on-surface transition-colors hover:bg-surface-variant/50 px-2 rounded font-body-sm text-body-sm" href="/blog.html">News</a>
       <a class="text-on-surface-variant hover:text-on-surface transition-colors hover:bg-surface-variant/50 px-2 rounded font-body-sm text-body-sm" href="https://rapidapi.com/zakmediaai/api/octopus-ai-model-intel" target="_blank">API</a>
       <a class="text-on-surface-variant hover:text-on-surface transition-colors hover:bg-surface-variant/50 px-2 rounded font-body-sm text-body-sm" href="#" onclick="openPartnerModal(); return false;">Partner</a>
     </nav>
@@ -169,7 +117,7 @@ body { background-color: #131313; color: #e5e2e1; }
       <div class="w-1.5 h-1.5 rounded-full bg-matrix-green pulse-green"></div>
       <span id="update-timer">Updated 0s ago</span>
     </div>
-    <button class="hidden lg:block bg-bloomberg-orange text-deep-charcoal px-4 py-1.5 rounded font-data-tabular text-data-tabular font-bold hover:bg-primary-tint transition-colors" onclick="openPartnerModal()">
+    <button class="hidden lg:block bg-bloomberg-orange text-deep-charcoal px-4 py-1.5 rounded font-data-tabular text-data-tabular font-bold hover:bg-primary-tint transition-colors shadow-[0_0_15px_rgba(255,136,0,0.3)]" onclick="openPartnerModal()">
       Connect Terminal
     </button>
     <button class="lg:hidden text-on-surface-variant hover:text-on-surface transition-colors" onclick="toggleMenu()" aria-label="Menu">
@@ -185,55 +133,54 @@ body { background-color: #131313; color: #e5e2e1; }
     <span class="material-symbols-outlined text-2xl">close</span>
   </button>
   <a href="/" onclick="toggleMenu()"><span class="material-symbols-outlined">dashboard</span> Terminal</a>
-  <a href="/blog.html" onclick="toggleMenu()"><span class="material-symbols-outlined">article</span> Research</a>
-  <a href="https://rapidapi.com/zakmediaai/api/octopus-ai-model-intel" target="_blank" onclick="toggleMenu()"><span class="material-symbols-outlined">code</span> API Docs</a>
-  <a href="#" onclick="toggleMenu(); openPartnerModal(); return false;"><span class="material-symbols-outlined text-bloomberg-orange">handshake</span> Partner With Us</a>
+  <a href="/blog.html" onclick="toggleMenu()"><span class="material-symbols-outlined">article</span> News</a>
+  <a href="https://rapidapi.com/zakmediaai/api/octopus-ai-model-intel" target="_blank" onclick="toggleMenu()"><span class="material-symbols-outlined">code</span> API</a>
+  <a href="#" onclick="toggleMenu(); openPartnerModal(); return false;"><span class="material-symbols-outlined text-bloomberg-orange">handshake</span> Partner</a>
 </div>
 
 <!-- Main Content -->
 <main class="flex-grow w-full max-w-container-max mx-auto px-margin-edge py-10 flex flex-col gap-10">
   
   <!-- Cinematic Hero -->
-  <section class="text-center py-12 flex flex-col items-center justify-center gap-4 relative overflow-hidden">
-    <canvas class="absolute inset-0 pointer-events-none w-full h-full opacity-60" id="data-stream-canvas" style="transform: translateZ(0);"></canvas>
+  <section class="text-center py-16 flex flex-col items-center justify-center gap-4 relative overflow-hidden">
     <div class="relative z-10 flex flex-col items-center justify-center gap-4">
-      <h1 class="font-headline-xl text-headline-xl-mobile md:text-headline-xl shimmer-text tracking-tight uppercase">
+      <h1 class="font-headline-xl text-headline-xl-mobile md:text-headline-xl shimmer-text tracking-tight uppercase drop-shadow-[0_0_30px_rgba(255,183,129,0.3)]">
         The Architecture of Intelligence
       </h1>
       <p class="font-body-lg text-body-lg text-text-muted max-w-2xl mx-auto">
-        Track real-time pricing, context windows, and ROI across 200+ LLMs. Stop overpaying for AI infrastructure. Optimize your AI margins with real-time intelligence.
+        Track real-time pricing, context windows, and ROI across 200+ LLMs. Stop overpaying for AI infrastructure.
       </p>
-      <div class="flex items-center gap-2 mt-4 text-text-muted font-data-label text-data-label bg-surface/50 px-3 py-1 rounded-full backdrop-blur-sm border border-border-slate">
+      <div class="flex items-center gap-2 mt-4 text-text-muted font-data-label text-data-label bg-surface/50 px-3 py-1 rounded-full backdrop-blur-md border border-border-slate">
         <div class="w-1.5 h-1.5 rounded-full bg-matrix-green pulse-green"></div>
-        Updated <span id="time-updated">just now</span>
+        Updated <span class="text-on-surface" id="time-updated">just now</span>
       </div>
     </div>
   </section>
 
   <!-- Live Intelligence Modules -->
   <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-    <div class="glass-panel p-4 rounded-lg flex flex-col gap-2 relative overflow-hidden pulse-border hover:border-primary transition-colors cursor-default">
+    <div class="glass-panel p-5 rounded-lg flex flex-col gap-2 relative overflow-hidden pulse-border hover:border-primary transition-colors cursor-default">
       <div class="font-data-label text-data-label text-text-muted uppercase">Total Models Tracked</div>
-      <div class="font-data-tabular text-headline-md text-on-surface" id="stat-total">—</div>
-      <div class="absolute bottom-0 left-0 w-full h-8 opacity-20" style="background: linear-gradient(90deg, transparent, rgba(0, 255, 136, 0.2) 50%, transparent); mask-image: linear-gradient(to bottom, transparent, black);"></div>
+      <div class="font-data-tabular text-headline-md text-on-surface font-bold" id="stat-total">—</div>
+      <div class="absolute bottom-0 left-0 w-full h-8 opacity-20" style="background: linear-gradient(90deg, transparent, rgba(0, 255, 136, 0.4) 50%, transparent); mask-image: linear-gradient(to bottom, transparent, black);"></div>
     </div>
-    <div class="glass-panel p-4 rounded-lg flex flex-col gap-2 relative overflow-hidden border border-outline-variant/30 hover:border-primary transition-colors cursor-default">
+    <div class="glass-panel p-5 rounded-lg flex flex-col gap-2 relative overflow-hidden border border-outline-variant/30 hover:border-primary transition-colors cursor-default">
       <div class="font-data-label text-data-label text-text-muted uppercase">Average Input Cost</div>
-      <div class="font-data-tabular text-headline-md text-on-surface"><span id="stat-avg">—</span> <span class="text-text-muted text-sm">/ 1M</span></div>
+      <div class="font-data-tabular text-headline-md text-on-surface font-bold"><span id="stat-avg">—</span> <span class="text-text-muted text-sm font-normal">/ 1M</span></div>
     </div>
-    <div class="glass-panel p-4 rounded-lg flex flex-col gap-2 relative overflow-hidden border border-outline-variant/30 hover:border-primary transition-colors cursor-default">
+    <div class="glass-panel p-5 rounded-lg flex flex-col gap-2 relative overflow-hidden border border-outline-variant/30 hover:border-primary transition-colors cursor-default">
       <div class="font-data-label text-data-label text-text-muted uppercase">Cheapest Model</div>
-      <div class="font-data-tabular text-body-lg text-on-surface truncate" id="stat-cheapest">—</div>
+      <div class="font-data-tabular text-body-lg text-on-surface truncate font-bold mt-1" id="stat-cheapest">—</div>
     </div>
-    <div class="glass-panel p-4 rounded-lg flex flex-col gap-2 relative overflow-hidden border border-outline-variant/30 hover:border-primary transition-colors cursor-default">
+    <div class="glass-panel p-5 rounded-lg flex flex-col gap-2 relative overflow-hidden border border-outline-variant/30 hover:border-primary transition-colors cursor-default">
       <div class="font-data-label text-data-label text-text-muted uppercase">Max Context Window</div>
-      <div class="font-data-tabular text-headline-md text-on-surface" id="stat-context">—</div>
+      <div class="font-data-tabular text-headline-md text-on-surface font-bold" id="stat-context">—</div>
     </div>
   </section>
 
   <!-- The Market Forge (Data Table) -->
   <section class="glass-panel rounded-lg border border-outline-variant/30 flex flex-col overflow-hidden">
-    <div class="flex flex-col sm:flex-row justify-between items-center p-4 border-b border-border-slate gap-4 bg-surface-elevated">
+    <div class="flex flex-col sm:flex-row justify-between items-center p-4 border-b border-border-slate gap-4 bg-surface-elevated/80 backdrop-blur-md">
       <h2 class="font-headline-md text-headline-md text-on-surface m-0 flex items-center gap-2">
         <span class="material-symbols-outlined text-bloomberg-orange" style="font-variation-settings: 'FILL' 1;">candlestick_chart</span>
         Live Market Table
@@ -241,10 +188,10 @@ body { background-color: #131313; color: #e5e2e1; }
       <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
         <div class="relative flex-1 sm:flex-none">
           <span class="material-symbols-outlined absolute left-2 top-1/2 -translate-y-1/2 text-text-muted text-sm">search</span>
-          <input id="search-input" class="bg-surface-container-high border border-border-slate rounded pl-8 pr-3 py-1.5 font-body-sm text-body-sm text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary w-full sm:w-64 placeholder-text-muted" placeholder="Search models, providers..." type="text"/>
+          <input id="search-input" class="bg-surface-container-high/80 border border-border-slate rounded pl-8 pr-3 py-1.5 font-body-sm text-body-sm text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary w-full sm:w-64 placeholder-text-muted backdrop-blur-sm" placeholder="Search models, providers..." type="text"/>
         </div>
-        <div class="flex gap-1 bg-surface-container-high p-1 rounded border border-border-slate overflow-x-auto" id="filter-tabs">
-          <button class="filter-btn px-3 py-1 bg-surface-bright rounded text-on-surface font-body-sm text-body-sm transition-colors whitespace-nowrap" data-filter="all">All Models</button>
+        <div class="flex gap-1 bg-surface-container-high/80 p-1 rounded border border-border-slate backdrop-blur-sm overflow-x-auto" id="filter-tabs">
+          <button class="filter-btn px-3 py-1 bg-surface-bright rounded text-on-surface font-body-sm text-body-sm transition-colors shadow-sm whitespace-nowrap" data-filter="all">All Models</button>
           <button class="filter-btn px-3 py-1 text-text-muted hover:text-on-surface font-body-sm text-body-sm transition-colors whitespace-nowrap" data-filter="budget">Budget</button>
           <button class="filter-btn px-3 py-1 text-text-muted hover:text-on-surface font-body-sm text-body-sm transition-colors whitespace-nowrap" data-filter="vision">Vision</button>
           <button class="filter-btn px-3 py-1 text-text-muted hover:text-on-surface font-body-sm text-body-sm transition-colors whitespace-nowrap" data-filter="code">Code</button>
@@ -256,7 +203,7 @@ body { background-color: #131313; color: #e5e2e1; }
     <!-- Desktop Table -->
     <div class="overflow-x-auto hidden lg:block">
       <table class="w-full text-left border-collapse">
-        <thead class="bg-surface-elevated border-b border-border-slate font-data-label text-data-label text-text-muted uppercase tracking-wider">
+        <thead class="bg-surface-elevated/60 border-b border-border-slate font-data-label text-data-label text-text-muted uppercase tracking-wider backdrop-blur-md">
           <tr>
             <th class="px-4 py-3 font-normal w-12 text-center">#</th>
             <th class="px-4 py-3 font-normal">Model</th>
@@ -267,12 +214,9 @@ body { background-color: #131313; color: #e5e2e1; }
             <th class="px-4 py-3 font-normal text-right w-32">Action</th>
           </tr>
         </thead>
-        <tbody id="table-body" class="font-data-tabular text-data-tabular divide-y divide-border-slate">
+        <tbody id="table-body" class="font-data-tabular text-data-tabular divide-y divide-border-slate/50">
           <tr><td colspan="7" class="px-4 py-12 text-center text-text-muted">
-            <div class="inline-flex items-center gap-2">
-              <div class="w-2 h-2 rounded-full bg-matrix-green pulse-green"></div>
-              Connecting to data fabric...
-            </div>
+            <div class="inline-flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-matrix-green pulse-green"></div>Connecting to data fabric...</div>
           </td></tr>
         </tbody>
       </table>
@@ -281,7 +225,7 @@ body { background-color: #131313; color: #e5e2e1; }
     <!-- Mobile Cards -->
     <div id="cards-grid" class="lg:hidden grid grid-cols-1 gap-3 p-4"></div>
     
-    <div class="p-3 border-t border-border-slate bg-surface-elevated text-center">
+    <div class="p-3 border-t border-border-slate bg-surface-elevated/80 text-center backdrop-blur-md">
       <div class="text-text-muted font-body-sm text-body-sm flex items-center justify-center gap-2">
         <span class="material-symbols-outlined text-[16px] text-matrix-green pulse-green">memory</span>
         <span id="result-info">—</span>
@@ -315,21 +259,21 @@ body { background-color: #131313; color: #e5e2e1; }
 </main>
 
 <!-- Footer -->
-<footer class="bg-surface-container-lowest border-t border-outline-variant/30 flex flex-col md:flex-row justify-between items-center px-margin-edge py-gutter gap-gutter w-full mt-auto">
+<footer class="bg-surface-container-lowest/80 backdrop-blur-md border-t border-outline-variant/30 flex flex-col md:flex-row justify-between items-center px-margin-edge py-gutter gap-gutter w-full mt-auto z-10">
   <div class="font-data-tabular text-data-tabular text-text-muted flex items-center gap-2">
     <span class="material-symbols-outlined text-[16px] text-matrix-green pulse-green">memory</span>
     © 2026 AI MODEL RANKS | INSTITUTIONAL DATA STREAM ACTIVE
   </div>
   <nav class="flex gap-4">
-    <a class="font-data-tabular text-data-tabular text-text-muted hover:text-on-surface hover:text-primary transition-colors" href="/blog.html">Research</a>
+    <a class="font-data-tabular text-data-tabular text-text-muted hover:text-on-surface hover:text-primary transition-colors" href="/blog.html">News</a>
     <a class="font-data-tabular text-data-tabular text-text-muted hover:text-on-surface hover:text-primary transition-colors" href="https://rapidapi.com/zakmediaai/api/octopus-ai-model-intel" target="_blank">API Docs</a>
     <a class="font-data-tabular text-data-tabular text-text-muted hover:text-on-surface hover:text-primary transition-colors" href="#" onclick="openPartnerModal(); return false;">Partners</a>
   </nav>
 </footer>
 
-<!-- Terminal Log Overlay (Bottom Left) -->
-<div class="fixed bottom-16 left-4 font-data-tabular text-[10px] text-text-muted opacity-50 pointer-events-none hidden lg:block z-40">
-  <div class="flex flex-col gap-0.5" id="terminal-logs">
+<!-- Terminal Log Overlay -->
+<div class="fixed bottom-16 left-4 font-data-tabular text-[11px] text-text-muted opacity-60 pointer-events-none hidden lg:block z-40 bg-surface/40 p-2 rounded backdrop-blur-sm border border-border-slate/50">
+  <div class="flex flex-col gap-1" id="terminal-logs">
     <div>&gt; SYS_INIT: Connecting to data fabric...</div>
     <div>&gt; Handshake OK. Latency 12ms.</div>
     <div>&gt; Parsing latest inference costs...</div>
@@ -393,7 +337,6 @@ function getApiLink(provider) {
   return `https://${domain}`;
 }
 
-// Deterministic 7D change (-8% to +8%)
 function get7DChange(name) {
   let seed = 0;
   for (let i = 0; i < (name||'').length; i++) seed = (seed << 5) - seed + (name||'').charCodeAt(i);
@@ -401,7 +344,6 @@ function get7DChange(name) {
   return (((seed / 233280) - 0.5) * 16).toFixed(1);
 }
 
-// Deterministic sparkline SVG
 function getSparklineSVG(name, isPositive) {
   let seed = 0;
   for (let i = 0; i < (name||'').length; i++) seed = (seed << 5) - seed + (name||'').charCodeAt(i);
@@ -415,7 +357,7 @@ function getSparklineSVG(name, isPositive) {
     y = Math.max(4, Math.min(28, y));
     points.push(`${i * (80/15)},${y}`);
   }
-  const color = isPositive ? '#00ff88' : '#ff4d6d';
+  const color = isPositive ? '#00ff66' : '#ff5500';
   return `<svg viewBox="0 0 80 32" class="sparkline"><polyline points="${points.join(' ')}" fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 }
 
@@ -438,7 +380,7 @@ async function fetchData() {
     addTerminalLog(`> Data stream synced. [${allModels.length} models]`);
   } catch (e) {
     console.error('Fetch error:', e);
-    document.getElementById('table-body').innerHTML = '<tr><td colspan="7" class="px-4 py-12 text-center text-error">Failed to connect to data fabric. Retrying...</td></tr>';
+    document.getElementById('table-body').innerHTML = '<tr><td colspan="7" class="px-4 py-12 text-center text-error">Failed to connect. Retrying...</td></tr>';
   }
 }
 
@@ -453,7 +395,6 @@ function updateTimer() {
 setInterval(updateTimer, 1000);
 
 function renderAll() {
-  // Update stats
   const total = allModels.length;
   const avg = allModels.reduce((s, m) => s + (m.input_cost_per_mtok || 0), 0) / (total || 1);
   const cheapest = allModels[0];
@@ -464,17 +405,16 @@ function renderAll() {
   document.getElementById('stat-cheapest').textContent = cheapest ? `${cheapest.provider}: ${cheapest.model}`.slice(0, 40) : '—';
   document.getElementById('stat-context').textContent = formatContext(maxCtx?.context_window || 0);
 
-  // Update ticker
   const track = document.getElementById('ticker-track');
-  const topModels = allModels.slice(0, 12);
+  const topModels = allModels.slice(0, 15);
   const items = topModels.map(m => {
     const change = get7DChange(m.model);
     const isUp = parseFloat(change) >= 0;
-    const cls = isUp ? 'text-matrix-green' : 'text-error';
+    const cls = isUp ? 'text-alert-up' : 'text-alert-down';
     const arrow = isUp ? '▲' : '▼';
-    return `<span>${m.model}: <span class="${cls}">$${(m.input_cost_per_mtok||0).toFixed(2)}/1M</span> <span class="${cls}">${arrow}${Math.abs(change)}%</span></span><span class="text-bloomberg-orange">·</span>`;
+    return `<span class="px-4">${m.model}: <span class="${cls}">$${(m.input_cost_per_mtok||0).toFixed(2)}/1M</span> <span class="${cls}">${arrow}${Math.abs(change)}%</span></span><span class="text-border-slate font-bold">|</span>`;
   }).join('');
-  track.innerHTML = `<div class="flex items-center gap-6 px-3">${items}</div><div class="flex items-center gap-6 px-3">${items}</div><div class="flex items-center gap-6 px-3">${items}</div>`;
+  track.innerHTML = `<div class="flex items-center">${items}</div><div class="flex items-center">${items}</div>`;
 
   renderTable();
 }
@@ -505,48 +445,46 @@ function renderTable() {
     return;
   }
 
-  // Desktop table
   tbody.innerHTML = models.map((m, i) => {
     const change = get7DChange(m.model);
     const isUp = parseFloat(change) >= 0;
-    const changeCls = isUp ? 'text-matrix-green' : 'text-error';
+    const changeCls = isUp ? 'text-alert-up' : 'text-alert-down';
     const trendIcon = isUp ? 'trending_up' : 'trending_down';
     const provider = m.provider || 'Unknown';
     const apiLink = getApiLink(provider);
     const inCost = m.input_cost_per_mtok || 0;
     const outCost = m.output_cost_per_mtok || 0;
 
-    return `<tr class="hover:bg-surface-variant/20 transition-colors group">
-      <td class="px-4 py-3 text-text-muted text-center">${i+1}</td>
-      <td class="px-4 py-3 flex items-center gap-2">
+    return `<tr class="hover:bg-surface-variant/30 transition-colors group">
+      <td class="px-4 py-4 text-text-muted text-center">${i+1}</td>
+      <td class="px-4 py-4 flex items-center gap-3">
         <img src="${getLogo(provider)}" class="provider-logo" onerror="this.style.display='none'">
-        <span class="text-on-surface group-hover:text-primary transition-colors">${m.model}</span>
+        <span class="text-on-surface group-hover:text-primary transition-colors font-medium">${m.model}</span>
       </td>
-      <td class="px-4 py-3 text-right ${inCost < 1 ? 'text-matrix-green' : 'text-on-surface'}">$${inCost.toFixed(2)}</td>
-      <td class="px-4 py-3 text-right text-on-surface">$${outCost.toFixed(2)}</td>
-      <td class="px-4 py-3 text-right text-text-muted">${formatContext(m.context_window)}</td>
-      <td class="px-4 py-3">
+      <td class="px-4 py-4 text-right ${inCost < 1 ? 'text-alert-up' : 'text-on-surface'} font-medium">$${inCost.toFixed(2)}</td>
+      <td class="px-4 py-4 text-right text-on-surface font-medium">$${outCost.toFixed(2)}</td>
+      <td class="px-4 py-4 text-right text-text-muted">${formatContext(m.context_window)}</td>
+      <td class="px-4 py-4">
         <div class="flex items-center justify-center gap-2 ${changeCls}">
           ${getSparklineSVG(m.model, isUp)}
           <div class="flex items-center gap-1">
             <span class="material-symbols-outlined text-[16px]">${trendIcon}</span>
-            <span>${Math.abs(change)}%</span>
+            <span class="font-bold">${Math.abs(change)}%</span>
           </div>
         </div>
       </td>
-      <td class="px-4 py-3 text-right">
-        <a href="${apiLink}" target="_blank" class="inline-flex items-center gap-1 px-3 py-1 border border-border-slate rounded text-text-muted hover:text-on-surface hover:border-on-surface transition-colors text-xs">
+      <td class="px-4 py-4 text-right">
+        <a href="${apiLink}" target="_blank" class="inline-flex items-center gap-1 px-3 py-1.5 border border-border-slate rounded text-text-muted hover:text-on-surface hover:border-on-surface transition-colors text-xs bg-surface-container-high/50 hover:bg-surface-bright backdrop-blur-sm">
           Get API <span class="material-symbols-outlined text-[14px]">arrow_right_alt</span>
         </a>
       </td>
     </tr>`;
   }).join('');
 
-  // Mobile cards
   cards.innerHTML = models.map((m, i) => {
     const change = get7DChange(m.model);
     const isUp = parseFloat(change) >= 0;
-    const changeCls = isUp ? 'text-matrix-green' : 'text-error';
+    const changeCls = isUp ? 'text-alert-up' : 'text-alert-down';
     const trendIcon = isUp ? 'trending_up' : 'trending_down';
     const provider = m.provider || 'Unknown';
     const apiLink = getApiLink(provider);
@@ -558,7 +496,7 @@ function renderTable() {
         <img src="${getLogo(provider)}" class="provider-logo provider-logo-lg" onerror="this.style.display='none'">
         <div class="flex-1 min-w-0">
           <div class="font-bold text-on-surface truncate">${m.model}</div>
-          <div class="text-text-muted text-xs uppercase tracking-wider">${provider}</div>
+          <div class="text-text-muted text-xs uppercase tracking-wider font-data-label">${provider}</div>
         </div>
         <div class="${changeCls} flex items-center gap-1 font-data-tabular text-xs">
           <span class="material-symbols-outlined text-[16px]">${trendIcon}</span>
@@ -567,15 +505,15 @@ function renderTable() {
       </div>
       <div class="grid grid-cols-3 gap-2 mb-3 text-xs">
         <div class="bg-surface-container-high rounded p-2">
-          <div class="text-text-muted text-[10px] uppercase">Input</div>
-          <div class="font-data-tabular ${inCost < 1 ? 'text-matrix-green' : 'text-on-surface'}">$${inCost.toFixed(2)}</div>
+          <div class="text-text-muted text-[10px] uppercase font-data-label">Input</div>
+          <div class="font-data-tabular ${inCost < 1 ? 'text-alert-up' : 'text-on-surface'}">$${inCost.toFixed(2)}</div>
         </div>
         <div class="bg-surface-container-high rounded p-2">
-          <div class="text-text-muted text-[10px] uppercase">Output</div>
+          <div class="text-text-muted text-[10px] uppercase font-data-label">Output</div>
           <div class="font-data-tabular text-on-surface">$${outCost.toFixed(2)}</div>
         </div>
         <div class="bg-surface-container-high rounded p-2">
-          <div class="text-text-muted text-[10px] uppercase">Context</div>
+          <div class="text-text-muted text-[10px] uppercase font-data-label">Context</div>
           <div class="font-data-tabular text-on-surface">${formatContext(m.context_window)}</div>
         </div>
       </div>
@@ -587,28 +525,25 @@ function renderTable() {
   }).join('');
 }
 
-// Event listeners
 document.getElementById('search-input').addEventListener('input', renderTable);
 document.querySelectorAll('.filter-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.filter-btn').forEach(b => {
-      b.classList.remove('bg-surface-bright', 'text-on-surface');
+      b.classList.remove('bg-surface-bright', 'text-on-surface', 'shadow-sm');
       b.classList.add('text-text-muted');
     });
-    btn.classList.add('bg-surface-bright', 'text-on-surface');
+    btn.classList.add('bg-surface-bright', 'text-on-surface', 'shadow-sm');
     btn.classList.remove('text-text-muted');
     currentFilter = btn.dataset.filter;
     renderTable();
   });
 });
 
-// Mobile menu
 function toggleMenu() {
   document.getElementById('mobileMenu').classList.toggle('open');
   document.getElementById('overlay').classList.toggle('show');
 }
 
-// Partner modal
 function openPartnerModal() {
   const m = document.getElementById('partnerModal');
   m.classList.remove('hidden');
@@ -630,7 +565,6 @@ function submitPartner(e) {
   closePartnerModal();
 }
 
-// Terminal logs
 function addTerminalLog(msg) {
   const logs = document.getElementById('terminal-logs');
   if (!logs) return;
@@ -640,7 +574,6 @@ function addTerminalLog(msg) {
   if (logs.children.length > 6) logs.removeChild(logs.firstChild);
 }
 
-// Random live-feel log messages
 const fakeMessages = [
   "> Llama 3 cost updated: $0.02/1M",
   "> Ping OpenAI API: 200 OK",
@@ -654,47 +587,95 @@ setInterval(() => {
   addTerminalLog(msg);
 }, 4000);
 
-// Canvas data stream background
+// Interactive Dot Grid
 document.addEventListener('DOMContentLoaded', () => {
-  const canvas = document.getElementById('data-stream-canvas');
+  const canvas = document.getElementById('bg-canvas');
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
-  let w, h;
-  const initCanvas = () => {
-    w = canvas.width = canvas.parentElement.offsetWidth;
-    h = canvas.height = canvas.parentElement.offsetHeight;
+  let width, height, mouseX = 0, mouseY = 0;
+  const spacing = 24;
+  const dots = [];
+  
+  const resize = () => {
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
+    initDots();
   };
-  initCanvas();
-  window.addEventListener('resize', initCanvas);
-  const lines = Array.from({length: 40}).map(() => ({
-    x: Math.random() * w, y: Math.random() * h,
-    len: Math.random() * 80 + 30, speed: Math.random() * 0.8 + 0.2,
-    opacity: Math.random() * 0.25 + 0.05
-  }));
+  
+  window.addEventListener('resize', resize);
+  window.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; });
+  
+  const initDots = () => {
+    dots.length = 0;
+    for (let x = 0; x < width; x += spacing) {
+      for (let y = 0; y < height; y += spacing) {
+        dots.push({ x: x + spacing/2, y: y + spacing/2, baseAlpha: 0.03 + Math.random() * 0.04, pulseOffset: Math.random() * Math.PI * 2, pulseSpeed: 0.01 + Math.random() * 0.02 });
+      }
+    }
+  };
+  
+  let time = 0;
   const draw = () => {
-    ctx.clearRect(0, 0, w, h);
-    lines.forEach(line => {
-      const gradient = ctx.createLinearGradient(0, line.y, 0, line.y + line.len);
-      gradient.addColorStop(0, `rgba(255, 136, 0, 0)`);
-      gradient.addColorStop(0.5, `rgba(255, 136, 0, ${line.opacity})`);
-      gradient.addColorStop(1, `rgba(255, 136, 0, 0)`);
+    ctx.clearRect(0, 0, width, height);
+    ctx.fillStyle = '#0a0a0a';
+    ctx.fillRect(0, 0, width, height);
+    time += 1;
+    for (let i = 0; i < dots.length; i++) {
+      const dot = dots[i];
+      const dx = mouseX - dot.x;
+      const dy = mouseY - dot.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      let alpha = dot.baseAlpha + Math.sin(time * dot.pulseSpeed + dot.pulseOffset) * 0.02;
+      const maxDist = 200;
+      if (dist < maxDist) {
+        const intensity = 1 - (dist / maxDist);
+        alpha += intensity * 0.4;
+      }
+      ctx.fillStyle = `rgba(255, 183, 129, ${alpha})`;
       ctx.beginPath();
-      ctx.strokeStyle = gradient;
-      ctx.lineWidth = 1.5;
-      ctx.moveTo(line.x, line.y);
-      ctx.lineTo(line.x, line.y + line.len);
-      ctx.stroke();
-      line.y += line.speed;
-      if (line.y > h) { line.y = -line.len; line.x = Math.random() * w; }
-    });
+      ctx.arc(dot.x, dot.y, 1, 0, Math.PI * 2);
+      ctx.fill();
+    }
     requestAnimationFrame(draw);
   };
+  resize();
   draw();
 });
 
-// Init
+// Digital Rain
+document.addEventListener('DOMContentLoaded', () => {
+  const canvas = document.getElementById('matrix-canvas');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let w, h;
+  const initCanvas = () => { w = canvas.width = canvas.parentElement.offsetWidth; h = canvas.height = canvas.parentElement.offsetHeight; };
+  initCanvas();
+  window.addEventListener('resize', initCanvas);
+  const cols = Math.floor(w / 14);
+  const ypos = Array(cols).fill(0);
+  const chars = '01ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$+-*/=%""\'#&_(),.;:?!\\|{}<>[]^~';
+  ctx.fillStyle = '#0a0a0a';
+  ctx.fillRect(0, 0, w, h);
+  function matrix() {
+    ctx.fillStyle = 'rgba(10, 10, 10, 0.1)';
+    ctx.fillRect(0, 0, w, h);
+    ctx.font = '10px JetBrains Mono';
+    ypos.forEach((y, ind) => {
+      const text = chars.charAt(Math.floor(Math.random() * chars.length));
+      const x = ind * 14;
+      if (Math.random() > 0.975) { ctx.fillStyle = '#fff'; ctx.fillText(text, x, y); ctx.fillStyle = '#ffb781'; }
+      else { ctx.fillStyle = '#ff8800'; ctx.fillText(text, x, y); }
+      if (y > 100 + Math.random() * 10000) ypos[ind] = 0;
+      else ypos[ind] = y + 14;
+    });
+  }
+  setInterval(matrix, 50);
+});
+
 fetchData();
-setInterval(fetchData, 60000); // Refresh every 60s
+setInterval(fetchData, 60000);
 </script>
 </body>
 </html>
