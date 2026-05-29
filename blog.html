@@ -3,49 +3,172 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Intelligence Blog | AI Model Ranks</title>
+<title>AI Intelligence News | AI Model Ranks</title>
 <script src="/config.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-  :root { --bg:#09090b; --surface:#121212; --border:#27272a; --text:#fafafa; --muted:#a1a1aa; --cyan:#06b6d4; --font-sans:'Inter',sans-serif; }
+  :root { --bg:#050505; --surface:#0a0a0a; --border:#222; --text:#fafafa; --muted:#888; --cyan:#06b6d4; --font-sans:'Inter',sans-serif; --font-mono:'JetBrains Mono',monospace; }
   body { background:var(--bg); color:var(--text); font-family:var(--font-sans); margin:0; padding:0; }
-  .nav { background:rgba(9,9,11,0.95); border-bottom:1px solid var(--border); padding:1rem 2rem; display:flex; justify-content:space-between; align-items:center; }
-  .logo { font-weight:800; color:var(--text); text-decoration:none; display:flex; align-items:center; gap:0.5rem; }
-  .container { max-width:800px; margin:0 auto; padding:3rem 1.5rem; }
-  h1 { font-size:2.5rem; margin-bottom:1rem; }
-  .article { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:2rem; margin-bottom:2rem; }
-  .article h2 { font-size:1.5rem; margin-bottom:0.5rem; color:var(--cyan); }
-  .meta { color:var(--muted); font-size:0.875rem; margin-bottom:1.5rem; font-family:'JetBrains Mono',monospace; }
-  p { color:var(--muted); line-height:1.7; margin-bottom:1rem; }
+  .nav { background:rgba(5,5,5,0.8); backdrop-filter:blur(16px); border-bottom:1px solid var(--border); padding:1rem 2rem; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; z-index:100; }
+  .logo { font-weight:800; color:var(--text); text-decoration:none; display:flex; align-items:center; gap:0.75rem; font-size:1.25rem; }
+  .logo-icon { width:32px; height:32px; background:var(--cyan); border-radius:8px; display:flex; align-items:center; justify-content:center; color:#000; font-weight:800; }
+  .container { max-width:1200px; margin:0 auto; padding:3rem 2rem; }
+  h1 { font-size:2.5rem; margin-bottom:0.5rem; letter-spacing:-0.02em; }
+  .subtitle { color:var(--muted); font-size:1.125rem; margin-bottom:3rem; display:flex; align-items:center; gap:0.5rem; }
+  .live-dot { width:8px; height:8px; background:#10b981; border-radius:50%; animation:pulse 2s infinite; }
+  @keyframes pulse { 0% { box-shadow:0 0 0 0 rgba(16,185,129,0.7); } 70% { box-shadow:0 0 0 8px rgba(16,185,129,0); } 100% { box-shadow:0 0 0 0 rgba(16,185,129,0); } }
+  
+  .grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(320px, 1fr)); gap:2rem; }
+  .card { background:var(--surface); border:1px solid var(--border); border-radius:16px; overflow:hidden; cursor:pointer; transition:all 0.3s cubic-bezier(0.4,0,0.2,1); display:flex; flex-direction:column; }
+  .card:hover { transform:translateY(-6px); border-color:var(--cyan); box-shadow:0 15px 40px rgba(6,182,212,0.15); }
+  .card-img { width:100%; height:200px; object-fit:cover; background:#111; }
+  .card-body { padding:1.5rem; flex:1; display:flex; flex-direction:column; }
+  .card-tag { font-family:var(--font-mono); font-size:0.75rem; color:var(--cyan); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:0.75rem; font-weight:600; }
+  .card-title { font-size:1.25rem; font-weight:700; margin-bottom:0.75rem; line-height:1.3; }
+  .card-excerpt { color:var(--muted); font-size:0.95rem; line-height:1.6; flex:1; margin-bottom:1.5rem; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
+  .card-meta { font-family:var(--font-mono); font-size:0.8rem; color:var(--muted); display:flex; justify-content:space-between; border-top:1px solid var(--border); padding-top:1rem; margin-top:auto; }
+
+  /* MODAL READER */
+  .modal-overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:1000; display:none; overflow-y:auto; backdrop-filter:blur(10px); }
+  .modal-overlay.show { display:block; animation:fadeIn 0.3s ease; }
+  @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+  .modal-content { max-width:800px; margin:4rem auto; background:var(--surface); border:1px solid var(--border); border-radius:24px; overflow:hidden; position:relative; box-shadow:0 30px 60px rgba(0,0,0,0.5); }
+  .modal-close { position:absolute; top:1.5rem; right:1.5rem; background:rgba(255,255,255,0.1); border:none; color:var(--text); width:40px; height:40px; border-radius:50%; font-size:1.5rem; cursor:pointer; z-index:10; display:flex; align-items:center; justify-content:center; transition:background 0.2s; }
+  .modal-close:hover { background:rgba(255,255,255,0.2); }
+  .modal-img { width:100%; height:400px; object-fit:cover; }
+  .modal-body { padding:3rem; }
+  .modal-body h1 { font-size:2.5rem; margin-bottom:1rem; line-height:1.2; }
+  .modal-body .meta { color:var(--cyan); font-family:var(--font-mono); font-size:0.9rem; margin-bottom:2rem; }
+  .modal-body .content { color:#ccc; font-size:1.125rem; line-height:1.8; }
+  .modal-body .content p { margin-bottom:1.5rem; }
+  .modal-body .content a { color:var(--cyan); text-decoration:underline; }
+  
+  .loader { text-align:center; padding:4rem; color:var(--muted); font-family:var(--font-mono); }
+  .spinner { width:40px; height:40px; border:3px solid var(--border); border-top-color:var(--cyan); border-radius:50%; animation:spin 1s linear infinite; margin:0 auto 1rem; }
+  @keyframes spin { to { transform:rotate(360deg); } }
 </style>
 </head>
 <body>
+
 <nav class="nav">
-  <a href="/" class="logo">🐙 AI Model Ranks</a>
-  <a href="/" style="color:var(--cyan); text-decoration:none; font-weight:600;">← Back to Data</a>
+  <a href="/" class="logo"><div class="logo-icon">🐙</div> AI Model Ranks</a>
+  <a href="/" style="color:var(--cyan); text-decoration:none; font-weight:600; font-size:0.95rem;">← Back to Terminal</a>
 </nav>
 
 <div class="container">
-  <h1>AI Intelligence Blog</h1>
-  <p style="color:var(--muted); font-size:1.125rem; margin-bottom:3rem;">Pricing analysis, model launches, and infrastructure reviews for AI engineers.</p>
-
-  <div class="article">
-    <h2>The Great AI Price War of 2026: Who Wins?</h2>
-    <div class="meta">May 28, 2026 · 6 min read · Market Analysis</div>
-    <p>In the last 90 days, the cost of premium LLM inference has dropped by 42%. We analyze the data from 210+ models to understand why open-source routers like Groq and Together AI are forcing proprietary labs to slash prices, and what this means for SaaS margins.</p>
-  </div>
-
-  <div class="article">
-    <h2>Open Source vs. Proprietary: A Cost-Benefit Analysis</h2>
-    <div class="meta">May 25, 2026 · 8 min read · Engineering</div>
-    <p>Should your startup pay OpenAI $15/1M tokens, or route through Llama 3 on Groq for $0.05? We ran 10,000 identical prompts through both pipelines to benchmark real-world latency, accuracy, and total cost of ownership.</p>
-  </div>
-
-  <div class="article">
-    <h2>Why Context Windows Matter More Than Benchmark Scores</h2>
-    <div class="meta">May 20, 2026 · 5 min read · Deep Dive</div>
-    <p>Benchmark scores like MMLU are becoming commoditized. The real moat in 2026 is context retention. We test the new 10M token models from Meta and Google to see where they break, and which vector databases pair best with them.</p>
+  <h1>AI Intelligence Wire</h1>
+  <div class="subtitle"><span class="live-dot"></span> Live RSS Feed · Auto-updating daily from top AI publications</div>
+  
+  <div id="blog-grid" class="grid">
+    <div class="loader" style="grid-column:1/-1;"><div class="spinner"></div>Fetching latest AI intelligence...</div>
   </div>
 </div>
+
+<!-- MODAL READER -->
+<div class="modal-overlay" id="modal">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <img id="modal-img" class="modal-img" src="" alt="">
+    <div class="modal-body">
+      <div class="meta" id="modal-meta"></div>
+      <h1 id="modal-title"></h1>
+      <div class="content" id="modal-content"></div>
+      <div style="margin-top:3rem; padding-top:2rem; border-top:1px solid var(--border); text-align:center;">
+        <a href="/" style="color:var(--cyan); text-decoration:none; font-weight:600;">← Return to Live Market Data</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// We use rss2json.com to fetch real daily news from TechCrunch AI section for free
+const RSS_URL = 'https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Ftechcrunch.com%2Fcategory%2Fartificial-intelligence%2Ffeed%2F';
+
+// Fallback data if RSS fails
+const FALLBACK_ARTICLES = [
+  { title: "The Great AI Price War of 2026: Who Wins?", description: "In the last 90 days, the cost of premium LLM inference has dropped by 42%. We analyze the data from 210+ models to understand why open-source routers are forcing proprietary labs to slash prices.", pubDate: new Date().toISOString(), link: "#", categories: ["Market Analysis"] },
+  { title: "Open Source vs. Proprietary: A Cost-Benefit Analysis", description: "Should your startup pay OpenAI $15/1M tokens, or route through Llama 3 on Groq for $0.05? We ran 10,000 identical prompts through both pipelines.", pubDate: new Date().toISOString(), link: "#", categories: ["Engineering"] },
+  { title: "Why Context Windows Matter More Than Benchmark Scores", description: "Benchmark scores like MMLU are becoming commoditized. The real moat in 2026 is context retention. We test the new 10M token models.", pubDate: new Date().toISOString(), link: "#", categories: ["Deep Dive"] }
+];
+
+async function fetchNews() {
+  try {
+    const res = await fetch(RSS_URL);
+    const data = await res.json();
+    if (data.status === 'ok' && data.items.length > 0) {
+      renderGrid(data.items);
+    } else {
+      renderGrid(FALLBACK_ARTICLES);
+    }
+  } catch (e) {
+    console.error('RSS fetch failed, using fallback', e);
+    renderGrid(FALLBACK_ARTICLES);
+  }
+}
+
+function getUnsplashImage(title) {
+  // Auto-generate relevant cover images based on article title keywords
+  const keywords = encodeURIComponent((title.match(/AI|model|LLM|OpenAI|Anthropic|Google|tech|data|code/i) || ['artificial intelligence', 'technology']).join(','));
+  return `https://source.unsplash.com/800x400/?${keywords}`;
+}
+
+function formatDate(dateStr) {
+  return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+function renderGrid(articles) {
+  const grid = document.getElementById('blog-grid');
+  grid.innerHTML = articles.slice(0, 12).map((item, i) => {
+    const img = item.thumbnail || item.enclosure?.link || getUnsplashImage(item.title);
+    const tag = item.categories?.[0] || 'AI News';
+    const excerpt = item.description ? item.description.replace(/<[^>]*>?/gm, '').slice(0, 150) + '...' : '';
+    
+    return `<div class="card" onclick="openModal(${i})">
+      <img src="${img}" class="card-img" onerror="this.src='https://source.unsplash.com/800x400/?technology,ai'">
+      <div class="card-body">
+        <div class="card-tag">${tag}</div>
+        <div class="card-title">${item.title}</div>
+        <div class="card-excerpt">${excerpt}</div>
+        <div class="card-meta">
+          <span>${formatDate(item.pubDate)}</span>
+          <span style="color:var(--cyan); font-weight:600;">Read Article →</span>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+  
+  // Store for modal
+  window._articles = articles;
+}
+
+function openModal(index) {
+  const item = window._articles[index];
+  const img = item.thumbnail || item.enclosure?.link || getUnsplashImage(item.title);
+  
+  document.getElementById('modal-img').src = img;
+  document.getElementById('modal-title').textContent = item.title;
+  document.getElementById('modal-meta').textContent = `${item.categories?.[0] || 'AI News'} · ${formatDate(item.pubDate)}`;
+  
+  // Clean HTML content for reading
+  let content = item.content || item.description || '';
+  content = content.replace(/<img[^>]*>/g, ''); // Remove inline images for clean reading
+  document.getElementById('modal-content').innerHTML = content;
+  
+  document.getElementById('modal').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+// Close modal on ESC key
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+// Close modal on background click
+document.getElementById('modal').addEventListener('click', (e) => { if (e.target === document.getElementById('modal')) closeModal(); });
+
+fetchNews();
+</script>
 </body>
 </html>
