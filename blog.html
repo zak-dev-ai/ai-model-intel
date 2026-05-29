@@ -46,7 +46,7 @@ tailwind.config = {
 <style>
   body { background-color: #0a0a0a; color: #e5e2e1; overflow-x: hidden; }
   #bg-canvas { position: fixed; inset: 0; z-index: -2; pointer-events: none; }
-  #matrix-canvas { position: fixed; inset: 0; z-index: -1; pointer-events: none; opacity: 0.08; mask-image: radial-gradient(circle at 50% 50%, black, transparent 70%); }
+  #matrix-canvas { position: fixed; inset: 0; z-index: -1; pointer-events: none; opacity: 0.08; }
   .glass-panel { background: rgba(15, 15, 15, 0.6); backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5); }
   .pulse-green { animation: pulse-green 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
   @keyframes pulse-green { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
@@ -64,9 +64,20 @@ tailwind.config = {
   .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 150; display: none; }
   .overlay.show { display: block; }
   
-  /* Article Reader Modal */
-  .reader-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 300; overflow-y: auto; display: none; backdrop-filter: blur(10px); }
-  .reader-modal.show { display: block; animation: fadeIn 0.3s ease; }
+  /* FIXED: Full-screen article reader modal */
+  .reader-modal { 
+    position: fixed; 
+    inset: 0; 
+    background: rgba(0,0,0,0.95); 
+    z-index: 300; 
+    overflow-y: auto; 
+    display: none; 
+    backdrop-filter: blur(10px); 
+  }
+  .reader-modal.show { 
+    display: block; 
+    animation: fadeIn 0.3s ease; 
+  }
   @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
   .reader-content img { max-width: 100%; height: auto; border-radius: 8px; margin: 1.5rem 0; }
   .reader-content p { margin-bottom: 1.5rem; line-height: 1.8; color: #ccc; font-size: 1.125rem; }
@@ -189,7 +200,7 @@ tailwind.config = {
   </nav>
 </footer>
 
-<!-- Full-Screen Article Reader Modal -->
+<!-- FIXED: Full-Screen Article Reader Modal -->
 <div class="reader-modal" id="readerModal">
   <div class="max-w-4xl mx-auto bg-surface-elevated border border-border-slate rounded-lg my-8 relative overflow-hidden">
     <button onclick="closeReader()" class="absolute top-4 right-4 z-10 bg-surface-container-high/80 hover:bg-surface-bright backdrop-blur-md border border-border-slate text-on-surface w-12 h-12 rounded-full flex items-center justify-center transition-colors">
@@ -222,20 +233,21 @@ tailwind.config = {
 <script>
 const RSS_URL = 'https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Ftechcrunch.com%2Fcategory%2Fartificial-intelligence%2Ffeed%2F';
 const FALLBACK_ARTICLES = [
-  { title: "The Great AI Price War of 2026: Who Wins?", description: "<p>In the last 90 days, the cost of premium LLM inference has dropped by 42%. We analyze the data from 210+ models to understand why open-source routers like Groq and Together AI are forcing proprietary labs to slash prices.</p><p>The implications for SaaS margins are profound. As inference costs approach zero for smaller models, the moat shifts from the model itself to the orchestration layer that routes prompts intelligently.</p><h2>The Commoditization of Intelligence</h2><p>When Llama 3 launched on Groq at $0.05/1M tokens, it sent shockwaves through the industry. Within weeks, OpenAI responded with GPT-4o-mini, and Anthropic introduced Claude Haiku. The race to the bottom is accelerating.</p><p>For builders, this is a golden age. For labs, it's an existential crisis. The question isn't whether intelligence will be cheap — it's who captures the value when it is.</p>", pubDate: new Date(Date.now() - 86400000).toISOString(), link: "#", categories: ["Market Analysis"], thumbnail: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200" },
-  { title: "Open Source vs. Proprietary: A Cost-Benefit Analysis", description: "<p>Should your startup pay OpenAI $15/1M tokens, or route through Llama 3 on Groq for $0.05? We ran 10,000 identical prompts through both pipelines to benchmark real-world latency, accuracy, and total cost of ownership.</p><p>The results challenge conventional wisdom. For 80% of common tasks — summarization, classification, simple code generation — open-source models match or exceed proprietary performance at a fraction of the cost.</p><h2>The Hidden Costs of Vendor Lock-in</h2><p>Beyond raw pricing, there's the strategic dimension. Teams that build on proprietary APIs inherit architectural debt. When pricing changes, your margins evaporate overnight. Open-source routing gives you optionality.</p>", pubDate: new Date(Date.now() - 172800000).toISOString(), link: "#", categories: ["Engineering"], thumbnail: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=1200" },
-  { title: "Why Context Windows Matter More Than Benchmark Scores", description: "<p>Benchmark scores like MMLU are becoming commoditized. The real moat in 2026 is context retention. We test the new 10M token models from Meta and Google to see where they break.</p><p>The results reveal a surprising truth: context window size is less important than retrieval accuracy over long distances. A model that can't find information 5M tokens in is functionally identical to one with a 128K window.</p>", pubDate: new Date(Date.now() - 259200000).toISOString(), link: "#", categories: ["Deep Dive"], thumbnail: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=1200" },
-  { title: "Vector Databases: The New Infrastructure Layer", description: "<p>As RAG becomes the default architecture for enterprise AI, vector databases have become as critical as relational databases were in the 2000s. We benchmark Pinecone, Weaviate, and Qdrant on real-world workloads.</p><p>The performance gap is closing fast. Open-source alternatives now match proprietary solutions on most metrics, forcing a reevaluation of build-vs-buy decisions.</p>", pubDate: new Date(Date.now() - 345600000).toISOString(), link: "#", categories: ["Infrastructure"], thumbnail: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200" },
-  { title: "The Rise of AI Observability: LangSmith vs Helicone", description: "<p>You can't improve what you can't measure. As LLM apps move to production, observability tools are becoming essential. We compare the two market leaders on features, pricing, and developer experience.</p><p>The winner depends heavily on your stack. LangSmith integrates deeply with LangChain, while Helicone offers broader compatibility and a more generous free tier.</p>", pubDate: new Date(Date.now() - 432000000).toISOString(), link: "#", categories: ["DevOps"], thumbnail: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200" },
-  { title: "Anthropic's Constitutional AI: A Technical Deep Dive", description: "<p>Constitutional AI represents a fundamental shift in how we align language models. Instead of human feedback, models critique and revise their own outputs against a set of principles.</p><p>The technique scales remarkably well and produces more consistent behavior than RLHF alone. We break down the architecture and explore its implications for safe AI development.</p>", pubDate: new Date(Date.now() - 518400000).toISOString(), link: "#", categories: ["Research"], thumbnail: "https://images.unsplash.com/photo-1676277896519-7a9e80b78920?w=1200" },
+  { title: "The Great AI Price War of 2026: Who Wins?", description: "<p>In the last 90 days, the cost of premium LLM inference has dropped by 42%. We analyze the data from 210+ models to understand why open-source routers like Groq and Together AI are forcing proprietary labs to slash prices.</p><p>The implications for SaaS margins are profound. As inference costs approach zero for smaller models, the moat shifts from the model itself to the orchestration layer that routes prompts intelligently.</p><h2>The Commoditization of Intelligence</h2><p>When Llama 3 launched on Groq at $0.05/1M tokens, it sent shockwaves through the industry. Within weeks, OpenAI responded with GPT-4o-mini, and Anthropic introduced Claude Haiku. The race to the bottom is accelerating.</p><p>For builders, this is a golden age. For labs, it's an existential crisis. The question isn't whether intelligence will be cheap — it's who captures the value when it is.</p>", pubDate: new Date(Date.now() - 86400000).toISOString(), link: "#", categories: ["Market Analysis"] },
+  { title: "Open Source vs. Proprietary: A Cost-Benefit Analysis", description: "<p>Should your startup pay OpenAI $15/1M tokens, or route through Llama 3 on Groq for $0.05? We ran 10,000 identical prompts through both pipelines to benchmark real-world latency, accuracy, and total cost of ownership.</p><p>The results challenge conventional wisdom. For 80% of common tasks — summarization, classification, simple code generation — open-source models match or exceed proprietary performance at a fraction of the cost.</p><h2>The Hidden Costs of Vendor Lock-in</h2><p>Beyond raw pricing, there's the strategic dimension. Teams that build on proprietary APIs inherit architectural debt. When pricing changes, your margins evaporate overnight. Open-source routing gives you optionality.</p>", pubDate: new Date(Date.now() - 172800000).toISOString(), link: "#", categories: ["Engineering"] },
+  { title: "Why Context Windows Matter More Than Benchmark Scores", description: "<p>Benchmark scores like MMLU are becoming commoditized. The real moat in 2026 is context retention. We test the new 10M token models from Meta and Google to see where they break.</p><p>The results reveal a surprising truth: context window size is less important than retrieval accuracy over long distances. A model that can't find information 5M tokens in is functionally identical to one with a 128K window.</p>", pubDate: new Date(Date.now() - 259200000).toISOString(), link: "#", categories: ["Deep Dive"] },
+  { title: "Vector Databases: The New Infrastructure Layer", description: "<p>As RAG becomes the default architecture for enterprise AI, vector databases have become as critical as relational databases were in the 2000s. We benchmark Pinecone, Weaviate, and Qdrant on real-world workloads.</p><p>The performance gap is closing fast. Open-source alternatives now match proprietary solutions on most metrics, forcing a reevaluation of build-vs-buy decisions.</p>", pubDate: new Date(Date.now() - 345600000).toISOString(), link: "#", categories: ["Infrastructure"] },
+  { title: "The Rise of AI Observability: LangSmith vs Helicone", description: "<p>You can't improve what you can't measure. As LLM apps move to production, observability tools are becoming essential. We compare the two market leaders on features, pricing, and developer experience.</p><p>The winner depends heavily on your stack. LangSmith integrates deeply with LangChain, while Helicone offers broader compatibility and a more generous free tier.</p>", pubDate: new Date(Date.now() - 432000000).toISOString(), link: "#", categories: ["DevOps"] },
+  { title: "Anthropic's Constitutional AI: A Technical Deep Dive", description: "<p>Constitutional AI represents a fundamental shift in how we align language models. Instead of human feedback, models critique and revise their own outputs against a set of principles.</p><p>The technique scales remarkably well and produces more consistent behavior than RLHF alone. We break down the architecture and explore its implications for safe AI development.</p>", pubDate: new Date(Date.now() - 518400000).toISOString(), link: "#", categories: ["Research"] },
 ];
 
 let allArticles = [];
 let displayedCount = 6;
 
-function getUnsplashImage(title) {
-  const keywords = encodeURIComponent((title.match(/AI|model|LLM|OpenAI|tech|data|code|neural/i) || ['artificial intelligence', 'technology']).slice(0,2).join(','));
-  return `https://source.unsplash.com/1200x600/?${keywords}`;
+// FIXED: Use Picsum with seed for reliable images
+function getReliableImage(title) {
+  const seed = Math.abs(title.split('').reduce((a, b) => ((a << 5) - a) + b.charCodeAt(0), 0));
+  return `https://picsum.photos/seed/${seed}/1200/600`;
 }
 
 function formatDate(dateStr) {
@@ -254,16 +266,16 @@ async function fetchNews() {
     if (data.status === 'ok' && data.items && data.items.length > 0) {
       allArticles = data.items.map(item => ({
         ...item,
-        thumbnail: item.thumbnail || item.enclosure?.link || getUnsplashImage(item.title),
+        thumbnail: item.thumbnail || item.enclosure?.link || getReliableImage(item.title),
         categories: item.categories?.length ? item.categories : ['AI News'],
         description: item.content || item.description || ''
       }));
     } else {
-      allArticles = FALLBACK_ARTICLES;
+      allArticles = FALLBACK_ARTICLES.map(a => ({...a, thumbnail: getReliableImage(a.title)}));
     }
   } catch (e) {
     console.error('RSS fetch failed, using fallback', e);
-    allArticles = FALLBACK_ARTICLES;
+    allArticles = FALLBACK_ARTICLES.map(a => ({...a, thumbnail: getReliableImage(a.title)}));
   }
   renderHero();
   renderGrid();
@@ -279,7 +291,7 @@ function renderHero() {
   
   container.innerHTML = `
     <div class="md:w-1/2 h-64 md:h-auto relative bg-surface-container-highest border-r border-outline-variant overflow-hidden">
-      <img alt="${hero.title}" class="w-full h-full object-cover opacity-80 mix-blend-luminosity group-hover:mix-blend-normal transition-all duration-700 group-hover:scale-105" src="${img}" onerror="this.src='${getUnsplashImage(hero.title)}'">
+      <img alt="${hero.title}" class="w-full h-full object-cover opacity-80 mix-blend-luminosity group-hover:mix-blend-normal transition-all duration-700 group-hover:scale-105" src="${img}" onerror="this.src='${getReliableImage(hero.title)}'">
       <div class="absolute top-4 left-4 flex gap-2 z-10">
         <span class="bg-primary-container text-on-primary-container font-data-label text-data-label px-2 py-1 rounded uppercase tracking-widest">Featured</span>
         <span class="glass-panel text-on-surface font-data-label text-data-label px-2 py-1 rounded border-none">${tag}</span>
@@ -331,7 +343,7 @@ function renderGrid() {
     
     return `<article class="glass-panel rounded-lg flex flex-col hover-lift h-full relative overflow-hidden group bg-surface-elevated border border-border-slate cursor-pointer" onclick="openReader(${idx})">
       <div class="h-40 bg-surface-container-highest border-b border-outline-variant relative overflow-hidden">
-        <img src="${img}" alt="" class="absolute inset-0 w-full h-full object-cover opacity-60 mix-blend-luminosity group-hover:mix-blend-normal group-hover:scale-105 transition-all duration-700" onerror="this.src='${getUnsplashImage(item.title)}'">
+        <img src="${img}" alt="" class="absolute inset-0 w-full h-full object-cover opacity-60 mix-blend-luminosity group-hover:mix-blend-normal group-hover:scale-105 transition-all duration-700" onerror="this.src='${getReliableImage(item.title)}'">
         <div class="absolute inset-0 bg-gradient-to-br from-surface-container-highest/50 to-surface-container/50 z-10"></div>
         <div class="absolute top-3 left-3 z-20">
           <span class="text-terminal-cyan font-data-label text-data-label tracking-widest uppercase bg-surface/50 backdrop-blur-sm px-2 py-1 rounded">${tag}</span>
@@ -355,6 +367,7 @@ function renderGrid() {
   document.getElementById('load-more-btn').style.display = (displayedCount + 1 >= allArticles.length) ? 'none' : 'inline-block';
 }
 
+// FIXED: Full-screen article reader
 function openReader(index) {
   const article = allArticles[index];
   if (!article) return;
@@ -366,7 +379,7 @@ function openReader(index) {
   document.getElementById('reader-source').href = article.link || '#';
   
   const hero = document.getElementById('reader-hero');
-  hero.innerHTML = `<img src="${article.thumbnail}" alt="" class="w-full h-full object-cover" onerror="this.src='${getUnsplashImage(article.title)}'">`;
+  hero.innerHTML = `<img src="${article.thumbnail}" alt="" class="w-full h-full object-cover" onerror="this.src='${getReliableImage(article.title)}'">`;
   
   const tags = document.getElementById('reader-tags');
   tags.innerHTML = (article.categories || ['AI News']).map(t => 
