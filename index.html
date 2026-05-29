@@ -4,7 +4,6 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>AI Model Ranks — Live Terminal</title>
-<meta name="description" content="The Bloomberg Terminal for AI. Track real-time pricing, context windows, and ROI across 210+ LLMs.">
 <script src="/config.js"></script>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
@@ -46,8 +45,20 @@ tailwind.config = {
 </script>
 <style>
   body { background-color: #0a0a0a; color: #e5e2e1; overflow-x: hidden; }
-  #bg-canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -2; pointer-events: none; }
-  #matrix-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; opacity: 0.12; mask-image: radial-gradient(circle at 50% 50%, black, transparent 70%); -webkit-mask-image: radial-gradient(circle at 50% 50%, black, transparent 70%); }
+  
+  /* FIXED: Matrix canvas now covers full screen with better visibility */
+  #bg-canvas { position: fixed; inset: 0; z-index: -2; pointer-events: none; }
+  #matrix-canvas { 
+    position: fixed; 
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1; 
+    pointer-events: none; 
+    opacity: 0.35; 
+  }
+  
   .shimmer-text { background: linear-gradient(90deg, #e5e2e1 0%, #ffb781 50%, #e5e2e1 100%); background-size: 200% auto; color: transparent; -webkit-background-clip: text; background-clip: text; animation: shimmer 3s linear infinite; }
   @keyframes shimmer { to { background-position: 200% center; } }
   .pulse-border { animation: pulse-border 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
@@ -60,16 +71,33 @@ tailwind.config = {
   
   .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
   
-  /* Mobile menu */
+  /* FIXED: Table row hover animation */
+  .table-row-hover {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .table-row-hover:hover {
+    background-color: rgba(255, 183, 129, 0.08) !important;
+    transform: translateX(4px);
+    box-shadow: -4px 0 0 0 #ffb781;
+  }
+  
+  /* FIXED: Card hover animation */
+  .card-hover {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .card-hover:hover {
+    transform: translateY(-4px);
+    border-color: #ffb781 !important;
+    box-shadow: 0 10px 40px -5px rgba(255, 183, 129, 0.25), 0 0 15px -2px rgba(255, 183, 129, 0.15);
+  }
+  
   .mobile-menu { position: fixed; top: 0; right: -100%; width: 80%; max-width: 320px; height: 100vh; background: rgba(19, 19, 19, 0.98); backdrop-filter: blur(20px); z-index: 200; transition: right 0.3s ease; padding: 5rem 2rem; display: flex; flex-direction: column; gap: 0.5rem; box-shadow: -10px 0 30px rgba(0,0,0,0.5); }
   .mobile-menu.open { right: 0; }
   .mobile-menu a { color: #e5e2e1; text-decoration: none; font-size: 1.125rem; font-weight: 500; padding: 1rem 0; border-bottom: 1px solid #1A1A1A; display: flex; align-items: center; gap: 0.75rem; }
   .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 150; display: none; }
   .overlay.show { display: block; }
   
-  /* Mobile cards */
-  .mobile-card { background: rgba(15, 15, 15, 0.7); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 0.5rem; padding: 1.25rem; transition: all 0.2s; }
-  .mobile-card:hover { border-color: #ffb781; transform: translateY(-2px); }
+  .mobile-card { background: rgba(15, 15, 15, 0.7); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 0.5rem; padding: 1.25rem; }
   
   .provider-logo { width: 24px; height: 24px; border-radius: 4px; background: #fff; padding: 2px; box-shadow: 0 2px 6px rgba(0,0,0,0.3); }
   .provider-logo-lg { width: 32px; height: 32px; border-radius: 6px; }
@@ -78,7 +106,6 @@ tailwind.config = {
   ::-webkit-scrollbar { width: 8px; height: 8px; }
   ::-webkit-scrollbar-track { background: #131313; }
   ::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 4px; }
-  ::-webkit-scrollbar-thumb:hover { background: #3a3939; }
 </style>
 </head>
 <body class="min-h-screen flex flex-col font-body-sm relative pt-10">
@@ -162,7 +189,6 @@ tailwind.config = {
     <div class="glass-panel p-5 rounded-lg flex flex-col gap-2 relative overflow-hidden pulse-border hover:border-primary transition-colors cursor-default">
       <div class="font-data-label text-data-label text-text-muted uppercase">Total Models Tracked</div>
       <div class="font-data-tabular text-headline-md text-on-surface font-bold" id="stat-total">—</div>
-      <div class="absolute bottom-0 left-0 w-full h-8 opacity-20" style="background: linear-gradient(90deg, transparent, rgba(0, 255, 136, 0.4) 50%, transparent); mask-image: linear-gradient(to bottom, transparent, black);"></div>
     </div>
     <div class="glass-panel p-5 rounded-lg flex flex-col gap-2 relative overflow-hidden border border-outline-variant/30 hover:border-primary transition-colors cursor-default">
       <div class="font-data-label text-data-label text-text-muted uppercase">Average Input Cost</div>
@@ -455,7 +481,7 @@ function renderTable() {
     const inCost = m.input_cost_per_mtok || 0;
     const outCost = m.output_cost_per_mtok || 0;
 
-    return `<tr class="hover:bg-surface-variant/30 transition-colors group">
+    return `<tr class="table-row-hover hover:bg-surface-variant/30 transition-colors group">
       <td class="px-4 py-4 text-text-muted text-center">${i+1}</td>
       <td class="px-4 py-4 flex items-center gap-3">
         <img src="${getLogo(provider)}" class="provider-logo" onerror="this.style.display='none'">
@@ -491,7 +517,7 @@ function renderTable() {
     const inCost = m.input_cost_per_mtok || 0;
     const outCost = m.output_cost_per_mtok || 0;
 
-    return `<div class="mobile-card">
+    return `<div class="mobile-card card-hover">
       <div class="flex items-center gap-3 mb-3">
         <img src="${getLogo(provider)}" class="provider-logo provider-logo-lg" onerror="this.style.display='none'">
         <div class="flex-1 min-w-0">
@@ -644,31 +670,32 @@ document.addEventListener('DOMContentLoaded', () => {
   draw();
 });
 
-// Digital Rain
+// FIXED: Digital Rain - now covers full screen properly
 document.addEventListener('DOMContentLoaded', () => {
   const canvas = document.getElementById('matrix-canvas');
   if(!canvas) return;
   const ctx = canvas.getContext('2d');
   let w, h;
-  const initCanvas = () => { w = canvas.width = canvas.parentElement.offsetWidth; h = canvas.height = canvas.parentElement.offsetHeight; };
+  const initCanvas = () => { 
+    w = canvas.width = window.innerWidth; 
+    h = canvas.height = window.innerHeight; 
+  };
   initCanvas();
   window.addEventListener('resize', initCanvas);
   const cols = Math.floor(w / 14);
   const ypos = Array(cols).fill(0);
-  const chars = '01ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$+-*/=%""\'#&_(),.;:?!\\|{}<>[]^~';
-  ctx.fillStyle = '#0a0a0a';
-  ctx.fillRect(0, 0, w, h);
+  const chars = '01ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$+-*/=%#&_';
+  
   function matrix() {
-    ctx.fillStyle = 'rgba(10, 10, 10, 0.1)';
+    ctx.fillStyle = 'rgba(10, 10, 10, 0.05)';
     ctx.fillRect(0, 0, w, h);
-    ctx.font = '10px JetBrains Mono';
+    ctx.font = '12px JetBrains Mono';
     ypos.forEach((y, ind) => {
       const text = chars.charAt(Math.floor(Math.random() * chars.length));
       const x = ind * 14;
-      if (Math.random() > 0.975) { ctx.fillStyle = '#fff'; ctx.fillText(text, x, y); ctx.fillStyle = '#ffb781'; }
-      else { ctx.fillStyle = '#ff8800'; ctx.fillText(text, x, y); }
-      if (y > 100 + Math.random() * 10000) ypos[ind] = 0;
-      else ypos[ind] = y + 14;
+      ctx.fillStyle = Math.random() > 0.975 ? '#fff' : '#ff8800';
+      ctx.fillText(text, x, y);
+      ypos[ind] = y > 100 + Math.random() * 10000 ? 0 : y + 14;
     });
   }
   setInterval(matrix, 50);
