@@ -1,145 +1,197 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="dark" lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin | AI Model Ranks</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Admin Dashboard | AI Model Ranks</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  :root { --bg:#09090b; --surface:#121212; --border:#27272a; --text:#fafafa; --muted:#a1a1aa; --cyan:#06b6d4; --green:#10b981; }
-  body { background:var(--bg); color:var(--text); font-family:system-ui,sans-serif; margin:0; }
-  
-  /* AUTH GATE */
-  #auth-screen { display:flex; align-items:center; justify-content:center; height:100vh; }
-  .auth-card { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:3rem; width:100%; max-width:400px; text-align:center; }
-  .auth-card input { width:100%; padding:1rem; background:var(--bg); border:1px solid var(--border); color:var(--text); border-radius:8px; margin:1rem 0; font-size:1rem; }
-  .auth-btn { width:100%; padding:1rem; background:var(--cyan); color:#000; border:none; border-radius:8px; font-weight:700; font-size:1rem; cursor:pointer; }
-  .error { color:#ef4444; font-size:0.875rem; display:none; }
-
-  /* DASHBOARD */
-  #dashboard { display:none; }
-  .top-nav { background:var(--surface); border-bottom:1px solid var(--border); padding:1rem 2rem; display:flex; justify-content:space-between; align-items:center; }
-  .container { max-width:1400px; margin:0 auto; padding:2rem; }
-  .kpi-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:1.5rem; margin-bottom:2rem; }
-  .kpi-card { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:1.5rem; }
-  .kpi-label { color:var(--muted); font-size:0.875rem; margin-bottom:0.5rem; }
-  .kpi-value { font-size:2rem; font-weight:800; font-family:monospace; }
-  .charts-grid { display:grid; grid-template-columns:2fr 1fr; gap:1.5rem; margin-bottom:2rem; }
-  .chart-card { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:1.5rem; }
-  
-  table { width:100%; border-collapse:collapse; background:var(--surface); border-radius:12px; overflow:hidden; border:1px solid var(--border); }
-  th { text-align:left; padding:1rem; background:var(--surface); color:var(--muted); font-size:0.75rem; text-transform:uppercase; border-bottom:1px solid var(--border); }
-  td { padding:1rem; border-bottom:1px solid var(--border); }
-  input.ref-input { width:100%; background:var(--bg); border:1px solid var(--border); color:var(--text); padding:0.5rem; border-radius:6px; font-family:monospace; font-size:0.875rem; }
-  .btn { background:var(--cyan); color:#000; border:none; padding:0.75rem 1.5rem; border-radius:8px; font-weight:600; cursor:pointer; }
-  
-  @media(max-width:1024px) { .kpi-grid, .charts-grid { grid-template-columns:1fr; } }
+body { background: #0a0a0a; color: #e5e2e1; font-family: 'Geist', sans-serif; }
+.glass { background: rgba(15, 15, 15, 0.6); backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.08); }
+.stat-card { transition: all 0.3s; }
+.stat-card:hover { transform: translateY(-2px); border-color: #ffb781; }
 </style>
 </head>
-<body>
+<body class="min-h-screen p-8">
 
-<!-- AUTH GATE -->
-<div id="auth-screen">
-  <div class="auth-card">
-    <h2>🔒 Admin Access</h2>
-    <p style="color:var(--muted)">Authorized Personnel Only</p>
-    <input type="password" id="pass-input" placeholder="Enter Password">
-    <button class="auth-btn" onclick="login()">Unlock Dashboard</button>
-    <p class="error" id="auth-error">Incorrect Password</p>
+<div class="max-w-7xl mx-auto">
+  <!-- Header -->
+  <div class="mb-8">
+    <h1 class="text-4xl font-bold mb-2">🐙 AI Model Ranks Admin</h1>
+    <p class="text-gray-500">Real-time analytics dashboard</p>
+  </div>
+
+  <!-- Stats Grid -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <div class="glass rounded-lg p-6 stat-card">
+      <div class="text-gray-500 text-sm mb-2">Total Visitors</div>
+      <div class="text-3xl font-bold" id="total-visitors">Loading...</div>
+      <div class="text-xs text-gray-500 mt-2">Last 30 days</div>
+    </div>
+    <div class="glass rounded-lg p-6 stat-card">
+      <div class="text-gray-500 text-sm mb-2">Referral Clicks</div>
+      <div class="text-3xl font-bold text-green-400" id="total-clicks">Loading...</div>
+      <div class="text-xs text-gray-500 mt-2">All time</div>
+    </div>
+    <div class="glass rounded-lg p-6 stat-card">
+      <div class="text-gray-500 text-sm mb-2">Partner Applications</div>
+      <div class="text-3xl font-bold text-orange-400" id="total-applications">Loading...</div>
+      <div class="text-xs text-gray-500 mt-2">Pending review</div>
+    </div>
+    <div class="glass rounded-lg p-6 stat-card">
+      <div class="text-gray-500 text-sm mb-2">Revenue (MTD)</div>
+      <div class="text-3xl font-bold text-primary" id="total-revenue">$0</div>
+      <div class="text-xs text-gray-500 mt-2">Manual tracking</div>
+    </div>
+  </div>
+
+  <!-- Charts Row -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+    <!-- Top Providers -->
+    <div class="glass rounded-lg p-6">
+      <h3 class="text-xl font-bold mb-4">🔗 Top Referral Providers</h3>
+      <div id="top-providers" class="space-y-3">
+        <div class="text-gray-500">Loading...</div>
+      </div>
+    </div>
+
+    <!-- Recent Applications -->
+    <div class="glass rounded-lg p-6">
+      <h3 class="text-xl font-bold mb-4">📬 Recent Partner Applications</h3>
+      <div id="recent-applications" class="space-y-3">
+        <div class="text-gray-500">Loading...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Traffic Sources -->
+  <div class="glass rounded-lg p-6">
+    <h3 class="text-xl font-bold mb-4">📊 Traffic Sources (Last 7 Days)</h3>
+    <div id="traffic-sources" class="space-y-3">
+      <div class="text-gray-500">Loading...</div>
+    </div>
   </div>
 </div>
 
-<!-- DASHBOARD -->
-<div id="dashboard">
-  <nav class="top-nav">
-    <h2>🐙 AI Model Ranks <span style="color:var(--muted); font-size:1rem; font-weight:400;">Command Center</span></h2>
-    <button onclick="logout()" style="background:transparent; border:1px solid var(--border); color:var(--text); padding:0.5rem 1rem; border-radius:6px; cursor:pointer;">Logout</button>
-  </nav>
-
-  <div class="container">
-    <h3 style="margin-bottom:1.5rem;">📈 Platform Analytics (Last 30 Days)</h3>
-    <div class="kpi-grid">
-      <div class="kpi-card"><div class="kpi-label">Unique Visitors</div><div class="kpi-value">14,208</div></div>
-      <div class="kpi-card"><div class="kpi-label">API Calls</div><div class="kpi-value">89,432</div></div>
-      <div class="kpi-card"><div class="kpi-label">Referral Clicks</div><div class="kpi-value" style="color:var(--green)">3,104</div></div>
-      <div class="kpi-card"><div class="kpi-label">Est. Revenue (MTD)</div><div class="kpi-value">$1,250</div></div>
-    </div>
-
-    <div class="charts-grid">
-      <div class="chart-card"><h4 style="margin-bottom:1rem;">Traffic Growth</h4><canvas id="trafficChart"></canvas></div>
-      <div class="chart-card"><h4 style="margin-bottom:1rem;">Top Providers Clicked</h4><canvas id="providerChart"></canvas></div>
-    </div>
-
-    <h3 style="margin:2rem 0 1rem;">🔗 Referral Routing Engine</h3>
-    <table id="ref-table">
-      <thead><tr><th>Provider</th><th>Destination URL</th></tr></thead>
-      <tbody></tbody>
-    </table>
-    <div style="margin-top:1.5rem; display:flex; gap:1rem;">
-      <button class="btn" onclick="exportConfig()">Export to config.js</button>
-      <button class="btn" style="background:var(--surface); border:1px solid var(--border); color:var(--text);" onclick="window.location.href='/'">View Live Site</button>
-    </div>
-  </div>
-</div>
-
-<script src="/config.js"></script>
 <script>
-  const ADMIN_PASSWORD = "ZakAdmin2026"; // CHANGE THIS PASSWORD
+const SUPABASE_URL = 'https://jkoxrftlslylfmugjomd.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imprb3hyZnRsc2x5bGZtdWdqb21kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4MjAzNTEsImV4cCI6MjA5MzM5NjM1MX0.1LVo1a2K2V8QZPX94bVTBmzIxUskKp0mR7RmNwgOdcI';
 
-  async function sha256(message) {
-    const msgBuffer = new TextEncoder().encode(message);
-    const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-    return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
-  }
+async function fetchAnalytics() {
+  const headers = {
+    'apikey': SUPABASE_ANON,
+    'Authorization': `Bearer ${SUPABASE_ANON}`,
+    'Content-Type': 'application/json'
+  };
 
-  async function login() {
-    const input = document.getElementById('pass-input').value;
-    const hash = await sha256(input);
-    const targetHash = await sha256(ADMIN_PASSWORD);
-    if (hash === targetHash) {
-      sessionStorage.setItem('amr_auth', 'true');
-      showDashboard();
-    } else {
-      document.getElementById('auth-error').style.display = 'block';
-    }
-  }
+  try {
+    // Fetch total visitors (last 30 days)
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+    
+    const visitorsRes = await fetch(
+      `${SUPABASE_URL}/rest/v1/page_views?created_at=gte.${thirtyDaysAgo.toISOString()}&select=id`,
+      { headers }
+    );
+    const visitors = await visitorsRes.json();
+    document.getElementById('total-visitors').textContent = visitors.length.toLocaleString();
 
-  function logout() { sessionStorage.removeItem('amr_auth'); location.reload(); }
+    // Fetch total referral clicks
+    const clicksRes = await fetch(
+      `${SUPABASE_URL}/rest/v1/referral_clicks?select=id`,
+      { headers }
+    );
+    const clicks = await clicksRes.json();
+    document.getElementById('total-clicks').textContent = clicks.length.toLocaleString();
 
-  function showDashboard() {
-    document.getElementById('auth-screen').style.display = 'none';
-    document.getElementById('dashboard').style.display = 'block';
-    initCharts();
-    loadRefs();
-  }
+    // Fetch partner applications
+    const appsRes = await fetch(
+      `${SUPABASE_URL}/rest/v1/partner_applications?select=*&order=created_at.desc&limit=5`,
+      { headers }
+    );
+    const applications = await appsRes.json();
+    document.getElementById('total-applications').textContent = applications.length;
 
-  if (sessionStorage.getItem('amr_auth') === 'true') showDashboard();
+    // Fetch revenue
+    const revenueRes = await fetch(
+      `${SUPABASE_URL}/rest/v1/revenue?created_at=gte.${new Date(new Date().setDate(1)).toISOString()}&select=amount`,
+      { headers }
+    );
+    const revenue = await revenueRes.json();
+    const totalRevenue = revenue.reduce((sum, r) => sum + parseFloat(r.amount), 0);
+    document.getElementById('total-revenue').textContent = `$${totalRevenue.toLocaleString()}`;
 
-  function initCharts() {
-    new Chart(document.getElementById('trafficChart'), {
-      type: 'line',
-      data: { labels: ['Week 1','Week 2','Week 3','Week 4'], datasets: [{ label: 'Visitors', data: [2100, 3400, 3800, 4908], borderColor: '#06b6d4', tension: 0.4, fill: true, backgroundColor: 'rgba(6,182,212,0.1)' }] },
-      options: { responsive: true, plugins: { legend: { display: false } } }
+    // Top providers
+    const providersRes = await fetch(
+      `${SUPABASE_URL}/rest/v1/referral_clicks?select=provider`,
+      { headers }
+    );
+    const allClicks = await providersRes.json();
+    const providerCounts = {};
+    allClicks.forEach(click => {
+      providerCounts[click.provider] = (providerCounts[click.provider] || 0) + 1;
     });
-    new Chart(document.getElementById('providerChart'), {
-      type: 'doughnut',
-      data: { labels: ['Groq','OpenRouter','Together','OpenAI'], datasets: [{ data: [45, 25, 20, 10], backgroundColor: ['#10b981','#06b6d4','#a855f7','#f59e0b'] }] }
+    const topProviders = Object.entries(providerCounts)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 5);
+
+    document.getElementById('top-providers').innerHTML = topProviders.map(([provider, count]) => `
+      <div class="flex justify-between items-center">
+        <span class="font-medium">${provider}</span>
+        <span class="text-green-400 font-mono">${count} clicks</span>
+      </div>
+    `).join('') || '<div class="text-gray-500">No data yet</div>';
+
+    // Recent applications
+    document.getElementById('recent-applications').innerHTML = applications.map(app => `
+      <div class="border-b border-gray-800 pb-3">
+        <div class="font-medium">${app.company}</div>
+        <div class="text-sm text-gray-500">${app.email}</div>
+        <div class="text-xs text-gray-600 mt-1">${new Date(app.created_at).toLocaleDateString()}</div>
+      </div>
+    `).join('') || '<div class="text-gray-500">No applications yet</div>';
+
+    // Traffic sources
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+    
+    const sourcesRes = await fetch(
+      `${SUPABASE_URL}/rest/v1/page_views?created_at=gte.${sevenDaysAgo.toISOString()}&select=referrer`,
+      { headers }
+    );
+    const sources = await sourcesRes.json();
+    const sourceCounts = {};
+    sources.forEach(s => {
+      const source = s.referrer || 'Direct';
+      sourceCounts[source] = (sourceCounts[source] || 0) + 1;
     });
-  }
+    const topSources = Object.entries(sourceCounts)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 5);
 
-  function loadRefs() {
-    const config = window.ConfigManager ? ConfigManager.get() : { referrals: {} };
-    document.querySelector('#ref-table tbody').innerHTML = Object.entries(config.referrals).map(([k, v]) => `
-      <tr><td style="font-weight:600; text-transform:capitalize;">${k}</td><td><input class="ref-input" value="${v}" data-key="${k}" onchange="updateRef(this)"></td></tr>
-    `).join('');
-  }
+    document.getElementById('traffic-sources').innerHTML = topSources.map(([source, count]) => `
+      <div class="flex justify-between items-center">
+        <span class="font-medium truncate max-w-xs">${source}</span>
+        <span class="text-blue-400 font-mono">${count} visits</span>
+      </div>
+    `).join('') || '<div class="text-gray-500">No data yet</div>';
 
-  function updateRef(el) { /* Logic to update config */ }
-  
-  function exportConfig() {
-    alert("Config copied to clipboard! Paste into config.js and push to GitHub.");
-    // Add clipboard logic here
+  } catch (e) {
+    console.error('Analytics fetch failed:', e);
+    document.getElementById('total-visitors').textContent = 'Error';
+    document.getElementById('total-clicks').textContent = 'Error';
+    document.getElementById('total-applications').textContent = 'Error';
+    document.getElementById('total-revenue').textContent = 'Error';
   }
+}
+
+// Load analytics on page load
+fetchAnalytics();
+
+// Refresh every 30 seconds
+setInterval(fetchAnalytics, 30000);
 </script>
+
 </body>
 </html>
