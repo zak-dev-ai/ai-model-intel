@@ -231,6 +231,7 @@ tailwind.config = {
       <input type="url" id="p-website" placeholder="Website URL" required class="bg-surface-container-high border border-border-slate rounded px-3 py-2 text-on-surface focus:outline-none focus:border-primary">
       <input type="email" id="p-email" placeholder="Contact Email" required class="bg-surface-container-high border border-border-slate rounded px-3 py-2 text-on-surface focus:outline-none focus:border-primary">
       <textarea id="p-proposal" placeholder="Briefly describe your proposal..." rows="3" required class="bg-surface-container-high border border-border-slate rounded px-3 py-2 text-on-surface focus:outline-none focus:border-primary"></textarea>
+      <input type="checkbox" name="botcheck" class="hidden" style="display:none !important" tabindex="-1" autocomplete="off">
       <button type="submit" class="bg-bloomberg-orange text-deep-charcoal px-4 py-2 rounded font-data-tabular text-data-tabular font-bold hover:opacity-90 transition-opacity">
         Submit Application →
       </button>
@@ -425,17 +426,40 @@ function closePartnerModal() {
   m.classList.add('hidden');
   m.classList.remove('flex');
 }
-function submitPartner(e) {
+async function submitPartner(e) {
   e.preventDefault();
-  const company = document.getElementById('p-company').value;
-  const website = document.getElementById('p-website').value;
-  const email = document.getElementById('p-email').value;
-  const proposal = document.getElementById('p-proposal').value;
-  const body = `Company: ${company}%0AWebsite: ${website}%0AEmail: ${email}%0A%0AProposal:%0A${proposal}`;
-  // Opens user's email client to send to your inbox
-  window.location.href = `mailto:partners@aimodelranks.live?subject=Partner Application: ${company}&body=${body}`;
-  closePartnerModal();
-}
+  const btn = e.target.querySelector('button[type="submit"]');
+  const originalText = btn.innerHTML;
+  btn.innerHTML = 'Transmitting...';
+  btn.disabled = true;
+
+  // 👇 PASTE YOUR WEB3FORMS ACCESS KEY HERE:
+  const ACCESS_KEY = '206ea04f-da37-40ea-994d-29b8967177bf'; 
+
+  const data = {
+    access_key: ACCESS_KEY,
+    subject: `New Partner App: ${document.getElementById('p-company').value}`,
+    from_name: 'AI Model Ranks Terminal',
+    company: document.getElementById('p-company').value,
+    website: document.getElementById('p-website').value,
+    email: document.getElementById('p-email').value,
+    proposal: document.getElementById('p-proposal').value,
+    botcheck: '' // Honeypot for spam protection
+  };
+
+  try {
+    const res = await fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    const json = await res.json();
+    if (json.success) {
+      btn.innerHTML = '✓ Application Received';
+      setTimeout(() => {
+        closePartnerModal();
+        e.target.reset();
+        btn.innerHTML = original
 
 // Background Animations (Untouched)
 document.addEventListener('DOMContentLoaded', () => {
