@@ -586,6 +586,40 @@ td.td-sc{font-family:var(--mono);font-size:11px;}
 @media(min-width:769px){.burger{display:none!important}.mobile-menu{display:none!important}.nav-right{display:flex!important}}
 @media(max-width:768px){.burger{display:block}.nav-right{display:none!important}}
 
+/* === 📱 MOBILE UI RESCUE === */
+@media (max-width: 768px) {
+  /* 1. Hide scrolling marquees to save screen space and CPU */
+  .mcards-wrap, .ticker-row, .spotlight-wrap, .tools-ticker, .toolcards-wrap {
+    display: none !important;
+  }
+
+  /* 2. Hide the broken table, force the Card Grid to be the default */
+  .tbl-wrap { display: none !important; }
+  .card-grid {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  /* 3. Hide the Table/Grid toggle buttons since we only want cards on mobile */
+  .vt-toggle { display: none !important; }
+
+  /* 4. Make the Hero section compact and punchy */
+  .hero { padding: 24px 16px !important; }
+  .hero h1 { font-size: 28px !important; line-height: 1.2 !important; }
+  .hero-sub { font-size: 14px !important; margin-bottom: 20px !important; }
+  .hero-btns { flex-direction: column; gap: 12px !important; }
+  .btn-hp, .btn-hs, .btn-ha { width: 100%; justify-content: center; }
+
+  /* 5. Stack the Hero Stats vertically */
+  .hero-stats { flex-direction: column; }
+  .hstat { border-right: none !important; border-bottom: 1px solid var(--border); padding: 12px !important; }
+  .hstat:last-child { border-bottom: none; }
+
+  /* 6. Hide the massive Top 6 Ad grid and Ad Showcase on mobile */
+  .top6-section, .ad-showcase { display: none !important; }
+}
+
 </style>
 </head>
 <body>
@@ -899,9 +933,9 @@ const CHECKOUT = window.OCTOPUS_CONFIG ? {
   growth: window.OCTOPUS_CONFIG.DODO.growth,
   starter: window.OCTOPUS_CONFIG.DODO.starter,
 } : {
-  premium: 'https://checkout.dodopayments.com/buy/pdt_0NeuDicfvBmy8ws9vVtag?quantity=1',
-  growth:  'https://checkout.dodopayments.com/buy/pdt_0NeuDc4euvgNHtJJynMUM?quantity=1',
-  starter: 'https://checkout.dodopayments.com/buy/pdt_0NeuDTWmUZGiP64pziSb4?quantity=1',
+  premium: 'mailto:partners@aimodelranks.live?subject=Premium%20Sponsorship',
+  growth:  'mailto:partners@aimodelranks.live?subject=Growth%20Sponsorship',
+  starter: 'mailto:partners@aimodelranks.live?subject=Starter%20Sponsorship',
 };
 
 // ── STATIC TOOL DATA ──────────────────────────────────────────────
@@ -1232,19 +1266,22 @@ function renderGrid(models){
   g.innerHTML=models.map((m,i)=>{
     const p=pc(m.provider||''),isSel=sel.has(m.model);
     const[tt,tc]=tier(m.input_cost_per_mtok||0);
-    return`<div class="mcard${isSel?' sel':''}" onclick="rc('${(m.model||'').replace(/'/g,"\\'")}')">
-      <div class="gc-top"><span class="gc-rk">#${i+1}${i===0?' 👑':''}</span><div class="gc-ck">${isSel?'<svg width="9" height="7" viewBox="0 0 10 8"><path d="M1 4l2.5 2.5L9 1" stroke="var(--cyan)" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>':''}</div></div>
-      <div class="gc-ico" style="background:${p.bg};color:${p.c}">${p.l}</div>
-      <div class="gc-nm">${m.model||'—'}</div>
-      <div class="gc-pv"><span class="pbg pb-${m.provider||''}">${m.provider||'—'}</span></div>
-      <div class="gc-m">
-        <div class="gm"><div class="gml">Input/1M</div><div class="gmv ${cc(m.input_cost_per_mtok||0)}">${fmtC(m.input_cost_per_mtok)}</div></div>
-        <div class="gm"><div class="gml">Output/1M</div><div class="gmv ${cc(m.output_cost_per_mtok||0)}">${fmtC(m.output_cost_per_mtok)}</div></div>
-        <div class="gm"><div class="gml">Context</div><div class="gmv mid">${fmtCtx(m.context_window)}</div></div>
-        <div class="gm"><div class="gml">Score</div><div class="gmv mid">${vs(m).toFixed(1)}</div></div>
+    const apiLink = m.api_url || 'https://www.google.com/search?q='+encodeURIComponent(m.model+' API pricing');
+    return`<div class="mcard${isSel?' sel':''}" style="display:flex;flex-direction:column;">
+      <div class="gc-top" onclick="rc('${(m.model||'').replace(/'/g,"\\'")}')"><span class="gc-rk">#${i+1}${i===0?' 👑':''}</span><div class="gc-ck">${isSel?'<svg width="9" height="7" viewBox="0 0 10 8"><path d="M1 4l2.5 2.5L9 1" stroke="var(--cyan)" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>':''}</div></div>
+      <div onclick="rc('${(m.model||'').replace(/'/g,"\\'")}')">
+        <div class="gc-ico" style="background:${p.bg};color:${p.c}">${p.l}</div>
+        <div class="gc-nm" style="font-size:18px;margin-bottom:8px;font-weight:800;">${m.model||'—'}</div>
+        <div class="gc-pv" style="margin-bottom:16px;"><span class="pbg pb-${m.provider||''}">${m.provider||'—'}</span></div>
+        <div class="gc-m" style="margin-bottom:16px;grid-template-columns:1fr 1fr;">
+          <div class="gm"><div class="gml">Input/1M</div><div class="gmv ${cc(m.input_cost_per_mtok||0)}">${fmtC(m.input_cost_per_mtok)}</div></div>
+          <div class="gm"><div class="gml">Output/1M</div><div class="gmv ${cc(m.output_cost_per_mtok||0)}">${fmtC(m.output_cost_per_mtok)}</div></div>
+          <div class="gm"><div class="gml">Context</div><div class="gmv mid">${fmtCtx(m.context_window)}</div></div>
+          <div class="gm"><div class="gml">Score</div><div class="gmv mid">${vs(m).toFixed(1)}</div></div>
+        </div>
+        <div class="ctags" style="margin-bottom:20px;">${capTags(m)}</div>
       </div>
-      <div class="gc-ft"><span class="gc-ctx">${fmtCtx(m.context_window)}</span><span class="tierp ${tc}">${tt}</span></div>
-      <div class="ctags" style="margin-top:8px">${capTags(m)}</div>
+      <a href="${apiLink}" target="_blank" rel="noopener" onclick="event.stopPropagation();" style="display:block;text-align:center;background:linear-gradient(135deg,var(--cyan),#2a8fd4);color:#000;padding:14px;border-radius:8px;font-weight:800;font-size:14px;text-decoration:none;font-family:var(--sans);margin-top:auto;box-shadow:0 4px 12px rgba(59,180,255,0.2);">Get API Key →</a>
     </div>`;
   }).join('');
 }
