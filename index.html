@@ -1482,10 +1482,10 @@ function toggleMenu() {
 // Init
 document.getElementById('card-grid').style.display='none';
 document.getElementById('today-date').textContent=new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
-loadAdsFromManager();
+try { loadAdsFromManager(); } catch(e) { console.error('loadAdsFromManager:', e); }
 loadModels();
-setInterval(loadModels, 60000);
-setInterval(loadAdsFromManager, 120000);
+setInterval(function(){ try { loadModels(); } catch(e){} }, 60000);
+setInterval(function(){ try { loadAdsFromManager(); } catch(e){} }, 120000);
 </script>
 </body>
 </html>
