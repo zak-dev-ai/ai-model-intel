@@ -356,11 +356,21 @@ function formatContext(n) {
 }
 
 function getApiLink(provider) {
+  // 1. Check for Admin Dashboard Overrides (Saved in localStorage)
+  const overrides = JSON.parse(localStorage.getItem('amr_custom_refs') || '{}');
+  const providerKey = (provider || '').toLowerCase();
+  if (overrides[providerKey]) {
+    return overrides[providerKey] + (overrides[providerKey].includes('?') ? '&' : '?') + 'ref=aimodelranks';
+  }
+
+  // 2. Fallback to config.js
   if (window.ConfigManager && ConfigManager.getReferral) {
     const link = ConfigManager.getReferral(provider);
     if (link && link !== '#') return link;
   }
-  const domain = PROVIDER_DOMAINS[(provider||'').toLowerCase()] || 'openrouter.ai';
+  
+  // 3. Final Fallback
+  const domain = PROVIDER_DOMAINS[providerKey] || 'openrouter.ai';
   const base = `https://${domain}`;
   return base + (base.includes('?') ? '&' : '?') + 'ref=aimodelranks';
 }
