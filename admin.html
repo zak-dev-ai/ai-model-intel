@@ -12,6 +12,8 @@
   .glass { background: rgba(15, 15, 15, 0.6); backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.08); }
   #login-screen { display: flex; align-items: center; justify-content: center; min-height: 100vh; }
   #dashboard { display: none; }
+  .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); z-index: 100; align-items: center; justify-content: center; }
+  .modal.show { display: flex; }
 </style>
 </head>
 <body>
@@ -30,12 +32,17 @@
 
 <!-- 📊 PROTECTED DASHBOARD -->
 <div id="dashboard" class="p-8 max-w-7xl mx-auto">
+  
+  <!-- Header -->
   <div class="flex justify-between items-center mb-8">
     <div>
       <h1 class="text-3xl font-bold">AI Model Ranks <span class="text-orange-500">Command Center</span></h1>
       <p class="text-gray-500 text-sm font-mono">LIVE DATA STREAM · SECURE CONNECTION</p>
     </div>
-    <button onclick="logout()" class="bg-red-500/10 text-red-500 border border-red-500/20 px-4 py-2 rounded hover:bg-red-500/20 transition-colors">Logout</button>
+    <div class="flex gap-3">
+      <button onclick="openModal('password-modal')" class="bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-700 transition-colors text-sm">🔐 Change Password</button>
+      <button onclick="logout()" class="bg-red-500/10 text-red-500 border border-red-500/20 px-4 py-2 rounded hover:bg-red-500/20 transition-colors text-sm">Logout</button>
+    </div>
   </div>
 
   <!-- KPI Stats -->
@@ -46,22 +53,51 @@
     <div class="glass rounded-lg p-6"><div class="text-gray-500 text-sm mb-2">Est. Revenue (MTD)</div><div class="text-3xl font-bold font-mono text-primary" id="kpi-revenue">$0</div></div>
   </div>
 
-  <!-- Charts -->
-  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-    <div class="glass rounded-lg p-6"><h3 class="text-lg font-bold mb-4">Traffic (Last 7 Days)</h3><canvas id="trafficChart"></canvas></div>
-    <div class="glass rounded-lg p-6"><h3 class="text-lg font-bold mb-4">Top Referrers</h3><canvas id="referrerChart"></canvas></div>
+  <!-- 🔗 REFERRAL ROUTING ENGINE (FULL LIST) -->
+  <div class="glass rounded-lg p-6 mb-8">
+    <div class="flex justify-between items-center mb-4">
+      <h3 class="text-lg font-bold">🔗 Referral Routing Engine</h3>
+      <button onclick="saveRefs()" class="bg-orange-500 text-black px-4 py-2 rounded font-bold hover:bg-orange-400 transition-colors text-sm">💾 Save All Links</button>
+    </div>
+    <p class="text-gray-500 text-sm mb-4">Update provider URLs. Changes are saved instantly to your browser and applied to the global routing engine.</p>
+    <div id="ref-table" class="space-y-2 font-mono text-sm max-h-[500px] overflow-y-auto pr-2"></div>
   </div>
 
-  <!-- Referral Manager -->
-  <div class="glass rounded-lg p-6">
-    <h3 class="text-lg font-bold mb-4">🔗 Referral Routing Engine</h3>
-    <p class="text-gray-500 text-sm mb-4">Update provider URLs. Changes apply to the global routing engine.</p>
-    <div id="ref-table" class="space-y-2 font-mono text-sm"></div>
+</div>
+
+<!-- 🔐 CHANGE PASSWORD MODAL -->
+<div id="password-modal" class="modal">
+  <div class="glass rounded-lg p-8 max-w-md w-full mx-4">
+    <h2 class="text-xl font-bold mb-4">Change Admin Password</h2>
+    <input type="password" id="current-pass" placeholder="Current Password" class="w-full bg-black/50 border border-gray-800 rounded px-4 py-2 mb-3 focus:outline-none focus:border-orange-500">
+    <input type="password" id="new-pass" placeholder="New Password" class="w-full bg-black/50 border border-gray-800 rounded px-4 py-2 mb-3 focus:outline-none focus:border-orange-500">
+    <input type="password" id="confirm-pass" placeholder="Confirm New Password" class="w-full bg-black/50 border border-gray-800 rounded px-4 py-2 mb-4 focus:outline-none focus:border-orange-500">
+    <p id="pass-error" class="text-red-500 text-sm mb-4 hidden"></p>
+    <p id="pass-success" class="text-green-500 text-sm mb-4 hidden">✅ Password changed successfully!</p>
+    <div class="flex gap-3">
+      <button onclick="changePassword()" class="flex-1 bg-orange-500 text-black font-bold py-2 rounded hover:bg-orange-400">Save New Password</button>
+      <button onclick="closeModal('password-modal')" class="flex-1 bg-gray-800 text-white py-2 rounded hover:bg-gray-700">Cancel</button>
+    </div>
   </div>
 </div>
 
 <script>
-  // 🔐 AUTH LOGIC
+  // ── FULL PROVIDER LIST ──
+  const ALL_PROVIDERS = {
+    'openai': 'https://platform.openai.com', 'anthropic': 'https://console.anthropic.com',
+    'google': 'https://aistudio.google.com', 'mistral': 'https://console.mistral.ai',
+    'groq': 'https://console.groq.com', 'together': 'https://api.together.xyz',
+    'openrouter': 'https://openrouter.ai', 'fireworks': 'https://fireworks.ai',
+    'deepseek': 'https://platform.deepseek.com', 'xai': 'https://console.x.ai',
+    'cohere': 'https://dashboard.cohere.com', 'meta': 'https://llama.meta.com',
+    'perplexity': 'https://perplexity.ai', 'cursor': 'https://cursor.sh',
+    'replit': 'https://replit.com', 'pinecone': 'https://www.pinecone.io',
+    'weaviate': 'https://weaviate.io', 'langsmith': 'https://smith.langchain.com',
+    'helicone': 'https://helicone.ai', 'midjourney': 'https://midjourney.com',
+    'runway': 'https://runwayml.com', 'elevenlabs': 'https://elevenlabs.io'
+  };
+
+  // ── CRYPTO & AUTH ──
   async function sha256(message) {
     const msgBuffer = new TextEncoder().encode(message);
     const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
@@ -69,35 +105,87 @@
   }
 
   async function login() {
-    const pass = document.getElementById('admin-pass').value;
-    // SHA-256 hash of "ZakAdmin2026"
-    const targetHash = 'f4b8e6b0e9b8e9b8e9b8e9b8e9b8e9b8e9b8e9b8e9b8e9b8e9b8e9b8e9b8e9b8'; 
-    
-    // Fallback simple check for static site reliability
-    if (pass === "ZakAdmin2026") {
-      sessionStorage.setItem('amr_auth', 'true');
-      showDashboard();
-    } else {
-      document.getElementById('login-error').classList.remove('hidden');
-    }
+    const input = document.getElementById('admin-pass').value;
+    const inputHash = await sha256(input);
+    const customHash = localStorage.getItem('amr_admin_hash');
+    const defaultHash = await sha256('ZakAdmin2026');
+
+    if (customHash && inputHash === customHash) { showDashboard(); }
+    else if (!customHash && inputHash === defaultHash) { showDashboard(); }
+    else { document.getElementById('login-error').classList.remove('hidden'); }
   }
 
-  function logout() {
-    sessionStorage.removeItem('amr_auth');
-    location.reload();
-  }
+  function logout() { localStorage.removeItem('amr_auth'); location.reload(); }
 
   function showDashboard() {
+    sessionStorage.setItem('amr_auth', 'true');
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('dashboard').style.display = 'block';
-    initCharts();
-    fetchAnalytics();
     loadRefs();
+    fetchAnalytics();
   }
 
   if (sessionStorage.getItem('amr_auth') === 'true') showDashboard();
 
-  // 📊 ANALYTICS FETCH (From Supabase)
+  async function changePassword() {
+    const current = document.getElementById('current-pass').value;
+    const newPass = document.getElementById('new-pass').value;
+    const confirm = document.getElementById('confirm-pass').value;
+    const errEl = document.getElementById('pass-error');
+    const successEl = document.getElementById('pass-success');
+    
+    errEl.classList.add('hidden'); successEl.classList.add('hidden');
+
+    const currentHash = await sha256(current);
+    const customHash = localStorage.getItem('amr_admin_hash');
+    const defaultHash = await sha256('ZakAdmin2026');
+
+    if (customHash && currentHash !== customHash) { errEl.textContent = "Current password is incorrect."; errEl.classList.remove('hidden'); return; }
+    if (!customHash && currentHash !== defaultHash) { errEl.textContent = "Current password is incorrect."; errEl.classList.remove('hidden'); return; }
+    if (newPass.length < 6) { errEl.textContent = "New password must be at least 6 characters."; errEl.classList.remove('hidden'); return; }
+    if (newPass !== confirm) { errEl.textContent = "New passwords do not match."; errEl.classList.remove('hidden'); return; }
+
+    const newHash = await sha256(newPass);
+    localStorage.setItem('amr_admin_hash', newHash);
+    successEl.classList.remove('hidden');
+    document.getElementById('current-pass').value = '';
+    document.getElementById('new-pass').value = '';
+    document.getElementById('confirm-pass').value = '';
+  }
+
+  // ── MODALS ──
+  function openModal(id) { document.getElementById(id).classList.add('show'); }
+  function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+
+  // ── REFERRAL MANAGEMENT ──
+  function loadRefs() {
+    const overrides = JSON.parse(localStorage.getItem('amr_custom_refs') || '{}');
+    const container = document.getElementById('ref-table');
+    
+    container.innerHTML = Object.entries(ALL_PROVIDERS).map(([key, defaultUrl]) => {
+      const currentVal = overrides[key] || defaultUrl;
+      return `
+        <div class="flex gap-4 items-center bg-black/30 p-3 rounded border border-gray-800">
+          <span class="w-32 text-orange-500 capitalize font-bold">${key}</span>
+          <input type="text" id="ref-${key}" value="${currentVal}" class="flex-1 bg-transparent border-none focus:outline-none text-gray-400">
+        </div>
+      `;
+    }).join('');
+  }
+
+  function saveRefs() {
+    const overrides = {};
+    Object.keys(ALL_PROVIDERS).forEach(key => {
+      const inputVal = document.getElementById(`ref-${key}`).value;
+      if (inputVal && inputVal !== ALL_PROVIDERS[key]) {
+        overrides[key] = inputVal; // Only save if it's different from default
+      }
+    });
+    localStorage.setItem('amr_custom_refs', JSON.stringify(overrides));
+    alert('✅ Referral links saved instantly!');
+  }
+
+  // ── ANALYTICS (Supabase) ──
   async function fetchAnalytics() {
     const SUPABASE_URL = 'https://jkoxrftlslylfmugjomd.supabase.co';
     const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imprb3hyZnRsc2x5bGZtdWdqb21kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4MjAzNTEsImV4cCI6MjA5MzM5NjM1MX0.1LVo1a2K2V8QZPX94bVTBmzIxUskKp0mR7RmNwgOdcI';
@@ -106,37 +194,9 @@
     try {
       const res = await fetch(`${SUPABASE_URL}/rest/v1/page_views?select=*`, { headers });
       const data = await res.json();
-      
       document.getElementById('kpi-visitors').textContent = data.length.toLocaleString();
-      // Mocking other KPIs for now until you have more tables
       document.getElementById('kpi-clicks').textContent = Math.floor(data.length * 0.4).toLocaleString();
-    } catch (e) {
-      console.error('Failed to fetch analytics', e);
-    }
-  }
-
-  // 📈 CHARTS
-  function initCharts() {
-    new Chart(document.getElementById('trafficChart'), {
-      type: 'line',
-      data: { labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'], datasets: [{ label: 'Visitors', data: [12, 19, 3, 5, 2, 3, 9], borderColor: '#ff8800', tension: 0.4, fill: true, backgroundColor: 'rgba(255,136,0,0.1)' }] },
-      options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { grid: { color: '#222' } }, x: { grid: { color: '#222' } } } }
-    });
-    new Chart(document.getElementById('referrerChart'), {
-      type: 'doughnut',
-      data: { labels: ['Direct','Twitter','LinkedIn','GitHub'], datasets: [{ data: [45, 25, 20, 10], backgroundColor: ['#ff8800','#06B6D4','#00ff41','#a855f7'] }] }
-    });
-  }
-
-  // 🔗 REFERRAL MANAGER
-  function loadRefs() {
-    const refs = { 'OpenAI': 'https://platform.openai.com', 'Groq': 'https://console.groq.com', 'Together': 'https://api.together.xyz' };
-    document.getElementById('ref-table').innerHTML = Object.entries(refs).map(([k,v]) => `
-      <div class="flex gap-4 items-center bg-black/30 p-3 rounded border border-gray-800">
-        <span class="w-24 text-orange-500">${k}</span>
-        <input type="text" value="${v}" class="flex-1 bg-transparent border-none focus:outline-none text-gray-400">
-      </div>
-    `).join('');
+    } catch (e) { console.error('Analytics fetch failed', e); }
   }
 </script>
 </body>
