@@ -48,8 +48,12 @@ tailwind.config = {
   body { background-color: #0a0a0a; color: #e5e2e1; overflow-x: hidden; }
   
   #bg-canvas { position: fixed; inset: 0; z-index: -2; pointer-events: none; }
-  #matrix-canvas { position: fixed; inset: 0; z-index: -1; pointer-events: none; opacity: 0.15; mask-image: radial-gradient(circle at 50% 30%, black, transparent 70%); -webkit-mask-image: radial-gradient(circle at 50% 30%, black, transparent 70%); }
-  
+  #matrix-canvas {
+  position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; pointer-events: none; opacity: 0.45; /* Boosted visibility */
+  /* Soft vignette so it doesn't wash out your text */
+  mask-image: radial-gradient(circle at 50% 50%, rgba(0,0,0,1) 0%, rgba(0,0,0,0.1) 100%);
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, rgba(0,0,0,1) 0%, rgba(0,0,0,0.1) 100%);
+}  
   .shimmer-text { background: linear-gradient(90deg, #e5e2e1 0%, #ffb781 50%, #e5e2e1 100%); background-size: 200% auto; color: transparent; -webkit-background-clip: text; background-clip: text; animation: shimmer 3s linear infinite; }
   @keyframes shimmer { to { background-position: 200% center; } }
   
@@ -687,16 +691,28 @@ document.addEventListener('DOMContentLoaded', () => {
   initCanvas(); window.addEventListener('resize', initCanvas);
   const cols = Math.floor(w / 14), ypos = Array(cols).fill(0);
   const chars = '01ABCDEFGHIJKLMNOPQRSTUVWXYZ$+-*/=%#&_';
-  function matrix() {
-    ctx.fillStyle = 'rgba(10, 10, 10, 0.1)'; ctx.fillRect(0, 0, w, h);
-    ctx.font = '12px JetBrains Mono';
-    ypos.forEach((y, ind) => {
-      const text = chars.charAt(Math.floor(Math.random() * chars.length));
-      const x = ind * 14;
-      ctx.fillStyle = Math.random() > 0.975 ? '#fff' : '#ff8800';
+  function matrix () {
+  // Longer, more visible trails
+  ctx.fillStyle = 'rgba(10, 10, 10, 0.04)'; 
+  ctx.fillRect(0, 0, w, h);
+  ctx.font = '14px JetBrains Mono';
+  
+  ypos.forEach((y, ind) => {
+    const text = chars.charAt(Math.floor(Math.random() * chars.length));
+    const x = ind * 14;
+    // Bright white head for the "falling" effect
+    if (Math.random() > 0.95) {
+      ctx.fillStyle = '#ffffff';
       ctx.fillText(text, x, y);
-      ypos[ind] = y > 100 + Math.random() * 10000 ? 0 : y + 14;
-    });
+    }
+    // Vibrant Bloomberg Orange body
+    ctx.fillStyle = '#ff9900'; 
+    ctx.fillText(text, x, y);
+    
+    if (y > h + Math.random() * 1000) ypos[ind] = 0;
+    else ypos[ind] = y + 14;
+  });
+});
   }
   setInterval(matrix, 50);
 });
