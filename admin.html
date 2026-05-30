@@ -18,7 +18,6 @@
 </head>
 <body>
 
-<!-- 🔐 AUTH GATE -->
 <div id="login-screen">
   <div class="glass rounded-lg p-8 max-w-md w-full mx-4 text-center">
     <div class="text-4xl mb-4">🐙</div>
@@ -30,10 +29,7 @@
   </div>
 </div>
 
-<!-- 📊 PROTECTED DASHBOARD -->
 <div id="dashboard" class="p-8 max-w-7xl mx-auto">
-  
-  <!-- Header -->
   <div class="flex justify-between items-center mb-8">
     <div>
       <h1 class="text-3xl font-bold">AI Model Ranks <span class="text-orange-500">Command Center</span></h1>
@@ -45,7 +41,6 @@
     </div>
   </div>
 
-  <!-- KPI Stats -->
   <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
     <div class="glass rounded-lg p-6"><div class="text-gray-500 text-sm mb-2">Total Visitors</div><div class="text-3xl font-bold font-mono" id="kpi-visitors">0</div></div>
     <div class="glass rounded-lg p-6"><div class="text-gray-500 text-sm mb-2">Referral Clicks</div><div class="text-3xl font-bold font-mono text-green-400" id="kpi-clicks">0</div></div>
@@ -53,7 +48,16 @@
     <div class="glass rounded-lg p-6"><div class="text-gray-500 text-sm mb-2">Est. Revenue (MTD)</div><div class="text-3xl font-bold font-mono text-primary" id="kpi-revenue">$0</div></div>
   </div>
 
-  <!-- 🔗 REFERRAL ROUTING ENGINE (FULL LIST) -->
+  <div class="glass rounded-lg p-6 mb-8 border border-green-500/20">
+    <h3 class="text-lg font-bold mb-4 text-green-400">💰 Log New B2B Revenue</h3>
+    <p class="text-gray-500 text-sm mb-4">When you close a sponsorship or affiliate deal, log it here to update your MTD Revenue.</p>
+    <div class="flex gap-4 flex-wrap">
+      <input type="text" id="rev-source" placeholder="Source (e.g., Groq Sponsorship)" class="flex-1 min-w-[200px] bg-black/50 border border-gray-800 rounded px-4 py-2 focus:outline-none focus:border-green-500">
+      <input type="number" id="rev-amount" placeholder="Amount (e.g., 500)" class="w-32 bg-black/50 border border-gray-800 rounded px-4 py-2 focus:outline-none focus:border-green-500">
+      <button onclick="logRevenue()" class="bg-green-500 text-black px-6 py-2 rounded font-bold hover:bg-green-400 transition-colors">Add Revenue</button>
+    </div>
+  </div>
+
   <div class="glass rounded-lg p-6 mb-8">
     <div class="flex justify-between items-center mb-4">
       <h3 class="text-lg font-bold">🔗 Referral Routing Engine</h3>
@@ -62,10 +66,8 @@
     <p class="text-gray-500 text-sm mb-4">Update provider URLs. Changes are saved instantly to your browser and applied to the global routing engine.</p>
     <div id="ref-table" class="space-y-2 font-mono text-sm max-h-[500px] overflow-y-auto pr-2"></div>
   </div>
-
 </div>
 
-<!-- 🔐 CHANGE PASSWORD MODAL -->
 <div id="password-modal" class="modal">
   <div class="glass rounded-lg p-8 max-w-md w-full mx-4">
     <h2 class="text-xl font-bold mb-4">Change Admin Password</h2>
@@ -82,7 +84,10 @@
 </div>
 
 <script>
-  // ── FULL PROVIDER LIST ──
+  const SUPABASE_URL = 'https://jkoxrftlslylfmugjomd.supabase.co';
+  const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imprb3hyZnRsc2x5bGZtdWdqb21kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4MjAzNTEsImV4cCI6MjA5MzM5NjM1MX0.1LVo1a2K2V8QZPX94bVTBmzIxUskKp0mR7RmNwgOdcI';
+  const HEADERS = { 'apikey': SUPABASE_ANON, 'Authorization': 'Bearer ' + SUPABASE_ANON, 'Content-Type': 'application/json' };
+
   const ALL_PROVIDERS = {
     'openai': 'https://platform.openai.com', 'anthropic': 'https://console.anthropic.com',
     'google': 'https://aistudio.google.com', 'mistral': 'https://console.mistral.ai',
@@ -97,7 +102,6 @@
     'runway': 'https://runwayml.com', 'elevenlabs': 'https://elevenlabs.io'
   };
 
-  // ── CRYPTO & AUTH ──
   async function sha256(message) {
     const msgBuffer = new TextEncoder().encode(message);
     const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
@@ -115,7 +119,7 @@
     else { document.getElementById('login-error').classList.remove('hidden'); }
   }
 
-  function logout() { localStorage.removeItem('amr_auth'); location.reload(); }
+  function logout() { sessionStorage.removeItem('amr_auth'); location.reload(); }
 
   function showDashboard() {
     sessionStorage.setItem('amr_auth', 'true');
@@ -133,7 +137,6 @@
     const confirm = document.getElementById('confirm-pass').value;
     const errEl = document.getElementById('pass-error');
     const successEl = document.getElementById('pass-success');
-    
     errEl.classList.add('hidden'); successEl.classList.add('hidden');
 
     const currentHash = await sha256(current);
@@ -153,23 +156,18 @@
     document.getElementById('confirm-pass').value = '';
   }
 
-  // ── MODALS ──
   function openModal(id) { document.getElementById(id).classList.add('show'); }
   function closeModal(id) { document.getElementById(id).classList.remove('show'); }
 
-  // ── REFERRAL MANAGEMENT ──
   function loadRefs() {
     const overrides = JSON.parse(localStorage.getItem('amr_custom_refs') || '{}');
     const container = document.getElementById('ref-table');
-    
     container.innerHTML = Object.entries(ALL_PROVIDERS).map(([key, defaultUrl]) => {
       const currentVal = overrides[key] || defaultUrl;
-      return `
-        <div class="flex gap-4 items-center bg-black/30 p-3 rounded border border-gray-800">
-          <span class="w-32 text-orange-500 capitalize font-bold">${key}</span>
-          <input type="text" id="ref-${key}" value="${currentVal}" class="flex-1 bg-transparent border-none focus:outline-none text-gray-400">
-        </div>
-      `;
+      return `<div class="flex gap-4 items-center bg-black/30 p-3 rounded border border-gray-800">
+        <span class="w-32 text-orange-500 capitalize font-bold">${key}</span>
+        <input type="text" id="ref-${key}" value="${currentVal}" class="flex-1 bg-transparent border-none focus:outline-none text-gray-400">
+      </div>`;
     }).join('');
   }
 
@@ -177,26 +175,48 @@
     const overrides = {};
     Object.keys(ALL_PROVIDERS).forEach(key => {
       const inputVal = document.getElementById(`ref-${key}`).value;
-      if (inputVal && inputVal !== ALL_PROVIDERS[key]) {
-        overrides[key] = inputVal; // Only save if it's different from default
-      }
+      if (inputVal && inputVal !== ALL_PROVIDERS[key]) { overrides[key] = inputVal; }
     });
     localStorage.setItem('amr_custom_refs', JSON.stringify(overrides));
     alert('✅ Referral links saved instantly!');
   }
 
-  // ── ANALYTICS (Supabase) ──
   async function fetchAnalytics() {
-    const SUPABASE_URL = 'https://jkoxrftlslylfmugjomd.supabase.co';
-    const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imprb3hyZnRsc2x5bGZtdWdqb21kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4MjAzNTEsImV4cCI6MjA5MzM5NjM1MX0.1LVo1a2K2V8QZPX94bVTBmzIxUskKp0mR7RmNwgOdcI';
-    const headers = { 'apikey': SUPABASE_ANON, 'Authorization': 'Bearer ' + SUPABASE_ANON };
-
     try {
-      const res = await fetch(`${SUPABASE_URL}/rest/v1/page_views?select=*`, { headers });
-      const data = await res.json();
-      document.getElementById('kpi-visitors').textContent = data.length.toLocaleString();
-      document.getElementById('kpi-clicks').textContent = Math.floor(data.length * 0.4).toLocaleString();
-    } catch (e) { console.error('Analytics fetch failed', e); }
+      const visRes = await fetch(`${SUPABASE_URL}/rest/v1/page_views?select=id`, { headers: HEADERS });
+      const visitors = await visRes.json();
+      document.getElementById('kpi-visitors').textContent = visitors.length.toLocaleString();
+
+      const clickRes = await fetch(`${SUPABASE_URL}/rest/v1/referral_clicks?select=id`, { headers: HEADERS });
+      const clicks = await clickRes.json();
+      document.getElementById('kpi-clicks').textContent = clicks.length.toLocaleString();
+
+      const appRes = await fetch(`${SUPABASE_URL}/rest/v1/partner_applications?select=id`, { headers: HEADERS });
+      const apps = await appRes.json();
+      document.getElementById('kpi-apps').textContent = apps.length.toLocaleString();
+
+      const firstDay = new Date(); firstDay.setDate(1); firstDay.setHours(0,0,0,0);
+      const revRes = await fetch(`${SUPABASE_URL}/rest/v1/revenue?created_at=gte.${firstDay.toISOString()}&select=amount`, { headers: HEADERS });
+      const revData = await revRes.json();
+      const totalRev = revData.reduce((sum, r) => sum + parseFloat(r.amount || 0), 0);
+      document.getElementById('kpi-revenue').textContent = `$${totalRev.toLocaleString()}`;
+    } catch (e) { console.error('Failed to fetch analytics', e); }
+  }
+
+  async function logRevenue() {
+    const source = document.getElementById('rev-source').value;
+    const amount = document.getElementById('rev-amount').value;
+    if (!source || !amount) return alert('Please fill in both Source and Amount');
+
+    await fetch(`${SUPABASE_URL}/rest/v1/revenue`, {
+      method: 'POST', headers: HEADERS,
+      body: JSON.stringify({ source, amount })
+    });
+    
+    alert('✅ Revenue logged successfully!');
+    document.getElementById('rev-source').value = '';
+    document.getElementById('rev-amount').value = '';
+    fetchAnalytics();
   }
 </script>
 </body>
