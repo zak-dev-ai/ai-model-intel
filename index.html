@@ -4,6 +4,7 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>AI Model Ranks — Live Terminal</title>
+<meta name="description" content="The Bloomberg Terminal for AI. Track real-time pricing, benchmarks, and ROI across 200+ LLMs.">
 <script src="/config.js"></script>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
@@ -43,7 +44,7 @@ tailwind.config = {
   }
 }
 </script>
-    <!-- Google tag (gtag.js) -->
+  <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-7PEVV57LGZ"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -65,7 +66,7 @@ tailwind.config = {
   .glass-panel { background: rgba(15, 15, 15, 0.6); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5); }
   @keyframes ticker-scroll { 0% { transform: translateX(0) translateZ(0); } 100% { transform: translateX(-50%) translateZ(0); } }
   .ticker-track { display: flex; width: max-content; animation: ticker-scroll 60s linear infinite; will-change: transform; }
-  .table-row-hover { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+  .table-row-hover { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; }
   .table-row-hover:hover { background-color: rgba(255, 183, 129, 0.08) !important; transform: translateX(4px); box-shadow: -4px 0 0 0 #ffb781; }
   .card-hover { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   .card-hover:hover { transform: translateY(-4px); border-color: #ffb781 !important; box-shadow: 0 10px 40px -5px rgba(255, 183, 129, 0.25), 0 0 15px -2px rgba(255, 183, 129, 0.15); }
@@ -81,40 +82,25 @@ tailwind.config = {
   .benchmark-high { background: rgba(0, 255, 65, 0.15); color: #00ff41; border: 1px solid rgba(0, 255, 65, 0.3); }
   .benchmark-mid { background: rgba(6, 182, 212, 0.15); color: #06B6D4; border: 1px solid rgba(6, 182, 212, 0.3); }
   .benchmark-low { background: rgba(255, 85, 0, 0.15); color: #ff5500; border: 1px solid rgba(255, 85, 0, 0.3); }
-  
-  /* Hover Detail Card */
   .hover-detail-card {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background: rgba(15, 15, 15, 0.95);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 183, 129, 0.3);
-    border-radius: 8px;
-    padding: 16px;
-    margin-top: 8px;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(-10px);
-    transition: all 0.2s ease;
-    z-index: 50;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    position: fixed;
+    pointer-events: none;
+    z-index: 1000;
+    background: rgba(15, 15, 15, 0.98);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 183, 129, 0.4);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 30px rgba(255, 183, 129, 0.2);
+    display: none;
+    min-width: 450px;
+    max-width: 550px;
   }
-  .table-row-hover:hover .hover-detail-card {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-  }
-  .vote-btn {
-    transition: all 0.2s;
-  }
-  .vote-btn:hover {
-    transform: scale(1.1);
-  }
-  .vote-btn.voted {
-    color: #00ff41;
-  }
+  .table-row-hover:hover .hover-detail-card { display: block; }
+  .vote-btn { transition: all 0.2s; cursor: pointer; }
+  .vote-btn:hover { transform: scale(1.15); }
+  .vote-btn.voted { color: #00ff41; }
+  .vote-btn.voted svg { fill: #00ff41; }
   ::-webkit-scrollbar { width: 8px; height: 8px; }
   ::-webkit-scrollbar-track { background: #131313; }
   ::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 4px; }
@@ -419,30 +405,19 @@ function getBenchmarkClass(value, type) {
   return '';
 }
 
-// FUZZY MATCHING FOR BENCHMARKS
 function getBenchmarkData(modelName) {
   if (!modelName) return null;
-  
   const cleanName = modelName.toLowerCase().replace(/[^a-z0-9]/g, '');
-  
-  // Try exact match first
   if (benchmarks[cleanName]) return benchmarks[cleanName];
-  
-  // Try partial match - check if benchmark model is contained in pricing model
   for (const [benchKey, benchData] of Object.entries(benchmarks)) {
-    if (cleanName.includes(benchKey) || benchKey.includes(cleanName)) {
-      return benchData;
-    }
+    if (cleanName.includes(benchKey) || benchKey.includes(cleanName)) return benchData;
   }
-  
-  // Try keyword overlap
   const modelWords = cleanName.split(/[-_]/);
   for (const [benchKey, benchData] of Object.entries(benchmarks)) {
     const benchWords = benchKey.split(/[-_]/);
     const overlap = modelWords.filter(w => benchWords.includes(w));
     if (overlap.length >= 2) return benchData;
   }
-  
   return null;
 }
 
@@ -527,22 +502,35 @@ function getFilteredModels() {
   return models;
 }
 
-// VOTE HANDLING
 function handleVote(modelName) {
-  const currentVotes = JSON.parse(localStorage.getItem(VOTES_KEY) || '{}');
-  if (currentVotes[modelName]) {
-    delete currentVotes[modelName];
+  if (userVotes[modelName]) {
+    delete userVotes[modelName];
   } else {
-    currentVotes[modelName] = true;
+    userVotes[modelName] = true;
   }
-  localStorage.setItem(VOTES_KEY, JSON.stringify(currentVotes));
-  userVotes = currentVotes;
+  localStorage.setItem(VOTES_KEY, JSON.stringify(userVotes));
   renderTable();
 }
 
 function getVoteCount(modelName) {
-  const allVotes = JSON.parse(localStorage.getItem('all_votes') || '{}');
+  const allVotes = JSON.parse(localStorage.getItem('all_model_votes') || '{}');
   return allVotes[modelName] || 0;
+}
+
+function showHoverCard(event, row) {
+  const card = row.querySelector('.hover-detail-card');
+  if (!card) return;
+  const x = event.clientX;
+  const y = event.clientY - 20;
+  card.style.left = `${x}px`;
+  card.style.top = `${y}px`;
+  card.style.transform = 'translate(-50%, -100%)';
+}
+
+function hideHoverCard() {
+  document.querySelectorAll('.hover-detail-card').forEach(card => {
+    card.style.display = 'none';
+  });
 }
 
 function renderTable() {
@@ -571,7 +559,7 @@ function renderTable() {
     const voteCount = getVoteCount(m.model);
     const hasVoted = userVotes[m.model];
 
-    return `<tr class="table-row-hover hover:bg-surface-variant/30 transition-colors group relative">
+    return `<tr class="table-row-hover" onmousemove="showHoverCard(event, this)" onmouseleave="hideHoverCard()">
       <td class="px-4 py-4 text-text-muted text-center">${i+1}</td>
       <td class="px-4 py-4 flex items-center gap-3">
         <img src="${getLogo(provider)}" class="provider-logo" onerror="this.style.display='none'">
@@ -594,7 +582,9 @@ function renderTable() {
       </td>
       <td class="px-4 py-4 text-center">
         <button class="vote-btn ${hasVoted ? 'voted' : ''} text-text-muted hover:text-primary transition-colors" onclick="handleVote('${m.model.replace(/'/g, "\\'")}')">
-          <span class="material-symbols-outlined text-[18px]">${hasVoted ? 'thumb_up' : 'thumb_up_off'}</span>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline" viewBox="0 0 20 20" fill="${hasVoted ? '#00ff41' : 'currentColor'}">
+            <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z"/>
+          </svg>
           <span class="font-data-tabular text-xs ml-1">${voteCount}</span>
         </button>
       </td>
@@ -612,11 +602,9 @@ function renderTable() {
           Get API <span class="material-symbols-outlined text-[14px]">arrow_right_alt</span>
         </a>
       </td>
-      
-      <!-- HOVER DETAIL CARD -->
-      <td colspan="12" class="p-0">
+      <td colspan="12" class="p-0" style="position: relative;">
         <div class="hover-detail-card">
-          <div class="grid grid-cols-4 gap-4">
+          <div class="grid grid-cols-4 gap-4 mb-3">
             <div class="bg-surface-container-high/50 rounded p-3">
               <div class="text-text-muted text-[10px] uppercase font-data-label mb-1">Provider</div>
               <div class="text-on-surface font-bold">${provider}</div>
@@ -635,7 +623,7 @@ function renderTable() {
             </div>
           </div>
           ${bench ? `
-          <div class="mt-3 pt-3 border-t border-border-slate">
+          <div class="pt-3 border-t border-border-slate">
             <div class="text-text-muted text-[10px] uppercase font-data-label mb-2">Performance Benchmarks</div>
             <div class="grid grid-cols-4 gap-3">
               <div class="text-center">
@@ -656,7 +644,7 @@ function renderTable() {
               </div>
             </div>
           </div>` : ''}
-          <div class="mt-3 flex items-center justify-between text-[11px] text-text-muted">
+          <div class="mt-3 flex items-center justify-between text-[11px] text-text-muted pt-3 border-t border-border-slate">
             <span>Community Votes: <span class="text-primary font-bold">${voteCount}</span></span>
             <span>Updated: <span id="time-updated">just now</span></span>
           </div>
@@ -703,7 +691,9 @@ function renderTable() {
       </div>` : ''}
       <div class="flex items-center justify-between mb-3">
         <button class="vote-btn ${hasVoted ? 'voted' : ''} text-text-muted hover:text-primary transition-colors flex items-center gap-1" onclick="handleVote('${m.model.replace(/'/g, "\\'")}')">
-          <span class="material-symbols-outlined text-[18px]">${hasVoted ? 'thumb_up' : 'thumb_up_off'}</span>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="${hasVoted ? '#00ff41' : 'currentColor'}">
+            <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z"/>
+          </svg>
           <span class="font-data-tabular text-xs">${voteCount} votes</span>
         </button>
         ${getSparklineSVG(m.model, isUp)}
