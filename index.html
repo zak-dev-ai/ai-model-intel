@@ -575,15 +575,7 @@ seedVotesIfNeeded();
 
 function getVoteCount(modelName) {
   const allVotes = JSON.parse(localStorage.getItem('all_model_votes') || '{}');
-  const key = getVoteKey(modelName);
-  if (allVotes[key]) return allVotes[key];
-  // Fuzzy fallback for seeded keys
-  const cleaned = key.replace(/[^a-z0-9]/g, '');
-  for (const k in allVotes) {
-    const ck = k.replace(/[^a-z0-9]/g, '');
-    if (ck === cleaned || cleaned.includes(ck) || ck.includes(cleaned)) return allVotes[k];
-  }
-  return 0;
+  return allVotes[getVoteKey(modelName)] || 0;
 }
 
 function showHoverCard(event, row) {
