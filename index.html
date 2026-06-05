@@ -209,12 +209,13 @@ tailwind.config = {
             <th class="px-4 py-3 font-normal text-right">Input / 1M</th>
             <th class="px-4 py-3 font-normal text-right">Output / 1M</th>
             <th class="px-4 py-3 font-normal text-right">Context</th>
+            <th class="px-4 py-3 font-normal text-right">Quality</th>
             <th class="px-4 py-3 font-normal text-center w-32">7D Trend</th>
             <th class="px-4 py-3 font-normal text-right w-32">Action</th>
           </tr>
         </thead>
         <tbody id="table-body" class="font-data-tabular text-data-tabular divide-y divide-border-slate/50">
-          <tr><td colspan="7" class="px-4 py-12 text-center text-text-muted"><div class="inline-flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-matrix-green pulse-green"></div>Connecting to data fabric...</div></td></tr>
+          <tr><td colspan="8" class="px-4 py-12 text-center text-text-muted"><div class="inline-flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-matrix-green pulse-green"></div>Connecting to data fabric...</div></td></tr>
         </tbody>
       </table>
     </div>
@@ -372,12 +373,60 @@ async function fetchData() {
     allModels = data.pricing || [];
     allModels.sort((a, b) => (a.input_cost_per_mtok || 999) - (b.input_cost_per_mtok || 999));
     lastUpdate = Date.now();
+    // Enrich with benchmark scores from lmmarketcap.com
+    await enrichBenchmarks();
     renderAll();
     addTerminalLog(`> Data stream synced. [${allModels.length} models]`);
   } catch (e) {
     console.error('Fetch error:', e);
-    document.getElementById('table-body').innerHTML = '<tr><td colspan="7" class="px-4 py-12 text-center text-error">Failed to connect. Retrying...</td></tr>';
+    document.getElementById('table-body').innerHTML = '<tr><td colspan="8" class="px-4 py-12 text-center text-error">Failed to connect. Retrying...</td></tr>';
   }
+}
+
+let benchmarkCache = null;
+let benchmarkCacheTime = 0;
+
+async function enrichBenchmarks() {
+  try {
+    // Cache benchmarks for 30 minutes
+    if (benchmarkCache && (Date.now() - benchmarkCacheTime < 1800000)) {
+      mergeBenchmarks(benchmarkCache);
+      return;
+    }
+    const bmRes = await fetch('https://lmmarketcap.com/api/models?limit=200');
+    const bmData = await bmRes.json();
+    benchmarkCache = bmData.data || [];
+    benchmarkCacheTime = Date.now();
+    mergeBenchmarks(benchmarkCache);
+  } catch (e) {
+    console.warn('Benchmark enrichment skipped', e);
+  }
+}
+
+function mergeBenchmarks(benchmarks) {
+  if (!benchmarks || !allModels) return;
+  const bmMap = new Map();
+  benchmarks.forEach(b => {
+    const key = (b.name || '').toLowerCase().replace(/[^a-z0-9]/g,'');
+    bmMap.set(key, b);
+  });
+  allModels.forEach(m => {
+    const modelName = (m.model || '').toLowerCase().replace(/[^a-z0-9]/g,'');
+    const providerName = (m.provider || '').toLowerCase().replace(/[^a-z0-9]/g,'');
+    // Try exact match first, then partial
+    let bm = bmMap.get(modelName) || bmMap.get(providerName + modelName);
+    if (!bm) {
+      for (const [k, v] of bmMap) {
+        if (modelName.includes(k) || k.includes(modelName) || modelName.includes(bmMap.get(k)?.name?.toLowerCase()?.replace(/[^a-z0-9]/g,'')||'')) {
+          bm = v; break;
+        }
+      }
+    }
+    if (bm) {
+      m._quality_score = parseFloat(bm.score) || null;
+      m._quality_rank = bm.quality_rank || null;
+    }
+  });
 }
 
 function updateTimer() {
@@ -431,7 +480,7 @@ function renderTable() {
   resultInfo.textContent = `${models.length} models · LIVE`;
 
   if (!models.length) {
-    tbody.innerHTML = '<tr><td colspan="7" class="px-4 py-12 text-center text-text-muted">No models match your query.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="8" class="px-4 py-12 text-center text-text-muted">No models match your query.</td></tr>';
     cards.innerHTML = '<div class="text-center py-8 text-text-muted">No models match your query.</div>';
     return;
   }
@@ -455,6 +504,7 @@ function renderTable() {
       <td class="px-4 py-4 text-right ${inCost < 1 ? 'text-alert-up' : 'text-on-surface'} font-medium">$${inCost.toFixed(2)}</td>
       <td class="px-4 py-4 text-right text-on-surface font-medium">$${outCost.toFixed(2)}</td>
       <td class="px-4 py-4 text-right text-text-muted">${formatContext(m.context_window)}</td>
+      <td class="px-4 py-4 text-right">${m._quality_score ? `<span class="font-medium ${m._quality_score >= 85 ? 'text-alert-up' : m._quality_score >= 70 ? 'text-primary' : 'text-text-muted'}">${m._quality_score.toFixed(1)}</span>` : '<span class="text-text-muted">—</span>'}</td>
       <td class="px-4 py-4"><div class="flex items-center justify-center gap-2 ${changeCls}">${getSparklineSVG(m.model, isUp)}<div class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">${trendIcon}</span><span class="font-bold">${Math.abs(change)}%</span></div></div></td>
       <td class="px-4 py-4 text-right">
         <a href="${apiLink}" target="_blank" data-provider="${provider}" class="btn-api inline-flex items-center gap-1 px-3 py-1.5 border border-border-slate rounded text-text-muted hover:text-on-surface hover:border-on-surface transition-colors text-xs bg-surface-container-high/50 hover:bg-surface-bright backdrop-blur-sm">
