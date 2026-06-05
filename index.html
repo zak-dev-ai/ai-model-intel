@@ -4,7 +4,7 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>AI Model Ranks — Live Terminal</title>
-<meta name="description" content="The Bloomberg Terminal for AI. Track real-time pricing, context windows, and ROI across 210+ LLMs.">
+<meta name="description" content="The Bloomberg Terminal for AI. Track real-time pricing, benchmarks (MMLU, HumanEval, GPQA), and ROI across 200+ LLMs.">
 <script src="/config.js"></script>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
@@ -70,11 +70,15 @@ tailwind.config = {
   .provider-logo { width: 24px; height: 24px; border-radius: 4px; background: #fff; padding: 2px; box-shadow: 0 2px 6px rgba(0,0,0,0.3); }
   .provider-logo-lg { width: 32px; height: 32px; border-radius: 6px; }
   .sparkline { width: 80px; height: 32px; display: block; }
+  .benchmark-badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; font-family: 'JetBrains Mono', monospace; }
+  .benchmark-high { background: rgba(0, 255, 65, 0.15); color: #00ff41; border: 1px solid rgba(0, 255, 65, 0.3); }
+  .benchmark-mid { background: rgba(6, 182, 212, 0.15); color: #06B6D4; border: 1px solid rgba(6, 182, 212, 0.3); }
+  .benchmark-low { background: rgba(255, 85, 0, 0.15); color: #ff5500; border: 1px solid rgba(255, 85, 0, 0.3); }
   ::-webkit-scrollbar { width: 8px; height: 8px; }
   ::-webkit-scrollbar-track { background: #131313; }
   ::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 4px; }
 </style>
-  <!-- Google tag (gtag.js) -->
+    <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-7PEVV57LGZ"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -152,7 +156,7 @@ tailwind.config = {
   <section class="text-center py-16 flex flex-col items-center justify-center gap-4 relative overflow-hidden">
     <div class="relative z-10 flex flex-col items-center justify-center gap-4">
       <h1 class="font-headline-xl text-headline-xl-mobile md:text-headline-xl shimmer-text tracking-tight uppercase drop-shadow-[0_0_30px_rgba(255,183,129,0.3)]">The Architecture of Intelligence</h1>
-      <p class="font-body-lg text-body-lg text-text-muted max-w-2xl mx-auto">Track real-time pricing, context windows, and ROI across 200+ LLMs. Stop overpaying for AI infrastructure.</p>
+      <p class="font-body-lg text-body-lg text-text-muted max-w-2xl mx-auto">Track real-time pricing, benchmarks (MMLU, HumanEval, GPQA), and ROI across 200+ LLMs. Stop overpaying for AI infrastructure.</p>
       <div class="flex items-center gap-2 mt-4 text-text-muted font-data-label text-data-label bg-surface/50 px-3 py-1 rounded-full backdrop-blur-md border border-border-slate">
         <div class="w-1.5 h-1.5 rounded-full bg-matrix-green pulse-green"></div>
         Updated <span class="text-on-surface" id="time-updated">just now</span>
@@ -209,13 +213,16 @@ tailwind.config = {
             <th class="px-4 py-3 font-normal text-right">Input / 1M</th>
             <th class="px-4 py-3 font-normal text-right">Output / 1M</th>
             <th class="px-4 py-3 font-normal text-right">Context</th>
-            <th class="px-4 py-3 font-normal text-right">Quality</th>
+            <th class="px-4 py-3 font-normal text-center" title="Massive Multitask Language Understanding">MMLU</th>
+            <th class="px-4 py-3 font-normal text-center" title="Code Generation Ability">HumanEval</th>
+            <th class="px-4 py-3 font-normal text-center" title="Graduate-Level Reasoning">GPQA</th>
+            <th class="px-4 py-3 font-normal text-center" title="LMSYS Arena User Preference">Arena Elo</th>
             <th class="px-4 py-3 font-normal text-center w-32">7D Trend</th>
             <th class="px-4 py-3 font-normal text-right w-32">Action</th>
           </tr>
         </thead>
         <tbody id="table-body" class="font-data-tabular text-data-tabular divide-y divide-border-slate/50">
-          <tr><td colspan="8" class="px-4 py-12 text-center text-text-muted"><div class="inline-flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-matrix-green pulse-green"></div>Connecting to data fabric...</div></td></tr>
+          <tr><td colspan="11" class="px-4 py-12 text-center text-text-muted"><div class="inline-flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-matrix-green pulse-green"></div>Connecting to data fabric...</div></td></tr>
         </tbody>
       </table>
     </div>
@@ -298,10 +305,12 @@ tailwind.config = {
 
 <script>
 const API_URL = 'https://ai-model-intel.zak-media-ai.workers.dev/pricing';
+const BENCHMARKS_URL = '/benchmarks.json';
 const SUPABASE_URL = 'https://jkoxrftlslylfmugjomd.supabase.co';
 const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imprb3hyZnRsc2x5bGZtdWdqb21kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4MjAzNTEsImV4cCI6MjA5MzM5NjM1MX0.1LVo1a2K2V8QZPX94bVTBmzIxUskKp0mR7RmNwgOdcI';
 
 let allModels = [];
+let benchmarks = {};
 let currentFilter = 'all';
 let lastUpdate = Date.now();
 
@@ -358,6 +367,21 @@ function getSparklineSVG(name, isPositive) {
   return `<svg viewBox="0 0 80 32" class="sparkline"><polyline points="${points.join(' ')}" fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 }
 
+function getBenchmarkClass(value, type) {
+  if (!value) return '';
+  if (type === 'mmlu' || type === 'humaneval' || type === 'gpqa') {
+    if (value >= 80) return 'benchmark-high';
+    if (value >= 60) return 'benchmark-mid';
+    return 'benchmark-low';
+  }
+  if (type === 'arena_elo') {
+    if (value >= 1200) return 'benchmark-high';
+    if (value >= 1100) return 'benchmark-mid';
+    return 'benchmark-low';
+  }
+  return '';
+}
+
 const filters = {
   all: () => true,
   budget: (m) => (m.input_cost_per_mtok || 999) <= 0.50,
@@ -366,6 +390,27 @@ const filters = {
   reasoning: (m) => /o1|o3|reason|thinking|r1|magistral|reflection/i.test(m.model || '')
 };
 
+async function fetchBenchmarks() {
+  try {
+    const res = await fetch(BENCHMARKS_URL);
+    const data = await res.json();
+    // Create a lookup map by model name (normalized)
+    data.benchmarks.forEach(b => {
+      const key = b.model.toLowerCase().replace(/[^a-z0-9]/g, '');
+      benchmarks[key] = b;
+    });
+    addTerminalLog(`> Benchmarks loaded: ${data.benchmarks.length} models`);
+  } catch (e) {
+    console.error('Failed to load benchmarks:', e);
+    addTerminalLog('> Warning: Benchmarks failed to load');
+  }
+}
+
+function getBenchmarkData(modelName) {
+  const key = (modelName || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+  return benchmarks[key] || null;
+}
+
 async function fetchData() {
   try {
     const res = await fetch(API_URL);
@@ -373,60 +418,12 @@ async function fetchData() {
     allModels = data.pricing || [];
     allModels.sort((a, b) => (a.input_cost_per_mtok || 999) - (b.input_cost_per_mtok || 999));
     lastUpdate = Date.now();
-    // Enrich with benchmark scores from lmmarketcap.com
-    await enrichBenchmarks();
     renderAll();
     addTerminalLog(`> Data stream synced. [${allModels.length} models]`);
   } catch (e) {
     console.error('Fetch error:', e);
-    document.getElementById('table-body').innerHTML = '<tr><td colspan="8" class="px-4 py-12 text-center text-error">Failed to connect. Retrying...</td></tr>';
+    document.getElementById('table-body').innerHTML = '<tr><td colspan="11" class="px-4 py-12 text-center text-error">Failed to connect. Retrying...</td></tr>';
   }
-}
-
-let benchmarkCache = null;
-let benchmarkCacheTime = 0;
-
-async function enrichBenchmarks() {
-  try {
-    // Cache benchmarks for 30 minutes
-    if (benchmarkCache && (Date.now() - benchmarkCacheTime < 1800000)) {
-      mergeBenchmarks(benchmarkCache);
-      return;
-    }
-    const bmRes = await fetch('https://api.allorigins.win/raw?url=' + encodeURIComponent('https://lmmarketcap.com/api/models?limit=200'));
-    const bmData = await bmRes.json();
-    benchmarkCache = bmData.data || [];
-    benchmarkCacheTime = Date.now();
-    mergeBenchmarks(benchmarkCache);
-  } catch (e) {
-    console.warn('Benchmark enrichment skipped', e);
-  }
-}
-
-function mergeBenchmarks(benchmarks) {
-  if (!benchmarks || !allModels) return;
-  const bmMap = new Map();
-  benchmarks.forEach(b => {
-    const key = (b.name || '').toLowerCase().replace(/[^a-z0-9]/g,'');
-    bmMap.set(key, b);
-  });
-  allModels.forEach(m => {
-    const modelName = (m.model || '').toLowerCase().replace(/[^a-z0-9]/g,'');
-    const providerName = (m.provider || '').toLowerCase().replace(/[^a-z0-9]/g,'');
-    // Try exact match first, then partial
-    let bm = bmMap.get(modelName) || bmMap.get(providerName + modelName);
-    if (!bm) {
-      for (const [k, v] of bmMap) {
-        if (modelName.includes(k) || k.includes(modelName) || modelName.includes(bmMap.get(k)?.name?.toLowerCase()?.replace(/[^a-z0-9]/g,'')||'')) {
-          bm = v; break;
-        }
-      }
-    }
-    if (bm) {
-      m._quality_score = parseFloat(bm.score) || null;
-      m._quality_rank = bm.quality_rank || null;
-    }
-  });
 }
 
 function updateTimer() {
@@ -480,7 +477,7 @@ function renderTable() {
   resultInfo.textContent = `${models.length} models · LIVE`;
 
   if (!models.length) {
-    tbody.innerHTML = '<tr><td colspan="8" class="px-4 py-12 text-center text-text-muted">No models match your query.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="11" class="px-4 py-12 text-center text-text-muted">No models match your query.</td></tr>';
     cards.innerHTML = '<div class="text-center py-8 text-text-muted">No models match your query.</div>';
     return;
   }
@@ -494,6 +491,7 @@ function renderTable() {
     const apiLink = getApiLink(provider);
     const inCost = m.input_cost_per_mtok || 0;
     const outCost = m.output_cost_per_mtok || 0;
+    const bench = getBenchmarkData(m.model);
 
     return `<tr class="table-row-hover hover:bg-surface-variant/30 transition-colors group">
       <td class="px-4 py-4 text-text-muted text-center">${i+1}</td>
@@ -504,7 +502,18 @@ function renderTable() {
       <td class="px-4 py-4 text-right ${inCost < 1 ? 'text-alert-up' : 'text-on-surface'} font-medium">$${inCost.toFixed(2)}</td>
       <td class="px-4 py-4 text-right text-on-surface font-medium">$${outCost.toFixed(2)}</td>
       <td class="px-4 py-4 text-right text-text-muted">${formatContext(m.context_window)}</td>
-      <td class="px-4 py-4 text-right">${m._quality_score ? `<span class="font-medium ${m._quality_score >= 85 ? 'text-alert-up' : m._quality_score >= 70 ? 'text-primary' : 'text-text-muted'}">${m._quality_score.toFixed(1)}</span>` : '<span class="text-text-muted">—</span>'}</td>
+      <td class="px-4 py-4 text-center">
+        ${bench?.mmlu ? `<span class="benchmark-badge ${getBenchmarkClass(bench.mmlu, 'mmlu')}">${bench.mmlu.toFixed(1)}</span>` : '<span class="text-text-muted">—</span>'}
+      </td>
+      <td class="px-4 py-4 text-center">
+        ${bench?.humaneval ? `<span class="benchmark-badge ${getBenchmarkClass(bench.humaneval, 'humaneval')}">${bench.humaneval.toFixed(1)}%</span>` : '<span class="text-text-muted">—</span>'}
+      </td>
+      <td class="px-4 py-4 text-center">
+        ${bench?.gpqa ? `<span class="benchmark-badge ${getBenchmarkClass(bench.gpqa, 'gpqa')}">${bench.gpqa.toFixed(1)}</span>` : '<span class="text-text-muted">—</span>'}
+      </td>
+      <td class="px-4 py-4 text-center">
+        ${bench?.arena_elo ? `<span class="benchmark-badge ${getBenchmarkClass(bench.arena_elo, 'arena_elo')}">${bench.arena_elo}</span>` : '<span class="text-text-muted">—</span>'}
+      </td>
       <td class="px-4 py-4"><div class="flex items-center justify-center gap-2 ${changeCls}">${getSparklineSVG(m.model, isUp)}<div class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">${trendIcon}</span><span class="font-bold">${Math.abs(change)}%</span></div></div></td>
       <td class="px-4 py-4 text-right">
         <a href="${apiLink}" target="_blank" data-provider="${provider}" class="btn-api inline-flex items-center gap-1 px-3 py-1.5 border border-border-slate rounded text-text-muted hover:text-on-surface hover:border-on-surface transition-colors text-xs bg-surface-container-high/50 hover:bg-surface-bright backdrop-blur-sm">
@@ -523,6 +532,7 @@ function renderTable() {
     const apiLink = getApiLink(provider);
     const inCost = m.input_cost_per_mtok || 0;
     const outCost = m.output_cost_per_mtok || 0;
+    const bench = getBenchmarkData(m.model);
 
     return `<div class="mobile-card card-hover glass-panel border border-outline-variant/30 rounded-lg p-5">
       <div class="flex items-center gap-3 mb-3">
@@ -540,6 +550,13 @@ function renderTable() {
         <div class="bg-surface-container-high rounded p-2"><div class="text-text-muted text-[10px] uppercase font-data-label">Output</div><div class="font-data-tabular text-on-surface">$${outCost.toFixed(2)}</div></div>
         <div class="bg-surface-container-high rounded p-2"><div class="text-text-muted text-[10px] uppercase font-data-label">Context</div><div class="font-data-tabular text-on-surface">${formatContext(m.context_window)}</div></div>
       </div>
+      ${bench ? `
+      <div class="grid grid-cols-2 gap-2 mb-3 text-xs">
+        <div class="bg-surface-container-high rounded p-2"><div class="text-text-muted text-[10px] uppercase font-data-label">MMLU</div><div class="font-data-tabular"><span class="benchmark-badge ${getBenchmarkClass(bench.mmlu, 'mmlu')}">${bench.mmlu?.toFixed(1) || '—'}</span></div></div>
+        <div class="bg-surface-container-high rounded p-2"><div class="text-text-muted text-[10px] uppercase font-data-label">HumanEval</div><div class="font-data-tabular"><span class="benchmark-badge ${getBenchmarkClass(bench.humaneval, 'humaneval')}">${bench.humaneval ? bench.humaneval.toFixed(1) + '%' : '—'}</span></div></div>
+        <div class="bg-surface-container-high rounded p-2"><div class="text-text-muted text-[10px] uppercase font-data-label">GPQA</div><div class="font-data-tabular"><span class="benchmark-badge ${getBenchmarkClass(bench.gpqa, 'gpqa')}">${bench.gpqa?.toFixed(1) || '—'}</span></div></div>
+        <div class="bg-surface-container-high rounded p-2"><div class="text-text-muted text-[10px] uppercase font-data-label">Arena Elo</div><div class="font-data-tabular"><span class="benchmark-badge ${getBenchmarkClass(bench.arena_elo, 'arena_elo')}">${bench.arena_elo || '—'}</span></div></div>
+      </div>` : ''}
       <div class="flex items-center justify-between mb-3">${getSparklineSVG(m.model, isUp)}</div>
       <a href="${apiLink}" target="_blank" data-provider="${provider}" class="mc-btn block text-center bg-bloomberg-orange text-deep-charcoal px-4 py-2 rounded font-data-tabular text-data-tabular font-bold hover:opacity-90 transition-opacity">Get API Key →</a>
     </div>`;
@@ -565,14 +582,12 @@ async function submitPartner(e) {
   const originalText = btn.innerHTML;
   btn.innerHTML = 'Transmitting...'; btn.disabled = true;
 
-  // Save to Supabase
   fetch(SUPABASE_URL + '/rest/v1/partner_applications', {
     method: 'POST',
     headers: { 'apikey': SUPABASE_ANON, 'Authorization': 'Bearer ' + SUPABASE_ANON, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
     body: JSON.stringify({ company: document.getElementById('p-company').value, website: document.getElementById('p-website').value, email: document.getElementById('p-email').value, proposal: document.getElementById('p-proposal').value })
   }).catch(() => {});
 
-  // Send to Web3Forms (Email)
   const data = { access_key: '206ea04f-da37-40ea-994d-29b8967177bf', subject: `New Partner App: ${document.getElementById('p-company').value}`, from_name: 'AI Model Ranks Terminal', company: document.getElementById('p-company').value, website: document.getElementById('p-website').value, email: document.getElementById('p-email').value, proposal: document.getElementById('p-proposal').value, botcheck: '' };
   try {
     const res = await fetch('https://api.web3forms.com/submit', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(data) });
@@ -584,7 +599,6 @@ async function submitPartner(e) {
   } catch (err) { btn.innerHTML = 'Error. Try Again.'; btn.disabled = false; }
 }
 
-// Track Referral Clicks to Supabase
 document.addEventListener('click', function(e) {
   const btn = e.target.closest('.btn-api, .mc-btn');
   if (btn && btn.getAttribute('href')) {
@@ -605,7 +619,6 @@ function addTerminalLog(msg) {
 const fakeMessages = ["> Llama 3 cost updated: $0.02", "> Ping OpenAI API: 200 OK", "> Market shift detected: -0.5% avg", "> Re-indexing context windows...", "> Data stream synced."];
 setInterval(() => { const msg = fakeMessages[Math.floor(Math.random() * fakeMessages.length)]; addTerminalLog(msg); }, 4000);
 
-// Interactive Dot Grid Background
 document.addEventListener('DOMContentLoaded', () => {
   const canvas = document.getElementById('bg-canvas'); if (!canvas) return;
   const ctx = canvas.getContext('2d'); let width = window.innerWidth, height = window.innerHeight, mouseX = width / 2, mouseY = height / 2;
@@ -618,7 +631,6 @@ document.addEventListener('DOMContentLoaded', () => {
   resize(); draw();
 });
 
-// Digital Rain Overlay
 document.addEventListener('DOMContentLoaded', () => {
   const canvas = document.getElementById('matrix-canvas'); if(!canvas) return;
   const ctx = canvas.getContext('2d'); let w, h;
@@ -633,11 +645,14 @@ document.addEventListener('DOMContentLoaded', () => {
   setInterval(matrix, 50);
 });
 
-// Track Page View
 fetch(SUPABASE_URL + '/rest/v1/page_views', { method: 'POST', headers: { 'apikey': SUPABASE_ANON, 'Authorization': 'Bearer ' + SUPABASE_ANON, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' }, body: JSON.stringify({ page: window.location.pathname, referrer: document.referrer || 'Direct', user_agent: navigator.userAgent }) }).catch(() => {});
 
-fetchData();
-setInterval(fetchData, 60000);
+// Load benchmarks first, then pricing data
+(async function init() {
+  await fetchBenchmarks();
+  await fetchData();
+  setInterval(fetchData, 60000);
+})();
 </script>
 </body>
 </html>
