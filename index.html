@@ -633,9 +633,24 @@ function renderTable() {
 
     return `<tr class="table-row-hover" onmousemove="showHoverCard(event, this)" onmouseleave="hideHoverCard()">
       <td class="px-4 py-4 text-text-muted text-center">${i+1}</td>
-      <td class="px-4 py-4 flex items-center gap-3">
+      <td class="px-4 py-4 flex items-center gap-3" style="position:relative">
         <img src="${getLogo(provider)}" class="provider-logo" onerror="this.style.display='none'">
         <span class="text-on-surface group-hover:text-primary transition-colors font-medium">${m.model}</span>
+        <div class="hover-detail-card">
+          <div class="flex items-center gap-2 mb-2 pb-2 border-b border-outline-variant">
+            <span class="text-primary text-[13px] font-semibold">${m.model}</span>
+            <span class="text-text-muted text-[10px] ml-auto uppercase tracking-wider">${provider}</span>
+          </div>
+          <div class="grid grid-cols-2 gap-x-4 gap-y-1 text-[11px]">
+            <span class="text-text-muted">Input</span><span class="text-right font-mono ${inCost < 1 ? 'text-alert-up' : 'text-on-surface'}">$${inCost.toFixed(2)}</span>
+            <span class="text-text-muted">Output</span><span class="text-right font-mono text-on-surface">$${outCost.toFixed(2)}</span>
+            <span class="text-text-muted">Context</span><span class="text-right font-mono text-on-surface">${formatContext(m.context_window)}</span>
+            ${bench?.mmlu ? `<span class="text-text-muted">MMLU</span><span class="text-right"><span class="benchmark-badge ${getBenchmarkClass(bench.mmlu, 'mmlu')}">${bench.mmlu.toFixed(1)}</span></span>` : '<span></span><span></span>'}
+            ${bench?.humaneval ? `<span class="text-text-muted">HumanEval</span><span class="text-right"><span class="benchmark-badge ${getBenchmarkClass(bench.humaneval, 'humaneval')}">${bench.humaneval.toFixed(1)}%</span></span>` : '<span></span><span></span>'}
+            ${bench?.arena_elo ? `<span class="text-text-muted">Arena Elo</span><span class="text-right font-mono ${bench.arena_elo >= 1250 ? 'text-alert-up' : 'text-primary'}">${bench.arena_elo}</span>` : '<span></span><span></span>'}
+          </div>
+          ${voteCount > 0 ? `<div class="mt-2 pt-2 border-t border-outline-variant flex justify-between text-[10px]"><span class="text-text-muted">Community votes</span><span class="text-primary font-semibold">${voteCount}</span></div>` : ''}
+        </div>
       </td>
       <td class="px-4 py-4 text-right ${inCost < 1 ? 'text-alert-up' : 'text-on-surface'} font-medium">$${inCost.toFixed(2)}</td>
       <td class="px-4 py-4 text-right text-on-surface font-medium">$${outCost.toFixed(2)}</td>
@@ -673,23 +688,6 @@ function renderTable() {
         <a href="${apiLink}" target="_blank" data-provider="${provider}" class="btn-api inline-flex items-center gap-1 px-3 py-1.5 border border-border-slate rounded text-text-muted hover:text-on-surface hover:border-on-surface transition-colors text-xs bg-surface-container-high/50 hover:bg-surface-bright backdrop-blur-sm">
           Get API <span class="material-symbols-outlined text-[14px]">arrow_right_alt</span>
         </a>
-      </td>
-      <td colspan="12" class="p-0" style="position: relative;">
-        <div class="hover-detail-card">
-          <div class="flex items-center gap-2 mb-2 pb-2 border-b border-outline-variant">
-            <span class="text-primary text-[13px] font-semibold">${m.model}</span>
-            <span class="text-text-muted text-[10px] ml-auto uppercase tracking-wider">${provider}</span>
-          </div>
-          <div class="grid grid-cols-2 gap-x-4 gap-y-1 text-[11px]">
-            <span class="text-text-muted">Input</span><span class="text-right font-mono ${inCost < 1 ? 'text-alert-up' : 'text-on-surface'}">$${inCost.toFixed(2)}</span>
-            <span class="text-text-muted">Output</span><span class="text-right font-mono text-on-surface">$${outCost.toFixed(2)}</span>
-            <span class="text-text-muted">Context</span><span class="text-right font-mono text-on-surface">${formatContext(m.context_window)}</span>
-            ${bench?.mmlu ? `<span class="text-text-muted">MMLU</span><span class="text-right"><span class="benchmark-badge ${getBenchmarkClass(bench.mmlu, 'mmlu')}">${bench.mmlu.toFixed(1)}</span></span>` : '<span></span><span></span>'}
-            ${bench?.humaneval ? `<span class="text-text-muted">HumanEval</span><span class="text-right"><span class="benchmark-badge ${getBenchmarkClass(bench.humaneval, 'humaneval')}">${bench.humaneval.toFixed(1)}%</span></span>` : '<span></span><span></span>'}
-            ${bench?.arena_elo ? `<span class="text-text-muted">Arena Elo</span><span class="text-right font-mono ${bench.arena_elo >= 1250 ? 'text-alert-up' : 'text-primary'}">${bench.arena_elo}</span>` : '<span></span><span></span>'}
-          </div>
-          ${voteCount > 0 ? `<div class="mt-2 pt-2 border-t border-outline-variant flex justify-between text-[10px]"><span class="text-text-muted">Community votes</span><span class="text-primary font-semibold">${voteCount}</span></div>` : ''}
-        </div>
       </td>
     </tr>`;
   }).join('');
