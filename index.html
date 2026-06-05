@@ -444,6 +444,28 @@ async function fetchBenchmarks() {
   }
 }
 
+function getBenchmarkData(modelName) {
+  const clean = (s) => (s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+  const key = clean(modelName);
+  // 1. Exact match
+  if (benchmarks[key]) return benchmarks[key];
+  // 2. Strip provider prefix (e.g. "OpenAI: GPT-4o" → "GPT-4o")
+  const colon = modelName.indexOf(':');
+  if (colon > -1) {
+    const afterColon = clean(modelName.slice(colon + 1));
+    if (benchmarks[afterColon]) return benchmarks[afterColon];
+    // 3. Try matching the model part against all benchmark keys
+    for (const bk in benchmarks) {
+      if (afterColon.includes(bk) || bk.includes(afterColon)) return benchmarks[bk];
+    }
+  }
+  // 4. Fuzzy: check if any benchmark key is a substring of the cleaned model name
+  for (const bk in benchmarks) {
+    if (bk.length > 4 && key.includes(bk)) return benchmarks[bk];
+  }
+  return null;
+}
+
 async function fetchData() {
   try {
     const res = await fetch(API_URL);
