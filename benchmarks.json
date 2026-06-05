@@ -1,0 +1,162 @@
+{
+  "benchmarks": [
+    {
+      "model": "gpt-4o",
+      "provider": "openai",
+      "mmlu": 88.7,
+      "humaneval": 90.2,
+      "gpqa": 53.6,
+      "arena_elo": 1287,
+      "speed_tps": 95
+    },
+    {
+      "model": "gpt-4-turbo",
+      "provider": "openai",
+      "mmlu": 86.4,
+      "humaneval": 87.1,
+      "gpqa": 49.8,
+      "arena_elo": 1257,
+      "speed_tps": 45
+    },
+    {
+      "model": "gpt-3.5-turbo",
+      "provider": "openai",
+      "mmlu": 70.0,
+      "humaneval": 72.3,
+      "gpqa": 32.1,
+      "arena_elo": 1106,
+      "speed_tps": 180
+    },
+    {
+      "model": "claude-3-opus",
+      "provider": "anthropic",
+      "mmlu": 86.8,
+      "humaneval": 84.9,
+      "gpqa": 50.4,
+      "arena_elo": 1245,
+      "speed_tps": 55
+    },
+    {
+      "model": "claude-3-sonnet",
+      "provider": "anthropic",
+      "mmlu": 81.2,
+      "humaneval": 79.4,
+      "gpqa": 43.2,
+      "arena_elo": 1193,
+      "speed_tps": 110
+    },
+    {
+      "model": "claude-3-haiku",
+      "provider": "anthropic",
+      "mmlu": 75.1,
+      "humaneval": 71.8,
+      "gpqa": 37.5,
+      "arena_elo": 1132,
+      "speed_tps": 220
+    },
+    {
+      "model": "gemini-1.5-pro",
+      "provider": "google",
+      "mmlu": 85.9,
+      "humaneval": 82.6,
+      "gpqa": 48.3,
+      "arena_elo": 1234,
+      "speed_tps": 68
+    },
+    {
+      "model": "gemini-1.5-flash",
+      "provider": "google",
+      "mmlu": 78.4,
+      "humaneval": 74.2,
+      "gpqa": 40.1,
+      "arena_elo": 1167,
+      "speed_tps": 195
+    },
+    {
+      "model": "llama-3-70b-instruct",
+      "provider": "meta",
+      "mmlu": 82.0,
+      "humaneval": 81.7,
+      "gpqa": 44.5,
+      "arena_elo": 1208,
+      "speed_tps": 125
+    },
+    {
+      "model": "llama-3-8b-instruct",
+      "provider": "meta",
+      "mmlu": 68.4,
+      "humaneval": 62.5,
+      "gpqa": 33.8,
+      "arena_elo": 1094,
+      "speed_tps": 310
+    },
+    {
+      "model": "mistral-large",
+      "provider": "mistral",
+      "mmlu": 84.0,
+      "humaneval": 82.1,
+      "gpqa": 46.7,
+      "arena_elo": 1215,
+      "speed_tps": 78
+    },
+    {
+      "model": "mistral-medium",
+      "provider": "mistral",
+      "mmlu": 78.9,
+      "humaneval": 75.3,
+      "gpqa": 39.8,
+      "arena_elo": 1154,
+      "speed_tps": 135
+    },
+    {
+      "model": "mixtral-8x7b-instruct",
+      "provider": "mistral",
+      "mmlu": 74.4,
+      "humaneval": 73.6,
+      "gpqa": 38.2,
+      "arena_elo": 1138,
+      "speed_tps": 165
+    },
+    {
+      "model": "deepseek-v2",
+      "provider": "deepseek",
+      "mmlu": 79.2,
+      "humaneval": 76.8,
+      "gpqa": 41.5,
+      "arena_elo": 1171,
+      "speed_tps": 145
+    },
+    {
+      "model": "qwen-72b-chat",
+      "provider": "alibaba",
+      "mmlu": 81.5,
+      "humaneval": 79.1,
+      "gpqa": 43.8,
+      "arena_elo": 1189,
+      "speed_tps": 98
+    },
+    {
+      "model": "command-r-plus",
+      "provider": "cohere",
+      "mmlu": 80.1,
+      "humaneval": 77.4,
+      "gpqa": 42.3,
+      "arena_elo": 1176,
+      "speed_tps": 115
+    },
+    {
+      "model": "grok-1.5",
+      "provider": "xai",
+      "mmlu": 83.2,
+      "humaneval": 80.5,
+      "gpqa": 45.1,
+      "arena_elo": 1201,
+      "speed_tps": 88
+    }
+  ],
+  "metadata": {
+    "source": "Hugging Face Open LLM Leaderboard + LMSYS Chatbot Arena",
+    "last_updated": "2025-06-01",
+    "description": "MMLU (Massive Multitask Language Understanding), HumanEval (Code Generation), GPQA (Graduate-Level Reasoning), Arena Elo (User Preference Ranking from LMSYS), Speed (tokens per second inference)"
+  }
+}
