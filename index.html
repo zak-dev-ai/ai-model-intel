@@ -86,14 +86,13 @@ tailwind.config = {
     position: fixed;
     pointer-events: none;
     z-index: 1000;
-    background: rgba(12, 12, 12, 0.97);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 183, 129, 0.3);
-    border-radius: 10px;
-    padding: 14px 18px;
-    box-shadow: 0 12px 40px rgba(0,0,0,0.6), 0 0 20px rgba(255, 183, 129, 0.12);
+    background: #141414;
+    border: 1px solid #ffb781;
+    border-radius: 8px;
+    padding: 12px 16px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,183,129,0.2);
     display: none;
-    width: 300px;
+    width: 280px;
   }
   .table-row-hover:hover .hover-detail-card { display: block; }
   .vote-btn { transition: all 0.2s; cursor: pointer; }
@@ -576,11 +575,13 @@ function showHoverCard(event, row) {
   const card = row.querySelector('.hover-detail-card');
   if (!card) return;
   const x = event.clientX;
-  const y = event.clientY - 20;
+  const y = event.clientY;
   card.style.display = 'block';
-  card.style.left = `${x}px`;
-  card.style.top = `${y}px`;
-  card.style.transform = 'translate(-50%, -100%)';
+  // Position to the right of cursor, with edge detection
+  const offsetX = (x + 300 > window.innerWidth) ? -300 : 14;
+  card.style.left = `${x + offsetX}px`;
+  card.style.top = `${y + 8}px`;
+  card.style.transform = 'none';
 }
 
 function hideHoverCard() {
@@ -660,22 +661,19 @@ function renderTable() {
       </td>
       <td colspan="12" class="p-0" style="position: relative;">
         <div class="hover-detail-card">
-          <div class="flex items-center gap-2 mb-3 pb-2 border-b border-border-slate">
-            <img src="${getLogo(provider)}" class="w-5 h-5 rounded" onerror="this.style.display='none'">
-            <span class="text-on-surface font-semibold">${m.model}</span>
-            <span class="text-text-muted text-[11px] ml-auto">${provider}</span>
+          <div class="flex items-center gap-2 mb-2 pb-2 border-b border-outline-variant">
+            <span class="text-primary text-[13px] font-semibold">${m.model}</span>
+            <span class="text-text-muted text-[10px] ml-auto uppercase tracking-wider">${provider}</span>
           </div>
-          <div class="space-y-1 text-[12px]">
-            <div class="flex justify-between"><span class="text-text-muted">Input / Output</span><span>$${inCost.toFixed(2)} <span class="text-text-muted">/</span> $${outCost.toFixed(2)} <span class="text-text-muted text-[10px]">per 1M</span></span></div>
-            <div class="flex justify-between"><span class="text-text-muted">Context</span><span>${formatContext(m.context_window)}</span></div>
-            ${bench?.mmlu ? `<div class="flex justify-between"><span class="text-text-muted">MMLU</span><span class="benchmark-badge ${getBenchmarkClass(bench.mmlu, 'mmlu')} scale-90">${bench.mmlu.toFixed(1)}</span></div>` : ''}
-            ${bench?.humaneval ? `<div class="flex justify-between"><span class="text-text-muted">HumanEval</span><span class="benchmark-badge ${getBenchmarkClass(bench.humaneval, 'humaneval')} scale-90">${bench.humaneval.toFixed(1)}%</span></div>` : ''}
-            ${bench?.arena_elo ? `<div class="flex justify-between"><span class="text-text-muted">Arena Elo</span><span class="${bench.arena_elo >= 1250 ? 'text-alert-up' : 'text-primary'}">${bench.arena_elo}</span></div>` : ''}
+          <div class="grid grid-cols-2 gap-x-4 gap-y-1 text-[11px]">
+            <span class="text-text-muted">Input</span><span class="text-right font-mono ${inCost < 1 ? 'text-alert-up' : 'text-on-surface'}">$${inCost.toFixed(2)}</span>
+            <span class="text-text-muted">Output</span><span class="text-right font-mono text-on-surface">$${outCost.toFixed(2)}</span>
+            <span class="text-text-muted">Context</span><span class="text-right font-mono text-on-surface">${formatContext(m.context_window)}</span>
+            ${bench?.mmlu ? `<span class="text-text-muted">MMLU</span><span class="text-right"><span class="benchmark-badge ${getBenchmarkClass(bench.mmlu, 'mmlu')}">${bench.mmlu.toFixed(1)}</span></span>` : '<span></span><span></span>'}
+            ${bench?.humaneval ? `<span class="text-text-muted">HumanEval</span><span class="text-right"><span class="benchmark-badge ${getBenchmarkClass(bench.humaneval, 'humaneval')}">${bench.humaneval.toFixed(1)}%</span></span>` : '<span></span><span></span>'}
+            ${bench?.arena_elo ? `<span class="text-text-muted">Arena Elo</span><span class="text-right font-mono ${bench.arena_elo >= 1250 ? 'text-alert-up' : 'text-primary'}">${bench.arena_elo}</span>` : '<span></span><span></span>'}
           </div>
-          <div class="mt-2 pt-2 border-t border-border-slate flex justify-between items-center text-[11px]">
-            <span class="text-text-muted">Votes</span>
-            <span class="text-primary font-semibold">▲ ${voteCount}</span>
-          </div>
+          ${voteCount > 0 ? `<div class="mt-2 pt-2 border-t border-outline-variant flex justify-between text-[10px]"><span class="text-text-muted">Community votes</span><span class="text-primary font-semibold">${voteCount}</span></div>` : ''}
         </div>
       </td>
     </tr>`;
