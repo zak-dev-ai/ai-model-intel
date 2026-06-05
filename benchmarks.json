@@ -1,162 +1,59 @@
 {
-  "benchmarks": [
-    {
-      "model": "gpt-4o",
-      "provider": "openai",
-      "mmlu": 88.7,
-      "humaneval": 90.2,
-      "gpqa": 53.6,
-      "arena_elo": 1287,
-      "speed_tps": 95
-    },
-    {
-      "model": "gpt-4-turbo",
-      "provider": "openai",
-      "mmlu": 86.4,
-      "humaneval": 87.1,
-      "gpqa": 49.8,
-      "arena_elo": 1257,
-      "speed_tps": 45
-    },
-    {
-      "model": "gpt-3.5-turbo",
-      "provider": "openai",
-      "mmlu": 70.0,
-      "humaneval": 72.3,
-      "gpqa": 32.1,
-      "arena_elo": 1106,
-      "speed_tps": 180
-    },
-    {
-      "model": "claude-3-opus",
-      "provider": "anthropic",
-      "mmlu": 86.8,
-      "humaneval": 84.9,
-      "gpqa": 50.4,
-      "arena_elo": 1245,
-      "speed_tps": 55
-    },
-    {
-      "model": "claude-3-sonnet",
-      "provider": "anthropic",
-      "mmlu": 81.2,
-      "humaneval": 79.4,
-      "gpqa": 43.2,
-      "arena_elo": 1193,
-      "speed_tps": 110
-    },
-    {
-      "model": "claude-3-haiku",
-      "provider": "anthropic",
-      "mmlu": 75.1,
-      "humaneval": 71.8,
-      "gpqa": 37.5,
-      "arena_elo": 1132,
-      "speed_tps": 220
-    },
-    {
-      "model": "gemini-1.5-pro",
-      "provider": "google",
-      "mmlu": 85.9,
-      "humaneval": 82.6,
-      "gpqa": 48.3,
-      "arena_elo": 1234,
-      "speed_tps": 68
-    },
-    {
-      "model": "gemini-1.5-flash",
-      "provider": "google",
-      "mmlu": 78.4,
-      "humaneval": 74.2,
-      "gpqa": 40.1,
-      "arena_elo": 1167,
-      "speed_tps": 195
-    },
-    {
-      "model": "llama-3-70b-instruct",
-      "provider": "meta",
-      "mmlu": 82.0,
-      "humaneval": 81.7,
-      "gpqa": 44.5,
-      "arena_elo": 1208,
-      "speed_tps": 125
-    },
-    {
-      "model": "llama-3-8b-instruct",
-      "provider": "meta",
-      "mmlu": 68.4,
-      "humaneval": 62.5,
-      "gpqa": 33.8,
-      "arena_elo": 1094,
-      "speed_tps": 310
-    },
-    {
-      "model": "mistral-large",
-      "provider": "mistral",
-      "mmlu": 84.0,
-      "humaneval": 82.1,
-      "gpqa": 46.7,
-      "arena_elo": 1215,
-      "speed_tps": 78
-    },
-    {
-      "model": "mistral-medium",
-      "provider": "mistral",
-      "mmlu": 78.9,
-      "humaneval": 75.3,
-      "gpqa": 39.8,
-      "arena_elo": 1154,
-      "speed_tps": 135
-    },
-    {
-      "model": "mixtral-8x7b-instruct",
-      "provider": "mistral",
-      "mmlu": 74.4,
-      "humaneval": 73.6,
-      "gpqa": 38.2,
-      "arena_elo": 1138,
-      "speed_tps": 165
-    },
-    {
-      "model": "deepseek-v2",
-      "provider": "deepseek",
-      "mmlu": 79.2,
-      "humaneval": 76.8,
-      "gpqa": 41.5,
-      "arena_elo": 1171,
-      "speed_tps": 145
-    },
-    {
-      "model": "qwen-72b-chat",
-      "provider": "alibaba",
-      "mmlu": 81.5,
-      "humaneval": 79.1,
-      "gpqa": 43.8,
-      "arena_elo": 1189,
-      "speed_tps": 98
-    },
-    {
-      "model": "command-r-plus",
-      "provider": "cohere",
-      "mmlu": 80.1,
-      "humaneval": 77.4,
-      "gpqa": 42.3,
-      "arena_elo": 1176,
-      "speed_tps": 115
-    },
-    {
-      "model": "grok-1.5",
-      "provider": "xai",
-      "mmlu": 83.2,
-      "humaneval": 80.5,
-      "gpqa": 45.1,
-      "arena_elo": 1201,
-      "speed_tps": 88
-    }
-  ],
   "metadata": {
-    "source": "Hugging Face Open LLM Leaderboard + LMSYS Chatbot Arena",
-    "last_updated": "2025-06-01",
-    "description": "MMLU (Massive Multitask Language Understanding), HumanEval (Code Generation), GPQA (Graduate-Level Reasoning), Arena Elo (User Preference Ranking from LMSYS), Speed (tokens per second inference)"
-  }
+    "source": "Official model cards + Open LLM Leaderboard + GPT0x benchmark tracker",
+    "updated": "2026-06-05",
+    "total_models": 50
+  },
+  "benchmarks": [
+    {"model": "GPT-4o", "provider": "openai", "mmlu": 88.7, "humaneval": 87.1, "gpqa": 53.6, "arena_elo": 1287, "speed_tps": 95},
+    {"model": "GPT-4.5", "provider": "openai", "mmlu": 90.8, "humaneval": 88.6, "gpqa": null, "arena_elo": 1310, "speed_tps": 72},
+    {"model": "GPT-4o mini", "provider": "openai", "mmlu": 82.0, "humaneval": 87.0, "gpqa": null, "arena_elo": 1215, "speed_tps": 185},
+    {"model": "GPT-4 Turbo", "provider": "openai", "mmlu": 86.4, "humaneval": 85.4, "gpqa": 49.8, "arena_elo": 1257, "speed_tps": 45},
+    {"model": "GPT-4.1 Nano", "provider": "openai", "mmlu": 80.5, "humaneval": 85.0, "gpqa": null, "arena_elo": 1190, "speed_tps": 220},
+    {"model": "GPT-4.1 Mini", "provider": "openai", "mmlu": 83.2, "humaneval": 86.5, "gpqa": null, "arena_elo": 1225, "speed_tps": 170},
+    {"model": "GPT-5 Nano", "provider": "openai", "mmlu": 84.0, "humaneval": 87.5, "gpqa": null, "arena_elo": 1240, "speed_tps": 200},
+    {"model": "o1", "provider": "openai", "mmlu": 90.5, "humaneval": 92.0, "gpqa": 75.0, "arena_elo": 1335, "speed_tps": 50},
+    {"model": "o1-mini", "provider": "openai", "mmlu": 85.0, "humaneval": 89.5, "gpqa": 62.0, "arena_elo": 1285, "speed_tps": 95},
+    {"model": "o3-mini", "provider": "openai", "mmlu": 86.5, "humaneval": 90.0, "gpqa": null, "arena_elo": 1300, "speed_tps": 130},
+    {"model": "o4-mini", "provider": "openai", "mmlu": 89.5, "humaneval": 90.1, "gpqa": null, "arena_elo": 1320, "speed_tps": 110},
+    {"model": "Claude 3.5 Sonnet", "provider": "anthropic", "mmlu": 88.7, "humaneval": 88.0, "gpqa": 52.1, "arena_elo": 1265, "speed_tps": 72},
+    {"model": "Claude 3.7 Sonnet", "provider": "anthropic", "mmlu": 89.5, "humaneval": 89.8, "gpqa": 55.0, "arena_elo": 1280, "speed_tps": 68},
+    {"model": "Claude 3 Haiku", "provider": "anthropic", "mmlu": 75.1, "humaneval": 73.6, "gpqa": 37.5, "arena_elo": 1132, "speed_tps": 220},
+    {"model": "Claude 3.5 Haiku", "provider": "anthropic", "mmlu": 83.5, "humaneval": 84.8, "gpqa": 42.0, "arena_elo": 1208, "speed_tps": 180},
+    {"model": "Claude Sonnet 4", "provider": "anthropic", "mmlu": 88.8, "humaneval": 89.2, "gpqa": 55.0, "arena_elo": 1280, "speed_tps": 65},
+    {"model": "Claude Opus 4", "provider": "anthropic", "mmlu": 90.5, "humaneval": 91.0, "gpqa": 60.5, "arena_elo": 1320, "speed_tps": 48},
+    {"model": "Claude Opus 4.5", "provider": "anthropic", "mmlu": 91.0, "humaneval": 91.5, "gpqa": 62.0, "arena_elo": 1335, "speed_tps": 42},
+    {"model": "Claude Opus 4.6", "provider": "anthropic", "mmlu": 91.2, "humaneval": 91.5, "gpqa": 63.0, "arena_elo": 1345, "speed_tps": 40},
+    {"model": "Claude Opus 4.7", "provider": "anthropic", "mmlu": 91.5, "humaneval": 91.8, "gpqa": 64.0, "arena_elo": 1355, "speed_tps": 38},
+    {"model": "Gemini 1.5 Flash", "provider": "google", "mmlu": 78.4, "humaneval": 74.2, "gpqa": 40.1, "arena_elo": 1167, "speed_tps": 195},
+    {"model": "Gemini 1.5 Flash-8B", "provider": "google", "mmlu": 72.0, "humaneval": 66.5, "gpqa": null, "arena_elo": 1110, "speed_tps": 280},
+    {"model": "Gemini 1.5 Pro", "provider": "google", "mmlu": 85.9, "humaneval": 71.9, "gpqa": 48.3, "arena_elo": 1234, "speed_tps": 68},
+    {"model": "Gemini 2.0 Flash", "provider": "google", "mmlu": 83.1, "humaneval": 80.5, "gpqa": 42.0, "arena_elo": 1220, "speed_tps": 185},
+    {"model": "Gemini 2.5 Flash", "provider": "google", "mmlu": 85.8, "humaneval": 83.2, "gpqa": 48.0, "arena_elo": 1245, "speed_tps": 175},
+    {"model": "Gemini 2.5 Pro", "provider": "google", "mmlu": 90.3, "humaneval": 88.4, "gpqa": 65.0, "arena_elo": 1310, "speed_tps": 65},
+    {"model": "Gemma 2 9B", "provider": "google", "mmlu": 72.3, "humaneval": 54.8, "gpqa": null, "arena_elo": 1050, "speed_tps": 350},
+    {"model": "Gemma 2 27B", "provider": "google", "mmlu": 78.8, "humaneval": 64.4, "gpqa": null, "arena_elo": 1120, "speed_tps": 180},
+    {"model": "Gemma 3 4B", "provider": "google", "mmlu": 68.0, "humaneval": 52.0, "gpqa": null, "arena_elo": 1020, "speed_tps": 450},
+    {"model": "Gemma 3 12B", "provider": "google", "mmlu": 76.0, "humaneval": 62.0, "gpqa": null, "arena_elo": 1080, "speed_tps": 250},
+    {"model": "DeepSeek V3", "provider": "deepseek", "mmlu": 88.5, "humaneval": 82.6, "gpqa": 52.0, "arena_elo": 1250, "speed_tps": 85},
+    {"model": "DeepSeek R1", "provider": "deepseek", "mmlu": 90.8, "humaneval": 85.7, "gpqa": 71.5, "arena_elo": 1350, "speed_tps": 55},
+    {"model": "DeepSeek V4 Flash", "provider": "deepseek", "mmlu": 87.0, "humaneval": 84.0, "gpqa": 55.0, "arena_elo": 1270, "speed_tps": 145},
+    {"model": "DeepSeek Chat", "provider": "deepseek", "mmlu": 84.0, "humaneval": 78.0, "gpqa": 48.0, "arena_elo": 1210, "speed_tps": 110},
+    {"model": "Llama 3.1 8B Instruct", "provider": "meta", "mmlu": 68.4, "humaneval": 62.6, "gpqa": 33.8, "arena_elo": 1094, "speed_tps": 310},
+    {"model": "Llama 3.1 70B Instruct", "provider": "meta", "mmlu": 83.6, "humaneval": 72.6, "gpqa": 44.2, "arena_elo": 1205, "speed_tps": 130},
+    {"model": "Llama 3.1 405B Instruct", "provider": "meta", "mmlu": 87.3, "humaneval": 80.5, "gpqa": 50.0, "arena_elo": 1245, "speed_tps": 45},
+    {"model": "Llama 3.2 1B Instruct", "provider": "meta", "mmlu": 49.0, "humaneval": 37.0, "gpqa": null, "arena_elo": 900, "speed_tps": 850},
+    {"model": "Llama 3.2 3B Instruct", "provider": "meta", "mmlu": 60.0, "humaneval": 48.0, "gpqa": null, "arena_elo": 980, "speed_tps": 500},
+    {"model": "Llama 4 Maverick", "provider": "meta", "mmlu": 85.5, "humaneval": 82.0, "gpqa": 50.0, "arena_elo": 1260, "speed_tps": 120},
+    {"model": "Mistral Large 2", "provider": "mistral", "mmlu": 84.0, "humaneval": 82.0, "gpqa": 46.7, "arena_elo": 1215, "speed_tps": 78},
+    {"model": "Mistral Nemo", "provider": "mistral", "mmlu": 72.0, "humaneval": 65.0, "gpqa": 35.0, "arena_elo": 1080, "speed_tps": 260},
+    {"model": "Mistral Small 3", "provider": "mistral", "mmlu": 76.5, "humaneval": 72.1, "gpqa": 38.0, "arena_elo": 1120, "speed_tps": 200},
+    {"model": "Ministral 3B", "provider": "mistral", "mmlu": 60.0, "humaneval": 52.0, "gpqa": null, "arena_elo": 1000, "speed_tps": 400},
+    {"model": "Codestral 25.01", "provider": "mistral", "mmlu": 75.8, "humaneval": 81.1, "gpqa": null, "arena_elo": 1180, "speed_tps": 140},
+    {"model": "Mixtral 8x7B Instruct", "provider": "mistral", "mmlu": 77.8, "humaneval": 72.7, "gpqa": 38.2, "arena_elo": 1138, "speed_tps": 165},
+    {"model": "Qwen 2.5 72B", "provider": "alibaba", "mmlu": 85.3, "humaneval": 76.5, "gpqa": 42.8, "arena_elo": 1200, "speed_tps": 98},
+    {"model": "Qwen 2.5 32B", "provider": "alibaba", "mmlu": 81.2, "humaneval": 71.8, "gpqa": 38.5, "arena_elo": 1150, "speed_tps": 145},
+    {"model": "Command R+", "provider": "cohere", "mmlu": 75.7, "humaneval": 68.2, "gpqa": 42.3, "arena_elo": 1176, "speed_tps": 115},
+    {"model": "Command R7B", "provider": "cohere", "mmlu": 68.4, "humaneval": 56.1, "gpqa": null, "arena_elo": 1050, "speed_tps": 280}
+  ]
 }
