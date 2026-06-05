@@ -522,13 +522,27 @@ function getFilteredModels() {
   return models;
 }
 
+function getVoteKey(modelName) {
+  // Normalize to match seed keys: strip provider prefix, clean
+  let name = modelName;
+  const colon = name.indexOf(':');
+  if (colon > -1) name = name.slice(colon + 1).trim();
+  return name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+}
+
 function handleVote(modelName) {
+  const key = getVoteKey(modelName);
+  const allVotes = JSON.parse(localStorage.getItem('all_model_votes') || '{}');
   if (userVotes[modelName]) {
     delete userVotes[modelName];
+    allVotes[key] = Math.max(0, (allVotes[key] || 0) - 1);
   } else {
     userVotes[modelName] = true;
+    if (!allVotes[key]) allVotes[key] = 0;
+    allVotes[key] = (allVotes[key] || 0) + 1;
   }
   localStorage.setItem(VOTES_KEY, JSON.stringify(userVotes));
+  localStorage.setItem('all_model_votes', JSON.stringify(allVotes));
   renderTable();
 }
 
@@ -561,11 +575,12 @@ seedVotesIfNeeded();
 
 function getVoteCount(modelName) {
   const allVotes = JSON.parse(localStorage.getItem('all_model_votes') || '{}');
-  if (allVotes[modelName]) return allVotes[modelName];
-  // Also try cleaned key (for seeded votes)
-  const cleaned = modelName.toLowerCase().replace(/[^a-z0-9]/g, '');
+  const key = getVoteKey(modelName);
+  if (allVotes[key]) return allVotes[key];
+  // Fuzzy fallback for seeded keys
+  const cleaned = key.replace(/[^a-z0-9]/g, '');
   for (const k in allVotes) {
-    const ck = k.toLowerCase().replace(/[^a-z0-9]/g, '');
+    const ck = k.replace(/[^a-z0-9]/g, '');
     if (ck === cleaned || cleaned.includes(ck) || ck.includes(cleaned)) return allVotes[k];
   }
   return 0;
