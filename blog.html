@@ -276,17 +276,36 @@ function estimateReadTime(content) {
 }
 
 async function fetchNews() {
+  let localArticles = [];
+  // 1. Load local curated articles (appear first)
   try {
-    // Add timeout to prevent hanging
+    const localRes = await fetch('/static/blog-articles.json');
+    const localData = await localRes.json();
+    if (localData && localData.articles) {
+      localArticles = localData.articles.map(a => ({
+        title: a.title,
+        pubDate: new Date(a._date || a.date).toISOString(),
+        thumbnail: a.img || getReliableImage(a.title),
+        categories: [a.tag || 'DEEP DIVE'],
+        description: a.content || a.excerpt || '',
+        link: '#',
+        _local: true
+      }));
+    }
+  } catch (e) {
+    console.warn('Local articles fetch skipped', e);
+  }
+  
+  // 2. Fetch RSS (TechCrunch)
+  let rssArticles = [];
+  try {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 8000);
-    
-    const res = await fetch(RSS_URL, { signal: controller.signal });
+    const rssRes = await fetch(RSS_URL, { signal: controller.signal });
     clearTimeout(timeoutId);
-    
-    const data = await res.json();
-    if (data.status === 'ok' && data.items && data.items.length > 0) {
-      allArticles = data.items.map(item => ({
+    const rssData = await rssRes.json();
+    if (rssData.status === 'ok' && rssData.items && rssData.items.length > 0) {
+      rssArticles = rssData.items.map(item => ({
         ...item,
         thumbnail: item.thumbnail || item.enclosure?.link || getReliableImage(item.title),
         categories: item.categories?.length ? item.categories : ['AI News'],
@@ -294,14 +313,16 @@ async function fetchNews() {
       }));
     } else {
       console.warn('RSS feed returned no items, using fallback');
-      allArticles = FALLBACK_ARTICLES.map(a => ({...a, thumbnail: getReliableImage(a.title)}));
+      rssArticles = FALLBACK_ARTICLES.map(a => ({...a, thumbnail: getReliableImage(a.title)}));
     }
   } catch (e) {
     console.error('RSS fetch failed, using fallback', e);
-    allArticles = FALLBACK_ARTICLES.map(a => ({...a, thumbnail: getReliableImage(a.title)}));
+    rssArticles = FALLBACK_ARTICLES.map(a => ({...a, thumbnail: getReliableImage(a.title)}));
   }
   
-  // Always render, even if fetch failed
+  // 3. Merge: local first, RSS after
+  allArticles = [...localArticles, ...rssArticles];
+  
   renderHero();
   renderGrid();
 }
