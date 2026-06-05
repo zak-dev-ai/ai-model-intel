@@ -86,11 +86,11 @@ tailwind.config = {
     position: fixed;
     pointer-events: none;
     z-index: 1000;
-    background: #141414;
-    border: 1px solid #ffb781;
+    background: #1a1a1a;
+    border: 2px solid #ffb781;
     border-radius: 8px;
     padding: 12px 16px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,183,129,0.2);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.9);
     display: none;
     width: 280px;
   }
@@ -546,33 +546,6 @@ function handleVote(modelName) {
   renderTable();
 }
 
-function seedVotesIfNeeded() {
-  const allVotes = JSON.parse(localStorage.getItem('all_model_votes') || '{}');
-  if (Object.keys(allVotes).length > 5) return; // Already seeded or has real votes
-  const baseKeys = ['gpt-4o','gpt-4-turbo','gpt-4o-mini','o1','claude-3.7-sonnet','claude-3.5-sonnet',
-    'claude-opus-4','gemini-2.5-pro','gemini-2.0-flash','deepseek-v3','deepseek-r1',
-    'llama-3.1-70b-instruct','llama-3.1-8b-instruct','mistral-large-2','qwen-2.5-72b',
-    'command-r+','grok-2','phi-4','gemma-2-27b','mixtral-8x7b'];
-  // Quality tiers: top models get higher vote ranges
-  const high = ['o1','claude-opus-4','gpt-4o','claude-3.7-sonnet','gemini-2.5-pro','deepseek-r1'];
-  const med = ['gpt-4-turbo','deepseek-v3','llama-3.1-70b-instruct','gpt-4o-mini','claude-3.5-sonnet',
-    'gemini-2.0-flash','llama-3.1-405b-instruct','qwen-2.5-72b','mistral-large-2','grok-2','phi-4'];
-  baseKeys.forEach(k => {
-    let min, max;
-    if (high.some(h => k.includes(h.replace('-','').toLowerCase()))) { min=35; max=48; }
-    else if (med.some(m => k.includes(m))) { min=25; max=38; }
-    else { min=18; max=32; }
-    allVotes[k] = Math.floor(Math.random() * (max - min)) + min;
-  });
-  // Also seed a few votes for models currently visible in pricing
-  const r = (mn,mx) => Math.floor(Math.random()*(mx-mn))+mn;
-  if (!allVotes['gemini-2.5-flash']) allVotes['gemini-2.5-flash'] = r(22,35);
-  if (!allVotes['deepseek-v4-flash']) allVotes['deepseek-v4-flash'] = r(28,40);
-  if (!allVotes['claude-3.5-haiku']) allVotes['claude-3.5-haiku'] = r(24,36);
-  localStorage.setItem('all_model_votes', JSON.stringify(allVotes));
-}
-seedVotesIfNeeded();
-
 function getVoteCount(modelName) {
   const allVotes = JSON.parse(localStorage.getItem('all_model_votes') || '{}');
   const key = getVoteKey(modelName);
@@ -587,14 +560,10 @@ function getVoteCount(modelName) {
 function showHoverCard(event, row) {
   const card = row.querySelector('.hover-detail-card');
   if (!card) return;
-  const x = event.clientX;
-  const y = event.clientY;
   card.style.display = 'block';
-  // Position to the right of cursor, with edge detection
-  const offsetX = (x + 300 > window.innerWidth) ? -300 : 14;
-  card.style.left = `${x + offsetX}px`;
-  card.style.top = `${y + 8}px`;
-  card.style.transform = 'none';
+  card.style.left = `${event.clientX}px`;
+  card.style.top = `${event.clientY}px`;
+  card.style.transform = 'translate(0, 0)';
 }
 
 function hideHoverCard() {
