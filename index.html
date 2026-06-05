@@ -393,7 +393,7 @@ async function enrichBenchmarks() {
       mergeBenchmarks(benchmarkCache);
       return;
     }
-    const bmRes = await fetch('https://lmmarketcap.com/api/models?limit=200');
+    const bmRes = await fetch('https://api.allorigins.win/raw?url=' + encodeURIComponent('https://lmmarketcap.com/api/models?limit=200'));
     const bmData = await bmRes.json();
     benchmarkCache = bmData.data || [];
     benchmarkCacheTime = Date.now();
