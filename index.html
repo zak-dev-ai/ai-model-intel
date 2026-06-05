@@ -4,80 +4,107 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>AI Model Ranks — Live Terminal</title>
-<meta name="description" content="The Bloomberg Terminal for AI. Track real-time pricing, benchmarks (MMLU, HumanEval, GPQA), and ROI across 200+ LLMs.">
-<script src="/config.js"></script>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=JetBrains+Mono:wght@100..800&display=swap" rel="stylesheet"/>
-<script>
+<script id="tailwind-config">
 tailwind.config = {
   darkMode: "class",
   theme: {
     extend: {
-      colors: {
-        "surface": "#131313", "surface-elevated": "#0F0F0F", "surface-container": "#201f1f",
-        "surface-container-high": "#2a2a2a", "surface-container-highest": "#353534",
-        "surface-container-lowest": "#0e0e0e", "surface-bright": "#3a3939",
-        "border-slate": "#1A1A1A", "outline-variant": "#574335",
-        "text-muted": "#888888", "on-surface": "#e5e2e1", "on-surface-variant": "#dec1ae",
-        "primary": "#ffb781", "primary-container": "#ff8800",
-        "matrix-green": "#00ff41", "bloomberg-orange": "#ff8800", "terminal-cyan": "#06B6D4",
-        "alert-up": "#00ff66", "alert-down": "#ff5500", "deep-charcoal": "#131313"
+      "colors": {
+        "surface-tint": "#ffb781",
+        "on-secondary-container": "#007117",
+        "primary-fixed-dim": "#ffb781",
+        "secondary": "#ecffe3",
+        "surface-container": "#201f1f",
+        "secondary-container": "#13ff43",
+        "surface-container-high": "#2a2a2a",
+        "on-background": "#e5e2e1",
+        "on-secondary-fixed-variant": "#00530e",
+        "secondary-fixed": "#72ff70",
+        "tertiary-fixed": "#ffdad7",
+        "on-tertiary": "#68000a",
+        "surface": "#131313",
+        "primary-fixed": "#ffdcc4",
+        "on-tertiary-container": "#80000f",
+        "outline-variant": "#574335",
+        "inverse-surface": "#e5e2e1",
+        "surface-bright": "#3a3939",
+        "on-tertiary-fixed-variant": "#930013",
+        "text-muted": "#888888",
+        "surface-elevated": "#0F0F0F",
+        "secondary-fixed-dim": "#00e639",
+        "on-primary-container": "#613000",
+        "surface-container-highest": "#353534",
+        "on-secondary": "#003907",
+        "primary-container": "#ff8800",
+        "inverse-on-surface": "#313030",
+        "background": "#131313",
+        "tertiary-container": "#ff837c",
+        "on-error": "#690005",
+        "on-primary-fixed": "#2f1400",
+        "terminal-cyan": "#06B6D4",
+        "border-slate": "#1A1A1A",
+        "error-container": "#93000a",
+        "on-primary": "#4e2600",
+        "surface-container-lowest": "#0e0e0e",
+        "outline": "#a58c7b",
+        "on-tertiary-fixed": "#410004",
+        "on-secondary-fixed": "#002203",
+        "on-surface-variant": "#dec1ae",
+        "tertiary": "#ffb3ad",
+        "surface-dim": "#131313",
+        "on-primary-fixed-variant": "#6f3800",
+        "error": "#ffb4ab",
+        "on-surface": "#e5e2e1",
+        "surface-variant": "#353534",
+        "surface-container-low": "#1c1b1b",
+        "inverse-primary": "#924c00",
+        "tertiary-fixed-dim": "#ffb3ad",
+        "primary": "#ffb781",
+        "on-error-container": "#ffdad6",
+        "matrix-green": "#00ff88",
+        "bloomberg-orange": "#ff8800",
+        "deep-charcoal": "#131313",
+        "alert-down": "#ff5500",
+        "alert-up": "#00ff66"
       },
-      fontFamily: {
-        "headline-md": ["Geist", "sans-serif"], "headline-xl": ["Geist", "sans-serif"],
-        "headline-xl-mobile": ["Geist", "sans-serif"], "body-sm": ["Geist", "sans-serif"],
-        "body-lg": ["Geist", "sans-serif"], "data-tabular": ["JetBrains Mono", "monospace"],
-        "data-label": ["JetBrains Mono", "monospace"]
+      "borderRadius": {
+        "DEFAULT": "0.125rem",
+        "lg": "0.25rem",
+        "xl": "0.5rem",
+        "full": "0.75rem"
       },
-      fontSize: {
-        "headline-md": ["24px", { lineHeight: "32px", letterSpacing: "-0.01em", fontWeight: "600" }],
-        "headline-xl": ["40px", { lineHeight: "48px", letterSpacing: "-0.02em", fontWeight: "700" }],
-        "headline-xl-mobile": ["32px", { lineHeight: "38px", fontWeight: "700" }],
-        "body-sm": ["14px", { lineHeight: "20px", fontWeight: "400" }],
-        "body-lg": ["16px", { lineHeight: "24px", fontWeight: "400" }],
-        "data-tabular": ["14px", { lineHeight: "20px", letterSpacing: "-0.01em", fontWeight: "500" }],
-        "data-label": ["12px", { lineHeight: "14px", letterSpacing: "0.05em", fontWeight: "700" }]
+      "spacing": {
+        "grid-column-gap": "1px",
+        "unit": "4px",
+        "container-max": "1600px",
+        "margin-edge": "24px",
+        "gutter": "16px"
       },
-      spacing: { "container-max": "1600px", "margin-edge": "24px", "gutter": "16px" }
+      "fontFamily": {
+        "headline-md": ["Geist", "sans-serif"],
+        "body-sm": ["Geist", "sans-serif"],
+        "data-tabular": ["JetBrains Mono", "monospace"],
+        "body-lg": ["Geist", "sans-serif"],
+        "data-label": ["JetBrains Mono", "monospace"],
+        "headline-xl": ["Geist", "sans-serif"],
+        "headline-xl-mobile": ["Geist", "sans-serif"]
+      },
+      "fontSize": {
+        "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+        "data-tabular": ["14px", { "lineHeight": "20px", "letterSpacing": "-0.01em", "fontWeight": "500" }],
+        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+        "data-label": ["12px", { "lineHeight": "14px", "letterSpacing": "0.05em", "fontWeight": "700" }],
+        "headline-xl": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+        "headline-xl-mobile": ["32px", { "lineHeight": "38px", "fontWeight": "700" }]
+      }
     }
   }
 }
 </script>
-<style>
-  body { background-color: #0a0a0a; color: #e5e2e1; overflow-x: hidden; }
-  #bg-canvas { position: fixed; inset: 0; z-index: -2; pointer-events: none; }
-  #matrix-canvas { position: fixed; inset: 0; z-index: -1; pointer-events: none; opacity: 0.45; mask-image: radial-gradient(circle at 50% 50%, rgba(0,0,0,1) 0%, rgba(0,0,0,0.1) 100%); -webkit-mask-image: radial-gradient(circle at 50% 50%, rgba(0,0,0,1) 0%, rgba(0,0,0,0.1) 100%); }
-  .shimmer-text { background: linear-gradient(90deg, #e5e2e1 0%, #ffb781 50%, #e5e2e1 100%); background-size: 200% auto; color: transparent; -webkit-background-clip: text; background-clip: text; animation: shimmer 3s linear infinite; }
-  @keyframes shimmer { to { background-position: 200% center; } }
-  .pulse-border { animation: pulse-border 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
-  @keyframes pulse-border { 0%, 100% { border-color: rgba(255, 136, 0, 0.2); } 50% { border-color: rgba(255, 136, 0, 0.6); } }
-  .pulse-green { animation: pulse-green 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
-  @keyframes pulse-green { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
-  .glass-panel { background: rgba(15, 15, 15, 0.6); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5); }
-  @keyframes ticker-scroll { 0% { transform: translateX(0) translateZ(0); } 100% { transform: translateX(-50%) translateZ(0); } }
-  .ticker-track { display: flex; width: max-content; animation: ticker-scroll 60s linear infinite; will-change: transform; }
-  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
-  .table-row-hover { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-  .table-row-hover:hover { background-color: rgba(255, 183, 129, 0.08) !important; transform: translateX(4px); box-shadow: -4px 0 0 0 #ffb781; }
-  .card-hover { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-  .card-hover:hover { transform: translateY(-4px); border-color: #ffb781 !important; box-shadow: 0 10px 40px -5px rgba(255, 183, 129, 0.25), 0 0 15px -2px rgba(255, 183, 129, 0.15); }
-  .mobile-menu { position: fixed; top: 0; right: -100%; width: 80%; max-width: 320px; height: 100vh; background: rgba(19, 19, 19, 0.98); backdrop-filter: blur(20px); z-index: 200; transition: right 0.3s ease; padding: 5rem 2rem; display: flex; flex-direction: column; gap: 0.5rem; box-shadow: -10px 0 30px rgba(0,0,0,0.5); }
-  .mobile-menu.open { right: 0; }
-  .mobile-menu a { color: #e5e2e1; text-decoration: none; font-size: 1.125rem; font-weight: 500; padding: 1rem 0; border-bottom: 1px solid #1A1A1A; display: flex; align-items: center; gap: 0.75rem; }
-  .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 150; display: none; }
-  .overlay.show { display: block; }
-  .provider-logo { width: 24px; height: 24px; border-radius: 4px; background: #fff; padding: 2px; box-shadow: 0 2px 6px rgba(0,0,0,0.3); }
-  .provider-logo-lg { width: 32px; height: 32px; border-radius: 6px; }
-  .sparkline { width: 80px; height: 32px; display: block; }
-  .benchmark-badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; font-family: 'JetBrains Mono', monospace; }
-  .benchmark-high { background: rgba(0, 255, 65, 0.15); color: #00ff41; border: 1px solid rgba(0, 255, 65, 0.3); }
-  .benchmark-mid { background: rgba(6, 182, 212, 0.15); color: #06B6D4; border: 1px solid rgba(6, 182, 212, 0.3); }
-  .benchmark-low { background: rgba(255, 85, 0, 0.15); color: #ff5500; border: 1px solid rgba(255, 85, 0, 0.3); }
-  ::-webkit-scrollbar { width: 8px; height: 8px; }
-  ::-webkit-scrollbar-track { background: #131313; }
-  ::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 4px; }
-</style>
     <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-7PEVV57LGZ"></script>
   <script>
@@ -86,36 +113,148 @@ tailwind.config = {
     gtag('js', new Date());
     gtag('config', 'G-7PEVV57LGZ');
   </script>
+<style>
+body {
+  background-color: #0a0a0a;
+  color: #e5e2e1;
+}
+#bg-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -2;
+  pointer-events: none;
+}
+#matrix-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.35;
+  mask-image: radial-gradient(circle at 50% 30%, black, transparent 70%);
+  -webkit-mask-image: radial-gradient(circle at 50% 30%, black, transparent 70%);
+}
+.shimmer-text {
+  background: linear-gradient(90deg, #e5e2e1 0%, #ffb781 50%, #e5e2e1 100%);
+  background-size: 200% auto;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: shimmer 3s linear infinite;
+}
+@keyframes shimmer {
+  to { background-position: 200% center; }
+}
+.pulse-border {
+  animation: pulse-border 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+@keyframes pulse-border {
+  0%, 100% { border-color: rgba(255, 136, 0, 0.2); }
+  50% { border-color: rgba(255, 136, 0, 0.6); }
+}
+.pulse-green {
+  animation: pulse-green 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+@keyframes pulse-green {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .5; }
+}
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+.glass-panel {
+  background: rgba(15, 15, 15, 0.6);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+}
+@keyframes ticker-scroll {
+  0% { transform: translateX(0) translateZ(0); }
+  100% { transform: translateX(-50%) translateZ(0); }
+}
+.ticker-track {
+  display: flex;
+  width: max-content;
+  animation: ticker-scroll 35s linear infinite;
+  will-change: transform;
+}
+.table-row-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.table-row-hover:hover {
+  background-color: rgba(255, 183, 129, 0.08) !important;
+  transform: translateX(4px);
+  box-shadow: -4px 0 0 0 #ffb781;
+}
+.card-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.card-hover:hover {
+  transform: translateY(-4px);
+  border-color: #ffb781 !important;
+  box-shadow: 0 10px 40px -5px rgba(255, 183, 129, 0.25), 0 0 15px -2px rgba(255, 183, 129, 0.15);
+}
+.benchmark-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  font-family: 'JetBrains Mono', monospace;
+}
+.benchmark-high {
+  background: rgba(0, 255, 65, 0.15);
+  color: #00ff41;
+  border: 1px solid rgba(0, 255, 65, 0.3);
+}
+.benchmark-mid {
+  background: rgba(6, 182, 212, 0.15);
+  color: #06B6D4;
+  border: 1px solid rgba(6, 182, 212, 0.3);
+}
+.benchmark-low {
+  background: rgba(255, 85, 0, 0.15);
+  color: #ff5500;
+  border: 1px solid rgba(255, 85, 0, 0.3);
+}
+</style>
 </head>
-<body class="min-h-screen flex flex-col font-body-sm relative pt-10">
-
+<body class="min-h-screen flex flex-col font-body-sm relative overflow-x-hidden pt-10">
 <canvas id="bg-canvas"></canvas>
 <canvas id="matrix-canvas"></canvas>
 
-<div class="fixed top-0 left-0 w-full h-10 bg-surface-container-lowest/90 backdrop-blur-md border-b border-border-slate flex items-center overflow-hidden z-[60]">
-  <div class="ticker-track font-data-tabular text-data-tabular text-text-muted" id="ticker-track">
-    <div class="flex items-center px-4 gap-6">
-      <span>GPT-4o: <span class="text-alert-up">$5.00/1M</span></span><span class="text-border-slate font-bold">|</span>
-      <span>Llama 3: <span class="text-alert-up">$0.59/1M</span></span><span class="text-border-slate font-bold">|</span>
-      <span>Claude 3.5: <span class="text-alert-down">$3.00/1M</span></span><span class="text-border-slate font-bold">|</span>
-      <span>Gemini 1.5: <span class="text-alert-up">$7.00/1M</span></span><span class="text-border-slate font-bold">|</span>
-      <span>Mistral Large: <span class="text-alert-down">$2.50/1M</span></span><span class="text-border-slate font-bold">|</span>
+<!-- Persistent Data Ticker -->
+<div class="fixed top-0 left-0 w-full h-10 bg-surface-container-highest/90 backdrop-blur-md border-b border-border-slate flex items-center overflow-hidden z-[60]">
+  <div class="ticker-track font-data-tabular text-data-tabular text-text-muted">
+    <div class="flex items-center gap-6 px-4">
+      <span>GPT-4o: <span class="text-alert-up">$5.00/1M</span></span><span class="text-bloomberg-orange">·</span>
+      <span>Llama 3: <span class="text-alert-up">$0.59/1M</span></span><span class="text-bloomberg-orange">·</span>
+      <span>Claude 3.5: <span class="text-alert-down">$3.00/1M</span></span><span class="text-bloomberg-orange">·</span>
+      <span>Gemini 1.5 Pro: <span class="text-alert-up">$7.00/1M</span></span><span class="text-bloomberg-orange">·</span>
+      <span>Mistral Large: <span class="text-alert-down">$2.50/1M</span></span><span class="text-bloomberg-orange">·</span>
     </div>
-    <div class="flex items-center px-4 gap-6">
-      <span>GPT-4o: <span class="text-alert-up">$5.00/1M</span></span><span class="text-border-slate font-bold">|</span>
-      <span>Llama 3: <span class="text-alert-up">$0.59/1M</span></span><span class="text-border-slate font-bold">|</span>
-      <span>Claude 3.5: <span class="text-alert-down">$3.00/1M</span></span><span class="text-border-slate font-bold">|</span>
-      <span>Gemini 1.5: <span class="text-alert-up">$7.00/1M</span></span><span class="text-border-slate font-bold">|</span>
-      <span>Mistral Large: <span class="text-alert-down">$2.50/1M</span></span><span class="text-border-slate font-bold">|</span>
+    <div class="flex items-center gap-6 px-4">
+      <span>GPT-4o: <span class="text-alert-up">$5.00/1M</span></span><span class="text-bloomberg-orange">·</span>
+      <span>Llama 3: <span class="text-alert-up">$0.59/1M</span></span><span class="text-bloomberg-orange">·</span>
+      <span>Claude 3.5: <span class="text-alert-down">$3.00/1M</span></span><span class="text-bloomberg-orange">·</span>
+      <span>Gemini 1.5 Pro: <span class="text-alert-up">$7.00/1M</span></span><span class="text-bloomberg-orange">·</span>
+      <span>Mistral Large: <span class="text-alert-down">$2.50/1M</span></span><span class="text-bloomberg-orange">·</span>
     </div>
   </div>
 </div>
 
+<!-- TopNavBar -->
 <header class="glass-panel docked full-width top-10 sticky z-50 border-b border-outline-variant/30 flex justify-between items-center w-full px-margin-edge h-16 transition-all duration-200">
   <div class="flex items-center gap-4">
     <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">bar_chart</span>
-    <a href="/" class="font-headline-md font-bold tracking-tight text-primary text-headline-md md:text-headline-md hover:text-primary-fixed transition-colors">AI Model Ranks</a>
-    <span class="text-text-muted hidden md:inline ml-2 font-data-tabular">— Live Terminal</span>
+    <span class="font-headline-md font-bold tracking-tight text-primary text-headline-md md:text-headline-md">AI Model Ranks</span>
+    <span class="text-text-muted hidden md:inline ml-2 font-data-tabular">- Live Terminal</span>
   </div>
   <div class="hidden lg:flex items-center gap-6 bg-surface-container-high/50 px-4 py-1.5 rounded border border-border-slate backdrop-blur-md">
     <div class="flex items-center gap-2">
@@ -123,40 +262,30 @@ tailwind.config = {
       <span class="font-data-label text-data-label text-matrix-green tracking-widest">LIVE DATA</span>
     </div>
     <nav class="flex gap-4 border-l border-border-slate pl-4">
-      <a class="text-primary border-b-2 border-primary pb-1 font-body-sm text-body-sm" href="/">Terminal</a>
+      <a class="text-primary border-b-2 border-primary pb-1 font-body-sm text-body-sm" href="#">Terminal</a>
       <a class="text-on-surface-variant hover:text-on-surface transition-colors hover:bg-surface-variant/50 px-2 rounded font-body-sm text-body-sm" href="/blog.html">News</a>
       <a class="text-on-surface-variant hover:text-on-surface transition-colors hover:bg-surface-variant/50 px-2 rounded font-body-sm text-body-sm" href="https://rapidapi.com/zakmediaai/api/octopus-ai-model-intel" target="_blank">API</a>
       <a class="text-on-surface-variant hover:text-on-surface transition-colors hover:bg-surface-variant/50 px-2 rounded font-body-sm text-body-sm cursor-pointer" onclick="openPartnerModal()">Partner</a>
     </nav>
   </div>
   <div class="flex items-center gap-4">
-    <div class="hidden md:flex items-center gap-2 text-text-muted font-data-label text-data-label">
-      <div class="w-1.5 h-1.5 rounded-full bg-matrix-green pulse-green"></div>
-      <span id="update-timer">Updated 0s ago</span>
-    </div>
-    <button class="hidden lg:block bg-bloomberg-orange text-deep-charcoal px-4 py-1.5 rounded font-data-tabular text-data-tabular font-bold hover:bg-primary-tint transition-colors shadow-[0_0_15px_rgba(255,136,0,0.3)]" onclick="openPartnerModal()">Connect Terminal</button>
-    <button class="lg:hidden text-on-surface-variant hover:text-on-surface transition-colors" onclick="toggleMenu()" aria-label="Menu">
-      <span class="material-symbols-outlined text-2xl">menu</span>
+    <button class="bg-bloomberg-orange text-deep-charcoal px-4 py-1.5 rounded font-data-tabular text-data-tabular font-bold hover:bg-primary-tint transition-colors shadow-[0_0_15px_rgba(255,136,0,0.3)]" onclick="openPartnerModal()">
+      Connect Terminal
     </button>
   </div>
 </header>
 
-<div class="overlay" id="overlay" onclick="toggleMenu()"></div>
-<div class="mobile-menu" id="mobileMenu">
-  <button class="absolute top-6 right-6 text-on-surface-variant hover:text-on-surface transition-colors" onclick="toggleMenu()">
-    <span class="material-symbols-outlined text-2xl">close</span>
-  </button>
-  <a href="/" onclick="toggleMenu()"><span class="material-symbols-outlined">dashboard</span> Terminal</a>
-  <a href="/blog.html" onclick="toggleMenu()"><span class="material-symbols-outlined">article</span> News</a>
-  <a href="https://rapidapi.com/zakmediaai/api/octopus-ai-model-intel" target="_blank" onclick="toggleMenu()"><span class="material-symbols-outlined">code</span> API</a>
-  <a href="#" onclick="toggleMenu(); openPartnerModal(); return false;"><span class="material-symbols-outlined text-bloomberg-orange">handshake</span> Partner</a>
-</div>
-
+<!-- Main Content -->
 <main class="flex-grow w-full max-w-container-max mx-auto px-margin-edge py-10 flex flex-col gap-10">
+  <!-- Cinematic Hero -->
   <section class="text-center py-16 flex flex-col items-center justify-center gap-4 relative overflow-hidden">
     <div class="relative z-10 flex flex-col items-center justify-center gap-4">
-      <h1 class="font-headline-xl text-headline-xl-mobile md:text-headline-xl shimmer-text tracking-tight uppercase drop-shadow-[0_0_30px_rgba(255,183,129,0.3)]">The Architecture of Intelligence</h1>
-      <p class="font-body-lg text-body-lg text-text-muted max-w-2xl mx-auto">Track real-time pricing, benchmarks (MMLU, HumanEval, GPQA), and ROI across 200+ LLMs. Stop overpaying for AI infrastructure.</p>
+      <h1 class="font-headline-xl text-headline-xl-mobile md:text-headline-xl shimmer-text tracking-tight uppercase drop-shadow-[0_0_30px_rgba(255,183,129,0.3)]">
+        The Architecture of Intelligence
+      </h1>
+      <p class="font-body-lg text-body-lg text-text-muted max-w-2xl mx-auto">
+        Track real-time pricing, benchmarks, and ROI across 200+ LLMs. Stop overpaying for AI infrastructure.
+      </p>
       <div class="flex items-center gap-2 mt-4 text-text-muted font-data-label text-data-label bg-surface/50 px-3 py-1 rounded-full backdrop-blur-md border border-border-slate">
         <div class="w-1.5 h-1.5 rounded-full bg-matrix-green pulse-green"></div>
         Updated <span class="text-on-surface" id="time-updated">just now</span>
@@ -164,10 +293,12 @@ tailwind.config = {
     </div>
   </section>
 
+  <!-- Live Intelligence Modules -->
   <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
     <div class="glass-panel p-5 rounded-lg flex flex-col gap-2 relative overflow-hidden pulse-border hover:border-primary transition-colors cursor-default">
       <div class="font-data-label text-data-label text-text-muted uppercase">Total Models Tracked</div>
       <div class="font-data-tabular text-headline-md text-on-surface font-bold" id="stat-total">—</div>
+      <div class="absolute bottom-0 left-0 w-full h-8 opacity-20" style="background: linear-gradient(90deg, transparent, rgba(0, 255, 136, 0.4) 50%, transparent); mask-image: linear-gradient(to bottom, transparent, black);"></div>
     </div>
     <div class="glass-panel p-5 rounded-lg flex flex-col gap-2 relative overflow-hidden border border-outline-variant/30 hover:border-primary transition-colors cursor-default">
       <div class="font-data-label text-data-label text-text-muted uppercase">Average Input Cost</div>
@@ -183,28 +314,30 @@ tailwind.config = {
     </div>
   </section>
 
+  <!-- The Market Forge (Data Table) -->
   <section class="glass-panel rounded-lg border border-outline-variant/30 flex flex-col overflow-hidden">
     <div class="flex flex-col sm:flex-row justify-between items-center p-4 border-b border-border-slate gap-4 bg-surface-elevated/80 backdrop-blur-md">
       <h2 class="font-headline-md text-headline-md text-on-surface m-0 flex items-center gap-2">
         <span class="material-symbols-outlined text-bloomberg-orange" style="font-variation-settings: 'FILL' 1;">candlestick_chart</span>
         Live Market Table
       </h2>
-      <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
-        <div class="relative flex-1 sm:flex-none">
+      <div class="flex flex-wrap items-center gap-2">
+        <div class="relative">
           <span class="material-symbols-outlined absolute left-2 top-1/2 -translate-y-1/2 text-text-muted text-sm">search</span>
-          <input id="search-input" class="bg-surface-container-high/80 border border-border-slate rounded pl-8 pr-3 py-1.5 font-body-sm text-body-sm text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary w-full sm:w-64 placeholder-text-muted backdrop-blur-sm" placeholder="Search models, providers..." type="text"/>
+          <input id="search-input" class="bg-surface-container-high/80 border border-border-slate rounded pl-8 pr-3 py-1.5 font-body-sm text-body-sm text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary w-64 placeholder-text-muted backdrop-blur-sm" placeholder="Search models, providers..." type="text"/>
         </div>
-        <div class="flex gap-1 bg-surface-container-high/80 p-1 rounded border border-border-slate backdrop-blur-sm overflow-x-auto" id="filter-tabs">
-          <button class="filter-btn px-3 py-1 bg-surface-bright rounded text-on-surface font-body-sm text-body-sm transition-colors shadow-sm whitespace-nowrap" data-filter="all">All Models</button>
-          <button class="filter-btn px-3 py-1 text-text-muted hover:text-on-surface font-body-sm text-body-sm transition-colors whitespace-nowrap" data-filter="budget">Budget</button>
-          <button class="filter-btn px-3 py-1 text-text-muted hover:text-on-surface font-body-sm text-body-sm transition-colors whitespace-nowrap" data-filter="vision">Vision</button>
-          <button class="filter-btn px-3 py-1 text-text-muted hover:text-on-surface font-body-sm text-body-sm transition-colors whitespace-nowrap" data-filter="code">Code</button>
-          <button class="filter-btn px-3 py-1 text-text-muted hover:text-on-surface font-body-sm text-body-sm transition-colors whitespace-nowrap" data-filter="reasoning">Reasoning</button>
+        <div class="flex gap-1 bg-surface-container-high/80 p-1 rounded border border-border-slate backdrop-blur-sm">
+          <button class="filter-btn px-3 py-1 bg-surface-bright rounded text-on-surface font-body-sm text-body-sm transition-colors shadow-sm" data-filter="all">All Models</button>
+          <button class="filter-btn px-3 py-1 text-text-muted hover:text-on-surface font-body-sm text-body-sm transition-colors" data-filter="budget">Budget</button>
+          <button class="filter-btn px-3 py-1 text-text-muted hover:text-on-surface font-body-sm text-body-sm transition-colors" data-filter="vision">Vision</button>
+          <button class="filter-btn px-3 py-1 text-text-muted hover:text-on-surface font-body-sm text-body-sm transition-colors" data-filter="code">Code</button>
+          <button class="filter-btn px-3 py-1 text-text-muted hover:text-on-surface font-body-sm text-body-sm transition-colors" data-filter="reasoning">Reasoning</button>
         </div>
       </div>
     </div>
     
-    <div class="overflow-x-auto hidden lg:block">
+    <!-- Table -->
+    <div class="overflow-x-auto">
       <table class="w-full text-left border-collapse">
         <thead class="bg-surface-elevated/60 border-b border-border-slate font-data-label text-data-label text-text-muted uppercase tracking-wider backdrop-blur-md">
           <tr>
@@ -227,44 +360,23 @@ tailwind.config = {
       </table>
     </div>
     
+    <!-- Mobile Cards -->
     <div id="cards-grid" class="lg:hidden grid grid-cols-1 gap-3 p-4"></div>
     
-    <div class="p-3 border-t border-border-slate bg-surface-elevated/80 text-center backdrop-blur-md">
+    <div class="p-4 border-t border-border-slate bg-surface-elevated/80 text-center backdrop-blur-md">
       <div class="text-text-muted font-body-sm text-body-sm flex items-center justify-center gap-2">
         <span class="material-symbols-outlined text-[16px] text-matrix-green pulse-green">memory</span>
         <span id="result-info">—</span>
       </div>
     </div>
   </section>
-
-  <section class="grid grid-cols-1 md:grid-cols-2 gap-4">
-    <div class="glass-panel p-6 rounded-lg border border-outline-variant/30 hover:border-primary transition-colors">
-      <div class="flex items-center gap-3 mb-3">
-        <span class="material-symbols-outlined text-terminal-cyan text-2xl" style="font-variation-settings: 'FILL' 1;">api</span>
-        <h3 class="font-headline-md text-on-surface">AI Cost & Routing API</h3>
-      </div>
-      <p class="text-text-muted text-body-sm mb-4">Integrate live AI pricing into your backend. Dynamically route prompts to the most cost-effective model via RapidAPI.</p>
-      <a href="https://rapidapi.com/zakmediaai/api/octopus-ai-model-intel" target="_blank" class="inline-flex items-center gap-2 bg-terminal-cyan text-deep-charcoal px-4 py-2 rounded font-data-tabular text-data-tabular font-bold hover:opacity-90 transition-opacity">
-        Access Developer Docs <span class="material-symbols-outlined text-[16px]">arrow_right_alt</span>
-      </a>
-    </div>
-    <div class="glass-panel p-6 rounded-lg border border-bloomberg-orange/30 hover:border-bloomberg-orange transition-colors">
-      <div class="flex items-center gap-3 mb-3">
-        <span class="material-symbols-outlined text-bloomberg-orange text-2xl" style="font-variation-settings: 'FILL' 1;">handshake</span>
-        <h3 class="font-headline-md text-on-surface">AI Infrastructure Partners</h3>
-      </div>
-      <p class="text-text-muted text-body-sm mb-4">Reach 10,000+ AI engineers daily. Native integrations, category sponsorships, and API routing partnerships.</p>
-      <button onclick="openPartnerModal()" class="inline-flex items-center gap-2 bg-bloomberg-orange text-deep-charcoal px-4 py-2 rounded font-data-tabular text-data-tabular font-bold hover:opacity-90 transition-opacity">
-        Become a Partner <span class="material-symbols-outlined text-[16px]">arrow_right_alt</span>
-      </button>
-    </div>
-  </section>
 </main>
 
+<!-- Footer -->
 <footer class="bg-surface-container-lowest/80 backdrop-blur-md border-t border-outline-variant/30 flex flex-col md:flex-row justify-between items-center px-margin-edge py-gutter gap-gutter w-full mt-auto z-10">
   <div class="font-data-tabular text-data-tabular text-text-muted flex items-center gap-2">
     <span class="material-symbols-outlined text-[16px] text-matrix-green pulse-green">memory</span>
-    © 2026 AI MODEL RANKS | INSTITUTIONAL DATA STREAM ACTIVE
+    © 2024 AI MODEL RANKS | INSTITUTIONAL DATA STREAM ACTIVE
   </div>
   <nav class="flex gap-4">
     <a class="font-data-tabular text-data-tabular text-text-muted hover:text-on-surface hover:text-primary transition-colors" href="/blog.html">News</a>
@@ -273,6 +385,7 @@ tailwind.config = {
   </nav>
 </footer>
 
+<!-- Terminal Log Overlay (Bottom Left) -->
 <div class="fixed bottom-16 left-4 font-data-tabular text-[11px] text-text-muted opacity-60 pointer-events-none hidden lg:block z-40 bg-surface/40 p-2 rounded backdrop-blur-sm border border-border-slate/50">
   <div class="flex flex-col gap-1" id="terminal-logs">
     <div>&gt; SYS_INIT: Connecting to data fabric...</div>
@@ -281,6 +394,7 @@ tailwind.config = {
   </div>
 </div>
 
+<!-- Partner Application Modal -->
 <div id="partnerModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[200] hidden items-center justify-center p-4">
   <div class="glass-panel rounded-lg border border-bloomberg-orange/30 max-w-md w-full p-6 relative">
     <button onclick="closePartnerModal()" class="absolute top-4 right-4 text-text-muted hover:text-on-surface">
@@ -298,7 +412,9 @@ tailwind.config = {
       <input type="url" id="p-website" name="website" placeholder="Website URL" required class="bg-surface-container-high border border-border-slate rounded px-3 py-2 text-on-surface focus:outline-none focus:border-primary">
       <input type="email" id="p-email" name="email" placeholder="Contact Email" required class="bg-surface-container-high border border-border-slate rounded px-3 py-2 text-on-surface focus:outline-none focus:border-primary">
       <textarea id="p-proposal" name="proposal" placeholder="Briefly describe your proposal..." rows="3" required class="bg-surface-container-high border border-border-slate rounded px-3 py-2 text-on-surface focus:outline-none focus:border-primary"></textarea>
-      <button type="submit" class="bg-bloomberg-orange text-deep-charcoal px-4 py-2 rounded font-data-tabular text-data-tabular font-bold hover:opacity-90 transition-opacity">Submit Application →</button>
+      <button type="submit" class="bg-bloomberg-orange text-deep-charcoal px-4 py-2 rounded font-data-tabular text-data-tabular font-bold hover:opacity-90 transition-opacity">
+        Submit Application →
+      </button>
     </form>
   </div>
 </div>
@@ -334,10 +450,6 @@ function formatContext(n) {
 }
 
 function getApiLink(provider) {
-  if (window.ConfigManager && ConfigManager.getReferral) {
-    const link = ConfigManager.getReferral(provider);
-    if (link && link !== '#') return link;
-  }
   const domain = PROVIDER_DOMAINS[(provider||'').toLowerCase()] || 'openrouter.ai';
   const base = `https://${domain}`;
   return base + (base.includes('?') ? '&' : '?') + 'ref=aimodelranks';
@@ -394,7 +506,6 @@ async function fetchBenchmarks() {
   try {
     const res = await fetch(BENCHMARKS_URL);
     const data = await res.json();
-    // Create a lookup map by model name (normalized)
     data.benchmarks.forEach(b => {
       const key = b.model.toLowerCase().replace(/[^a-z0-9]/g, '');
       benchmarks[key] = b;
@@ -447,16 +558,6 @@ function renderAll() {
   document.getElementById('stat-cheapest').textContent = cheapest ? `${cheapest.provider}: ${cheapest.model}`.slice(0, 40) : '—';
   document.getElementById('stat-context').textContent = formatContext(maxCtx?.context_window || 0);
 
-  const track = document.getElementById('ticker-track');
-  const topModels = allModels.slice(0, 15);
-  const items = topModels.map(m => {
-    const change = get7DChange(m.model);
-    const isUp = parseFloat(change) >= 0;
-    const cls = isUp ? 'text-alert-up' : 'text-alert-down';
-    const arrow = isUp ? '▲' : '▼';
-    return `<span class="px-4">${m.model}: <span class="${cls}">$${(m.input_cost_per_mtok||0).toFixed(2)}/1M</span> <span class="${cls}">${arrow}${Math.abs(change)}%</span></span><span class="text-border-slate font-bold">|</span>`;
-  }).join('');
-  track.innerHTML = `<div class="flex items-center">${items}</div><div class="flex items-center">${items}</div>`;
   renderTable();
 }
 
@@ -496,7 +597,7 @@ function renderTable() {
     return `<tr class="table-row-hover hover:bg-surface-variant/30 transition-colors group">
       <td class="px-4 py-4 text-text-muted text-center">${i+1}</td>
       <td class="px-4 py-4 flex items-center gap-3">
-        <img src="${getLogo(provider)}" class="provider-logo" onerror="this.style.display='none'">
+        <img src="${getLogo(provider)}" class="w-6 h-6 rounded bg-white flex items-center justify-center" onerror="this.style.display='none'">
         <span class="text-on-surface group-hover:text-primary transition-colors font-medium">${m.model}</span>
       </td>
       <td class="px-4 py-4 text-right ${inCost < 1 ? 'text-alert-up' : 'text-on-surface'} font-medium">$${inCost.toFixed(2)}</td>
@@ -514,9 +615,17 @@ function renderTable() {
       <td class="px-4 py-4 text-center">
         ${bench?.arena_elo ? `<span class="benchmark-badge ${getBenchmarkClass(bench.arena_elo, 'arena_elo')}">${bench.arena_elo}</span>` : '<span class="text-text-muted">—</span>'}
       </td>
-      <td class="px-4 py-4"><div class="flex items-center justify-center gap-2 ${changeCls}">${getSparklineSVG(m.model, isUp)}<div class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">${trendIcon}</span><span class="font-bold">${Math.abs(change)}%</span></div></div></td>
+      <td class="px-4 py-4">
+        <div class="flex items-center justify-center gap-2 ${changeCls}">
+          ${getSparklineSVG(m.model, isUp)}
+          <div class="flex items-center gap-1">
+            <span class="material-symbols-outlined text-[16px]">${trendIcon}</span>
+            <span class="font-bold">${Math.abs(change)}%</span>
+          </div>
+        </div>
+      </td>
       <td class="px-4 py-4 text-right">
-        <a href="${apiLink}" target="_blank" data-provider="${provider}" class="btn-api inline-flex items-center gap-1 px-3 py-1.5 border border-border-slate rounded text-text-muted hover:text-on-surface hover:border-on-surface transition-colors text-xs bg-surface-container-high/50 hover:bg-surface-bright backdrop-blur-sm">
+        <a href="${apiLink}" target="_blank" data-provider="${provider}" class="btn-api px-3 py-1.5 border border-border-slate rounded text-text-muted hover:text-on-surface hover:border-on-surface transition-colors text-xs flex items-center gap-1 ml-auto bg-surface-container-high/50 hover:bg-surface-bright backdrop-blur-sm">
           Get API <span class="material-symbols-outlined text-[14px]">arrow_right_alt</span>
         </a>
       </td>
@@ -536,7 +645,7 @@ function renderTable() {
 
     return `<div class="mobile-card card-hover glass-panel border border-outline-variant/30 rounded-lg p-5">
       <div class="flex items-center gap-3 mb-3">
-        <img src="${getLogo(provider)}" class="provider-logo provider-logo-lg" onerror="this.style.display='none'">
+        <img src="${getLogo(provider)}" class="w-8 h-8 rounded bg-white" onerror="this.style.display='none'">
         <div class="flex-1 min-w-0">
           <div class="font-bold text-on-surface truncate">${m.model}</div>
           <div class="text-text-muted text-xs uppercase tracking-wider font-data-label">${provider}</div>
@@ -546,16 +655,37 @@ function renderTable() {
         </div>
       </div>
       <div class="grid grid-cols-3 gap-2 mb-3 text-xs">
-        <div class="bg-surface-container-high rounded p-2"><div class="text-text-muted text-[10px] uppercase font-data-label">Input</div><div class="font-data-tabular ${inCost < 1 ? 'text-alert-up' : 'text-on-surface'}">$${inCost.toFixed(2)}</div></div>
-        <div class="bg-surface-container-high rounded p-2"><div class="text-text-muted text-[10px] uppercase font-data-label">Output</div><div class="font-data-tabular text-on-surface">$${outCost.toFixed(2)}</div></div>
-        <div class="bg-surface-container-high rounded p-2"><div class="text-text-muted text-[10px] uppercase font-data-label">Context</div><div class="font-data-tabular text-on-surface">${formatContext(m.context_window)}</div></div>
+        <div class="bg-surface-container-high rounded p-2">
+          <div class="text-text-muted text-[10px] uppercase font-data-label">Input</div>
+          <div class="font-data-tabular ${inCost < 1 ? 'text-alert-up' : 'text-on-surface'}">$${inCost.toFixed(2)}</div>
+        </div>
+        <div class="bg-surface-container-high rounded p-2">
+          <div class="text-text-muted text-[10px] uppercase font-data-label">Output</div>
+          <div class="font-data-tabular text-on-surface">$${outCost.toFixed(2)}</div>
+        </div>
+        <div class="bg-surface-container-high rounded p-2">
+          <div class="text-text-muted text-[10px] uppercase font-data-label">Context</div>
+          <div class="font-data-tabular text-on-surface">${formatContext(m.context_window)}</div>
+        </div>
       </div>
       ${bench ? `
       <div class="grid grid-cols-2 gap-2 mb-3 text-xs">
-        <div class="bg-surface-container-high rounded p-2"><div class="text-text-muted text-[10px] uppercase font-data-label">MMLU</div><div class="font-data-tabular"><span class="benchmark-badge ${getBenchmarkClass(bench.mmlu, 'mmlu')}">${bench.mmlu?.toFixed(1) || '—'}</span></div></div>
-        <div class="bg-surface-container-high rounded p-2"><div class="text-text-muted text-[10px] uppercase font-data-label">HumanEval</div><div class="font-data-tabular"><span class="benchmark-badge ${getBenchmarkClass(bench.humaneval, 'humaneval')}">${bench.humaneval ? bench.humaneval.toFixed(1) + '%' : '—'}</span></div></div>
-        <div class="bg-surface-container-high rounded p-2"><div class="text-text-muted text-[10px] uppercase font-data-label">GPQA</div><div class="font-data-tabular"><span class="benchmark-badge ${getBenchmarkClass(bench.gpqa, 'gpqa')}">${bench.gpqa?.toFixed(1) || '—'}</span></div></div>
-        <div class="bg-surface-container-high rounded p-2"><div class="text-text-muted text-[10px] uppercase font-data-label">Arena Elo</div><div class="font-data-tabular"><span class="benchmark-badge ${getBenchmarkClass(bench.arena_elo, 'arena_elo')}">${bench.arena_elo || '—'}</span></div></div>
+        <div class="bg-surface-container-high rounded p-2">
+          <div class="text-text-muted text-[10px] uppercase font-data-label">MMLU</div>
+          <div class="font-data-tabular"><span class="benchmark-badge ${getBenchmarkClass(bench.mmlu, 'mmlu')}">${bench.mmlu?.toFixed(1) || '—'}</span></div>
+        </div>
+        <div class="bg-surface-container-high rounded p-2">
+          <div class="text-text-muted text-[10px] uppercase font-data-label">HumanEval</div>
+          <div class="font-data-tabular"><span class="benchmark-badge ${getBenchmarkClass(bench.humaneval, 'humaneval')}">${bench.humaneval ? bench.humaneval.toFixed(1) + '%' : '—'}</span></div>
+        </div>
+        <div class="bg-surface-container-high rounded p-2">
+          <div class="text-text-muted text-[10px] uppercase font-data-label">GPQA</div>
+          <div class="font-data-tabular"><span class="benchmark-badge ${getBenchmarkClass(bench.gpqa, 'gpqa')}">${bench.gpqa?.toFixed(1) || '—'}</span></div>
+        </div>
+        <div class="bg-surface-container-high rounded p-2">
+          <div class="text-text-muted text-[10px] uppercase font-data-label">Arena Elo</div>
+          <div class="font-data-tabular"><span class="benchmark-badge ${getBenchmarkClass(bench.arena_elo, 'arena_elo')}">${bench.arena_elo || '—'}</span></div>
+        </div>
       </div>` : ''}
       <div class="flex items-center justify-between mb-3">${getSparklineSVG(m.model, isUp)}</div>
       <a href="${apiLink}" target="_blank" data-provider="${provider}" class="mc-btn block text-center bg-bloomberg-orange text-deep-charcoal px-4 py-2 rounded font-data-tabular text-data-tabular font-bold hover:opacity-90 transition-opacity">Get API Key →</a>
@@ -566,28 +696,43 @@ function renderTable() {
 document.getElementById('search-input').addEventListener('input', renderTable);
 document.querySelectorAll('.filter-btn').forEach(btn => {
   btn.addEventListener('click', () => {
-    document.querySelectorAll('.filter-btn').forEach(b => { b.classList.remove('bg-surface-bright', 'text-on-surface', 'shadow-sm'); b.classList.add('text-text-muted'); });
-    btn.classList.add('bg-surface-bright', 'text-on-surface', 'shadow-sm'); btn.classList.remove('text-text-muted');
-    currentFilter = btn.dataset.filter; renderTable();
+    document.querySelectorAll('.filter-btn').forEach(b => {
+      b.classList.remove('bg-surface-bright', 'text-on-surface', 'shadow-sm');
+      b.classList.add('text-text-muted');
+    });
+    btn.classList.add('bg-surface-bright', 'text-on-surface', 'shadow-sm');
+    btn.classList.remove('text-text-muted');
+    currentFilter = btn.dataset.filter;
+    renderTable();
   });
 });
 
-function toggleMenu() { document.getElementById('mobileMenu').classList.toggle('open'); document.getElementById('overlay').classList.toggle('show'); }
-function openPartnerModal() { const m = document.getElementById('partnerModal'); m.classList.remove('hidden'); m.classList.add('flex'); }
-function closePartnerModal() { const m = document.getElementById('partnerModal'); m.classList.add('hidden'); m.classList.remove('flex'); }
+function openPartnerModal() {
+  const m = document.getElementById('partnerModal');
+  m.classList.remove('hidden');
+  m.classList.add('flex');
+}
+function closePartnerModal() {
+  const m = document.getElementById('partnerModal');
+  m.classList.add('hidden');
+  m.classList.remove('flex');
+}
 
 async function submitPartner(e) {
   e.preventDefault();
   const btn = e.target.querySelector('button[type="submit"]');
   const originalText = btn.innerHTML;
-  btn.innerHTML = 'Transmitting...'; btn.disabled = true;
+  btn.innerHTML = 'Transmitting...';
+  btn.disabled = true;
 
+  // Save to Supabase
   fetch(SUPABASE_URL + '/rest/v1/partner_applications', {
     method: 'POST',
     headers: { 'apikey': SUPABASE_ANON, 'Authorization': 'Bearer ' + SUPABASE_ANON, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
     body: JSON.stringify({ company: document.getElementById('p-company').value, website: document.getElementById('p-website').value, email: document.getElementById('p-email').value, proposal: document.getElementById('p-proposal').value })
   }).catch(() => {});
 
+  // Send to Web3Forms
   const data = { access_key: '206ea04f-da37-40ea-994d-29b8967177bf', subject: `New Partner App: ${document.getElementById('p-company').value}`, from_name: 'AI Model Ranks Terminal', company: document.getElementById('p-company').value, website: document.getElementById('p-website').value, email: document.getElementById('p-email').value, proposal: document.getElementById('p-proposal').value, botcheck: '' };
   try {
     const res = await fetch('https://api.web3forms.com/submit', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(data) });
@@ -599,6 +744,7 @@ async function submitPartner(e) {
   } catch (err) { btn.innerHTML = 'Error. Try Again.'; btn.disabled = false; }
 }
 
+// Track Referral Clicks to Supabase
 document.addEventListener('click', function(e) {
   const btn = e.target.closest('.btn-api, .mc-btn');
   if (btn && btn.getAttribute('href')) {
@@ -612,42 +758,138 @@ document.addEventListener('click', function(e) {
 });
 
 function addTerminalLog(msg) {
-  const logs = document.getElementById('terminal-logs'); if (!logs) return;
-  const newLog = document.createElement('div'); newLog.textContent = msg; logs.appendChild(newLog);
+  const logs = document.getElementById('terminal-logs');
+  if (!logs) return;
+  const newLog = document.createElement('div');
+  newLog.textContent = msg;
+  logs.appendChild(newLog);
   if (logs.children.length > 6) logs.removeChild(logs.firstChild);
 }
-const fakeMessages = ["> Llama 3 cost updated: $0.02", "> Ping OpenAI API: 200 OK", "> Market shift detected: -0.5% avg", "> Re-indexing context windows...", "> Data stream synced."];
-setInterval(() => { const msg = fakeMessages[Math.floor(Math.random() * fakeMessages.length)]; addTerminalLog(msg); }, 4000);
 
+const fakeMessages = [
+  "> Llama 3.1 8B cost updated: $0.02",
+  "> Ping OpenAI API: 200 OK",
+  "> Market shift detected: -0.5% avg",
+  "> Re-indexing model context windows...",
+  "> Data stream synced."
+];
+setInterval(() => {
+  const msg = fakeMessages[Math.floor(Math.random() * fakeMessages.length)];
+  addTerminalLog(msg);
+}, 3000);
+
+// Interactive Dot Grid Background
 document.addEventListener('DOMContentLoaded', () => {
-  const canvas = document.getElementById('bg-canvas'); if (!canvas) return;
-  const ctx = canvas.getContext('2d'); let width = window.innerWidth, height = window.innerHeight, mouseX = width / 2, mouseY = height / 2;
-  const spacing = 24, dots = [];
-  const resize = () => { width = window.innerWidth; height = window.innerHeight; canvas.width = width; canvas.height = height; initDots(); };
-  window.addEventListener('resize', resize); window.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; });
-  const initDots = () => { dots.length = 0; for (let x = 0; x < width; x += spacing) { for (let y = 0; y < height; y += spacing) { dots.push({ x: x + spacing/2, y: y + spacing/2, baseAlpha: 0.03 + Math.random() * 0.04, pulseOffset: Math.random() * Math.PI * 2, pulseSpeed: 0.01 + Math.random() * 0.02 }); } } };
+  const canvas = document.getElementById('bg-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let width = window.innerWidth;
+  let height = window.innerHeight;
+  let mouseX = width / 2;
+  let mouseY = height / 2;
+  const spacing = 20;
+  const dots = [];
+  const resize = () => {
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
+    initDots();
+  };
+  window.addEventListener('resize', resize);
+  window.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+  });
+  const initDots = () => {
+    dots.length = 0;
+    for (let x = 0; x < width; x += spacing) {
+      for (let y = 0; y < height; y += spacing) {
+        dots.push({
+          x: x + spacing/2,
+          y: y + spacing/2,
+          baseAlpha: 0.05 + Math.random() * 0.05,
+          pulseOffset: Math.random() * Math.PI * 2,
+          pulseSpeed: 0.01 + Math.random() * 0.02
+        });
+      }
+    }
+  };
   let time = 0;
-  const draw = () => { ctx.clearRect(0, 0, width, height); ctx.fillStyle = '#0a0a0a'; ctx.fillRect(0, 0, width, height); time += 1; for (let i = 0; i < dots.length; i++) { const dot = dots[i]; const dx = mouseX - dot.x, dy = mouseY - dot.y, dist = Math.sqrt(dx * dx + dy * dy); let alpha = dot.baseAlpha + Math.sin(time * dot.pulseSpeed + dot.pulseOffset) * 0.02; if (dist < 200) alpha += (1 - (dist / 200)) * 0.4; ctx.fillStyle = `rgba(255, 183, 129, ${alpha})`; ctx.beginPath(); ctx.arc(dot.x, dot.y, 1, 0, Math.PI * 2); ctx.fill(); } requestAnimationFrame(draw); };
-  resize(); draw();
+  const draw = () => {
+    ctx.clearRect(0, 0, width, height);
+    ctx.fillStyle = '#131313';
+    ctx.fillRect(0, 0, width, height);
+    time += 1;
+    for (let i = 0; i < dots.length; i++) {
+      const dot = dots[i];
+      const dx = mouseX - dot.x;
+      const dy = mouseY - dot.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      let alpha = dot.baseAlpha + Math.sin(time * dot.pulseSpeed + dot.pulseOffset) * 0.02;
+      const maxDist = 200;
+      if (dist < maxDist) {
+        const intensity = 1 - (dist / maxDist);
+        alpha += intensity * 0.4;
+      }
+      ctx.fillStyle = `rgba(255, 183, 129, ${alpha})`;
+      ctx.beginPath();
+      ctx.arc(dot.x, dot.y, 1, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    requestAnimationFrame(draw);
+  };
+  resize();
+  draw();
 });
 
+// Digital Rain Overlay
 document.addEventListener('DOMContentLoaded', () => {
-  const canvas = document.getElementById('matrix-canvas'); if(!canvas) return;
-  const ctx = canvas.getContext('2d'); let w, h;
-  const initCanvas = () => { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; };
-  initCanvas(); window.addEventListener('resize', initCanvas);
-  const cols = Math.floor(w / 14), ypos = Array(cols).fill(0);
-  const chars = '01ABCDEFGHIJKLMNOPQRSTUVWXYZ$+-*/=%#&_';
-  function matrix () {
-    ctx.fillStyle = 'rgba(10, 10, 10, 0.04)'; ctx.fillRect(0, 0, w, h); ctx.font = '14px JetBrains Mono';
-    ypos.forEach((y, ind) => { const text = chars.charAt(Math.floor(Math.random() * chars.length)); const x = ind * 14; if (Math.random() > 0.95) { ctx.fillStyle = '#ffffff'; ctx.fillText(text, x, y); } ctx.fillStyle = '#ff9900'; ctx.fillText(text, x, y); if (y > h + Math.random() * 1000) ypos[ind] = 0; else ypos[ind] = y + 14; });
+  const canvas = document.getElementById('matrix-canvas');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let w, h;
+  const initCanvas = () => {
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = window.innerHeight;
+  };
+  initCanvas();
+  window.addEventListener('resize', initCanvas);
+  const cols = Math.floor(w / 14);
+  const ypos = Array(cols).fill(0);
+  const chars = '01ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$+-*/=%""\'#&_(),.;:?!\\|{}<>[]^~';
+  ctx.fillStyle = '#131313';
+  ctx.fillRect(0, 0, w, h);
+  function matrix() {
+    ctx.fillStyle = 'rgba(19, 19, 19, 0.1)';
+    ctx.fillRect(0, 0, w, h);
+    ctx.fillStyle = '#ff8800';
+    ctx.font = '10px JetBrains Mono';
+    ypos.forEach((y, ind) => {
+      const text = chars.charAt(Math.floor(Math.random() * chars.length));
+      const x = ind * 14;
+      if (Math.random() > 0.95) {
+        ctx.fillStyle = '#fff';
+        ctx.fillText(text, x, y);
+        ctx.fillStyle = '#ffb781';
+      } else {
+        ctx.fillText(text, x, y);
+      }
+      if (y > 100 + Math.random() * 10000) ypos[ind] = 0;
+      else ypos[ind] = y + 14;
+    });
   }
   setInterval(matrix, 50);
 });
 
-fetch(SUPABASE_URL + '/rest/v1/page_views', { method: 'POST', headers: { 'apikey': SUPABASE_ANON, 'Authorization': 'Bearer ' + SUPABASE_ANON, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' }, body: JSON.stringify({ page: window.location.pathname, referrer: document.referrer || 'Direct', user_agent: navigator.userAgent }) }).catch(() => {});
+// Track Page View
+fetch(SUPABASE_URL + '/rest/v1/page_views', {
+  method: 'POST',
+  headers: { 'apikey': SUPABASE_ANON, 'Authorization': 'Bearer ' + SUPABASE_ANON, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+  body: JSON.stringify({ page: window.location.pathname, referrer: document.referrer || 'Direct', user_agent: navigator.userAgent })
+}).catch(() => {});
 
-// Load benchmarks first, then pricing data
+// Initialize
 (async function init() {
   await fetchBenchmarks();
   await fetchData();
