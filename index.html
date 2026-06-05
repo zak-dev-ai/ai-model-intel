@@ -575,7 +575,13 @@ seedVotesIfNeeded();
 
 function getVoteCount(modelName) {
   const allVotes = JSON.parse(localStorage.getItem('all_model_votes') || '{}');
-  return allVotes[getVoteKey(modelName)] || 0;
+  const key = getVoteKey(modelName);
+  if (allVotes[key]) return allVotes[key];
+  // Auto-seed: generate a random vote count for unseen models
+  const seeded = Math.floor(Math.random() * 25) + 18; // 18-42 range
+  allVotes[key] = seeded;
+  localStorage.setItem('all_model_votes', JSON.stringify(allVotes));
+  return seeded;
 }
 
 function showHoverCard(event, row) {
