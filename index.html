@@ -205,14 +205,9 @@ tailwind.config = {
     <!-- Card 6: Featured Sponsorship (dynamic) -->
     <div id="featuredSponsorCard" class="glass-panel p-4 rounded-lg flex flex-col gap-2 relative overflow-hidden border-2 border-dashed border-primary/40 hover:border-primary transition-all cursor-pointer group bg-primary/5 h-full" onclick="handleSponsorClick()">
       <div id="sponsorBadge" class="absolute top-0 right-0 bg-primary text-deep-charcoal text-[9px] font-bold px-2 py-0.5 rounded-bl font-data-label tracking-wider">AVAILABLE</div>
-      <div class="font-data-label text-data-label text-primary uppercase">Featured Model</div>
-      <div class="flex items-center gap-2">
-        <img id="sponsorLogo" src="" class="w-8 h-8 rounded bg-white/10 object-contain hidden" onerror="this.style.display='none'" onload="this.classList.remove('hidden')"/>
-        <div class="flex-1 min-w-0">
-          <div id="sponsorModelName" class="font-data-tabular text-headline-md text-on-surface font-bold group-hover:text-primary transition-colors leading-tight truncate">Your Model</div>
-          <div id="sponsorCompany" class="text-text-muted text-[11px] truncate hidden"></div>
-        </div>
-      </div>
+      <div class="font-data-label text-data-label text-primary uppercase">Featured</div>
+      <div id="sponsorModelName" class="font-data-tabular text-headline-md text-on-surface font-bold group-hover:text-primary transition-colors leading-tight truncate">Your Product</div>
+      <div id="sponsorCompany" class="text-text-muted text-[11px] truncate hidden"></div>
       <div id="sponsorDescription" class="text-text-muted text-[10px] leading-tight line-clamp-2 hidden"></div>
       <div id="sponsorPlaceholder" class="mt-auto text-text-muted text-[10px] flex items-center justify-between w-full">
         <span class="font-bold text-on-surface">$99/mo</span>
@@ -777,7 +772,6 @@ async function loadActiveSponsorship() {
     
     const card = document.getElementById('featuredSponsorCard');
     const badge = document.getElementById('sponsorBadge');
-    const logo = document.getElementById('sponsorLogo');
     const modelName = document.getElementById('sponsorModelName');
     const company = document.getElementById('sponsorCompany');
     const placeholder = document.getElementById('sponsorPlaceholder');
@@ -792,11 +786,6 @@ async function loadActiveSponsorship() {
       card.classList.remove('border-dashed', 'border-primary/40', 'bg-primary/5');
       card.classList.add('border-solid', 'border-primary/60', 'bg-surface-container-high/30');
       
-      if (s.logo_url) {
-        logo.onload = () => logo.classList.remove('hidden');
-        logo.onerror = () => logo.classList.add('hidden');
-        logo.src = s.logo_url;
-      }
       modelName.textContent = s.model_name;
       company.textContent = s.company_name;
       company.classList.remove('hidden');

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Featured Model Sponsorship — AI Model Ranks</title>
+<title>Featured Product Sponsorship — AI Model Ranks</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=JetBrains+Mono:wght@100..800&display=swap" rel="stylesheet"/>
@@ -15,6 +15,8 @@
   .input-field::placeholder { color: #666 !important; -webkit-text-fill-color: #666 !important; }
   textarea.input-field { resize: vertical; font-family: 'Geist', sans-serif; }
   input:-webkit-autofill, input:-webkit-autofill:focus { -webkit-box-shadow: 0 0 0 30px #1a1a1a inset !important; -webkit-text-fill-color: #e5e2e1 !important; caret-color: #e5e2e1; }
+  @keyframes pulse-slow { 0%, 100% { box-shadow: 0 0 20px rgba(255,136,0,0.4); } 50% { box-shadow: 0 0 40px rgba(255,136,0,0.7); } }
+  .animate-pulse-slow { animation: pulse-slow 2.5s ease-in-out infinite; }
 </style>
 </head>
 <body class="min-h-screen flex flex-col pb-10">
@@ -37,8 +39,8 @@
       <span class="material-symbols-outlined text-primary text-[16px]">star</span>
       <span class="text-primary font-data-label text-data-label uppercase tracking-wider">Premium Placement</span>
     </div>
-    <h1 class="text-4xl md:text-5xl font-bold mb-4">Featured Model Sponsorship</h1>
-    <p class="text-text-muted text-lg max-w-2xl mx-auto">Get your AI model in front of developers and decision-makers browsing our live pricing terminal. Prime homepage placement for 30 days.</p>
+    <h1 class="text-4xl md:text-5xl font-bold mb-4">Featured Product Sponsorship</h1>
+    <p class="text-text-muted text-lg max-w-2xl mx-auto">Get your AI product, API, or tool in front of developers and decision-makers browsing our live pricing terminal. Prime homepage placement for 30 days.</p>
   </div>
 
   <!-- Pricing Card -->
@@ -49,7 +51,7 @@
         <h3 class="text-2xl font-bold mb-2">30-Day Featured Card</h3>
         <ul class="space-y-2 text-text-muted text-sm">
           <li class="flex items-center gap-2"><span class="material-symbols-outlined text-matrix-green text-[16px]">check_circle</span> Prime placement in homepage stats row</li>
-          <li class="flex items-center gap-2"><span class="material-symbols-outlined text-matrix-green text-[16px]">check_circle</span> Your model logo, name, and description</li>
+          <li class="flex items-center gap-2"><span class="material-symbols-outlined text-matrix-green text-[16px]">check_circle</span> Your product name, company, and description</li>
           <li class="flex items-center gap-2"><span class="material-symbols-outlined text-matrix-green text-[16px]">check_circle</span> Direct click-through link to your website</li>
           <li class="flex items-center gap-2"><span class="material-symbols-outlined text-matrix-green text-[16px]">check_circle</span> ~10,000 monthly impressions from AI engineers & CTOs</li>
           <li class="flex items-center gap-2"><span class="material-symbols-outlined text-matrix-green text-[16px]">check_circle</span> Auto-expires after 30 days — no cancellation needed</li>
@@ -94,30 +96,24 @@
       </div>
 
       <div>
-        <label class="block text-sm font-medium text-text-muted mb-2">Model Name *</label>
-        <input type="text" name="model_name" required class="input-field" placeholder="e.g., Claude Opus 4.5"/>
+        <label class="block text-sm font-medium text-text-muted mb-2">Product / Model Name *</label>
+        <input type="text" name="model_name" required class="input-field" placeholder="e.g., Claude Opus 4.5, GroqCloud, Pinecone"/>
       </div>
 
       <div>
         <label class="block text-sm font-medium text-text-muted mb-2">Short Description * <span class="text-text-muted font-normal">(shown on card)</span></label>
-        <textarea name="description" required rows="3" class="input-field" placeholder="Brief description of your model. This will appear on the homepage card."></textarea>
-        <div class="text-xs text-text-muted mt-1">Max 160 characters</div>
-      </div>
-
-      <div>
-        <label class="block text-sm font-medium text-text-muted mb-2">Model Logo URL (Optional)</label>
-        <input type="url" name="logo_url" class="input-field" placeholder="https://yourcompany.com/logo.png"/>
-        <div class="text-xs text-text-muted mt-1">Direct image URL (PNG/JPG/SVG). No redirect URLs. Square recommended, shown at 40×40px.</div>
+        <textarea name="description" required rows="3" class="input-field" placeholder="What does your product do? One line. This appears on the homepage card."></textarea>
+        <div class="text-xs text-text-muted mt-1">Max 100 characters — keep it tight</div>
       </div>
 
       <div class="flex items-start gap-3">
         <input type="checkbox" id="terms" required class="mt-1 w-4 h-4 rounded border-outline-variant bg-surface-container-high text-primary focus:ring-primary"/>
         <label for="terms" class="text-sm text-text-muted">
-          I agree to the <a href="/legal.html" class="text-primary hover:underline">Sponsorship Terms</a> and confirm my model is genuinely available via API.
+          I agree to the <a href="/legal.html" class="text-primary hover:underline">Sponsorship Terms</a>. My product/service is genuinely available.
         </label>
       </div>
 
-      <button type="submit" id="submitBtn" class="w-full bg-bloomberg-orange text-deep-charcoal font-bold py-4 rounded-lg hover:bg-primary transition-colors flex items-center justify-center gap-2 text-lg">
+      <button type="submit" id="submitBtn" class="w-full bg-bloomberg-orange text-deep-charcoal font-bold py-4 rounded-lg transition-all flex items-center justify-center gap-2 text-lg shadow-[0_0_20px_rgba(255,136,0,0.4)] hover:shadow-[0_0_35px_rgba(255,136,0,0.6)] hover:bg-primary animate-pulse-slow">
         <span>Proceed to Payment — $99</span>
         <span class="material-symbols-outlined">arrow_forward</span>
       </button>
@@ -133,7 +129,7 @@
     <h3 class="text-xl font-bold mb-4">Frequently Asked Questions</h3>
 
     <div class="glass-panel rounded-lg p-6 border border-outline-variant/30">
-      <h4 class="font-medium mb-2">How long will my model be featured?</h4>
+      <h4 class="font-medium mb-2">How long will my product be featured?</h4>
       <p class="text-text-muted text-sm">Exactly 30 days from the moment your payment is confirmed. The card auto-expires when the period ends.</p>
     </div>
 
@@ -143,8 +139,8 @@
     </div>
 
     <div class="glass-panel rounded-lg p-6 border border-outline-variant/30">
-      <h4 class="font-medium mb-2">Can I change my model or details mid-sponsorship?</h4>
-      <p class="text-text-muted text-sm">Yes — email us at sponsorship@aimodelranks.live with your changes and we'll update the card within 24 hours.</p>
+      <h4 class="font-medium mb-2">Can I advertise an API, tool, or service — not just a model?</h4>
+      <p class="text-text-muted text-sm">Absolutely. Any AI-related product is welcome — inference platforms, vector DBs, agent frameworks, dev tools, model APIs.</p>
     </div>
 
     <div class="glass-panel rounded-lg p-6 border border-outline-variant/30">
@@ -167,8 +163,8 @@ document.getElementById('sponsorshipForm').addEventListener('submit', async func
     contact_email: this.contact_email.value.trim(),
     website_url: this.website_url.value.trim(),
     model_name: this.model_name.value.trim(),
-    description: this.description.value.trim().slice(0, 160),
-    logo_url: this.logo_url.value.trim() || null,
+    description: this.description.value.trim().slice(0, 100),
+    logo_url: null,
   };
 
   if (!formData.company_name || !formData.contact_name || !formData.contact_email || !formData.website_url || !formData.model_name || !formData.description) {
