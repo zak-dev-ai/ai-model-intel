@@ -197,7 +197,7 @@ tailwind.config = {
     <!-- Card 5: Benchmarks -->
     <div class="glass-panel p-4 rounded-lg flex flex-col gap-2 relative overflow-hidden border border-outline-variant/30 hover:border-primary transition-colors cursor-pointer h-full" onclick="window.location.href='/benchmarks.html'">
       <div class="font-data-label text-data-label text-text-muted uppercase">Benchmarks</div>
-      <div class="font-data-tabular text-headline-md text-on-surface font-bold">4 Tests</div>
+      <div class="font-data-tabular text-headline-md text-on-surface font-bold">4 Benchmarks</div>
       <div class="text-text-muted text-xs mt-auto">MMLU, GPQA, HumanEval & more →</div>
       <div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-primary via-primary-container to-primary"></div>
     </div>
@@ -206,18 +206,18 @@ tailwind.config = {
     <div id="featuredSponsorCard" class="glass-panel p-4 rounded-lg flex flex-col gap-2 relative overflow-hidden border-2 border-dashed border-primary/40 hover:border-primary transition-all cursor-pointer group bg-primary/5 h-full" onclick="handleSponsorClick()">
       <div id="sponsorBadge" class="absolute top-0 right-0 bg-primary text-deep-charcoal text-[9px] font-bold px-2 py-0.5 rounded-bl font-data-label tracking-wider">AVAILABLE</div>
       <div class="font-data-label text-data-label text-primary uppercase">Featured Model</div>
-      <div class="flex items-center gap-3">
-        <img id="sponsorLogo" src="" class="w-10 h-10 rounded bg-white/10 object-contain hidden" onerror="this.style.display='none'" onload="this.classList.remove('hidden')"/>
+      <div class="flex items-center gap-2">
+        <img id="sponsorLogo" src="" class="w-8 h-8 rounded bg-white/10 object-contain hidden" onerror="this.style.display='none'" onload="this.classList.remove('hidden')"/>
         <div class="flex-1 min-w-0">
-          <div id="sponsorModelName" class="font-data-tabular text-[14px] text-on-surface font-bold group-hover:text-primary transition-colors leading-tight truncate">Your Model Here</div>
+          <div id="sponsorModelName" class="font-data-tabular text-headline-md text-on-surface font-bold group-hover:text-primary transition-colors leading-tight truncate">Your Model</div>
           <div id="sponsorCompany" class="text-text-muted text-[11px] truncate hidden"></div>
         </div>
       </div>
+      <div id="sponsorDescription" class="text-text-muted text-[10px] leading-tight line-clamp-2 hidden"></div>
       <div id="sponsorPlaceholder" class="mt-auto text-text-muted text-[10px] flex items-center justify-between w-full">
         <span class="font-bold text-on-surface">$99/mo</span>
         <span class="text-primary font-bold">Get Slot →</span>
       </div>
-      <div id="sponsorDescription" class="text-text-muted text-[10px] leading-tight line-clamp-2 hidden"></div>
       <div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-primary via-primary-container to-primary opacity-50 group-hover:opacity-100 transition-opacity"></div>
     </div>
 </section>
