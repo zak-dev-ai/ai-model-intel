@@ -168,7 +168,7 @@ tailwind.config = {
     </div>
   </section>
 
-  <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
+  <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
     <!-- Card 1: Total Models -->
     <div class="glass-panel p-4 rounded-lg flex flex-col gap-2 relative overflow-hidden pulse-border hover:border-primary transition-colors cursor-default">
       <div class="font-data-label text-data-label text-text-muted uppercase">Total Models Tracked</div>
@@ -202,15 +202,22 @@ tailwind.config = {
       <div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-primary via-primary-container to-primary"></div>
     </div>
 
-    <!-- Card 6: Dodo Payments Sponsorship Slot -->
-    <div class="glass-panel p-4 rounded-lg flex flex-col gap-2 relative overflow-hidden border-2 border-dashed border-primary/40 hover:border-primary transition-all cursor-pointer group bg-primary/5" onclick="window.location.href='https://checkout.dodopayments.com/buy/pdt_0NfDfuX7s3dcfqgwf3RCV?quantity=1'">
-      <div class="absolute top-0 right-0 bg-primary text-deep-charcoal text-[9px] font-bold px-2 py-0.5 rounded-bl font-data-label tracking-wider">AVAILABLE</div>
+    <!-- Card 6: Featured Sponsorship (dynamic) -->
+    <div id="featuredSponsorCard" class="glass-panel p-4 rounded-lg flex flex-col gap-2 relative overflow-hidden border-2 border-dashed border-primary/40 hover:border-primary transition-all cursor-pointer group bg-primary/5" onclick="handleSponsorClick()">
+      <div id="sponsorBadge" class="absolute top-0 right-0 bg-primary text-deep-charcoal text-[9px] font-bold px-2 py-0.5 rounded-bl font-data-label tracking-wider">AVAILABLE</div>
       <div class="font-data-label text-data-label text-primary uppercase">Featured Model</div>
-      <div class="font-data-tabular text-[16px] text-on-surface font-bold group-hover:text-primary transition-colors leading-tight">Your Model Here</div>
-      <div class="text-text-muted text-[10px] mt-1 flex items-center justify-between w-full">
+      <div class="flex items-center gap-3">
+        <img id="sponsorLogo" src="" class="w-10 h-10 rounded bg-white p-1 hidden" onerror="this.style.display='none'"/>
+        <div class="flex-1 min-w-0">
+          <div id="sponsorModelName" class="font-data-tabular text-[16px] text-on-surface font-bold group-hover:text-primary transition-colors leading-tight">Your Model Here</div>
+          <div id="sponsorCompany" class="text-text-muted text-[11px] truncate hidden"></div>
+        </div>
+      </div>
+      <div id="sponsorPlaceholder" class="text-text-muted text-[10px] mt-1 flex items-center justify-between w-full">
         <span class="font-bold text-on-surface">$99/mo</span>
         <span class="text-primary font-bold">Get Slot →</span>
       </div>
+      <div id="sponsorDescription" class="text-text-muted text-[10px] mt-1 line-clamp-2 hidden"></div>
       <div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-primary via-primary-container to-primary opacity-50 group-hover:opacity-100 transition-opacity"></div>
     </div>
 </section>
@@ -758,7 +765,59 @@ document.addEventListener('DOMContentLoaded', () => {
 
 fetch(SUPABASE_URL + '/rest/v1/page_views', { method: 'POST', headers: { 'apikey': SUPABASE_ANON, 'Authorization': 'Bearer ' + SUPABASE_ANON, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' }, body: JSON.stringify({ page: window.location.pathname, referrer: document.referrer || 'Direct', user_agent: navigator.userAgent }) }).catch(() => {});
 
+// === SPONSORSHIP CARD ===
+let sponsorData = null;
+let sponsorClickUrl = '/sponsor';
+
+async function loadActiveSponsorship() {
+  try {
+    const res = await fetch('/api/sponsorship/active');
+    const data = await res.json();
+    const s = data.sponsorship;
+    
+    const card = document.getElementById('featuredSponsorCard');
+    const badge = document.getElementById('sponsorBadge');
+    const logo = document.getElementById('sponsorLogo');
+    const modelName = document.getElementById('sponsorModelName');
+    const company = document.getElementById('sponsorCompany');
+    const placeholder = document.getElementById('sponsorPlaceholder');
+    const description = document.getElementById('sponsorDescription');
+
+    if (s) {
+      sponsorData = s;
+      sponsorClickUrl = s.website_url;
+      
+      badge.textContent = 'SPONSORED';
+      badge.className = 'absolute top-0 right-0 bg-matrix-green text-deep-charcoal text-[9px] font-bold px-2 py-0.5 rounded-bl font-data-label tracking-wider';
+      card.classList.remove('border-dashed', 'border-primary/40', 'bg-primary/5');
+      card.classList.add('border-solid', 'border-primary/60', 'bg-surface-container-high/30');
+      
+      if (s.logo_url) {
+        logo.src = s.logo_url;
+        logo.classList.remove('hidden');
+      }
+      modelName.textContent = s.model_name;
+      company.textContent = s.company_name;
+      company.classList.remove('hidden');
+      placeholder.classList.add('hidden');
+      description.textContent = s.description;
+      description.classList.remove('hidden');
+    }
+  } catch (e) {
+    console.log('Sponsorship API not available (expected on local dev)');
+  }
+}
+
+function handleSponsorClick() {
+  if (sponsorData && sponsorData.website_url) {
+    window.open(sponsorData.website_url, '_blank');
+  } else {
+    window.location.href = '/sponsor';
+  }
+}
+
 (async function init() {
+  loadActiveSponsorship();
   await fetchBenchmarks();
   await fetchData();
   setInterval(fetchData, 60000);

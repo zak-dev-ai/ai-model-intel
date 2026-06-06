@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Featured Model Sponsorship — AI Model Ranks</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=JetBrains+Mono:wght@100..800&display=swap" rel="stylesheet"/>
+<style>
+  body { background: #0a0a0a; color: #e5e2e1; font-family: 'Geist', sans-serif; }
+  .glass-panel { background: rgba(15, 15, 15, 0.6); backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.08); }
+  .input-field { background: rgba(26, 26, 26, 0.9); border: 1px solid rgba(255,255,255,0.1); color: #e5e2e1; padding: 12px 16px; border-radius: 8px; width: 100%; transition: all 0.2s; font-family: 'Geist', sans-serif; }
+  .input-field:focus { outline: none; border-color: #ffb781; box-shadow: 0 0 0 3px rgba(255, 183, 129, 0.1); }
+  .input-field::placeholder { color: #666; }
+  textarea.input-field { resize: vertical; font-family: 'Geist', sans-serif; }
+</style>
+</head>
+<body class="min-h-screen flex flex-col pb-10">
+
+<header class="fixed top-0 left-0 right-0 z-50 glass-panel border-b border-outline-variant/30">
+  <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+    <a href="/" class="flex items-center gap-3">
+      <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">bar_chart</span>
+      <span class="font-headline-md font-bold text-primary">AI Model Ranks</span>
+    </a>
+    <a href="/" class="text-text-muted hover:text-on-surface transition-colors text-sm">← Back to Terminal</a>
+  </div>
+</header>
+
+<main class="flex-grow max-w-4xl mx-auto px-6 w-full pt-24">
+
+  <!-- Hero -->
+  <div class="text-center mb-10">
+    <div class="inline-flex items-center gap-2 bg-primary/10 border border-primary/30 rounded-full px-4 py-1.5 mb-4">
+      <span class="material-symbols-outlined text-primary text-[16px]">star</span>
+      <span class="text-primary font-data-label text-data-label uppercase tracking-wider">Premium Placement</span>
+    </div>
+    <h1 class="text-4xl md:text-5xl font-bold mb-4">Featured Model Sponsorship</h1>
+    <p class="text-text-muted text-lg max-w-2xl mx-auto">Get your AI model in front of developers and decision-makers browsing our live pricing terminal. Prime homepage placement for 30 days.</p>
+  </div>
+
+  <!-- Pricing Card -->
+  <div class="glass-panel rounded-xl p-8 mb-8 border-2 border-primary/30 relative overflow-hidden">
+    <div class="absolute top-0 right-0 bg-primary text-deep-charcoal px-4 py-1.5 rounded-bl-lg font-data-label font-bold text-sm">BEST VALUE</div>
+    <div class="grid md:grid-cols-3 gap-8 items-center">
+      <div class="md:col-span-2">
+        <h3 class="text-2xl font-bold mb-2">30-Day Featured Card</h3>
+        <ul class="space-y-2 text-text-muted text-sm">
+          <li class="flex items-center gap-2"><span class="material-symbols-outlined text-matrix-green text-[16px]">check_circle</span> Prime placement in homepage stats row</li>
+          <li class="flex items-center gap-2"><span class="material-symbols-outlined text-matrix-green text-[16px]">check_circle</span> Your model logo, name, and description</li>
+          <li class="flex items-center gap-2"><span class="material-symbols-outlined text-matrix-green text-[16px]">check_circle</span> Direct click-through link to your website</li>
+          <li class="flex items-center gap-2"><span class="material-symbols-outlined text-matrix-green text-[16px]">check_circle</span> ~10,000 monthly impressions from AI engineers & CTOs</li>
+          <li class="flex items-center gap-2"><span class="material-symbols-outlined text-matrix-green text-[16px]">check_circle</span> Auto-expires after 30 days — no cancellation needed</li>
+        </ul>
+      </div>
+      <div class="text-center">
+        <div class="text-5xl font-bold text-primary mb-1">$99</div>
+        <div class="text-text-muted text-sm mb-4">USD / 30 days</div>
+        <div class="flex items-center justify-center gap-2 text-xs text-text-muted">
+          <span class="material-symbols-outlined text-[14px]">security</span>
+          Secure payment via Dodo
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sponsor Form -->
+  <div class="glass-panel rounded-xl p-8 border border-outline-variant/30">
+    <h2 class="text-2xl font-bold mb-6">Sponsorship Details</h2>
+
+    <form id="sponsorshipForm" class="space-y-6">
+      <div class="grid md:grid-cols-2 gap-6">
+        <div>
+          <label class="block text-sm font-medium text-text-muted mb-2">Company Name *</label>
+          <input type="text" name="company_name" required class="input-field" placeholder="e.g., Anthropic"/>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-text-muted mb-2">Contact Name *</label>
+          <input type="text" name="contact_name" required class="input-field" placeholder="Your full name"/>
+        </div>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-6">
+        <div>
+          <label class="block text-sm font-medium text-text-muted mb-2">Contact Email *</label>
+          <input type="email" name="contact_email" required class="input-field" placeholder="you@company.com"/>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-text-muted mb-2">Website URL *</label>
+          <input type="url" name="website_url" required class="input-field" placeholder="https://yourcompany.com"/>
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-text-muted mb-2">Model Name *</label>
+        <input type="text" name="model_name" required class="input-field" placeholder="e.g., Claude Opus 4.5"/>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-text-muted mb-2">Short Description * <span class="text-text-muted font-normal">(shown on card)</span></label>
+        <textarea name="description" required rows="3" class="input-field" placeholder="Brief description of your model. This will appear on the homepage card."></textarea>
+        <div class="text-xs text-text-muted mt-1">Max 160 characters</div>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-text-muted mb-2">Model Logo URL (Optional)</label>
+        <input type="url" name="logo_url" class="input-field" placeholder="https://yourcompany.com/logo.png"/>
+        <div class="text-xs text-text-muted mt-1">Square image recommended. Will be displayed at 40×40px.</div>
+      </div>
+
+      <div class="flex items-start gap-3">
+        <input type="checkbox" id="terms" required class="mt-1 w-4 h-4 rounded border-outline-variant bg-surface-container-high text-primary focus:ring-primary"/>
+        <label for="terms" class="text-sm text-text-muted">
+          I agree to the <a href="/legal.html" class="text-primary hover:underline">Sponsorship Terms</a> and confirm my model is genuinely available via API.
+        </label>
+      </div>
+
+      <button type="submit" id="submitBtn" class="w-full bg-bloomberg-orange text-deep-charcoal font-bold py-4 rounded-lg hover:bg-primary transition-colors flex items-center justify-center gap-2 text-lg">
+        <span>Proceed to Payment — $99</span>
+        <span class="material-symbols-outlined">arrow_forward</span>
+      </button>
+
+      <div class="text-center text-xs text-text-muted">
+        You'll be redirected to Dodo Payments secure checkout
+      </div>
+    </form>
+  </div>
+
+  <!-- FAQ -->
+  <div class="mt-10 space-y-4">
+    <h3 class="text-xl font-bold mb-4">Frequently Asked Questions</h3>
+
+    <div class="glass-panel rounded-lg p-6 border border-outline-variant/30">
+      <h4 class="font-medium mb-2">How long will my model be featured?</h4>
+      <p class="text-text-muted text-sm">Exactly 30 days from the moment your payment is confirmed. The card auto-expires when the period ends.</p>
+    </div>
+
+    <div class="glass-panel rounded-lg p-6 border border-outline-variant/30">
+      <h4 class="font-medium mb-2">What happens after 30 days?</h4>
+      <p class="text-text-muted text-sm">The card returns to "Available" state. You'll get an email 3 days before expiry if you want to renew at the same price.</p>
+    </div>
+
+    <div class="glass-panel rounded-lg p-6 border border-outline-variant/30">
+      <h4 class="font-medium mb-2">Can I change my model or details mid-sponsorship?</h4>
+      <p class="text-text-muted text-sm">Yes — email us at sponsorship@aimodelranks.live with your changes and we'll update the card within 24 hours.</p>
+    </div>
+
+    <div class="glass-panel rounded-lg p-6 border border-outline-variant/30">
+      <h4 class="font-medium mb-2">Is there a refund policy?</h4>
+      <p class="text-text-muted text-sm">Full refund within 48 hours if your card hasn't gone live yet. After that, no refunds as placement has already occurred.</p>
+    </div>
+  </div>
+
+</main>
+
+<script>
+const DODO_PAYMENT_URL = 'https://checkout.dodopayments.com/buy/pdt_0NfDfuX7s3dcfqgwf3RCV?quantity=1';
+
+document.getElementById('sponsorshipForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+
+  const formData = {
+    company_name: this.company_name.value.trim(),
+    contact_name: this.contact_name.value.trim(),
+    contact_email: this.contact_email.value.trim(),
+    website_url: this.website_url.value.trim(),
+    model_name: this.model_name.value.trim(),
+    description: this.description.value.trim().slice(0, 160),
+    logo_url: this.logo_url.value.trim() || null,
+  };
+
+  if (!formData.company_name || !formData.contact_name || !formData.contact_email || !formData.website_url || !formData.model_name || !formData.description) {
+    alert('Please fill in all required fields.');
+    return;
+  }
+
+  if (formData.description.length > 160) {
+    alert('Description must be 160 characters or less.');
+    return;
+  }
+
+  const btn = document.getElementById('submitBtn');
+  const original = btn.innerHTML;
+  btn.innerHTML = '<span class="material-symbols-outlined animate-spin">progress_activity</span> Processing...';
+  btn.disabled = true;
+
+  try {
+    const res = await fetch('/api/sponsorship/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData)
+    });
+
+    const result = await res.json();
+
+    if (result.success && result.sponsorship_id) {
+      window.location.href = `${DODO_PAYMENT_URL}&metadata[sponsorship_id]=${result.sponsorship_id}`;
+    } else {
+      throw new Error(result.error || 'Submission failed');
+    }
+  } catch (err) {
+    console.error('Submit error:', err);
+    alert('Something went wrong. Please try again or contact sponsorship@aimodelranks.live');
+    btn.innerHTML = original;
+    btn.disabled = false;
+  }
+});
+</script>
+</body>
+</html>

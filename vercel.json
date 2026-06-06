@@ -1,4 +1,7 @@
 {
+  "crons": [
+    { "path": "/api/sponsorship/cron", "schedule": "0 0 * * *" }
+  ],
   "framework": null,
   "outputDirectory": ".",
   "cleanUrls": true,
