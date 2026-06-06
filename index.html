@@ -168,56 +168,56 @@ tailwind.config = {
     </div>
   </section>
 
-  <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+  <section class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
     <!-- Card 1: Total Models -->
-    <div class="glass-panel p-4 rounded-lg flex flex-col gap-2 relative overflow-hidden pulse-border hover:border-primary transition-colors cursor-default">
-      <div class="font-data-label text-data-label text-text-muted uppercase">Total Models Tracked</div>
+    <div class="glass-panel p-4 rounded-lg flex flex-col gap-2 relative overflow-hidden pulse-border hover:border-primary transition-colors cursor-default h-full">
+      <div class="font-data-label text-data-label text-text-muted uppercase">Total Models</div>
       <div class="font-data-tabular text-headline-md text-on-surface font-bold" id="stat-total">—</div>
       <div class="absolute bottom-0 left-0 w-full h-8 opacity-20" style="background: linear-gradient(90deg, transparent, rgba(0, 255, 136, 0.4) 50%, transparent); mask-image: linear-gradient(to bottom, transparent, black);"></div>
     </div>
     
     <!-- Card 2: Average Cost -->
-    <div class="glass-panel p-4 rounded-lg flex flex-col gap-2 relative overflow-hidden border border-outline-variant/30 hover:border-primary transition-colors cursor-default">
-      <div class="font-data-label text-data-label text-text-muted uppercase">Average Input Cost</div>
-      <div class="font-data-tabular text-headline-md text-on-surface font-bold"><span id="stat-avg">—</span> <span class="text-text-muted text-sm font-normal">/ 1M</span></div>
+    <div class="glass-panel p-4 rounded-lg flex flex-col gap-2 relative overflow-hidden border border-outline-variant/30 hover:border-primary transition-colors cursor-default h-full">
+      <div class="font-data-label text-data-label text-text-muted uppercase">Avg Input Cost</div>
+      <div class="font-data-tabular text-headline-md text-on-surface font-bold"><span id="stat-avg">—</span> <span class="text-text-muted text-sm font-normal">/1M</span></div>
     </div>
     
     <!-- Card 3: Cheapest Model -->
-    <div class="glass-panel p-4 rounded-lg flex flex-col gap-2 relative overflow-hidden border border-outline-variant/30 hover:border-primary transition-colors cursor-default">
+    <div class="glass-panel p-4 rounded-lg flex flex-col gap-2 relative overflow-hidden border border-outline-variant/30 hover:border-primary transition-colors cursor-default h-full">
       <div class="font-data-label text-data-label text-text-muted uppercase">Cheapest Model</div>
       <div class="font-data-tabular text-body-lg text-on-surface truncate font-bold mt-1" id="stat-cheapest">—</div>
     </div>
     
     <!-- Card 4: Max Context -->
-    <div class="glass-panel p-4 rounded-lg flex flex-col gap-2 relative overflow-hidden border border-outline-variant/30 hover:border-primary transition-colors cursor-default">
-      <div class="font-data-label text-data-label text-text-muted uppercase">Max Context Window</div>
+    <div class="glass-panel p-4 rounded-lg flex flex-col gap-2 relative overflow-hidden border border-outline-variant/30 hover:border-primary transition-colors cursor-default h-full">
+      <div class="font-data-label text-data-label text-text-muted uppercase">Max Context</div>
       <div class="font-data-tabular text-headline-md text-on-surface font-bold" id="stat-context">—</div>
     </div>
     
     <!-- Card 5: Benchmarks -->
-    <div class="glass-panel p-4 rounded-lg flex flex-col gap-2 relative overflow-hidden border border-outline-variant/30 hover:border-primary transition-colors cursor-pointer" onclick="window.location.href='/benchmarks.html'">
-      <div class="font-data-label text-data-label text-text-muted uppercase">Model Benchmarks</div>
-      <div class="font-data-tabular text-headline-md text-on-surface font-bold">4 Benchmarks</div>
-      <div class="text-text-muted text-xs mt-1">MMLU, GPQA, HumanEval & more →</div>
+    <div class="glass-panel p-4 rounded-lg flex flex-col gap-2 relative overflow-hidden border border-outline-variant/30 hover:border-primary transition-colors cursor-pointer h-full" onclick="window.location.href='/benchmarks.html'">
+      <div class="font-data-label text-data-label text-text-muted uppercase">Benchmarks</div>
+      <div class="font-data-tabular text-headline-md text-on-surface font-bold">4 Tests</div>
+      <div class="text-text-muted text-xs mt-auto">MMLU, GPQA, HumanEval & more →</div>
       <div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-primary via-primary-container to-primary"></div>
     </div>
 
     <!-- Card 6: Featured Sponsorship (dynamic) -->
-    <div id="featuredSponsorCard" class="glass-panel p-4 rounded-lg flex flex-col gap-2 relative overflow-hidden border-2 border-dashed border-primary/40 hover:border-primary transition-all cursor-pointer group bg-primary/5" onclick="handleSponsorClick()">
+    <div id="featuredSponsorCard" class="glass-panel p-4 rounded-lg flex flex-col gap-2 relative overflow-hidden border-2 border-dashed border-primary/40 hover:border-primary transition-all cursor-pointer group bg-primary/5 h-full" onclick="handleSponsorClick()">
       <div id="sponsorBadge" class="absolute top-0 right-0 bg-primary text-deep-charcoal text-[9px] font-bold px-2 py-0.5 rounded-bl font-data-label tracking-wider">AVAILABLE</div>
       <div class="font-data-label text-data-label text-primary uppercase">Featured Model</div>
       <div class="flex items-center gap-3">
-        <img id="sponsorLogo" src="" class="w-10 h-10 rounded bg-white p-1 hidden" onerror="this.style.display='none'"/>
+        <img id="sponsorLogo" src="" class="w-10 h-10 rounded bg-white/10 object-contain hidden" onerror="this.style.display='none'" onload="this.classList.remove('hidden')"/>
         <div class="flex-1 min-w-0">
-          <div id="sponsorModelName" class="font-data-tabular text-[16px] text-on-surface font-bold group-hover:text-primary transition-colors leading-tight">Your Model Here</div>
+          <div id="sponsorModelName" class="font-data-tabular text-[14px] text-on-surface font-bold group-hover:text-primary transition-colors leading-tight truncate">Your Model Here</div>
           <div id="sponsorCompany" class="text-text-muted text-[11px] truncate hidden"></div>
         </div>
       </div>
-      <div id="sponsorPlaceholder" class="text-text-muted text-[10px] mt-1 flex items-center justify-between w-full">
+      <div id="sponsorPlaceholder" class="mt-auto text-text-muted text-[10px] flex items-center justify-between w-full">
         <span class="font-bold text-on-surface">$99/mo</span>
         <span class="text-primary font-bold">Get Slot →</span>
       </div>
-      <div id="sponsorDescription" class="text-text-muted text-[10px] mt-1 line-clamp-2 hidden"></div>
+      <div id="sponsorDescription" class="text-text-muted text-[10px] leading-tight line-clamp-2 hidden"></div>
       <div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-primary via-primary-container to-primary opacity-50 group-hover:opacity-100 transition-opacity"></div>
     </div>
 </section>
@@ -793,8 +793,9 @@ async function loadActiveSponsorship() {
       card.classList.add('border-solid', 'border-primary/60', 'bg-surface-container-high/30');
       
       if (s.logo_url) {
+        logo.onload = () => logo.classList.remove('hidden');
+        logo.onerror = () => logo.classList.add('hidden');
         logo.src = s.logo_url;
-        logo.classList.remove('hidden');
       }
       modelName.textContent = s.model_name;
       company.textContent = s.company_name;
