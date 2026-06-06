@@ -18,7 +18,7 @@ export default async function handler(req) {
     const data = body.data || body;
 
     // Accept multiple event name formats
-    const isComplete = ['payment.completed', 'payment.success', 'checkout.completed', 'subscription.created'].includes(event);
+    const isComplete = ['payment.completed', 'payment.success', 'payment.succeeded', 'checkout.completed', 'subscription.created'].includes(event);
 
     if (!isComplete) {
       console.log('[Webhook] Ignoring event:', event);
