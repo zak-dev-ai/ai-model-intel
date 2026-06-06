@@ -2,9 +2,12 @@
   "metadata": {
     "source": "Official model cards + Open LLM Leaderboard + GPT0x benchmark tracker",
     "updated": "2026-06-05",
-    "total_models": 50
+    "total_models": 53
   },
   "benchmarks": [
+    {"model": "Grok 4.1", "provider": "xai", "mmlu": 90.8, "humaneval": 88.2, "gpqa": 58.0, "arena_elo": 1406, "speed_tps": 55},
+    {"model": "Grok 3", "provider": "xai", "mmlu": 88.7, "humaneval": 84.0, "gpqa": 52.8, "arena_elo": 1317, "speed_tps": 65},
+    {"model": "Grok 2", "provider": "xai", "mmlu": 82.5, "humaneval": 78.3, "gpqa": 45.2, "arena_elo": 1218, "speed_tps": 80},
     {"model": "GPT-4o", "provider": "openai", "mmlu": 88.7, "humaneval": 87.1, "gpqa": 53.6, "arena_elo": 1287, "speed_tps": 95},
     {"model": "GPT-4.5", "provider": "openai", "mmlu": 90.8, "humaneval": 88.6, "gpqa": null, "arena_elo": 1310, "speed_tps": 72},
     {"model": "GPT-4o mini", "provider": "openai", "mmlu": 82.0, "humaneval": 87.0, "gpqa": null, "arena_elo": 1215, "speed_tps": 185},
