@@ -16,12 +16,18 @@
   .benchmark-card:hover { transform: translateY(-4px); border-color: #ffb781; box-shadow: 0 10px 40px -5px rgba(255, 183, 129, 0.25); }
   .tab-btn { transition: all 0.2s; }
   .tab-btn.active { background: rgba(255, 183, 129, 0.15); color: #ffb781; border-color: #ffb781; }
+  .shimmer-text { background: linear-gradient(135deg, #ffb781 0%, #ff8800 50%, #ffb781 100%); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: shimmer 3s linear infinite; }
+  @keyframes shimmer { to { background-position: 200% center; } }
+  .benchmark-badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; font-family: 'JetBrains Mono', monospace; }
+  .benchmark-high { background: rgba(0, 255, 65, 0.15); color: #00ff41; border: 1px solid rgba(0, 255, 65, 0.3); }
+  .benchmark-mid { background: rgba(6, 182, 212, 0.15); color: #06B6D4; border: 1px solid rgba(6, 182, 212, 0.3); }
+  .benchmark-low { background: rgba(255, 85, 0, 0.15); color: #ff5500; border: 1px solid rgba(255, 85, 0, 0.3); }
 </style>
 </head>
-<body class="min-h-screen flex flex-col pt-10">
+<body class="min-h-screen flex flex-col">
 
 <!-- Header -->
-<header class="glass-panel sticky top-10 z-50 border-b border-outline-variant/30 flex justify-between items-center w-full px-6 h-16">
+<header class="glass-panel sticky top-0 z-50 border-b border-outline-variant/30 flex justify-between items-center w-full px-6 h-16">
   <div class="flex items-center gap-4">
     <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">analytics</span>
     <a href="/" class="font-headline-md font-bold tracking-tight text-primary">AI Model Ranks</a>
@@ -34,69 +40,73 @@
   </nav>
 </header>
 
-<main class="flex-grow w-full max-w-7xl mx-auto px-6 py-10">
+<!-- Loading State -->
+<div id="loading-state" class="flex-grow flex flex-col items-center justify-center gap-4">
+  <div class="w-10 h-10 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
+  <p class="text-text-muted font-data-tabular">Loading benchmark data...</p>
+</div>
+
+<main id="main-content" class="flex-grow w-full max-w-7xl mx-auto px-6 py-10" style="display:none;">
   
   <!-- Hero -->
   <section class="text-center py-12 mb-8">
     <h1 class="text-4xl md:text-5xl font-bold mb-4 shimmer-text">Model Performance Benchmarks</h1>
-    <p class="text-text-muted max-w-2xl mx-auto mb-6">Comprehensive evaluation of 197+ AI models across reasoning, coding, knowledge, and agentic capabilities.</p>
+    <p class="text-text-muted max-w-2xl mx-auto mb-6" id="hero-subtitle">Comprehensive evaluation across reasoning, coding, knowledge, and more.</p>
     
-    <!-- Quick Stats -->
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto mb-8">
-      <div class="glass-panel p-4 rounded-lg">
-        <div class="text-2xl font-bold text-primary">197</div>
-        <div class="text-xs text-text-muted">Models Evaluated</div>
-      </div>
-      <div class="glass-panel p-4 rounded-lg">
-        <div class="text-2xl font-bold text-primary">10+</div>
-        <div class="text-xs text-text-muted">Benchmarks</div>
-      </div>
-      <div class="glass-panel p-4 rounded-lg">
-        <div class="text-2xl font-bold text-primary">61.4</div>
-        <div class="text-xs text-text-muted">Top Score (AAII)</div>
-      </div>
-      <div class="glass-panel p-4 rounded-lg">
-        <div class="text-2xl font-bold text-primary">Updated</div>
-        <div class="text-xs text-text-muted">Daily</div>
-      </div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto mb-8" id="quick-stats">
     </div>
   </section>
 
   <!-- Benchmark Categories Tabs -->
   <div class="flex flex-wrap justify-center gap-2 mb-8">
-    <button class="tab-btn active px-4 py-2 rounded-lg border border-border-slate text-sm font-medium" data-category="all">All Benchmarks</button>
-    <button class="tab-btn px-4 py-2 rounded-lg border border-border-slate text-sm font-medium" data-category="reasoning">Reasoning</button>
-    <button class="tab-btn px-4 py-2 rounded-lg border border-border-slate text-sm font-medium" data-category="coding">Coding</button>
-    <button class="tab-btn px-4 py-2 rounded-lg border border-border-slate text-sm font-medium" data-category="knowledge">Knowledge</button>
-    <button class="tab-btn px-4 py-2 rounded-lg border border-border-slate text-sm font-medium" data-category="agentic">Agentic</button>
+    <button class="tab-btn active px-4 py-2 rounded-lg border border-outline-variant text-sm font-medium" data-category="all">All Benchmarks</button>
+    <button class="tab-btn px-4 py-2 rounded-lg border border-outline-variant text-sm font-medium" data-category="knowledge">Knowledge</button>
+    <button class="tab-btn px-4 py-2 rounded-lg border border-outline-variant text-sm font-medium" data-category="reasoning">Reasoning</button>
+    <button class="tab-btn px-4 py-2 rounded-lg border border-outline-variant text-sm font-medium" data-category="coding">Coding</button>
+    <button class="tab-btn px-4 py-2 rounded-lg border border-outline-variant text-sm font-medium" data-category="speed">Speed</button>
   </div>
 
-  <!-- Main Intelligence Index Chart -->
-  <div class="glass-panel rounded-lg p-6 mb-6 benchmark-card" data-category="all">
-    <div class="flex justify-between items-center mb-4">
-      <div>
-        <h3 class="font-bold text-lg">Artificial Analysis Intelligence Index</h3>
-        <p class="text-sm text-text-muted">Composite score across 10 evaluations</p>
-      </div>
-    </div>
-    <div class="chart-container">
-      <canvas id="intelligenceIndexChart"></canvas>
-    </div>
-  </div>
-
-  <!-- Benchmark Charts Grid -->
+  <!-- Charts Grid -->
   <div class="grid lg:grid-cols-2 gap-6">
     
+    <!-- Arena Elo (Overall Rank) -->
+    <div class="glass-panel rounded-lg p-6 benchmark-card" data-category="all">
+      <div class="flex justify-between items-center mb-4">
+        <div>
+          <h3 class="font-bold text-lg">Arena Elo Rating</h3>
+          <p class="text-sm text-text-muted">Human preference ranking via LMSys Chatbot Arena</p>
+        </div>
+        <span class="text-xs px-2 py-1 rounded bg-primary/10 text-primary">Overall</span>
+      </div>
+      <div class="chart-container" style="height: 350px;">
+        <canvas id="arenaChart"></canvas>
+      </div>
+    </div>
+
+    <!-- MMLU -->
+    <div class="glass-panel rounded-lg p-6 benchmark-card" data-category="knowledge">
+      <div class="flex justify-between items-center mb-4">
+        <div>
+          <h3 class="font-bold text-lg">MMLU</h3>
+          <p class="text-sm text-text-muted">Massive Multitask Language Understanding</p>
+        </div>
+        <span class="text-xs px-2 py-1 rounded bg-bloomberg-orange/10 text-bloomberg-orange">Knowledge</span>
+      </div>
+      <div class="chart-container" style="height: 350px;">
+        <canvas id="mmluChart"></canvas>
+      </div>
+    </div>
+
     <!-- GPQA Diamond -->
     <div class="glass-panel rounded-lg p-6 benchmark-card" data-category="reasoning">
       <div class="flex justify-between items-center mb-4">
         <div>
           <h3 class="font-bold text-lg">GPQA Diamond</h3>
-          <p class="text-sm text-text-muted">Graduate-level reasoning</p>
+          <p class="text-sm text-text-muted">Graduate-level physics, chemistry & biology reasoning</p>
         </div>
         <span class="text-xs px-2 py-1 rounded bg-primary/10 text-primary">Reasoning</span>
       </div>
-      <div class="chart-container" style="height: 300px;">
+      <div class="chart-container" style="height: 350px;">
         <canvas id="gpqaChart"></canvas>
       </div>
     </div>
@@ -106,40 +116,26 @@
       <div class="flex justify-between items-center mb-4">
         <div>
           <h3 class="font-bold text-lg">HumanEval</h3>
-          <p class="text-sm text-text-muted">Code generation ability</p>
+          <p class="text-sm text-text-muted">Code generation from docstrings</p>
         </div>
         <span class="text-xs px-2 py-1 rounded bg-terminal-cyan/10 text-terminal-cyan">Coding</span>
       </div>
-      <div class="chart-container" style="height: 300px;">
+      <div class="chart-container" style="height: 350px;">
         <canvas id="humanevalChart"></canvas>
       </div>
     </div>
 
-    <!-- MMLU -->
-    <div class="glass-panel rounded-lg p-6 benchmark-card" data-category="knowledge">
+    <!-- Speed -->
+    <div class="glass-panel rounded-lg p-6 benchmark-card lg:col-span-2" data-category="speed">
       <div class="flex justify-between items-center mb-4">
         <div>
-          <h3 class="font-bold text-lg">MMLU</h3>
-          <p class="text-sm text-text-muted">Massive multitask language understanding</p>
+          <h3 class="font-bold text-lg">Inference Speed</h3>
+          <p class="text-sm text-text-muted">Tokens per second — throughput comparison</p>
         </div>
-        <span class="text-xs px-2 py-1 rounded bg-bloomberg-orange/10 text-bloomberg-orange">Knowledge</span>
+        <span class="text-xs px-2 py-1 rounded bg-matrix-green/10 text-matrix-green">Speed</span>
       </div>
-      <div class="chart-container" style="height: 300px;">
-        <canvas id="mmluChart"></canvas>
-      </div>
-    </div>
-
-    <!-- Terminal-Bench Hard -->
-    <div class="glass-panel rounded-lg p-6 benchmark-card" data-category="agentic">
-      <div class="flex justify-between items-center mb-4">
-        <div>
-          <h3 class="font-bold text-lg">Terminal-Bench Hard</h3>
-          <p class="text-sm text-text-muted">Agentic coding & terminal use</p>
-        </div>
-        <span class="text-xs px-2 py-1 rounded bg-matrix-green/10 text-matrix-green">Agentic</span>
-      </div>
-      <div class="chart-container" style="height: 300px;">
-        <canvas id="terminalBenchChart"></canvas>
+      <div class="chart-container" style="height: 400px;">
+        <canvas id="speedChart"></canvas>
       </div>
     </div>
 
@@ -147,22 +143,34 @@
 
   <!-- Full Leaderboard Table -->
   <div class="glass-panel rounded-lg p-6 mt-8">
-    <h3 class="font-bold text-xl mb-4">Complete Model Rankings</h3>
+    <div class="flex flex-wrap justify-between items-center gap-3 mb-4">
+      <h3 class="font-bold text-xl">Complete Model Rankings</h3>
+      <div class="flex gap-2">
+        <input id="table-search" class="bg-surface-variant/30 border border-outline-variant rounded px-3 py-1.5 text-sm text-on-surface placeholder-text-muted focus:outline-none focus:border-primary w-48" placeholder="Search models..." oninput="renderLeaderboard()">
+        <select id="table-sort" class="bg-surface-variant/30 border border-outline-variant rounded px-3 py-1.5 text-sm text-on-surface focus:outline-none focus:border-primary" onchange="renderLeaderboard()">
+          <option value="arena_elo">Sort by: Arena Elo</option>
+          <option value="mmlu">Sort by: MMLU</option>
+          <option value="humaneval">Sort by: HumanEval</option>
+          <option value="gpqa">Sort by: GPQA</option>
+          <option value="speed">Sort by: Speed (TPS)</option>
+        </select>
+      </div>
+    </div>
     <div class="overflow-x-auto">
       <table class="w-full text-left">
-        <thead class="border-b border-border-slate text-text-muted text-sm uppercase">
+        <thead class="border-b border-outline-variant text-text-muted text-sm uppercase">
           <tr>
-            <th class="pb-3">Rank</th>
+            <th class="pb-3">#</th>
             <th class="pb-3">Model</th>
-            <th class="pb-3 text-right">AA Intelligence</th>
-            <th class="pb-3 text-right">GPQA</th>
-            <th class="pb-3 text-right">HumanEval</th>
+            <th class="pb-3">Provider</th>
+            <th class="pb-3 text-right">Arena Elo</th>
             <th class="pb-3 text-right">MMLU</th>
-            <th class="pb-3 text-right">Terminal</th>
+            <th class="pb-3 text-right">HumanEval</th>
+            <th class="pb-3 text-right">GPQA</th>
+            <th class="pb-3 text-right">Speed</th>
           </tr>
         </thead>
-        <tbody class="font-data-tabular" id="leaderboardBody">
-          <!-- Populated by JavaScript -->
+        <tbody class="font-data-tabular text-sm" id="leaderboardBody">
         </tbody>
       </table>
     </div>
@@ -171,138 +179,268 @@
 </main>
 
 <script>
-// Benchmark Data (you'll populate this from your API or benchmarks.json)
-const benchmarkData = [
-  { name: 'Claude Opus 4.5', aa: 61.4, gpqa: 89.2, humaneval: 90.8, mmlu: 92.4, terminal: 61, provider: 'Anthropic' },
-  { name: 'GPT-5.5 (knight)', aa: 60.2, gpqa: 91.8, humaneval: 93.7, mmlu: 91.8, terminal: 58, provider: 'OpenAI' },
-  { name: 'Claude Opus 4.5 (max)', aa: 57.3, gpqa: 86.7, humaneval: 87.9, mmlu: 89.2, terminal: 54, provider: 'Anthropic' },
-  { name: 'Gemini 3.1 Pro Preview', aa: 57.2, gpqa: 90.3, humaneval: 87.9, mmlu: 89.2, terminal: 52, provider: 'Google' },
-  { name: 'Qwen3-7 Max', aa: 56.6, gpqa: 85.2, humaneval: 88.4, mmlu: 88.7, terminal: 51, provider: 'Alibaba' },
-  // Add all 197 models here...
-];
+// === DATA ===
+let benchmarkData = [];
 
-// Initialize Charts
+function getBenchmarkClass(score, type) {
+  if (score == null) return '';
+  if (type === 'speed') return score >= 200 ? 'benchmark-high' : score >= 100 ? 'benchmark-mid' : 'benchmark-low';
+  if (type === 'arena_elo') return score >= 1300 ? 'benchmark-high' : score >= 1200 ? 'benchmark-mid' : 'benchmark-low';
+  if (score >= 85) return 'benchmark-high';
+  if (score >= 70) return 'benchmark-mid';
+  return 'benchmark-low';
+}
+
+// === LOAD DATA ===
+async function loadData() {
+  try {
+    const res = await fetch('/benchmarks.json');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    if (!data.benchmarks || !data.benchmarks.length) throw new Error('No benchmark data');
+    
+    benchmarkData = data.benchmarks
+      .filter(b => b.mmlu || b.humaneval || b.gpqa || b.arena_elo)
+      .sort((a, b) => (b.arena_elo || 0) - (a.arena_elo || 0));
+    benchmarkData.forEach((b, i) => b.rank = i + 1);
+    
+    console.log(`[Benchmarks] Loaded ${benchmarkData.length} models`);
+    
+    updateQuickStats();
+    initCharts();
+    renderLeaderboard();
+    
+    document.getElementById('loading-state').style.display = 'none';
+    document.getElementById('main-content').style.display = '';
+    document.getElementById('hero-subtitle').textContent = 
+      `Comprehensive evaluation of ${benchmarkData.length} AI models across reasoning, coding, knowledge, and speed benchmarks.`;
+    
+  } catch (e) {
+    console.error('[Benchmarks] Load failed:', e);
+    document.getElementById('loading-state').innerHTML = `
+      <span class="material-symbols-outlined text-text-muted text-4xl">error_outline</span>
+      <p class="text-text-muted">Failed to load benchmark data</p>
+      <button onclick="loadData()" class="text-primary text-sm hover:underline mt-2">Retry</button>
+    `;
+  }
+}
+
+function updateQuickStats() {
+  const stats = document.getElementById('quick-stats');
+  const withArena = benchmarkData.filter(b => b.arena_elo);
+  const topScore = withArena.length ? Math.max(...withArena.map(b => b.arena_elo)) : '—';
+  const topModel = withArena.find(b => b.arena_elo === topScore);
+  
+  stats.innerHTML = `
+    <div class="glass-panel p-4 rounded-lg">
+      <div class="text-2xl font-bold text-primary">${benchmarkData.length}</div>
+      <div class="text-xs text-text-muted">Models Evaluated</div>
+    </div>
+    <div class="glass-panel p-4 rounded-lg">
+      <div class="text-2xl font-bold text-primary">4</div>
+      <div class="text-xs text-text-muted">Benchmarks Tracked</div>
+    </div>
+    <div class="glass-panel p-4 rounded-lg">
+      <div class="text-2xl font-bold text-primary">${topScore}</div>
+      <div class="text-xs text-text-muted">Top Arena Elo${topModel ? ' · ' + topModel.model : ''}</div>
+    </div>
+    <div class="glass-panel p-4 rounded-lg">
+      <div class="text-2xl font-bold text-primary">⏱</div>
+      <div class="text-xs text-text-muted">Updated Weekly</div>
+    </div>
+  `;
+}
+
+// === CHARTS ===
+let charts = {};
+
+function destroyCharts() {
+  Object.values(charts).forEach(c => c.destroy());
+  charts = {};
+}
+
 function initCharts() {
-  const commonOptions = {
+  destroyCharts();
+  
+  const withArena = benchmarkData.filter(b => b.arena_elo).sort((a,b) => b.arena_elo - a.arena_elo).slice(0, 20);
+  const withMMLU = benchmarkData.filter(b => b.mmlu).sort((a,b) => b.mmlu - a.mmlu).slice(0, 20);
+  const withGPQA = benchmarkData.filter(b => b.gpqa).sort((a,b) => b.gpqa - a.gpqa).slice(0, 20);
+  const withHumanEval = benchmarkData.filter(b => b.humaneval).sort((a,b) => b.humaneval - a.humaneval).slice(0, 20);
+  const withSpeed = benchmarkData.filter(b => b.speed_tps).sort((a,b) => b.speed_tps - a.speed_tps).slice(0, 25);
+  
+  const orange = (i, total) => i < 3 ? '#ffb781' : i < 10 ? '#ff8800' : '#2a2a2a';
+  const commonOptions = (max) => ({
     indexAxis: 'y',
     responsive: true,
     maintainAspectRatio: false,
-    plugins: { legend: { display: false } },
+    plugins: { 
+      legend: { display: false },
+      tooltip: { 
+        backgroundColor: '#1a1a1a',
+        borderColor: '#ffb781',
+        borderWidth: 1,
+        titleFont: { family: 'Geist' },
+        bodyFont: { family: 'JetBrains Mono' }
+      }
+    },
     scales: {
-      x: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' } },
-      y: { grid: { display: false } }
+      x: { 
+        max: max,
+        beginAtZero: true, 
+        grid: { color: 'rgba(255,255,255,0.05)' },
+        ticks: { color: '#888', font: { family: 'JetBrains Mono', size: 10 } }
+      },
+      y: { 
+        grid: { display: false },
+        ticks: { color: '#ccc', font: { family: 'Geist', size: 11 } }
+      }
     }
-  };
-
-  // Intelligence Index Chart
-  new Chart(document.getElementById('intelligenceIndexChart'), {
-    type: 'bar',
-    data: {
-      labels: benchmarkData.slice(0, 20).map(d => d.name),
-      datasets: [{
-        label: 'AA Intelligence Index',
-        data: benchmarkData.slice(0, 20).map(d => d.aa),
-        backgroundColor: benchmarkData.slice(0, 20).map((_, i) => 
-          i < 3 ? '#ffb781' : i < 10 ? '#ff8800' : '#2a2a2a'
-        )
-      }]
-    },
-    options: commonOptions
   });
 
-  // GPQA Chart
-  new Chart(document.getElementById('gpqaChart'), {
-    type: 'bar',
-    data: {
-      labels: benchmarkData.slice(0, 15).map(d => d.name),
-      datasets: [{
-        label: 'GPQA Diamond',
-        data: benchmarkData.slice(0, 15).map(d => d.gpqa),
-        backgroundColor: '#ff8800'
-      }]
-    },
-    options: commonOptions
-  });
+  // Arena Elo
+  if (document.getElementById('arenaChart') && withArena.length) {
+    charts.arena = new Chart(document.getElementById('arenaChart'), {
+      type: 'bar',
+      data: {
+        labels: withArena.map(d => d.model),
+        datasets: [{
+          data: withArena.map(d => d.arena_elo),
+          backgroundColor: withArena.map((_, i) => orange(i, withArena.length)),
+          borderRadius: 4
+        }]
+      },
+      options: commonOptions(Math.max(...withArena.map(d => d.arena_elo || 0)) * 1.15)
+    });
+  }
 
-  // HumanEval Chart
-  new Chart(document.getElementById('humanevalChart'), {
-    type: 'bar',
-    data: {
-      labels: benchmarkData.slice(0, 15).map(d => d.name),
-      datasets: [{
-        label: 'HumanEval',
-        data: benchmarkData.slice(0, 15).map(d => d.humaneval),
-        backgroundColor: '#06B6D4'
-      }]
-    },
-    options: commonOptions
-  });
+  // MMLU
+  if (document.getElementById('mmluChart') && withMMLU.length) {
+    charts.mmlu = new Chart(document.getElementById('mmluChart'), {
+      type: 'bar',
+      data: {
+        labels: withMMLU.map(d => d.model),
+        datasets: [{
+          data: withMMLU.map(d => d.mmlu),
+          backgroundColor: '#ff8800',
+          borderRadius: 4
+        }]
+      },
+      options: commonOptions(100)
+    });
+  }
 
-  // MMLU Chart
-  new Chart(document.getElementById('mmluChart'), {
-    type: 'bar',
-    data: {
-      labels: benchmarkData.slice(0, 15).map(d => d.name),
-      datasets: [{
-        label: 'MMLU',
-        data: benchmarkData.slice(0, 15).map(d => d.mmlu),
-        backgroundColor: '#ff8800'
-      }]
-    },
-    options: commonOptions
-  });
+  // GPQA
+  if (document.getElementById('gpqaChart') && withGPQA.length) {
+    charts.gpqa = new Chart(document.getElementById('gpqaChart'), {
+      type: 'bar',
+      data: {
+        labels: withGPQA.map(d => d.model),
+        datasets: [{
+          data: withGPQA.map(d => d.gpqa),
+          backgroundColor: '#ffb781',
+          borderRadius: 4
+        }]
+      },
+      options: commonOptions(100)
+    });
+  }
 
-  // Terminal-Bench Chart
-  new Chart(document.getElementById('terminalBenchChart'), {
-    type: 'bar',
-    data: {
-      labels: benchmarkData.slice(0, 15).map(d => d.name),
-      datasets: [{
-        label: 'Terminal-Bench Hard',
-        data: benchmarkData.slice(0, 15).map(d => d.terminal),
-        backgroundColor: '#00ff41'
-      }]
-    },
-    options: commonOptions
-  });
+  // HumanEval
+  if (document.getElementById('humanevalChart') && withHumanEval.length) {
+    charts.humaneval = new Chart(document.getElementById('humanevalChart'), {
+      type: 'bar',
+      data: {
+        labels: withHumanEval.map(d => d.model),
+        datasets: [{
+          data: withHumanEval.map(d => d.humaneval),
+          backgroundColor: '#06B6D4',
+          borderRadius: 4
+        }]
+      },
+      options: commonOptions(100)
+    });
+  }
 
-  // Populate Leaderboard
+  // Speed
+  if (document.getElementById('speedChart') && withSpeed.length) {
+    charts.speed = new Chart(document.getElementById('speedChart'), {
+      type: 'bar',
+      data: {
+        labels: withSpeed.map(d => d.model),
+        datasets: [{
+          data: withSpeed.map(d => d.speed_tps),
+          backgroundColor: withSpeed.map(d => {
+            if (d.speed_tps >= 300) return '#00ff41';
+            if (d.speed_tps >= 150) return '#ffb781';
+            return '#ff5500';
+          }),
+          borderRadius: 4
+        }]
+      },
+      options: commonOptions(Math.max(...withSpeed.map(d => d.speed_tps || 0)) * 1.15)
+    });
+  }
+}
+
+// === LEADERBOARD ===
+function renderLeaderboard() {
   const tbody = document.getElementById('leaderboardBody');
-  tbody.innerHTML = benchmarkData.map((d, i) => `
-    <tr class="border-b border-border-slate/50 hover:bg-surface-variant/20 transition-colors">
+  const search = (document.getElementById('table-search')?.value || '').toLowerCase();
+  const sortBy = document.getElementById('table-sort')?.value || 'arena_elo';
+  
+  let filtered = benchmarkData.filter(b => {
+    if (!search) return true;
+    return b.model.toLowerCase().includes(search) || b.provider.toLowerCase().includes(search);
+  });
+  
+  filtered.sort((a, b) => {
+    if (sortBy === 'speed') return (b.speed_tps || 0) - (a.speed_tps || 0);
+    return (b[sortBy] || 0) - (a[sortBy] || 0);
+  });
+  
+  if (!filtered.length) {
+    tbody.innerHTML = '<tr><td colspan="8" class="py-8 text-center text-text-muted">No models match your search.</td></tr>';
+    return;
+  }
+  
+  tbody.innerHTML = filtered.map((d, i) => `
+    <tr class="border-b border-outline-variant/30 hover:bg-surface-variant/20 transition-colors">
       <td class="py-3 text-primary font-bold">#${i + 1}</td>
-      <td class="py-3">
-        <div class="font-medium">${d.name}</div>
-        <div class="text-xs text-text-muted">${d.provider}</div>
+      <td class="py-3 font-medium">${d.model}</td>
+      <td class="py-3 text-text-muted capitalize">${d.provider}</td>
+      <td class="py-3 text-right">
+        ${d.arena_elo ? `<span class="benchmark-badge ${getBenchmarkClass(d.arena_elo, 'arena_elo')}">${d.arena_elo}</span>` : '<span class="text-text-muted">—</span>'}
       </td>
-      <td class="py-3 text-right"><span class="benchmark-badge benchmark-high">${d.aa}</span></td>
-      <td class="py-3 text-right">${d.gpqa}</td>
-      <td class="py-3 text-right">${d.humaneval}</td>
-      <td class="py-3 text-right">${d.mmlu}</td>
-      <td class="py-3 text-right">${d.terminal}</td>
+      <td class="py-3 text-right">
+        ${d.mmlu ? `<span class="benchmark-badge ${getBenchmarkClass(d.mmlu, 'mmlu')}">${d.mmlu}</span>` : '<span class="text-text-muted">—</span>'}
+      </td>
+      <td class="py-3 text-right">
+        ${d.humaneval ? `${d.humaneval}%` : '<span class="text-text-muted">—</span>'}
+      </td>
+      <td class="py-3 text-right">
+        ${d.gpqa ? d.gpqa.toFixed(1) : '<span class="text-text-muted">—</span>'}
+      </td>
+      <td class="py-3 text-right">
+        ${d.speed_tps ? `<span class="benchmark-badge ${getBenchmarkClass(d.speed_tps, 'speed')}">${d.speed_tps} t/s</span>` : '<span class="text-text-muted">—</span>'}
+      </td>
     </tr>
   `).join('');
 }
 
-// Tab Filtering
+// === TAB FILTERING ===
 document.querySelectorAll('.tab-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     
-    const category = btn.dataset.category;
     document.querySelectorAll('.benchmark-card').forEach(card => {
-      if (category === 'all' || card.dataset.category === category) {
-        card.style.display = 'block';
-      } else {
-        card.style.display = 'none';
-      }
+      card.style.display = (btn.dataset.category === 'all' || card.dataset.category === btn.dataset.category) ? '' : 'none';
     });
   });
 });
 
-// Initialize on load
-initCharts();
+// === INIT ===
+loadData();
 </script>
 </body>
 </html>
