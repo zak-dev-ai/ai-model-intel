@@ -168,26 +168,26 @@ tailwind.config = {
     </div>
   </section>
 
-  <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-    <div class="glass-panel p-5 rounded-lg flex flex-col gap-2 relative overflow-hidden pulse-border hover:border-primary transition-colors cursor-default">
+  <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+    <div class="glass-panel p-4 rounded-lg flex flex-col gap-2 relative overflow-hidden pulse-border hover:border-primary transition-colors cursor-default">
       <div class="font-data-label text-data-label text-text-muted uppercase">Total Models Tracked</div>
       <div class="font-data-tabular text-headline-md text-on-surface font-bold" id="stat-total">—</div>
       <div class="absolute bottom-0 left-0 w-full h-8 opacity-20" style="background: linear-gradient(90deg, transparent, rgba(0, 255, 136, 0.4) 50%, transparent); mask-image: linear-gradient(to bottom, transparent, black);"></div>
     </div>
-    <div class="glass-panel p-5 rounded-lg flex flex-col gap-2 relative overflow-hidden border border-outline-variant/30 hover:border-primary transition-colors cursor-default">
+    <div class="glass-panel p-4 rounded-lg flex flex-col gap-2 relative overflow-hidden border border-outline-variant/30 hover:border-primary transition-colors cursor-default">
       <div class="font-data-label text-data-label text-text-muted uppercase">Average Input Cost</div>
       <div class="font-data-tabular text-headline-md text-on-surface font-bold"><span id="stat-avg">—</span> <span class="text-text-muted text-sm font-normal">/ 1M</span></div>
     </div>
-    <div class="glass-panel p-5 rounded-lg flex flex-col gap-2 relative overflow-hidden border border-outline-variant/30 hover:border-primary transition-colors cursor-default">
+    <div class="glass-panel p-4 rounded-lg flex flex-col gap-2 relative overflow-hidden border border-outline-variant/30 hover:border-primary transition-colors cursor-default">
       <div class="font-data-label text-data-label text-text-muted uppercase">Cheapest Model</div>
       <div class="font-data-tabular text-body-lg text-on-surface truncate font-bold mt-1" id="stat-cheapest">—</div>
     </div>
-    <div class="glass-panel p-5 rounded-lg flex flex-col gap-2 relative overflow-hidden border border-outline-variant/30 hover:border-primary transition-colors cursor-default">
+    <div class="glass-panel p-4 rounded-lg flex flex-col gap-2 relative overflow-hidden border border-outline-variant/30 hover:border-primary transition-colors cursor-default">
       <div class="font-data-label text-data-label text-text-muted uppercase">Max Context Window</div>
       <div class="font-data-tabular text-headline-md text-on-surface font-bold" id="stat-context">—</div>
     </div>
-        <!-- Metric Card 5 - Benchmarks -->
-    <div class="glass-panel p-5 rounded-lg flex flex-col gap-2 relative overflow-hidden border border-outline-variant/30 hover:border-primary transition-colors cursor-pointer" onclick="window.location.href='/benchmarks.html'">
+    <!-- Metric Card 5 - Benchmarks -->
+    <div class="glass-panel p-4 rounded-lg flex flex-col gap-2 relative overflow-hidden border border-outline-variant/30 hover:border-primary transition-colors cursor-pointer" onclick="window.location.href='/benchmarks.html'">
       <div class="font-data-label text-data-label text-text-muted uppercase">Model Benchmarks</div>
       <div class="font-data-tabular text-headline-md text-on-surface font-bold">10+ Benchmarks</div>
       <div class="text-text-muted text-xs mt-1">MMLU, GPQA, HumanEval & more →</div>
