@@ -9,7 +9,7 @@ export default async function handler() {
     const now = new Date().toISOString();
 
     const pg = await fetch(
-      `${SUPABASE_URL}/rest/v1/sponsorships?select=*&is_active=eq.true&payment_status=eq.completed&end_date=gte.${now}&order=created_at.desc&limit=1`,
+      `${SUPABASE_URL}/rest/v1/sponsorships?select=*&is_active=eq.true&payment_status=eq.completed&end_date=gte.${now}&order=created_at.desc&limit=3`,
       {
         headers: {
           'apikey': SUPABASE_ANON,
@@ -24,16 +24,16 @@ export default async function handler() {
     }
 
     const data = await pg.json();
-    const sponsorship = data && data.length > 0 ? data[0] : null;
+    const sponsorships = data || [];
 
-    return new Response(JSON.stringify({ sponsorship }), {
+    return new Response(JSON.stringify({ sponsorships }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' }
     });
 
   } catch (error) {
     console.error('Active sponsorship error:', error);
-    return new Response(JSON.stringify({ sponsorship: null }), {
+    return new Response(JSON.stringify({ sponsorships: [] }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' }
     });

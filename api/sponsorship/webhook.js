@@ -38,6 +38,10 @@ export default async function handler(req) {
 
     console.log(`[Webhook] Activating sponsorship: ${sponsorshipId}`);
 
+    const now = new Date();
+    const startDate = now.toISOString();
+    const endDate = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000).toISOString();
+
     // Update sponsorship to active
     const pg = await fetch(`${SUPABASE_URL}/rest/v1/sponsorships?id=eq.${sponsorshipId}`, {
       method: 'PATCH',
@@ -52,7 +56,9 @@ export default async function handler(req) {
         payment_id: data.payment_id || data.id || null,
         amount_paid: data.amount || data.amount_total || 99.00,
         is_active: true,
-        updated_at: new Date().toISOString()
+        start_date: startDate,
+        end_date: endDate,
+        updated_at: startDate
       })
     });
 

@@ -89,6 +89,11 @@ tailwind.config = {
   ::-webkit-scrollbar { width: 8px; height: 8px; }
   ::-webkit-scrollbar-track { background: #131313; }
   ::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 4px; }
+  .carousel-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(136,136,136,0.3); transition: all 0.35s cubic-bezier(0.4,0,0.2,1); cursor: pointer; }
+  .carousel-dot.active { background: #ffb781; width: 20px; border-radius: 3px; box-shadow: 0 0 8px rgba(255,183,129,0.6); }
+  .carousel-slide { will-change: transform, opacity; backface-visibility: hidden; }
+  .carousel-slide-active { opacity: 1 !important; transform: scale(1) translateY(0) !important; pointer-events: auto !important; }
+  .carousel-slide-inactive { opacity: 0 !important; transform: scale(0.96) translateY(4px) !important; pointer-events: none !important; }
 </style>
 </head>
 <body class="min-h-screen flex flex-col font-body-sm relative pt-10">
@@ -202,18 +207,29 @@ tailwind.config = {
       <div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-primary via-primary-container to-primary"></div>
     </div>
 
-    <!-- Card 6: Featured Sponsorship (dynamic) -->
-    <div id="featuredSponsorCard" class="glass-panel p-4 rounded-lg flex flex-col gap-2 relative overflow-hidden border-2 border-dashed border-primary/40 hover:border-primary transition-all cursor-pointer group bg-primary/5 h-full" onclick="handleSponsorClick()">
-      <div id="sponsorBadge" class="absolute top-0 right-0 bg-primary text-deep-charcoal text-[9px] font-bold px-2 py-0.5 rounded-bl font-data-label tracking-wider">AVAILABLE</div>
-      <div class="font-data-label text-data-label text-primary uppercase">Featured</div>
-      <div id="sponsorModelName" class="font-data-tabular text-headline-md text-on-surface font-bold group-hover:text-primary transition-colors leading-tight truncate">Your Product</div>
-      <div id="sponsorCompany" class="text-text-muted text-[11px] truncate hidden"></div>
-      <div id="sponsorDescription" class="text-text-muted text-[10px] leading-tight line-clamp-2 hidden"></div>
-      <div id="sponsorPlaceholder" class="mt-auto text-text-muted text-[10px] flex items-center justify-between w-full">
-        <span class="font-bold text-on-surface">$99/mo</span>
-        <span class="text-primary font-bold">Get Slot →</span>
+    <!-- Card 6: Rotating Sponsor Carousel -->
+    <div class="glass-panel p-0 rounded-lg flex flex-col relative overflow-hidden border border-primary/20 h-full" id="sponsorCarouselCard">
+      <div class="relative w-full flex-1 min-h-[120px]" id="sponsorCarousel">
+        <!-- Slides injected by JS -->
+        <div class="carousel-slide absolute inset-0 p-3 flex flex-col justify-between transition-all duration-700 ease-out">
+          <div class="absolute top-0 right-0 bg-primary/30 text-on-surface text-[8px] font-bold px-1.5 py-0.5 rounded-bl font-data-label tracking-wider">LOADING</div>
+          <div>
+            <div class="font-data-label text-data-label text-primary uppercase">Featured</div>
+            <div class="font-data-tabular text-headline-md text-on-surface font-bold leading-tight mt-1 truncate">Loading slots...</div>
+          </div>
+        </div>
       </div>
-      <div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-primary via-primary-container to-primary opacity-50 group-hover:opacity-100 transition-opacity"></div>
+      <div class="flex items-center justify-between px-2 py-1.5 bg-surface-container-lowest/50">
+        <div class="flex items-center gap-1.5" id="carouselDots">
+          <div class="carousel-dot active" data-dot="0"></div>
+          <div class="carousel-dot" data-dot="1"></div>
+          <div class="carousel-dot" data-dot="2"></div>
+        </div>
+        <span class="font-data-label text-[8px] text-text-muted tracking-wider" id="carouselLabel">ROTATING</span>
+      </div>
+      <div class="absolute bottom-0 left-0 w-full h-0.5 bg-surface-container-high">
+        <div class="h-full transition-all ease-linear" id="carouselProgress" style="width:0%; background: linear-gradient(90deg, #ffb781, #ff8800, #ffb781);"></div>
+      </div>
     </div>
 </section>
 
@@ -760,54 +776,163 @@ document.addEventListener('DOMContentLoaded', () => {
 
 fetch(SUPABASE_URL + '/rest/v1/page_views', { method: 'POST', headers: { 'apikey': SUPABASE_ANON, 'Authorization': 'Bearer ' + SUPABASE_ANON, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' }, body: JSON.stringify({ page: window.location.pathname, referrer: document.referrer || 'Direct', user_agent: navigator.userAgent }) }).catch(() => {});
 
-// === SPONSORSHIP CARD ===
-let sponsorData = null;
-let sponsorClickUrl = '/sponsor';
+// === SPONSORSHIP CAROUSEL ===
+let sponsorSlots = [null, null, null];
+let currentSlide = 0;
+let carouselTimer = null;
+let carouselPaused = false;
+const SLIDE_INTERVAL = 10000;
 
-async function loadActiveSponsorship() {
+async function loadActiveSponsorships() {
   try {
     const res = await fetch('/api/sponsorship/active');
     const data = await res.json();
-    const s = data.sponsorship;
-    
-    const card = document.getElementById('featuredSponsorCard');
-    const badge = document.getElementById('sponsorBadge');
-    const modelName = document.getElementById('sponsorModelName');
-    const company = document.getElementById('sponsorCompany');
-    const placeholder = document.getElementById('sponsorPlaceholder');
-    const description = document.getElementById('sponsorDescription');
-
-    if (s) {
-      sponsorData = s;
-      sponsorClickUrl = s.website_url;
-      
-      badge.textContent = 'SPONSORED';
-      badge.className = 'absolute top-0 right-0 bg-matrix-green text-deep-charcoal text-[9px] font-bold px-2 py-0.5 rounded-bl font-data-label tracking-wider';
-      card.classList.remove('border-dashed', 'border-primary/40', 'bg-primary/5');
-      card.classList.add('border-solid', 'border-primary/60', 'bg-surface-container-high/30');
-      
-      modelName.textContent = s.model_name;
-      company.textContent = s.company_name;
-      company.classList.remove('hidden');
-      placeholder.classList.add('hidden');
-      description.textContent = s.description;
-      description.classList.remove('hidden');
+    const arr = Array.isArray(data.sponsorships) ? data.sponsorships : [];
+    for (let i = 0; i < 3; i++) {
+      sponsorSlots[i] = arr[i] || null;
     }
+    renderSlides();
+    startCarousel();
   } catch (e) {
-    console.log('Sponsorship API not available (expected on local dev)');
+    console.log('Sponsorship API not available');
+    renderSlides();
+    startCarousel();
   }
 }
 
-function handleSponsorClick() {
-  if (sponsorData && sponsorData.website_url) {
-    window.open(sponsorData.website_url, '_blank');
+function renderSlides() {
+  const container = document.getElementById('sponsorCarousel');
+  if (!container) return;
+
+  container.innerHTML = sponsorSlots.map((s, i) => {
+    if (s) {
+      return `<div class="carousel-slide absolute inset-0 p-3 flex flex-col justify-between transition-all duration-700 ease-out cursor-pointer carousel-slide-inactive" data-slide="${i}" onclick="handleSponsorSlideClick(${i})">
+        <div class="absolute top-0 right-0 bg-matrix-green text-deep-charcoal text-[8px] font-bold px-1.5 py-0.5 rounded-bl font-data-label tracking-wider">SPONSORED</div>
+        <div>
+          <div class="font-data-label text-data-label text-primary uppercase">Featured</div>
+          <div class="font-data-tabular text-body-lg text-on-surface font-bold leading-tight mt-1 truncate">${s.model_name || ''}</div>
+          <div class="text-text-muted text-[10px] mt-0.5 truncate">${s.company_name || ''}</div>
+          <div class="text-text-muted text-[10px] leading-tight line-clamp-2 mt-0.5">${s.description || ''}</div>
+        </div>
+        <div class="flex items-center justify-between w-full mt-1">
+          <span class="font-data-tabular text-[10px] text-text-muted">${s.company_name || ''}</span>
+          <span class="text-matrix-green font-bold text-[10px]">Learn More →</span>
+        </div>
+      </div>`;
+    } else {
+      return `<div class="carousel-slide absolute inset-0 p-3 flex flex-col justify-between transition-all duration-700 ease-out cursor-pointer carousel-slide-inactive" data-slide="${i}" onclick="handleSponsorSlideClick(${i})">
+        <div class="absolute top-0 right-0 bg-primary/20 text-on-surface text-[8px] font-bold px-1.5 py-0.5 rounded-bl font-data-label tracking-wider">SLOT ${i+1}</div>
+        <div>
+          <div class="font-data-label text-data-label text-primary uppercase">Featured</div>
+          <div class="font-data-tabular text-body-lg text-on-surface font-bold leading-tight mt-1 truncate">Advertise Here</div>
+          <div class="text-text-muted text-[10px] mt-0.5">Reach 10,000+ AI engineers daily</div>
+        </div>
+        <div class="flex items-center justify-between w-full mt-1">
+          <span class="font-data-tabular font-bold text-on-surface text-[11px]">$99/30d</span>
+          <span class="text-primary font-bold text-[10px]">Claim Slot →</span>
+        </div>
+      </div>`;
+    }
+  }).join('');
+
+  showSlide(0, false);
+}
+
+function showSlide(index, animate = true) {
+  currentSlide = index;
+  const slides = document.querySelectorAll('.carousel-slide');
+  slides.forEach((slide, i) => {
+    if (i === index) {
+      slide.classList.remove('carousel-slide-inactive');
+      slide.classList.add('carousel-slide-active');
+    } else {
+      slide.classList.remove('carousel-slide-active');
+      slide.classList.add('carousel-slide-inactive');
+    }
+  });
+
+  const label = document.getElementById('carouselLabel');
+  if (label) {
+    if (sponsorSlots[index]) {
+      label.textContent = 'SPONSORED';
+      label.className = 'font-data-label text-[8px] text-matrix-green tracking-wider';
+    } else {
+      label.textContent = 'AVAILABLE';
+      label.className = 'font-data-label text-[8px] text-text-muted tracking-wider';
+    }
+  }
+
+  document.querySelectorAll('.carousel-dot').forEach((dot, i) => {
+    dot.classList.toggle('active', i === index);
+  });
+
+  if (animate) resetProgress();
+}
+
+function handleSponsorSlideClick(index) {
+  const s = sponsorSlots[index];
+  if (s && s.website_url) {
+    window.open(s.website_url, '_blank');
   } else {
     window.location.href = '/sponsor';
   }
 }
 
+function nextSlide() {
+  showSlide((currentSlide + 1) % 3);
+}
+
+function resetProgress() {
+  const bar = document.getElementById('carouselProgress');
+  if (!bar) return;
+  bar.style.transition = 'none';
+  bar.style.width = '0%';
+  bar.offsetHeight;
+  bar.style.transition = `width ${SLIDE_INTERVAL}ms linear`;
+  bar.style.width = '100%';
+}
+
+function startCarousel() {
+  if (carouselTimer) clearInterval(carouselTimer);
+  resetProgress();
+  carouselTimer = setInterval(() => {
+    if (!carouselPaused) nextSlide();
+  }, SLIDE_INTERVAL);
+}
+
+function pauseCarousel() {
+  carouselPaused = true;
+  const bar = document.getElementById('carouselProgress');
+  if (bar) {
+    const w = getComputedStyle(bar).width;
+    bar.style.transition = 'none';
+    bar.style.width = w;
+  }
+}
+
+function resumeCarousel() {
+  carouselPaused = false;
+  resetProgress();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => {
+    const card = document.getElementById('sponsorCarouselCard');
+    if (card) {
+      card.addEventListener('mouseenter', pauseCarousel);
+      card.addEventListener('mouseleave', resumeCarousel);
+    }
+    document.querySelectorAll('.carousel-dot').forEach(dot => {
+      dot.addEventListener('click', (e) => {
+        const idx = parseInt(e.target.dataset.dot);
+        if (!isNaN(idx)) showSlide(idx);
+      });
+    });
+  }, 100);
+});
+
 (async function init() {
-  loadActiveSponsorship();
+  loadActiveSponsorships();
   await fetchBenchmarks();
   await fetchData();
   setInterval(fetchData, 60000);
