@@ -60,6 +60,8 @@ tailwind.config = {
   @keyframes shimmer { to { background-position: 200% center; } }
   .pulse-border { animation: pulse-border 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
   @keyframes pulse-border { 0%, 100% { border-color: rgba(255, 136, 0, 0.2); } 50% { border-color: rgba(255, 136, 0, 0.6); } }
+  .glow-card { animation: glow-pulse 2.5s ease-in-out infinite; border-color: rgba(255,136,0,0.4); }
+  @keyframes glow-pulse { 0%, 100% { box-shadow: 0 0 8px rgba(255,136,0,0.15), 0 0 20px rgba(255,136,0,0.05); } 50% { box-shadow: 0 0 20px rgba(255,136,0,0.4), 0 0 40px rgba(255,136,0,0.15), 0 0 60px rgba(255,183,129,0.08); } }
   .pulse-green { animation: pulse-green 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
   @keyframes pulse-green { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
   .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
@@ -175,7 +177,7 @@ tailwind.config = {
 
   <section class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
     <!-- Card 1: Total Models -->
-    <div class="glass-panel p-4 rounded-lg flex flex-col gap-2 relative overflow-hidden pulse-border hover:border-primary transition-colors cursor-default h-full">
+    <div class="glass-panel p-4 rounded-lg flex flex-col gap-2 relative overflow-hidden pulse-border glow-card hover:border-primary transition-colors cursor-default h-full">
       <div class="font-data-label text-data-label text-text-muted uppercase">Total Models</div>
       <div class="font-data-tabular text-headline-md text-on-surface font-bold" id="stat-total">—</div>
       <div class="absolute bottom-0 left-0 w-full h-8 opacity-20" style="background: linear-gradient(90deg, transparent, rgba(0, 255, 136, 0.4) 50%, transparent); mask-image: linear-gradient(to bottom, transparent, black);"></div>
@@ -820,16 +822,22 @@ function renderSlides() {
         </div>
       </div>`;
     } else {
+      const emptyCopy = [
+        { badge: 'SLOT 1', headline: 'Advertise Here', sub: 'Reach 10,000+ AI engineers daily', cta: 'Claim Slot →' },
+        { badge: 'SLOT 2', headline: 'Get Featured', sub: 'Prime homepage placement for 30 days', cta: 'Go Live →' },
+        { badge: 'SLOT 3', headline: 'Your Brand Here', sub: 'CTOs, devs & founders see this card', cta: 'Sponsor Now →' }
+      ];
+      const c = emptyCopy[i % 3];
       return `<div class="carousel-slide absolute inset-0 p-3 flex flex-col justify-between transition-all duration-700 ease-out cursor-pointer carousel-slide-inactive" data-slide="${i}" onclick="handleSponsorSlideClick(${i})">
-        <div class="absolute top-0 right-0 bg-primary/20 text-on-surface text-[8px] font-bold px-1.5 py-0.5 rounded-bl font-data-label tracking-wider">SLOT ${i+1}</div>
+        <div class="absolute top-0 right-0 bg-primary/20 text-on-surface text-[8px] font-bold px-1.5 py-0.5 rounded-bl font-data-label tracking-wider">${c.badge}</div>
         <div>
           <div class="font-data-label text-data-label text-primary uppercase">Featured</div>
-          <div class="font-data-tabular text-body-lg text-on-surface font-bold leading-tight mt-1 truncate">Advertise Here</div>
-          <div class="text-text-muted text-[10px] mt-0.5">Reach 10,000+ AI engineers daily</div>
+          <div class="font-data-tabular text-body-lg text-on-surface font-bold leading-tight mt-1 truncate">${c.headline}</div>
+          <div class="text-text-muted text-[10px] mt-0.5">${c.sub}</div>
         </div>
         <div class="flex items-center justify-between w-full mt-1">
           <span class="font-data-tabular font-bold text-on-surface text-[11px]">$99/30d</span>
-          <span class="text-primary font-bold text-[10px]">Claim Slot →</span>
+          <span class="text-primary font-bold text-[10px]">${c.cta}</span>
         </div>
       </div>`;
     }
