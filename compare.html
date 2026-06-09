@@ -65,6 +65,12 @@ tailwind.config = {
   .feed-item .sep { color: rgba(255,255,255,0.12); font-size: 10px; }
   .feed-item .text { overflow: hidden; text-overflow: ellipsis; max-width: 380px; display: inline-block; vertical-align: middle; white-space: nowrap; }
   #ai-ticker:hover .feed-track { animation-play-state: paused; }
+  /* Sponsor carousel */
+  .carousel-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(136,136,136,0.3); transition: all 0.35s cubic-bezier(0.4,0,0.2,1); cursor: pointer; }
+  .carousel-dot.active { background: #ffb781; width: 20px; border-radius: 3px; box-shadow: 0 0 8px rgba(255,183,129,0.6); }
+  .carousel-slide { will-change: transform, opacity; backface-visibility: hidden; }
+  .carousel-slide-active { opacity: 1 !important; transform: scale(1) translateY(0) !important; pointer-events: auto !important; }
+  .carousel-slide-inactive { opacity: 0 !important; transform: scale(0.96) translateY(4px) !important; pointer-events: none !important; }
 </style>
 </head>
 <body class="min-h-screen flex flex-col">
