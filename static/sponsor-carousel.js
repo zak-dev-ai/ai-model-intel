@@ -35,7 +35,7 @@
     container.innerHTML = sponsorSlots.map((s, i) => {
       const url = s && s.website_url ? s.website_url : '/sponsor';
       if (s) {
-        const logoUrl = s.logo_url || `https://www.google.com/s2/favicons?domain=${(s.website_url||'').replace(/https?:\\/\\//,'').replace(/\\/.*$/,'')}&sz=64`;
+        const logoUrl = s.logo_url || ('https://www.google.com/s2/favicons?domain=' + (s.website_url||'').replace(/https?:\/\//,'').replace(/\/.*$/,'') + '&sz=64');
         return `<div class="carousel-slide absolute inset-0 p-3 flex flex-col justify-between transition-all duration-700 ease-out cursor-pointer carousel-slide-inactive" data-slide="${i}" onclick="window.open('${url}','_blank')">
           <div class="absolute top-0 right-0 bg-matrix-green text-deep-charcoal text-[8px] font-bold px-1.5 py-0.5 rounded-bl font-data-label tracking-wider">SPONSORED</div>
           <div>
