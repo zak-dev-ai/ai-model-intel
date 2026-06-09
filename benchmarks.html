@@ -24,7 +24,7 @@
   .benchmark-low { background: rgba(255, 85, 0, 0.15); color: #ff5500; border: 1px solid rgba(255, 85, 0, 0.3); }
   /* AI News Ticker */
   #ai-ticker { height: 38px; }
-  .ticker-track { display: flex; animation: ticker-scroll 180s linear infinite; white-space: nowrap; will-change: transform; }
+  .ticker-track { display: flex; animation: ticker-scroll 180s linear infinite; width: max-content; white-space: nowrap; will-change: transform; }
   .ticker-item { display: inline-flex; align-items: center; gap: 10px; padding: 0 32px; font-size: 13px; color: #ccc; flex-shrink: 0; cursor: pointer; transition: color 0.2s; }
   .ticker-item:hover { color: #ffb781; }
   .ticker-item .badge { padding: 1px 8px; border-radius: 3px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; font-family: 'JetBrains Mono', monospace; white-space: nowrap; }
@@ -73,6 +73,30 @@
 <main id="main-content" class="flex-grow w-full max-w-7xl mx-auto px-6 py-10" style="display:none;">
   
   <!-- Hero -->
+  <!-- Sponsor Carousel -->
+  <div class="glass-panel p-0 rounded-lg flex flex-col relative overflow-hidden border border-primary/20 h-full glow-card" id="sponsorCarouselCard">
+    <div class="relative w-full flex-1 min-h-[120px]" id="sponsorCarousel">
+      <div class="carousel-slide absolute inset-0 p-3 flex flex-col justify-between transition-all duration-700 ease-out">
+        <div class="absolute top-0 right-0 bg-primary/30 text-on-surface text-[8px] font-bold px-1.5 py-0.5 rounded-bl font-data-label tracking-wider">LOADING</div>
+        <div>
+          <div class="font-data-label text-data-label text-primary uppercase">Featured</div>
+          <div class="font-data-tabular text-headline-md text-on-surface font-bold leading-tight mt-1 truncate">Loading slots...</div>
+        </div>
+      </div>
+    </div>
+    <div class="flex items-center justify-between px-2 py-1.5 bg-surface-container-lowest/50">
+      <div class="flex items-center gap-1.5" id="carouselDots">
+        <div class="carousel-dot active" data-dot="0"></div>
+        <div class="carousel-dot" data-dot="1"></div>
+        <div class="carousel-dot" data-dot="2"></div>
+      </div>
+      <span class="font-data-label text-[8px] text-text-muted tracking-wider" id="carouselLabel">ROTATING</span>
+    </div>
+    <div class="absolute bottom-0 left-0 w-full h-0.5 bg-surface-container-high">
+      <div class="h-full transition-all ease-linear" id="carouselProgress" style="width:0%; background: linear-gradient(90deg, #ffb781, #ff8800, #ffb781);"></div>
+    </div>
+  </div>
+
   <section class="text-center py-12 mb-8">
     <h1 class="text-4xl md:text-5xl font-bold mb-4 shimmer-text">Model Performance Benchmarks</h1>
     <p class="text-text-muted max-w-2xl mx-auto mb-6" id="hero-subtitle">Comprehensive evaluation across reasoning, coding, knowledge, and more.</p>
@@ -467,47 +491,7 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
 loadData();
 </script>
 <script src="/static/feedback-widget.js"></script>
-<script>
-// AI News Ticker — client-side via rss2json.com
-(async function initTicker() {
-  const ticker = document.getElementById('ai-ticker');
-  const track = document.getElementById('tickerTrack');
-  if (!ticker || !track) return;
-  const A = [
-    ['OpenAI','OpenAI','#00a67e'],['AnthropicAI','Anthropic','#d4a574'],
-    ['GoogleDeepMind','Google DeepMind','#4285f4'],['Grok','Grok','#ff6b35'],
-    ['MistralAI','Mistral','#f97316'],['cohere','Cohere','#8b5cf6'],
-    ['AIatMeta','Meta AI','#0064e0'],['deepseek_ai','DeepSeek','#4ade80'],
-    ['Alibaba_Qwen','Qwen','#f43f5e']
-  ];
-  try {
-    const r = await Promise.allSettled(A.map(([h]) =>
-      fetch('https://api.rss2json.com/v1/api.json?rss_url='+encodeURIComponent('https://nitter.net/'+h+'/rss'),{signal:AbortSignal.timeout(5000)}).then(x=>x.ok?x.json():null)
-    ));
-    const posts = [];
-    for (let i=0;i<r.length;i++) {
-      if (r[i].status!=='fulfilled'||!r[i].value||r[i].value.status!=='ok') continue;
-      const [h,l,c]=A[i];
-      for (const item of (r[i].value.items||[]).slice(0,2)) {
-        if (!item.title) continue;
-        const t = item.title.replace(/<[^>]*>/g,'').replace(/&apos;/g,"'");
-        posts.push({text:t.length>180?t.slice(0,177)+'...':t,account:l,url:item.link.replace('nitter.net/','x.com/').replace(/#m$/,''),color:c});
-      }
-    }
-    if (posts.length<3) return;
-    for (let i=posts.length-1;i>0;i--) { const j=Math.random()*(i+1)|0; [posts[i],posts[j]]=[posts[j],posts[i]]; }
-    track.innerHTML = posts.map(p=>
-      '<span class="ticker-item" onclick="window.open(\''+p.url.replace(/'/g,'')+'\',\'_blank\')">'+
-      '<span class="badge" style="color:'+p.color+';background:'+p.color+'15;border:1px solid '+p.color+'30">'+p.account+'</span>'+
-      '<span class="text">'+p.text.replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</span><span class="sep">•</span></span>'
-    ).join('') + posts.map(p=>
-      '<span class="ticker-item" onclick="window.open(\''+p.url.replace(/'/g,'')+'\',\'_blank\')">'+
-      '<span class="badge" style="color:'+p.color+';background:'+p.color+'15;border:1px solid '+p.color+'30">'+p.account+'</span>'+
-      '<span class="text">'+p.text.replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</span><span class="sep">•</span></span>'
-    ).join('');
-    ticker.style.display = 'block';
-  } catch(e) { console.warn('Ticker:',e.message); }
-})();
-</script>
+<script src="/static/sponsor-carousel.js"></script>
+<script src="/static/ai-feed.js"></script>
 </body>
 </html>

@@ -50,8 +50,22 @@ tailwind.config = {
   .glass-panel { background: rgba(15, 15, 15, 0.6); backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5); }
   .pulse-green { animation: pulse-green 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
   @keyframes pulse-green { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
+  /* AI News Ticker */
+  #ai-ticker { height: 38px; }
+  .ticker-track { display: flex; animation: ticker-scroll 180s linear infinite; width: max-content; white-space: nowrap; will-change: transform; }
+  .ticker-item { display: inline-flex; align-items: center; gap: 10px; padding: 0 32px; font-size: 13px; color: #ccc; flex-shrink: 0; cursor: pointer; transition: color 0.2s; }
+  .ticker-item:hover { color: #ffb781; }
+  .ticker-item .badge { padding: 1px 8px; border-radius: 3px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; font-family: 'JetBrains Mono', monospace; white-space: nowrap; }
+  .ticker-item .sep { color: rgba(255,255,255,0.12); font-size: 10px; }
+  .ticker-item .text { overflow: hidden; text-overflow: ellipsis; max-width: 380px; display: inline-block; vertical-align: middle; white-space: nowrap; }
   @keyframes ticker-scroll { 0% { transform: translateX(0) translateZ(0); } 100% { transform: translateX(-50%) translateZ(0); } }
-  .ticker-track { display: flex; width: max-content; animation: ticker-scroll 60s linear infinite; }
+  #ai-ticker:hover .ticker-track { animation-play-state: paused; }
+  /* Sponsor carousel */
+  .carousel-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(136,136,136,0.3); transition: all 0.35s cubic-bezier(0.4,0,0.2,1); cursor: pointer; }
+  .carousel-dot.active { background: #ffb781; width: 20px; border-radius: 3px; box-shadow: 0 0 8px rgba(255,183,129,0.6); }
+  .carousel-slide { will-change: transform, opacity; backface-visibility: hidden; }
+  .carousel-slide-active { opacity: 1 !important; transform: scale(1) translateY(0) !important; pointer-events: auto !important; }
+  .carousel-slide-inactive { opacity: 0 !important; transform: scale(0.96) translateY(4px) !important; pointer-events: none !important; }
   .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
   .hover-lift { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   .hover-lift:hover { transform: translateY(-4px); border-color: #ffb781; box-shadow: 0 10px 40px -5px rgba(255, 183, 129, 0.25), 0 0 15px -2px rgba(255, 183, 129, 0.15); }
@@ -89,22 +103,16 @@ tailwind.config = {
 <canvas id="bg-canvas"></canvas>
 <canvas id="matrix-canvas"></canvas>
 
-<!-- Persistent Data Ticker -->
-<div class="fixed top-0 left-0 w-full h-10 bg-surface-container-lowest/90 backdrop-blur-md border-b border-border-slate flex items-center overflow-hidden z-[60]">
-  <div class="ticker-track font-data-tabular text-data-tabular text-text-muted" id="ticker-track">
-    <div class="flex items-center px-4 gap-6">
-      <span class="text-alert-up">▲ GPT-4o: LATENCY -12%</span><span class="text-border-slate">|</span>
-      <span class="text-alert-down">▼ CLAUDE OPUS: COMPUTE +5%</span><span class="text-border-slate">|</span>
-      <span class="text-alert-up">▲ GEMINI 1.5: CONTEXT EXPANDED</span><span class="text-border-slate">|</span>
-      <span class="text-alert-up">▲ LLAMA 3: DEPLOYMENTS +24%</span><span class="text-border-slate">|</span>
-      <span class="text-alert-down">▼ MISTRAL LARGE: EU LIMITS</span><span class="text-border-slate">|</span>
+<!-- AI News Ticker -->
+<div id="ai-ticker" class="relative w-full overflow-hidden border-y border-outline-variant/20 bg-surface/80 backdrop-blur-md" style="display:none;">
+  <div class="flex items-center max-w-container-max mx-auto px-margin-edge">
+    <div class="flex-shrink-0 pr-4 py-2 border-r border-outline-variant/20 flex items-center gap-1.5" style="min-width:fit-content;">
+      <span class="material-symbols-outlined text-terminal-cyan" style="font-size:16px;">rss_feed</span>
+      <span class="text-xs font-bold uppercase tracking-wider text-terminal-cyan" style="font-family:'JetBrains Mono',monospace;">AI Feed</span>
     </div>
-    <div class="flex items-center px-4 gap-6">
-      <span class="text-alert-up">▲ GPT-4o: LATENCY -12%</span><span class="text-border-slate">|</span>
-      <span class="text-alert-down">▼ CLAUDE OPUS: COMPUTE +5%</span><span class="text-border-slate">|</span>
-      <span class="text-alert-up">▲ GEMINI 1.5: CONTEXT EXPANDED</span><span class="text-border-slate">|</span>
-      <span class="text-alert-up">▲ LLAMA 3: DEPLOYMENTS +24%</span><span class="text-border-slate">|</span>
-      <span class="text-alert-down">▼ MISTRAL LARGE: EU LIMITS</span><span class="text-border-slate">|</span>
+    <div class="overflow-hidden flex-1 relative">
+      <div class="flex ticker-track" id="tickerTrack">
+      </div>
     </div>
   </div>
 </div>
@@ -153,8 +161,32 @@ tailwind.config = {
 </div>
 
 <!-- Main Content -->
-<main class="flex-grow pt-20 pb-24 relative z-10 w-full max-w-container-max mx-auto px-margin-edge flex flex-col gap-12">
+<main class="flex-grow pt-10 pb-24 relative z-10 w-full max-w-container-max mx-auto px-margin-edge flex flex-col gap-12">
   
+  <!-- Sponsor Carousel -->
+  <div class="glass-panel p-0 rounded-lg flex flex-col relative overflow-hidden border border-primary/20 h-full glow-card" id="sponsorCarouselCard">
+    <div class="relative w-full flex-1 min-h-[120px]" id="sponsorCarousel">
+      <div class="carousel-slide absolute inset-0 p-3 flex flex-col justify-between transition-all duration-700 ease-out">
+        <div class="absolute top-0 right-0 bg-primary/30 text-on-surface text-[8px] font-bold px-1.5 py-0.5 rounded-bl font-data-label tracking-wider">LOADING</div>
+        <div>
+          <div class="font-data-label text-data-label text-primary uppercase">Featured</div>
+          <div class="font-data-tabular text-headline-md text-on-surface font-bold leading-tight mt-1 truncate">Loading slots...</div>
+        </div>
+      </div>
+    </div>
+    <div class="flex items-center justify-between px-2 py-1.5 bg-surface-container-lowest/50">
+      <div class="flex items-center gap-1.5" id="carouselDots">
+        <div class="carousel-dot active" data-dot="0"></div>
+        <div class="carousel-dot" data-dot="1"></div>
+        <div class="carousel-dot" data-dot="2"></div>
+      </div>
+      <span class="font-data-label text-[8px] text-text-muted tracking-wider" id="carouselLabel">ROTATING</span>
+    </div>
+    <div class="absolute bottom-0 left-0 w-full h-0.5 bg-surface-container-high">
+      <div class="h-full transition-all ease-linear" id="carouselProgress" style="width:0%; background: linear-gradient(90deg, #ffb781, #ff8800, #ffb781);"></div>
+    </div>
+  </div>
+
   <header class="flex flex-col gap-2 bg-surface-elevated/50 p-8 rounded-lg border border-border-slate backdrop-blur-md">
     <h1 class="font-headline-xl text-headline-xl-mobile md:text-headline-xl text-primary">AI Intelligence Wire</h1>
     <div class="flex items-center gap-2 text-on-surface-variant font-data-tabular text-data-tabular">
@@ -577,5 +609,7 @@ document.addEventListener('DOMContentLoaded', () => {
 fetchNews();
 </script>
 <script src="/static/feedback-widget.js"></script>
+<script src="/static/sponsor-carousel.js"></script>
+<script src="/static/ai-feed.js"></script>
 </body>
 </html>
