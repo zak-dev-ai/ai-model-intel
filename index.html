@@ -291,10 +291,13 @@ tailwind.config = {
         </div>
         <div class="flex gap-1 bg-surface-container-high/80 p-1 rounded border border-border-slate backdrop-blur-sm overflow-x-auto" id="filter-tabs">
           <button class="filter-btn px-3 py-1 bg-surface-bright rounded text-on-surface font-body-sm text-body-sm transition-colors shadow-sm whitespace-nowrap" data-filter="all">All Models</button>
-          <button class="filter-btn px-3 py-1 text-text-muted hover:text-on-surface font-body-sm text-body-sm transition-colors whitespace-nowrap" data-filter="budget">Budget</button>
-          <button class="filter-btn px-3 py-1 text-text-muted hover:text-on-surface font-body-sm text-body-sm transition-colors whitespace-nowrap" data-filter="vision">Vision</button>
-          <button class="filter-btn px-3 py-1 text-text-muted hover:text-on-surface font-body-sm text-body-sm transition-colors whitespace-nowrap" data-filter="code">Code</button>
-          <button class="filter-btn px-3 py-1 text-text-muted hover:text-on-surface font-body-sm text-body-sm transition-colors whitespace-nowrap" data-filter="reasoning">Reasoning</button>
+          <button class="filter-btn px-3 py-1 text-text-muted hover:text-on-surface font-body-sm text-body-sm transition-colors whitespace-nowrap" data-filter="text">📝 Text</button>
+          <button class="filter-btn px-3 py-1 text-text-muted hover:text-on-surface font-body-sm text-body-sm transition-colors whitespace-nowrap" data-filter="image">🖼 Image</button>
+          <button class="filter-btn px-3 py-1 text-text-muted hover:text-on-surface font-body-sm text-body-sm transition-colors whitespace-nowrap" data-filter="audio">🎵 Audio</button>
+          <button class="filter-btn px-3 py-1 text-text-muted hover:text-on-surface font-body-sm text-body-sm transition-colors whitespace-nowrap" data-filter="video">🎬 Video</button>
+          <button class="filter-btn px-3 py-1 text-text-muted hover:text-on-surface font-body-sm text-body-sm transition-colors whitespace-nowrap" data-filter="file">📄 File</button>
+          <button class="filter-btn px-3 py-1 text-text-muted hover:text-on-surface font-body-sm text-body-sm transition-colors whitespace-nowrap" data-filter="free">🆓 Free</button>
+          <button class="filter-btn px-3 py-1 text-text-muted hover:text-on-surface font-body-sm text-body-sm transition-colors whitespace-nowrap" data-filter="trending">🔥 Trending</button>
         </div>
       </div>
     </div>
@@ -405,7 +408,7 @@ tailwind.config = {
 </div>
 
 <script>
-const API_URL = 'https://ai-model-intel.zak-media-ai.workers.dev/pricing';
+const API_URL = '/api/models';
 const BENCHMARKS_URL = '/benchmarks.json';
 const SUPABASE_URL = 'https://jkoxrftlslylfmugjomd.supabase.co';
 const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imprb3hyZnRsc2x5bGZtdWdqb21kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4MjAzNTEsImV4cCI6MjA5MzM5NjM1MX0.1LVo1a2K2V8QZPX94bVTBmzIxUskKp0mR7RmNwgOdcI';
@@ -505,10 +508,13 @@ function getBenchmarkData(modelName) {
 
 const filters = {
   all: () => true,
-  budget: (m) => (m.input_cost_per_mtok || 999) <= 0.50,
-  vision: (m) => m.supports_vision === true || /vision|vl|visual/i.test(m.model || ''),
-  code: (m) => m.supports_functions === true || /code|dev|copilot|cursor|wizard|codestral/i.test(m.model || ''),
-  reasoning: (m) => /o1|o3|reason|thinking|r1|magistral|reflection/i.test(m.model || '')
+  text: (m) => (m.categories || []).includes('Text'),
+  image: (m) => (m.categories || []).includes('Image'),
+  audio: (m) => (m.categories || []).includes('Audio'),
+  video: (m) => (m.categories || []).includes('Video'),
+  file: (m) => (m.categories || []).includes('File'),
+  free: (m) => m.is_free === true,
+  trending: (m) => (m.trend_score || 0) > 30
 };
 
 async function fetchBenchmarks() {
@@ -530,7 +536,7 @@ async function fetchData() {
   try {
     const res = await fetch(API_URL);
     const data = await res.json();
-    allModels = data.pricing || [];
+    allModels = data.models || [];
     allModels.sort((a, b) => (a.input_cost_per_mtok || 999) - (b.input_cost_per_mtok || 999));
     lastUpdate = Date.now();
     renderAll();
