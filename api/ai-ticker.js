@@ -4,101 +4,71 @@
 export const config = { runtime: 'edge' };
 
 const ACCOUNTS = [
-  { handle: 'OpenAI', label: 'OpenAI' },
-  { handle: 'AnthropicAI', label: 'Anthropic' },
-  { handle: 'GoogleDeepMind', label: 'Google DeepMind' },
-  { handle: 'Grok', label: 'Grok' },
-  { handle: 'MistralAI', label: 'Mistral' },
-  { handle: 'cohere', label: 'Cohere' },
-  { handle: 'AIatMeta', label: 'Meta AI' },
-  { handle: 'deepseek_ai', label: 'DeepSeek' },
-  { handle: 'Alibaba_Qwen', label: 'Qwen' }
+  ['OpenAI', 'OpenAI'],
+  ['AnthropicAI', 'Anthropic'],
+  ['GoogleDeepMind', 'Google DeepMind'],
+  ['Grok', 'Grok'],
+  ['MistralAI', 'Mistral'],
+  ['cohere', 'Cohere'],
+  ['AIatMeta', 'Meta AI'],
+  ['deepseek_ai', 'DeepSeek'],
+  ['Alibaba_Qwen', 'Qwen']
 ];
 
-// Multiple Nitter mirrors for resilience
-const MIRRORS = [
-  'https://nitter.net',
-  'https://nitter.privacydev.net',
-  'https://nitter.lucabased.xyz',
-  'https://nitter.rawbit.ninja'
-];
+const COLORS = {
+  'OpenAI':'#00a67e','Anthropic':'#d4a574','Google DeepMind':'#4285f4',
+  'Grok':'#ff6b35','Mistral':'#f97316','Cohere':'#8b5cf6',
+  'Meta AI':'#0064e0','DeepSeek':'#4ade80','Qwen':'#f43f5e'
+};
 
-async function fetchWithFallback(url, retries = 2) {
-  for (let i = 0; i <= retries; i++) {
-    try {
-      const res = await fetch(url, { 
-        headers: { 'User-Agent': 'Mozilla/5.0' },
-        signal: AbortSignal.timeout(5000)
-      });
-      if (res.ok) return res;
-    } catch (e) {
-      // fall through to next attempt
-    }
+function parseRSS(text) {
+  const posts = [];
+  const items = text.split('<item>').slice(1);
+  for (const item of items.slice(0, 2)) {
+    const t = (item.match(/<title><!\[CDATA\[(.*?)\]\]><\/title>/) || [,''])[1]
+      .replace(/<[^>]*>/g,'').replace(/&apos;/g,"'").replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').trim();
+    if (!t) continue;
+    const d = (item.match(/<dc:creator>(.*?)<\/dc:creator>/) || [,''])[1].replace('@','');
+    const l = (item.match(/<link>(.*?)<\/link>/) || [,''])[1];
+    const pdate = (item.match(/<pubDate>(.*?)<\/pubDate>/) || [,''])[1];
+    posts.push({ text: t.length > 180 ? t.slice(0,177)+'...' : t, creator: d, url: l, time: pdate });
   }
-  return null;
+  return posts;
 }
 
 export default async function handler() {
   try {
-    const posts = [];
+    const fetches = ACCOUNTS.map(([handle, label]) =>
+      fetch(`https://nitter.net/${handle}/rss`, {
+        headers: { 'User-Agent': 'Mozilla/5.0' },
+        signal: AbortSignal.timeout(4000)
+      })
+      .then(r => r.ok ? r.text() : null)
+      .then(xml => {
+        if (!xml) return [];
+        return parseRSS(xml).map(p => ({
+          text: p.text,
+          account: label,
+          handle,
+          creator: p.creator,
+          url: p.url,
+          time: p.time,
+          color: COLORS[label] || '#888'
+        }));
+      })
+      .catch(() => [])
+    );
 
-    for (const account of ACCOUNTS) {
-      let success = false;
+    const results = await Promise.all(fetches);
+    const posts = results.flat();
 
-      for (const mirror of MIRRORS) {
-        if (success) break;
-        const url = `${mirror}/${account.handle}/rss`;
-        const res = await fetchWithFallback(url);
-        if (!res || !res.ok) continue;
-
-        const xml = await res.text();
-        success = true;
-
-        // Parse RSS XML — extract items with regex (lightweight, no parser dependency)
-        const itemRegex = /<item>([\s\S]*?)<\/item>/g;
-        let itemMatch;
-        let count = 0;
-
-        while ((itemMatch = itemRegex.exec(xml)) !== null && count < 3) {
-          const item = itemMatch[1];
-
-          const titleMatch = item.match(/<title><!\[CDATA\[(.*?)\]\]><\/title>/);
-          const descMatch = item.match(/<description><!\[CDATA\[(.*?)\]\]><\/description>/s);
-          const dateMatch = item.match(/<pubDate>(.*?)<\/pubDate>/);
-          const linkMatch = item.match(/<link>(.*?)<\/link>/);
-          const creatorMatch = item.match(/<dc:creator>(.*?)<\/dc:creator>/);
-
-          let text = titleMatch ? titleMatch[1] : '';
-          // Clean HTML from text
-          text = text.replace(/<[^>]*>/g, '').trim();
-          // Truncate long posts
-          if (text.length > 200) text = text.substring(0, 197) + '...';
-
-          const description = descMatch ? descMatch[1].replace(/<[^>]*>/g, '').trim() : '';
-          const date = dateMatch ? dateMatch[1] : '';
-          const link = linkMatch ? linkMatch[1] : `https://x.com/${account.handle}`;
-          const creator = creatorMatch ? creatorMatch[1].replace('@', '') : account.handle;
-
-          if (text) {
-            posts.push({
-              text,
-              account: account.label,
-              handle: account.handle,
-              creator,
-              time: date,
-              url: link,
-              id: `${account.handle}-${count}`
-            });
-            count++;
-          }
-        }
-
-        // Small delay to avoid rate limiting
-        await new Promise(r => setTimeout(r, 200));
-      }
+    // Shuffle for variety
+    for (let i = posts.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [posts[i], posts[j]] = [posts[j], posts[i]];
     }
 
-    return new Response(JSON.stringify({ posts, updated: new Date().toISOString() }), {
+    return new Response(JSON.stringify({ posts, count: posts.length }), {
       status: 200,
       headers: {
         'Content-Type': 'application/json',
@@ -107,8 +77,7 @@ export default async function handler() {
     });
 
   } catch (error) {
-    console.error('Ticker error:', error);
-    return new Response(JSON.stringify({ posts: [], error: error.message, updated: new Date().toISOString() }), {
+    return new Response(JSON.stringify({ posts: [], count: 0, error: error.message }), {
       status: 200,
       headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-cache' }
     });
