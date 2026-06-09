@@ -50,7 +50,7 @@
       }
 
       track.innerHTML = posts.map(p =>
-        '<span class="ticker-item" onclick="window.open(\''+p.url.replace(/'/g,'')+'\',\'_blank\')">' +
+        '<span class="feed-item" onclick="window.open(\''+p.url.replace(/'/g,'')+'\',\'_blank\')">' +
         '<span class="badge" style="color:'+p.color+';background:'+p.color+'15;border:1px solid '+p.color+'30">'+p.account+'</span>' +
         '<span class="text">'+p.text.replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</span>' +
         '<span class="sep">•</span></span>'

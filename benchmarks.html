@@ -24,14 +24,14 @@
   .benchmark-low { background: rgba(255, 85, 0, 0.15); color: #ff5500; border: 1px solid rgba(255, 85, 0, 0.3); }
   /* AI News Ticker */
   #ai-ticker { height: 38px; }
-  .ticker-track { display: flex; animation: ticker-scroll 180s linear infinite; width: max-content; white-space: nowrap; will-change: transform; }
-  .ticker-item { display: inline-flex; align-items: center; gap: 10px; padding: 0 32px; font-size: 13px; color: #ccc; flex-shrink: 0; cursor: pointer; transition: color 0.2s; }
-  .ticker-item:hover { color: #ffb781; }
-  .ticker-item .badge { padding: 1px 8px; border-radius: 3px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; font-family: 'JetBrains Mono', monospace; white-space: nowrap; }
-  .ticker-item .sep { color: rgba(255,255,255,0.12); font-size: 10px; }
-  .ticker-item .text { overflow: hidden; text-overflow: ellipsis; max-width: 380px; display: inline-block; vertical-align: middle; white-space: nowrap; }
-  @keyframes ticker-scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-  #ai-ticker:hover .ticker-track { animation-play-state: paused; }
+  .feed-track { display: flex; animation: feed-scroll 180s linear infinite; width: max-content; white-space: nowrap; will-change: transform; }
+  @keyframes feed-scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+  .feed-item { display: inline-flex; align-items: center; gap: 10px; padding: 0 32px; font-size: 13px; color: #ccc; flex-shrink: 0; cursor: pointer; transition: color 0.2s; }
+  .feed-item:hover { color: #ffb781; }
+  .feed-item .badge { padding: 1px 8px; border-radius: 3px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; font-family: 'JetBrains Mono', monospace; white-space: nowrap; }
+  .feed-item .sep { color: rgba(255,255,255,0.12); font-size: 10px; }
+  .feed-item .text { overflow: hidden; text-overflow: ellipsis; max-width: 380px; display: inline-block; vertical-align: middle; white-space: nowrap; }
+  #ai-ticker:hover .feed-track { animation-play-state: paused; }
 </style>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -58,7 +58,7 @@
       <span class="text-xs font-bold uppercase tracking-wider text-terminal-cyan" style="font-family:'JetBrains Mono',monospace;">AI Feed</span>
     </div>
     <div class="overflow-hidden flex-1 relative">
-      <div class="flex ticker-track" id="tickerTrack">
+      <div class="flex feed-track" id="tickerTrack">
       </div>
     </div>
   </div>
