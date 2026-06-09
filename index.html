@@ -67,7 +67,7 @@ tailwind.config = {
   .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
   .glass-panel { background: rgba(15, 15, 15, 0.6); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5); }
   @keyframes ticker-scroll { 0% { transform: translateX(0) translateZ(0); } 100% { transform: translateX(-50%) translateZ(0); } }
-  .ticker-track { display: flex; width: max-content; animation: ticker-scroll 120s linear infinite; will-change: transform; }
+  .ticker-track { display: flex; width: max-content; animation: ticker-scroll 180s linear infinite; will-change: transform; }
   .table-row-hover { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   .table-row-hover:hover { background-color: rgba(255, 183, 129, 0.08) !important; transform: translateX(4px); box-shadow: -4px 0 0 0 #ffb781; }
   .card-hover { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
@@ -98,7 +98,7 @@ tailwind.config = {
   .carousel-slide-inactive { opacity: 0 !important; transform: scale(0.96) translateY(4px) !important; pointer-events: none !important; }
   /* AI News Ticker */
   #ai-ticker { height: 38px; }
-  .ticker-track { display: flex; animation: ticker-scroll 120s linear infinite; white-space: nowrap; will-change: transform; }
+  /* .ticker-track defined above */
   .ticker-item { display: inline-flex; align-items: center; gap: 10px; padding: 0 32px; font-size: 13px; color: #ccc; flex-shrink: 0; cursor: pointer; transition: color 0.2s; }
   .ticker-item:hover { color: #ffb781; }
   .ticker-item .badge { padding: 1px 8px; border-radius: 3px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; font-family: 'JetBrains Mono', monospace; white-space: nowrap; }
