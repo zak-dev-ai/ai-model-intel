@@ -96,6 +96,19 @@ tailwind.config = {
   .carousel-slide { will-change: transform, opacity; backface-visibility: hidden; }
   .carousel-slide-active { opacity: 1 !important; transform: scale(1) translateY(0) !important; pointer-events: auto !important; }
   .carousel-slide-inactive { opacity: 0 !important; transform: scale(0.96) translateY(4px) !important; pointer-events: none !important; }
+  /* AI News Ticker */
+  #ai-ticker { height: 38px; }
+  .ticker-track { display: flex; animation: ticker-scroll 60s linear infinite; white-space: nowrap; will-change: transform; }
+  .ticker-item { display: inline-flex; align-items: center; gap: 10px; padding: 0 32px; font-size: 13px; color: #ccc; flex-shrink: 0; cursor: pointer; transition: color 0.2s; }
+  .ticker-item:hover { color: #ffb781; }
+  .ticker-item .badge { padding: 1px 8px; border-radius: 3px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; font-family: 'JetBrains Mono', monospace; white-space: nowrap; }
+  .ticker-item .sep { color: rgba(255,255,255,0.12); font-size: 10px; }
+  .ticker-item .text { overflow: hidden; text-overflow: ellipsis; max-width: 380px; display: inline-block; vertical-align: middle; white-space: nowrap; }
+  .ticker-fade-left, .ticker-fade-right { position: absolute; top: 0; bottom: 0; width: 40px; z-index: 2; pointer-events: none; }
+  .ticker-fade-left { left: 0; background: linear-gradient(to right, rgba(19,19,19,0.95) 0%, transparent 100%); }
+  .ticker-fade-right { right: 0; background: linear-gradient(to left, rgba(19,19,19,0.95) 0%, transparent 100%); }
+  @keyframes ticker-scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+  #ai-ticker:hover .ticker-track { animation-play-state: paused; }
 </style>
 </head>
 <body class="min-h-screen flex flex-col font-body-sm relative pt-10">
@@ -163,6 +176,21 @@ tailwind.config = {
   <a href="/blog.html" onclick="toggleMenu()"><span class="material-symbols-outlined">article</span> News</a>
   <a href="https://rapidapi.com/zakmediaai/api/octopus-ai-model-intel" target="_blank" onclick="toggleMenu()"><span class="material-symbols-outlined">code</span> API</a>
   <a href="#" onclick="toggleMenu(); openPartnerModal(); return false;"><span class="material-symbols-outlined text-bloomberg-orange">handshake</span> Partner</a>
+</div>
+
+<!-- AI News Ticker -->
+<div id="ai-ticker" class="relative w-full overflow-hidden border-y border-outline-variant/20 bg-surface/80 backdrop-blur-md" style="display:none;">
+  <div class="flex items-center max-w-container-max mx-auto">
+    <div class="flex-shrink-0 px-4 py-2 border-r border-outline-variant/20 flex items-center gap-1.5" style="min-width:fit-content;">
+      <span class="material-symbols-outlined text-terminal-cyan" style="font-size:16px;">rss_feed</span>
+      <span class="text-xs font-bold uppercase tracking-wider text-terminal-cyan" style="font-family:'JetBrains Mono',monospace;">AI Feed</span>
+    </div>
+    <div class="overflow-hidden flex-1 relative">
+      <div class="flex ticker-track" id="tickerTrack">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+  </div>
 </div>
 
 <main class="flex-grow w-full max-w-container-max mx-auto px-margin-edge py-10 flex flex-col gap-10">
@@ -962,5 +990,52 @@ document.addEventListener('DOMContentLoaded', () => {
 })();
 </script>
 <script src="/static/feedback-widget.js"></script>
+<script>
+// AI News Ticker
+(async function initTicker() {
+  const API = '/api/ai-ticker';
+  const ticker = document.getElementById('ai-ticker');
+  const track = document.getElementById('tickerTrack');
+  if (!ticker || !track) return;
+
+  try {
+    const res = await fetch(API, { cache: 'no-store' });
+    if (!res.ok) throw new Error('API error');
+    const data = await res.json();
+    if (!data.posts || data.posts.length < 2) { return; }
+
+    // Build items HTML
+    function buildItems(posts) {
+      return posts.map(p => {
+        const accountColors = {
+          'OpenAI': '#00a67e',
+          'Anthropic': '#d4a574',
+          'Google DeepMind': '#4285f4',
+          'Grok': '#ff6b35',
+          'Mistral': '#f97316',
+          'Cohere': '#8b5cf6',
+          'Meta AI': '#0064e0',
+          'DeepSeek': '#4ade80',
+          'Qwen': '#f43f5e'
+        };
+        const color = accountColors[p.account] || '#888';
+        return `<span class="ticker-item" onclick="window.open('${p.url.replace(/'/g, '')}','_blank')">
+          <span class="badge" style="color:${color};background:${color}15;border:1px solid ${color}30">${p.account}</span>
+          <span class="text">${p.text.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</span>
+          <span class="sep">•</span>
+        </span>`;
+      }).join('');
+    }
+
+    const html = buildItems(data.posts);
+    // Double it for seamless infinite scroll
+    track.innerHTML = html + html;
+    ticker.style.display = 'block';
+  } catch (e) {
+    // Silent fail — ticker just won't show
+    console.warn('Ticker unavailable:', e.message);
+  }
+})();
+</script>
 </body>
 </html>
