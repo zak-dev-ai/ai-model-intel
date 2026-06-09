@@ -1,6 +1,6 @@
 // Sponsor Carousel — shared across all pages
 // Rotates 3 sponsor slots every 20s. Loads live data from /api/sponsorship/active.
-(() => {
+(function initSponsorCarousel() {
   const SLIDE_INTERVAL = 20000;
   let sponsorSlots = [null, null, null];
   let currentSlide = 0;
@@ -145,9 +145,6 @@
     resetProgress();
   }
 
-  // Init
-  loadSponsors();
-
   // Pause/resume on hover
   setTimeout(() => {
     const card = document.getElementById('sponsorCarouselCard');
@@ -165,4 +162,25 @@
       if (!isNaN(idx)) showSlide(idx);
     }
   });
+
+  // Wait for DOM to be fully ready, then start
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', start);
+  } else {
+    start();
+  }
+
+  function start() {
+    var el = document.getElementById('sponsorCarousel');
+    if (!el) {
+      console.warn('Sponsor carousel: #sponsorCarousel not found, retrying...');
+      // Retry once after a short delay (pages with async content may need it)
+      setTimeout(function() {
+        el = document.getElementById('sponsorCarousel');
+        if (el) { loadSponsors(); }
+      }, 500);
+      return;
+    }
+    loadSponsors();
+  }
 })();
