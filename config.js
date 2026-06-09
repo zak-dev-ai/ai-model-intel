@@ -6,20 +6,76 @@ const DEFAULT_CONFIG = {
     refTag: 'aimodelranks' // Your referral tag
   },
   referrals: {
+    // Major AI providers — official API consoles
     'openai': 'https://platform.openai.com/api-keys',
+    '~openai': 'https://platform.openai.com/api-keys',
     'anthropic': 'https://console.anthropic.com/',
+    '~anthropic': 'https://console.anthropic.com/',
     'google': 'https://aistudio.google.com/app/apikey',
+    '~google': 'https://aistudio.google.com/app/apikey',
     'mistral': 'https://console.mistral.ai/',
-    'groq': 'https://console.groq.com/',
-    'together': 'https://api.together.xyz/',
-    'openrouter': 'https://openrouter.ai/',
-    'fireworks': 'https://fireworks.ai/',
+    'meta': 'https://llama.meta.com/',
+    'meta-llama': 'https://llama.meta.com/',
     'deepseek': 'https://platform.deepseek.com/',
     'xai': 'https://console.x.ai/',
+    'x-ai': 'https://console.x.ai/',
     'cohere': 'https://dashboard.cohere.com/',
-    'meta': 'https://llama.meta.com/',
+    'perplexity': 'https://docs.perplexity.ai/',
+    'groq': 'https://console.groq.com/',
+    'together': 'https://api.together.xyz/',
+    'fireworks': 'https://fireworks.ai/',
+    'openrouter': 'https://openrouter.ai/',
+    // Enterprise & Cloud
+    'amazon': 'https://aws.amazon.com/bedrock/',
+    'microsoft': 'https://azure.microsoft.com/en-us/products/ai-services/',
+    'ibm-granite': 'https://www.ibm.com/granite',
+    'nvidia': 'https://build.nvidia.com/explore/discover',
+    // Chinese AI Labs
+    'alibaba': 'https://www.alibabacloud.com/en/solutions/generative-ai/qwen',
+    'qwen': 'https://chat.qwen.ai/',
+    'baidu': 'https://yiyan.baidu.com/',
+    'bytedance': 'https://www.volcengine.com/product/doubao',
+    'bytedance-seed': 'https://team.doubao.com/',
+    'tencent': 'https://cloud.tencent.com/product/hunyuan',
+    'xiaomi': 'https://www.xiaomiev.com/',
+    'moonshot': 'https://platform.moonshot.cn/',
+    '~moonshotai': 'https://platform.moonshot.cn/',
+    'z-ai': 'https://z.ai/',
+    'minimax': 'https://www.minimaxi.com/',
+    'stepfun': 'https://platform.stepfun.com/',
+    // Open source & research labs
+    'allenai': 'https://allenai.org/',
+    'nex-agi': 'https://nex-agi.com/',
+    'inception': 'https://www.inceptionlabs.ai/',
+    'liquid': 'https://www.liquid.ai/',
+    'poolside': 'https://www.poolside.ai/',
+    'primeintellect': 'https://www.primeintellect.ai/',
+    'rekaai': 'https://www.reka.ai/',
+    'ai21': 'https://www.ai21.com/',
+    'upstage': 'https://www.upstage.ai/',
+    'writer': 'https://writer.com/',
+    'essentialai': 'https://www.essential.ai/',
+    'perceptron': 'https://www.perceptron.ai/',
+    'inflection': 'https://inflection.ai/',
+    'aion-labs': 'https://aionlabs.com/',
+    'deepcogito': 'https://deepcogito.com/',
+    'morph': 'https://www.morph.so/',
+    'inclusionai': 'https://inclusion.ai/',
+    'kwaipilot': 'https://mancer.tech/',
+    'mancer': 'https://mancer.tech/',
+    'arthropod': 'https://arthropod.ai/',
+    'switchpoint': 'https://switchpoint.io/',
+    'relace': 'https://relace.ai/',
+    // Community & open source
+    'nous': 'https://nousresearch.com/',
+    'anthracite-org': 'https://huggingface.co/anthracite-org',
+    'cognitivecomputations': 'https://cognitivecomputations.com/',
+    'gryphe': 'https://huggingface.co/Gryphe',
+    'sao10k': 'https://huggingface.co/Sao10K',
+    'thedrummer': 'https://huggingface.co/TheDrummer',
+    'undi95': 'https://huggingface.co/Undi95',
+    // Other tools
     'cursor': 'https://cursor.sh',
-    'perplexity': 'https://perplexity.ai',
     'github': 'https://github.com/features/copilot',
     'replit': 'https://replit.com',
     'pinecone': 'https://www.pinecone.io/',
@@ -38,10 +94,15 @@ window.ConfigManager = {
   get: () => DEFAULT_CONFIG,
   getReferral: (provider) => {
     const key = (provider || '').toLowerCase().trim();
-    let url = DEFAULT_CONFIG.referrals[key] || DEFAULT_CONFIG.referrals['openrouter'] || '#';
+    let url = DEFAULT_CONFIG.referrals[key] || null;
     
-    // Auto-append referral tag
-    if (url && url !== '#') {
+    // Fallback: try to guess provider website, otherwise use OpenRouter model page
+    if (!url) {
+      url = `https://openrouter.ai/models?q=${encodeURIComponent(provider)}`;
+    }
+    
+    // Auto-append referral tag only for known providers
+    if (url && url !== '#' && DEFAULT_CONFIG.referrals[key]) {
       const separator = url.includes('?') ? '&' : '?';
       url = `${url}${separator}ref=${DEFAULT_CONFIG.site.refTag}`;
     }
