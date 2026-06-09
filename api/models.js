@@ -63,6 +63,31 @@ function getCategories(arch) {
   return cats;
 }
 
+// Use-case tagging from model name + description
+const USE_CASE_PATTERNS = [
+  { tag: 'Programming', re: /programming|coding?|developer|copilot|cursor|coder|wizard|engineer|code llama|starcoder|deepseek.*coder|codeshell|codegemma|codestral|codeqwen|qwen.*coder|dev(|el)/i },
+  { tag: 'Roleplay', re: /roleplay|rp\b|character|storytell|creative writing|narrative|fiction|novel|imagination|rpg|chatbot|companion|waifu/i },
+  { tag: 'Marketing', re: /market(?:ing)?|advertise|campaign|copywrit|brand|seo\b|content.*(creator|writer|generator)|social media/i },
+  { tag: 'SEO', re: /\bseo\b|search engine|keyword|serp|backlink|ranking.*optim/i },
+  { tag: 'Technology', re: /tech(?:nology)?|\bai\b|machine learning|deep learning|neural|transformer|llm\b|open source|opensource/i },
+  { tag: 'Science', re: /scien(?:ce|tific)|research|biology|chemistry|physics|math(?:ematics)?|quantum|astronomy|lab|experiment|scientific/i },
+  { tag: 'Translation', re: /translat(?:e|ion)|multilingual|polyglot|language.*pair|i18n|l10n|bilingual|cross.lingual/i },
+  { tag: 'Legal', re: /legal|law|attorney|legislat|court|contract|compliance|regulatory|gdpr/i },
+  { tag: 'Finance', re: /financ(?:e|ial)|trading|stock|market|invest|banking|crypto|blockchain|defi|portfolio|wealth/i },
+  { tag: 'Health', re: /health|medical|clinical|diagnos(?:is|tic)|patient|doctor|pharma|drug|therapy|surgery|hospital|disease|medic(?:al|ine)|anatomy/i },
+  { tag: 'Trivia', re: /trivia|quiz|general knowledge|facts|q\&a|question.*answer/i },
+  { tag: 'Academia', re: /academ(?:ic|ia)|education|teach|tutor|learning|university|college|school|scholar|research.*paper|essay/i }
+];
+
+function getUseCases(name, desc) {
+  const text = ((name || '') + ' ' + (desc || '')).toLowerCase();
+  const cases = [];
+  for (const p of USE_CASE_PATTERNS) {
+    if (p.re.test(text)) cases.push(p.tag);
+  }
+  return cases.length ? cases : ['Technology']; // default: most AI models are tech
+}
+
 function getSignal(isFree, price) {
   if (isFree) return '🆓 Free — no cost to use';
   if (price <= 0.1) return '💰 Ultra-budget tier — ideal for massive scale';
@@ -116,6 +141,7 @@ export default async function handler(req) {
         const completionPrice = parseFloat(m.pricing?.completion || '0');
         const isFree = promptPrice === 0 && completionPrice === 0;
         const categories = getCategories(m.architecture);
+        const useCases = getUseCases(m.name || '', m.description || '');
         const trendScore = getTrendScore(m);
         const provider = getProvider(m.id);
 
@@ -137,6 +163,7 @@ export default async function handler(req) {
           context_window: ctx,
           max_output_tokens: m.top_provider?.max_completion_tokens || null,
           categories,
+          use_cases: useCases,
           modality: m.architecture?.modality || 'text->text',
           is_free: isFree,
           value_score: valueScore,
