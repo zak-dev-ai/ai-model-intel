@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1920, height=1080" />
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: #0a0a0a; }
+  body { font-family: "Geist", sans-serif; color: #e5e2e1; }
+
+  .scene { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+
+  /* Scene 1: Title */
+  .logo-icon { font-size: 120px; }
+  .title-main { font-size: 96px; font-weight: 900; letter-spacing: -0.03em; background: linear-gradient(90deg, #ffb781 0%, #ff8800 50%, #ffb781 100%); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .subtitle { font-size: 28px; color: #888; font-family: "JetBrains Mono", monospace; letter-spacing: 0.1em; }
+  .matrix-badge { display: inline-flex; align-items: center; gap: 10px; padding: 8px 24px; border: 1px solid rgba(0,255,65,0.3); border-radius: 4px; font-family: "JetBrains Mono", monospace; font-size: 18px; color: #00ff41; letter-spacing: 0.15em; }
+  .dot-green { width: 8px; height: 8px; border-radius: 50%; background: #00ff41; }
+
+  /* Scene 2: Stats */
+  .stat-number { font-size: 120px; font-weight: 900; font-family: "JetBrains Mono", monospace; color: #ff8800; line-height: 1; }
+  .stat-label { font-size: 24px; color: #888; font-family: "JetBrains Mono", monospace; letter-spacing: 0.05em; text-transform: uppercase; margin-top: 8px; }
+  .stat-card { display: flex; flex-direction: column; align-items: center; padding: 32px 48px; border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; background: rgba(15,15,15,0.6); backdrop-filter: blur(24px); }
+
+  /* Scene 3: Value Props */
+  .feature-line { font-size: 42px; font-weight: 600; color: #e5e2e1; margin: 12px 0; }
+  .feature-line .accent { color: #06B6D4; }
+  .check { color: #00ff41; margin-right: 16px; }
+
+  /* Scene 4: Numbers grid */
+  .numbers-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; width: 80%; max-width: 1400px; }
+  .num-card { text-align: center; padding: 40px 24px; border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; background: rgba(15,15,15,0.5); }
+  .num-value { font-size: 56px; font-weight: 900; font-family: "JetBrains Mono", monospace; }
+  .num-label { font-size: 16px; color: #888; font-family: "JetBrains Mono", monospace; text-transform: uppercase; margin-top: 8px; letter-spacing: 0.05em; }
+
+  /* Scene 5: Features */
+  .features-row { display: flex; gap: 40px; align-items: center; justify-content: center; width: 80%; }
+  .ft-card { flex: 1; max-width: 320px; padding: 40px 32px; border: 1px solid rgba(255,183,129,0.2); border-radius: 16px; background: rgba(15,15,15,0.7); text-align: center; }
+  .ft-icon { font-size: 48px; margin-bottom: 16px; }
+  .ft-title { font-size: 22px; font-weight: 700; color: #ffb781; margin-bottom: 8px; }
+  .ft-desc { font-size: 15px; color: #888; }
+
+  /* Scene 6: CTA */
+  .cta-url { font-size: 72px; font-weight: 900; font-family: "JetBrains Mono", monospace; color: #ff8800; letter-spacing: -0.02em; }
+  .cta-tagline { font-size: 32px; color: #888; margin-top: 16px; }
+  .cta-button { display: inline-flex; align-items: center; gap: 12px; margin-top: 32px; padding: 16px 48px; background: linear-gradient(135deg, #ff8800, #ff6600); border-radius: 8px; font-size: 24px; font-weight: 700; color: #0a0a0a; }
+  .gradient-bar { position: absolute; bottom: 0; left: 0; width: 100%; height: 3px; background: linear-gradient(90deg, #ffb781, #ff8800, #ffb781); }
+
+  /* Glow effects */
+  .glow-orange { text-shadow: 0 0 40px rgba(255,136,0,0.4), 0 0 80px rgba(255,136,0,0.2); }
+  .glow-green { text-shadow: 0 0 20px rgba(0,255,65,0.5); }
+
+  /* Dot grid background */
+  .dot-grid { position: absolute; inset: 0; background-image: radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px); background-size: 32px 32px; pointer-events: none; }
+
+  /* Particle accent */
+  .particle { position: absolute; width: 4px; height: 4px; border-radius: 50%; background: #ff8800; }
+
+  /* Recording overlay */
+  #recorder-ui { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+  #recorder-ui button { padding: 10px 24px; border: none; border-radius: 6px; font-family: "Geist", sans-serif; font-size: 16px; font-weight: 600; cursor: pointer; background: #ff8800; color: #0a0a0a; transition: opacity 0.2s; }
+  #recorder-ui button:hover { opacity: 0.85; }
+  #recorder-ui button:disabled { opacity: 0.4; cursor: not-allowed; }
+  #recorder-ui button.danger { background: #e3342f; color: white; }
+  #recorder-ui button.success { background: #00ff41; color: #0a0a0a; }
+  #recorder-ui .status { font-family: "JetBrains Mono", monospace; font-size: 13px; color: #888; text-align: right; }
+  #recorder-ui .status.recording { color: #ff4444; animation: pulse 1s infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+  #recorder-ui .countdown { font-family: "JetBrains Mono", monospace; font-size: 24px; color: #ff8800; font-weight: 700; }
+</style>
+</head>
+<body>
+
+<!-- RECORDING UI -->
+<div id="recorder-ui">
+  <div class="status" id="recStatus">⏸ Ready</div>
+  <div class="countdown" id="countdown"></div>
+  <button id="recBtn">🎬 Record & Download</button>
+</div>
+
+<div id="root" data-composition-id="main" data-start="0" data-duration="21" data-width="1920" data-height="1080">
+  <!-- Background -->
+  <div class="dot-grid" style="position:absolute;inset:0;opacity:0.5"></div>
+
+  <!-- SCENE 1: Title (0-3s) -->
+  <div id="scene1" class="scene" style="z-index:10">
+    <div style="text-align:center">
+      <div style="display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:24px">
+        <div id="liveDot" class="dot-green" style="width:12px;height:12px;border-radius:50%"></div>
+        <span id="liveBadge" class="matrix-badge">LIVE TERMINAL</span>
+      </div>
+      <h1 id="mainTitle" class="title-main glow-orange">AI Model Ranks</h1>
+      <p id="mainSub" class="subtitle" style="margin-top:20px">— THE BLOOMBERG TERMINAL FOR AI —</p>
+    </div>
+  </div>
+
+  <!-- SCENE 2: Big Stat Numbers (3-6s) -->
+  <div id="scene2" class="scene" style="z-index:9; opacity:0">
+    <div style="display:flex;gap:48px">
+      <div id="statCard1" class="stat-card">
+        <div id="statNum1" class="stat-number glow-orange">200+</div>
+        <div class="stat-label">Models Tracked</div>
+      </div>
+      <div id="statCard2" class="stat-card">
+        <div id="statNum2" class="stat-number" style="color:#00ff41;text-shadow:0 0 30px rgba(0,255,65,0.4)">$0.15</div>
+        <div class="stat-label">Avg / 1M Tokens</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCENE 3: Value Props (6-10s) -->
+  <div id="scene3" class="scene" style="z-index:8; opacity:0">
+    <div style="text-align:left; width:70%">
+      <div id="fp1" class="feature-line">🔍 <span class="accent">Compare</span> Every LLM — In One Place</div>
+      <div id="fp2" class="feature-line">💰 <span class="accent">Find</span> the Cheapest API Instantly</div>
+      <div id="fp3" class="feature-line">📊 <span class="accent">Track</span> Real-Time Pricing Updates</div>
+      <div id="fp4" class="feature-line">⚡ <span class="accent">Stop</span> Overpaying for AI Infrastructure</div>
+    </div>
+  </div>
+
+  <!-- SCENE 4: Stats Grid (10-14s) -->
+  <div id="scene4" class="scene" style="z-index:7; opacity:0">
+    <div class="numbers-grid">
+      <div id="nc1" class="num-card"><div class="num-value" style="color:#ff8800">196</div><div class="num-label">Total Models</div></div>
+      <div id="nc2" class="num-card"><div class="num-value" style="color:#00ff41">$0.15</div><div class="num-label">Avg Cost /1M</div></div>
+      <div id="nc3" class="num-card"><div class="num-value" style="color:#06B6D4">4</div><div class="num-label">Benchmarks</div></div>
+      <div id="nc4" class="num-card"><div class="num-value" style="color:#ffb781">∞</div><div class="num-label">Live Updates</div></div>
+    </div>
+  </div>
+
+  <!-- SCENE 5: Feature Cards (14-18s) -->
+  <div id="scene5" class="scene" style="z-index:6; opacity:0">
+    <div class="features-row">
+      <div id="ftc1" class="ft-card">
+        <div class="ft-icon">📈</div>
+        <div class="ft-title">Real-Time Pricing</div>
+        <div class="ft-desc">Input & output costs across 200+ models updated live</div>
+      </div>
+      <div id="ftc2" class="ft-card">
+        <div class="ft-icon">🧪</div>
+        <div class="ft-title">Benchmark Scores</div>
+        <div class="ft-desc">MMLU, HumanEval, GPQA & Arena Elo ratings</div>
+      </div>
+      <div id="ftc3" class="ft-card">
+        <div class="ft-icon">🔌</div>
+        <div class="ft-title">API Access</div>
+        <div class="ft-desc">Integrate live pricing into your backend via RapidAPI</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCENE 6: CTA (18-21s) -->
+  <div id="scene6" class="scene" style="z-index:5; opacity:0">
+    <div style="text-align:center">
+      <h1 id="ctaTitle" class="cta-url glow-orange">aimodelranks.live</h1>
+      <p id="ctaTag" class="cta-tagline">Stop guessing. Start comparing.</p>
+      <div id="ctaBtn" class="cta-button">🚀 Visit Now</div>
+    </div>
+  </div>
+
+  <!-- Bottom accent bar -->
+  <div class="gradient-bar"></div>
+
+  <!-- Floating particles -->
+  <div class="particle" style="top:15%;left:10%"></div>
+  <div class="particle" style="top:25%;left:85%"></div>
+  <div class="particle" style="top:70%;left:20%"></div>
+  <div class="particle" style="top:60%;left:75%"></div>
+  <div class="particle" style="top:80%;left:50%"></div>
+</div>
+
+<script>
+// ==================== ANIMATION TIMELINE ====================
+window.__timelines = window.__timelines || {};
+const tl = gsap.timeline({ paused: true });
+
+// Fade in scene 1
+tl.from("#liveDot", { opacity: 0, scale: 0, duration: 0.5 }, 0);
+tl.from("#liveBadge", { opacity: 0, y: -20, duration: 0.5 }, 0.2);
+tl.from("#mainTitle", { opacity: 0, y: 40, scale: 0.9, duration: 0.8, ease: "power3.out" }, 0.4);
+tl.from("#mainSub", { opacity: 0, y: 20, duration: 0.5 }, 1.2);
+
+// Transition scene 1 out, scene 2 in
+tl.to("#scene1", { opacity: 0, duration: 0.4, ease: "power2.in" }, 2.6);
+tl.fromTo("#scene2", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 2.8);
+tl.from("#statCard1", { opacity: 0, scale: 0.8, y: 30, duration: 0.6, ease: "back.out(1.5)" }, 3.0);
+tl.from("#statCard2", { opacity: 0, scale: 0.8, y: 30, duration: 0.6, ease: "back.out(1.5)" }, 3.2);
+
+// Scene 3: Value props
+tl.to("#scene2", { opacity: 0, duration: 0.3, ease: "power2.in" }, 5.7);
+tl.fromTo("#scene3", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 5.8);
+tl.from("#fp1", { opacity: 0, x: -40, duration: 0.4 }, 6.0);
+tl.from("#fp2", { opacity: 0, x: -40, duration: 0.4 }, 6.5);
+tl.from("#fp3", { opacity: 0, x: -40, duration: 0.4 }, 7.0);
+tl.from("#fp4", { opacity: 0, x: -40, duration: 0.4 }, 7.5);
+
+// Scene 4: Stats grid
+tl.to("#scene3", { opacity: 0, duration: 0.3 }, 9.7);
+tl.fromTo("#scene4", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 9.8);
+tl.from("#nc1", { opacity: 0, scale: 0.5, duration: 0.5, ease: "back.out(1.5)" }, 10.0);
+tl.from("#nc2", { opacity: 0, scale: 0.5, duration: 0.5, ease: "back.out(1.5)" }, 10.2);
+tl.from("#nc3", { opacity: 0, scale: 0.5, duration: 0.5, ease: "back.out(1.5)" }, 10.4);
+tl.from("#nc4", { opacity: 0, scale: 0.5, duration: 0.5, ease: "back.out(1.5)" }, 10.6);
+
+// Scene 5: Feature cards
+tl.to("#scene4", { opacity: 0, duration: 0.3 }, 13.7);
+tl.fromTo("#scene5", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 13.8);
+tl.from("#ftc1", { opacity: 0, y: 30, duration: 0.5, ease: "power3.out" }, 14.0);
+tl.from("#ftc2", { opacity: 0, y: 30, duration: 0.5, ease: "power3.out" }, 14.3);
+tl.from("#ftc3", { opacity: 0, y: 30, duration: 0.5, ease: "power3.out" }, 14.6);
+
+// Scene 6: CTA
+tl.to("#scene5", { opacity: 0, duration: 0.3 }, 17.7);
+tl.fromTo("#scene6", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 17.8);
+tl.from("#ctaTitle", { opacity: 0, scale: 0.8, duration: 0.7, ease: "power3.out" }, 18.0);
+tl.from("#ctaTag", { opacity: 0, y: 20, duration: 0.5 }, 18.6);
+tl.from("#ctaBtn", { opacity: 0, y: 20, scale: 0.9, duration: 0.5, ease: "back.out(1.5)" }, 19.0);
+
+window.__timelines["main"] = tl;
+
+// ==================== RECORDER ====================
+const recBtn = document.getElementById('recBtn');
+const recStatus = document.getElementById('recStatus');
+const countdown = document.getElementById('countdown');
+
+let recording = false;
+let mediaRecorder = null;
+let recordedChunks = [];
+
+function resetTimeline() {
+  tl.seek(0);
+  tl.pause();
+  // Reset all scenes visible state
+  document.querySelectorAll('.scene').forEach(el => {
+    el.style.opacity = '0';
+  });
+  document.getElementById('scene1').style.opacity = '1';
+}
+
+recBtn.addEventListener('click', async () => {
+  if (recording) {
+    // Stop recording early
+    if (mediaRecorder && mediaRecorder.state === 'recording') {
+      mediaRecorder.stop();
+    }
+    tl.pause();
+    recording = false;
+    recBtn.textContent = '🎬 Record & Download';
+    recBtn.className = '';
+    recStatus.textContent = '⏹ Stopped';
+    recStatus.className = 'status';
+    countdown.textContent = '';
+    return;
+  }
+
+  try {
+    // Request screen capture
+    const stream = await navigator.mediaDevices.getDisplayMedia({
+      preferredDisplaySurface: 'browser',
+      video: {
+        width: { ideal: 1920 },
+        height: { ideal: 1080 },
+        frameRate: { ideal: 30 }
+      },
+      audio: false
+    });
+
+    // Set up recorder
+    recordedChunks = [];
+    mediaRecorder = new MediaRecorder(stream, {
+      mimeType: MediaRecorder.isTypeSupported('video/webm;codecs=vp9')
+        ? 'video/webm;codecs=vp9'
+        : 'video/webm'
+    });
+
+    mediaRecorder.ondataavailable = (e) => {
+      if (e.data.size > 0) recordedChunks.push(e.data);
+    };
+
+    mediaRecorder.onstop = () => {
+      stream.getTracks().forEach(t => t.stop());
+      const blob = new Blob(recordedChunks, { type: 'video/webm' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'aimodelranks-promo.webm';
+      a.click();
+      URL.revokeObjectURL(url);
+      recording = false;
+      recBtn.textContent = '🎬 Record & Download';
+      recBtn.className = '';
+      recStatus.textContent = '✅ Downloaded!';
+      recStatus.className = 'status';
+      countdown.textContent = '';
+    };
+
+    // Reset and start
+    resetTimeline();
+    recording = true;
+    recBtn.textContent = '⏹ Stop Recording';
+    recBtn.className = 'danger';
+    recStatus.textContent = '● RECORDING';
+    recStatus.className = 'status recording';
+
+    // Wait a beat for the stream to initialize
+    await new Promise(r => setTimeout(r, 500));
+
+    // Start recording
+    mediaRecorder.start();
+    const startTime = Date.now();
+
+    // Play animation
+    tl.play();
+
+    // Countdown timer
+    function updateCountdown() {
+      if (!recording) return;
+      const elapsed = (Date.now() - startTime) / 1000;
+      const remaining = Math.max(0, 22 - elapsed);
+      countdown.textContent = remaining > 0 ? `${remaining.toFixed(1)}s` : '⏹';
+      if (remaining > 0) requestAnimationFrame(updateCountdown);
+    }
+    updateCountdown();
+
+    // Auto-stop after 22 seconds
+    setTimeout(() => {
+      if (mediaRecorder && mediaRecorder.state === 'recording') {
+        mediaRecorder.stop();
+        tl.pause();
+      }
+    }, 22500);
+
+  } catch (err) {
+    if (err.name === 'NotAllowedError' || err.name === 'AbortError') {
+      recStatus.textContent = '⚠ Screen share cancelled';
+      recStatus.className = 'status';
+      return;
+    }
+    console.error('Recording error:', err);
+    recStatus.textContent = '❌ Error: ' + err.message;
+    recStatus.className = 'status';
+    recBtn.textContent = '🎬 Record & Download';
+    recBtn.className = '';
+  }
+});
+
+// Init: reset timeline on load
+resetTimeline();
+</script>
+</body>
+</html>

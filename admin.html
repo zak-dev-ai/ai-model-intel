@@ -74,6 +74,24 @@
     <p class="text-gray-500 text-sm mb-4">Update provider URLs. Changes are saved instantly to your browser and applied to the global routing engine.</p>
     <div id="ref-table" class="space-y-2 font-mono text-sm max-h-[500px] overflow-y-auto pr-2"></div>
   </div>
+
+  <!-- User Feedback -->
+  <div class="glass rounded-lg p-6 mb-8">
+    <div class="flex justify-between items-center mb-4">
+      <h3 class="text-lg font-bold flex items-center gap-2">💬 User Feedback <span class="text-xs bg-orange-500/20 text-orange-400 px-2 py-0.5 rounded-full" id="feedback-count">0</span></h3>
+      <div class="flex gap-2">
+        <button onclick="loadFeedback()" class="bg-gray-800 text-white px-3 py-1 rounded hover:bg-gray-700 transition-colors text-sm">🔄 Refresh</button>
+        <select id="feedback-filter" onchange="renderFeedback()" class="bg-black/50 border border-gray-800 rounded px-3 py-1 text-sm">
+          <option value="all">All</option>
+          <option value="new">New</option>
+          <option value="read">Read</option>
+        </select>
+      </div>
+    </div>
+    <div id="feedback-list" class="space-y-3 max-h-[600px] overflow-y-auto pr-2">
+      <p class="text-gray-500 text-sm">Loading feedback...</p>
+    </div>
+  </div>
 </div>
 
 <div id="password-modal" class="modal">
@@ -226,6 +244,82 @@
     document.getElementById('rev-amount').value = '';
     fetchAnalytics();
   }
+
+  // ===== USER FEEDBACK =====
+  let allFeedback = [];
+
+  async function loadFeedback() {
+    document.getElementById('feedback-list').innerHTML = '<p class="text-gray-500 text-sm">Loading...</p>';
+    try {
+      const res = await fetch(SUPABASE_URL + '/rest/v1/user_feedback?order=created_at.desc&limit=200', {
+        headers: { ...HEADERS, 'Authorization': 'Bearer ' + (sessionStorage.getItem('amr_key') || '') }
+      });
+      if (!res.ok) throw new Error('Failed');
+      allFeedback = await res.json();
+      renderFeedback();
+    } catch (e) {
+      // Fallback: try anon role (RLS might block read for anon)
+      try {
+        const res = await fetch(SUPABASE_URL + '/rest/v1/user_feedback?order=created_at.desc&limit=200', { headers: HEADERS });
+        if (!res.ok) throw new Error('Fallback failed');
+        allFeedback = await res.json();
+        renderFeedback();
+      } catch (e2) {
+        document.getElementById('feedback-list').innerHTML = '<p class="text-red-500 text-sm">⚠ Unable to load feedback. Run the SQL to create the table first: sql/user-feedback.sql</p>';
+      }
+    }
+  }
+
+  function renderFeedback() {
+    const filter = document.getElementById('feedback-filter').value;
+    let items = allFeedback;
+    if (filter === 'new') items = items.filter(f => f.status === 'new');
+    if (filter === 'read') items = items.filter(f => f.status === 'read');
+
+    document.getElementById('feedback-count').textContent = allFeedback.filter(f => f.status === 'new').length;
+
+    if (!items.length) {
+      document.getElementById('feedback-list').innerHTML = '<p class="text-gray-500 text-sm">No feedback yet. The 💬 button is live on the site.</p>';
+      return;
+    }
+
+    document.getElementById('feedback-list').innerHTML = items.map(f => `
+      <div class="bg-black/30 rounded-lg p-4 border border-gray-800 ${f.status === 'new' ? 'border-l-2 border-l-orange-500' : ''}">
+        <div class="flex justify-between items-start gap-3 mb-2">
+          <p class="text-sm flex-1">${escapeHtml(f.feedback)}</p>
+          ${f.status === 'new' ? `<button onclick="markRead('${f.id}')" class="text-xs bg-orange-500/20 text-orange-400 px-2 py-1 rounded hover:bg-orange-500/30 shrink-0">Mark Read</button>` : '<span class="text-xs text-gray-500">Read</span>'}
+        </div>
+        <div class="flex gap-4 text-xs text-gray-600">
+          <span>${new Date(f.created_at).toLocaleString()}</span>
+          ${f.page_url ? `<span class="truncate max-w-[300px]">📄 ${escapeHtml(f.page_url)}</span>` : ''}
+        </div>
+      </div>
+    `).join('');
+  }
+
+  async function markRead(id) {
+    await fetch(SUPABASE_URL + '/rest/v1/user_feedback?id=eq.' + id, {
+      method: 'PATCH',
+      headers: { ...HEADERS, 'Authorization': 'Bearer ' + (sessionStorage.getItem('amr_key') || '') },
+      body: JSON.stringify({ status: 'read' })
+    });
+    const item = allFeedback.find(f => f.id === id);
+    if (item) item.status = 'read';
+    renderFeedback();
+  }
+
+  function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  // Auto-load feedback when dashboard loads
+  const origShowDashboard = showDashboard;
+  showDashboard = function() {
+    origShowDashboard();
+    loadFeedback();
+  };
 </script>
 </body>
 </html>

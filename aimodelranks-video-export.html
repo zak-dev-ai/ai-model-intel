@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1024, height=576" />
+<title>AI Model Ranks — Video Export</title>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #111; display: flex; justify-content: center; padding: 20px; font-family: sans-serif; }
+  #app { display: flex; flex-direction: column; gap: 16px; align-items: center; }
+  #stage { position: relative; width: 1024px; height: 576px; background: #0a0a0a; overflow: hidden; border: 1px solid #333; border-radius: 4px; }
+  #progress-bar { width: 1024px; height: 6px; background: #222; border-radius: 3px; overflow: hidden; }
+  #progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #ff8800, #ff6600); transition: width 0.1s linear; }
+  #controls { display: flex; gap: 12px; align-items: center; }
+  #controls button { padding: 10px 28px; border: none; border-radius: 6px; font-size: 15px; font-weight: 600; cursor: pointer; }
+  #exportBtn { background: #ff8800; color: #0a0a0a; }
+  #exportBtn:disabled { opacity: 0.4; cursor: not-allowed; }
+  #previewBtn { background: #333; color: #eee; }
+  #status { color: #888; font-family: "JetBrains Mono", monospace; font-size: 13px; }
+
+  /* Scenes adapted for 1024x576 */
+  .scene { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+  .title-main { font-size: 52px; font-weight: 900; letter-spacing: -0.03em; background: linear-gradient(90deg, #ffb781 0%, #ff8800 50%, #ffb781 100%); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .subtitle { font-size: 16px; color: #888; font-family: "JetBrains Mono", monospace; letter-spacing: 0.1em; }
+  .matrix-badge { display: inline-flex; align-items: center; gap: 8px; padding: 5px 16px; border: 1px solid rgba(0,255,65,0.3); border-radius: 4px; font-family: "JetBrains Mono", monospace; font-size: 12px; color: #00ff41; }
+  .dot-green { width: 7px; height: 7px; border-radius: 50%; background: #00ff41; }
+  .stat-number { font-size: 64px; font-weight: 900; font-family: "JetBrains Mono", monospace; color: #ff8800; line-height: 1; }
+  .stat-label { font-size: 14px; color: #888; font-family: "JetBrains Mono", monospace; letter-spacing: 0.05em; text-transform: uppercase; margin-top: 4px; }
+  .stat-card { display: flex; flex-direction: column; align-items: center; padding: 18px 28px; border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; background: rgba(15,15,15,0.6); }
+  .feature-line { font-size: 22px; font-weight: 600; color: #e5e2e1; margin: 8px 0; }
+  .feature-line .accent { color: #06B6D4; }
+  .numbers-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; width: 85%; }
+  .num-card { text-align: center; padding: 20px 16px; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; background: rgba(15,15,15,0.5); }
+  .num-value { font-size: 30px; font-weight: 900; font-family: "JetBrains Mono", monospace; }
+  .num-label { font-size: 11px; color: #888; font-family: "JetBrains Mono", monospace; text-transform: uppercase; margin-top: 4px; }
+  .features-row { display: flex; gap: 20px; align-items: center; justify-content: center; width: 88%; }
+  .ft-card { flex: 1; max-width: 200px; padding: 22px 18px; border: 1px solid rgba(255,183,129,0.2); border-radius: 12px; background: rgba(15,15,15,0.7); text-align: center; }
+  .ft-icon { font-size: 28px; margin-bottom: 8px; }
+  .ft-title { font-size: 14px; font-weight: 700; color: #ffb781; margin-bottom: 4px; }
+  .ft-desc { font-size: 11px; color: #888; }
+  .cta-url { font-size: 40px; font-weight: 900; font-family: "JetBrains Mono", monospace; color: #ff8800; }
+  .cta-tagline { font-size: 18px; color: #888; margin-top: 8px; }
+  .cta-button { display: inline-flex; align-items: center; gap: 8px; margin-top: 18px; padding: 10px 32px; background: linear-gradient(135deg, #ff8800, #ff6600); border-radius: 6px; font-size: 14px; font-weight: 700; color: #0a0a0a; }
+  .gradient-bar { position: absolute; bottom: 0; left: 0; width: 100%; height: 2px; background: linear-gradient(90deg, #ffb781, #ff8800, #ffb781); }
+  .glow-orange { text-shadow: 0 0 20px rgba(255,136,0,0.3); }
+  .dot-grid { position: absolute; inset: 0; background-image: radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px); background-size: 24px 24px; pointer-events: none; }
+  .particle { position: absolute; width: 3px; height: 3px; border-radius: 50%; background: #ff8800; }
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="stage">
+    <div class="dot-grid" style="position:absolute;inset:0;opacity:0.5"></div>
+
+    <!-- SCENE 1 -->
+    <div id="scene1" class="scene" style="z-index:10">
+      <div style="text-align:center">
+        <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:16px">
+          <div id="liveDot" class="dot-green"></div>
+          <span id="liveBadge" class="matrix-badge">LIVE TERMINAL</span>
+        </div>
+        <h1 id="mainTitle" class="title-main glow-orange">AI Model Ranks</h1>
+        <p id="mainSub" class="subtitle" style="margin-top:12px">— THE BLOOMBERG TERMINAL FOR AI —</p>
+      </div>
+    </div>
+
+    <!-- SCENE 2 -->
+    <div id="scene2" class="scene" style="z-index:9;opacity:0">
+      <div style="display:flex;gap:32px">
+        <div class="stat-card">
+          <div class="stat-number glow-orange">200+</div>
+          <div class="stat-label">Models Tracked</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" style="color:#00ff41;text-shadow:0 0 20px rgba(0,255,65,0.3)">$0.15</div>
+          <div class="stat-label">Avg / 1M Tokens</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCENE 3 -->
+    <div id="scene3" class="scene" style="z-index:8;opacity:0">
+      <div style="text-align:left;width:75%">
+        <div class="feature-line">🔍 <span class="accent">Compare</span> Every LLM — In One Place</div>
+        <div class="feature-line">💰 <span class="accent">Find</span> the Cheapest API Instantly</div>
+        <div class="feature-line">📊 <span class="accent">Track</span> Real-Time Pricing Updates</div>
+        <div class="feature-line">⚡ <span class="accent">Stop</span> Overpaying for AI Infrastructure</div>
+      </div>
+    </div>
+
+    <!-- SCENE 4 -->
+    <div id="scene4" class="scene" style="z-index:7;opacity:0">
+      <div class="numbers-grid">
+        <div class="num-card"><div class="num-value" style="color:#ff8800">196</div><div class="num-label">Total Models</div></div>
+        <div class="num-card"><div class="num-value" style="color:#00ff41">$0.15</div><div class="num-label">Avg Cost /1M</div></div>
+        <div class="num-card"><div class="num-value" style="color:#06B6D4">4</div><div class="num-label">Benchmarks</div></div>
+        <div class="num-card"><div class="num-value" style="color:#ffb781">∞</div><div class="num-label">Live Updates</div></div>
+      </div>
+    </div>
+
+    <!-- SCENE 5 -->
+    <div id="scene5" class="scene" style="z-index:6;opacity:0">
+      <div class="features-row">
+        <div class="ft-card">
+          <div class="ft-icon">📈</div>
+          <div class="ft-title">Real-Time Pricing</div>
+          <div class="ft-desc">Input & output costs across 200+ models updated live</div>
+        </div>
+        <div class="ft-card">
+          <div class="ft-icon">🧪</div>
+          <div class="ft-title">Benchmark Scores</div>
+          <div class="ft-desc">MMLU, HumanEval, GPQA & Arena Elo</div>
+        </div>
+        <div class="ft-card">
+          <div class="ft-icon">🔌</div>
+          <div class="ft-title">API Access</div>
+          <div class="ft-desc">Integrate live pricing via RapidAPI</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCENE 6 -->
+    <div id="scene6" class="scene" style="z-index:5;opacity:0">
+      <div style="text-align:center">
+        <h1 id="ctaTitle" class="cta-url glow-orange">aimodelranks.live</h1>
+        <p class="cta-tagline">Stop guessing. Start comparing.</p>
+        <div class="cta-button">🚀 Visit Now</div>
+      </div>
+    </div>
+
+    <div class="gradient-bar"></div>
+    <div class="particle" style="top:15%;left:10%"></div>
+    <div class="particle" style="top:25%;left:85%"></div>
+    <div class="particle" style="top:70%;left:20%"></div>
+    <div class="particle" style="top:60%;left:75%"></div>
+    <div class="particle" style="top:80%;left:50%"></div>
+  </div>
+
+  <div id="progress-bar"><div id="progress-fill"></div></div>
+  <div id="controls">
+    <button id="previewBtn">▶ Preview</button>
+    <button id="exportBtn">📹 Export MP4 (21s)</button>
+    <span id="status">Ready</span>
+  </div>
+</div>
+
+<script>
+// GSAP timeline
+const tl = gsap.timeline({ paused: true });
+tl.from("#liveDot", { opacity: 0, scale: 0, duration: 0.5 }, 0);
+tl.from("#liveBadge", { opacity: 0, y: -20, duration: 0.5 }, 0.2);
+tl.from("#mainTitle", { opacity: 0, y: 40, scale: 0.9, duration: 0.8, ease: "power3.out" }, 0.4);
+tl.from("#mainSub", { opacity: 0, y: 20, duration: 0.5 }, 1.2);
+tl.to("#scene1", { opacity: 0, duration: 0.4, ease: "power2.in" }, 2.6);
+tl.fromTo("#scene2", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 2.8);
+tl.from("#scene2 .stat-card", { opacity: 0, scale: 0.8, y: 30, duration: 0.6, ease: "back.out(1.5)", stagger: 0.2 }, 3.0);
+tl.to("#scene2", { opacity: 0, duration: 0.3, ease: "power2.in" }, 5.7);
+tl.fromTo("#scene3", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 5.8);
+tl.from("#scene3 .feature-line", { opacity: 0, x: -40, duration: 0.4, stagger: 0.3 }, 6.0);
+tl.to("#scene3", { opacity: 0, duration: 0.3 }, 9.7);
+tl.fromTo("#scene4", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 9.8);
+tl.from("#scene4 .num-card", { opacity: 0, scale: 0.5, duration: 0.4, stagger: 0.15, ease: "back.out(1.5)" }, 10.0);
+tl.to("#scene4", { opacity: 0, duration: 0.3 }, 13.7);
+tl.fromTo("#scene5", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 13.8);
+tl.from("#scene5 .ft-card", { opacity: 0, y: 30, duration: 0.4, stagger: 0.2, ease: "power3.out" }, 14.0);
+tl.to("#scene5", { opacity: 0, duration: 0.3 }, 17.7);
+tl.fromTo("#scene6", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 17.8);
+tl.from("#ctaTitle", { opacity: 0, scale: 0.8, duration: 0.7, ease: "power3.out" }, 18.0);
+tl.from("#scene6 .cta-tagline", { opacity: 0, y: 20, duration: 0.5 }, 18.6);
+tl.from("#scene6 .cta-button", { opacity: 0, y: 20, scale: 0.9, duration: 0.5, ease: "back.out(1.5)" }, 19.0);
+
+const TOTAL_DURATION = 21.5;
+const W = 1024, H = 576;
+const FPS = 30;
+const TOTAL_FRAMES = Math.ceil(TOTAL_DURATION * FPS);
+
+const stage = document.getElementById('stage');
+const exportBtn = document.getElementById('exportBtn');
+const previewBtn = document.getElementById('previewBtn');
+const status = document.getElementById('status');
+const progressFill = document.getElementById('progress-fill');
+
+previewBtn.addEventListener('click', () => {
+  tl.seek(0);
+  tl.play();
+  status.textContent = '▶ Playing';
+  setTimeout(() => { status.textContent = 'Ready'; }, (TOTAL_DURATION * 1000) + 200);
+});
+
+exportBtn.addEventListener('click', async () => {
+  exportBtn.disabled = true;
+  status.textContent = '🎬 Rendering frames...';
+  progressFill.style.width = '0%';
+
+  // Create offscreen canvas
+  const canvas = document.createElement('canvas');
+  canvas.width = W;
+  canvas.height = H;
+  const ctx = canvas.getContext('2d');
+
+  // Load ccapture.js from CDN
+  const script = document.createElement('script');
+  script.src = 'https://cdn.jsdelivr.net/npm/ccapture.js@1.1.0/build/CCapture.all.min.js';
+  document.head.appendChild(script);
+
+  await new Promise(r => script.onload = r);
+
+  const capturer = new CCapture({
+    format: 'webm',
+    framerate: FPS,
+    quality: 90,
+    name: 'aimodelranks-promo',
+    verbose: false
+  });
+  capturer.start();
+
+  status.textContent = `⏳ Rendering 0/${TOTAL_FRAMES} frames...`;
+
+  // Hide recorder UI if any
+  stage.style.display = 'block';
+
+  for (let i = 0; i < TOTAL_FRAMES; i++) {
+    const t = i / FPS;
+    tl.seek(t);
+
+    // Wait for DOM to update
+    await new Promise(r => requestAnimationFrame(r));
+
+    // Draw stage content to canvas
+    ctx.clearRect(0, 0, W, H);
+    ctx.drawWindow ? ctx.drawWindow(stage, 0, 0, W, H) : drawStageToCanvas(ctx, stage, W, H);
+
+    capturer.capture(canvas);
+
+    if (i % 30 === 0 || i === TOTAL_FRAMES - 1) {
+      const pct = ((i + 1) / TOTAL_FRAMES * 100).toFixed(0);
+      progressFill.style.width = pct + '%';
+      status.textContent = `⏳ Rendering ${i+1}/${TOTAL_FRAMES}...`;
+      await new Promise(r => setTimeout(r, 0)); // yield
+    }
+  }
+
+  status.textContent = '⏳ Encoding video...';
+  progressFill.style.width = '100%';
+  capturer.stop();
+  capturer.save((blob) => {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'aimodelranks-promo.webm';
+    a.click();
+    URL.revokeObjectURL(url);
+    exportBtn.disabled = false;
+    status.textContent = '✅ Done!';
+    progressFill.style.width = '0%';
+  });
+});
+
+// Fallback: rasterize DOM to canvas via html2canvas or manual
+function drawStageToCanvas(ctx, element, w, h) {
+  // Serialize inline styles - simple approach
+  const html = element.outerHTML;
+  const blob = new Blob([`
+    <html><head>
+    <style>
+      * { margin:0; padding:0; box-sizing:border-box; }
+      body { background:#0a0a0a; width:${w}px; height:${h}px; overflow:hidden; font-family:Geist, sans-serif; color:#e5e2e1; }
+      .scene { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; }
+      .title-main { font-size:52px; font-weight:900; background:linear-gradient(90deg,#ffb781,#ff8800,#ffb781); background-size:200% auto; -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+      .subtitle { font-size:16px; color:#888; font-family:"JetBrains Mono",monospace; }
+      .matrix-badge { display:inline-flex; align-items:center; gap:8px; padding:5px 16px; border:1px solid rgba(0,255,65,0.3); border-radius:4px; font-family:"JetBrains Mono",monospace; font-size:12px; color:#00ff41; }
+      .dot-green { width:7px; height:7px; border-radius:50%; background:#00ff41; }
+      .stat-number { font-size:64px; font-weight:900; font-family:"JetBrains Mono",monospace; color:#ff8800; }
+      .stat-label { font-size:14px; color:#888; font-family:"JetBrains Mono",monospace; text-transform:uppercase; }
+      .stat-card { display:flex; flex-direction:column; align-items:center; padding:18px 28px; border:1px solid rgba(255,255,255,0.06); border-radius:10px; background:rgba(15,15,15,0.6); }
+      .feature-line { font-size:22px; font-weight:600; color:#e5e2e1; margin:8px 0; }
+      .feature-line .accent { color:#06B6D4; }
+      .numbers-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; width:85%; margin:0 auto; }
+      .num-card { text-align:center; padding:20px 16px; border:1px solid rgba(255,255,255,0.08); border-radius:10px; background:rgba(15,15,15,0.5); }
+      .num-value { font-size:30px; font-weight:900; font-family:"JetBrains Mono",monospace; }
+      .num-label { font-size:11px; color:#888; font-family:"JetBrains Mono",monospace; text-transform:uppercase; }
+      .features-row { display:flex; gap:20px; justify-content:center; width:88%; margin:0 auto; }
+      .ft-card { padding:22px 18px; border:1px solid rgba(255,183,129,0.2); border-radius:12px; background:rgba(15,15,15,0.7); text-align:center; }
+      .ft-icon { font-size:28px; }
+      .ft-title { font-size:14px; font-weight:700; color:#ffb781; }
+      .ft-desc { font-size:11px; color:#888; }
+      .cta-url { font-size:40px; font-weight:900; font-family:"JetBrains Mono",monospace; color:#ff8800; }
+      .cta-tagline { font-size:18px; color:#888; }
+      .cta-button { display:inline-flex; gap:8px; margin-top:18px; padding:10px 32px; background:linear-gradient(135deg,#ff8800,#ff6600); border-radius:6px; font-size:14px; font-weight:700; color:#0a0a0a; }
+      .gradient-bar { position:absolute; bottom:0; width:100%; height:2px; background:linear-gradient(90deg,#ffb781,#ff8800,#ffb781); }
+      .dot-grid { position:absolute; inset:0; background-image:radial-gradient(rgba(255,255,255,0.03) 1px,transparent 1px); background-size:24px 24px; pointer-events:none; }
+      .glow-orange { text-shadow:0 0 20px rgba(255,136,0,0.3); }
+    </style>
+    </head><body>${element.innerHTML}</body></html>
+  `], { type: 'image/svg+xml' });
+  const url = URL.createObjectURL(blob);
+  const img = new Image();
+  img.onload = () => {
+    ctx.drawImage(img, 0, 0, w, h);
+    URL.revokeObjectURL(url);
+  };
+  img.src = url;
+}
+
+// Init
+tl.seek(0);
+</script>
+</body>
+</html>
