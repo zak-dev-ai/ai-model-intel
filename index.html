@@ -298,6 +298,10 @@ tailwind.config = {
           <button class="filter-btn px-3 py-1 text-text-muted hover:text-on-surface font-body-sm text-body-sm transition-colors whitespace-nowrap" data-filter="file">📄 File</button>
           <button class="filter-btn px-3 py-1 text-text-muted hover:text-on-surface font-body-sm text-body-sm transition-colors whitespace-nowrap" data-filter="free">🆓 Free</button>
           <button class="filter-btn px-3 py-1 text-text-muted hover:text-on-surface font-body-sm text-body-sm transition-colors whitespace-nowrap" data-filter="trending">🔥 Trending</button>
+          <button class="filter-btn px-3 py-1 text-text-muted hover:text-on-surface font-body-sm text-body-sm transition-colors whitespace-nowrap" data-filter="programming">💻 Code</button>
+          <button class="filter-btn px-3 py-1 text-text-muted hover:text-on-surface font-body-sm text-body-sm transition-colors whitespace-nowrap" data-filter="science">🧪 Science</button>
+          <button class="filter-btn px-3 py-1 text-text-muted hover:text-on-surface font-body-sm text-body-sm transition-colors whitespace-nowrap" data-filter="roleplay">🎭 RP</button>
+          <button class="filter-btn px-3 py-1 text-text-muted hover:text-on-surface font-body-sm text-body-sm transition-colors whitespace-nowrap" data-filter="translation">🌐 Translate</button>
         </div>
       </div>
     </div>
@@ -514,7 +518,15 @@ const filters = {
   video: (m) => (m.categories || []).includes('Video'),
   file: (m) => (m.categories || []).includes('File'),
   free: (m) => m.is_free === true,
-  trending: (m) => (m.trend_score || 0) > 30
+  trending: (m) => (m.trend_score || 0) > 30,
+  programming: (m) => (m.use_cases || []).includes('Programming'),
+  science: (m) => (m.use_cases || []).includes('Science'),
+  roleplay: (m) => (m.use_cases || []).includes('Roleplay'),
+  translation: (m) => (m.use_cases || []).includes('Translation'),
+  academia: (m) => (m.use_cases || []).includes('Academia'),
+  legal: (m) => (m.use_cases || []).includes('Legal'),
+  finance: (m) => (m.use_cases || []).includes('Finance'),
+  health: (m) => (m.use_cases || []).includes('Health')
 };
 
 async function fetchBenchmarks() {
