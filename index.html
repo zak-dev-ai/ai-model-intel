@@ -146,8 +146,9 @@ tailwind.config = {
     </div>
     <nav class="flex gap-4 border-l border-border-slate pl-4">
       <a class="text-primary border-b-2 border-primary pb-1 font-body-sm text-body-sm" href="/">Terminal</a>
-      <a class="text-on-surface-variant hover:text-on-surface transition-colors hover:bg-surface-variant/50 px-2 rounded font-body-sm text-body-sm" href="/compare.html">Compare</a>
-      <a class="text-on-surface-variant hover:text-on-surface transition-colors hover:bg-surface-variant/50 px-2 rounded font-body-sm text-body-sm" href="/blog.html">News</a>
+      <a class="text-on-surface-variant hover:text-on-surface transition-colors hover:bg-surface-variant/50 px-2 rounded font-body-sm text-body-sm" href="/compare">Compare</a>
+      <a class="text-on-surface-variant hover:text-on-surface transition-colors hover:bg-surface-variant/50 px-2 rounded font-body-sm text-body-sm" href="/benchmarks">Benchmarks</a>
+      <a class="text-on-surface-variant hover:text-on-surface transition-colors hover:bg-surface-variant/50 px-2 rounded font-body-sm text-body-sm" href="/blog">News</a>
       <a class="text-on-surface-variant hover:text-on-surface transition-colors hover:bg-surface-variant/50 px-2 rounded font-body-sm text-body-sm" href="https://rapidapi.com/zakmediaai/api/octopus-ai-model-intel" target="_blank">API</a>
       <a class="text-on-surface-variant hover:text-on-surface transition-colors hover:bg-surface-variant/50 px-2 rounded font-body-sm text-body-sm cursor-pointer" onclick="openPartnerModal()">Partner</a>
     </nav>
@@ -170,8 +171,9 @@ tailwind.config = {
     <span class="material-symbols-outlined text-2xl">close</span>
   </button>
   <a href="/" onclick="toggleMenu()"><span class="material-symbols-outlined">dashboard</span> Terminal</a>
-  <a href="/compare.html" onclick="toggleMenu()"><span class="material-symbols-outlined">compare_arrows</span> Compare</a>
-  <a href="/blog.html" onclick="toggleMenu()"><span class="material-symbols-outlined">article</span> News</a>
+  <a href="/compare" onclick="toggleMenu()"><span class="material-symbols-outlined">compare_arrows</span> Compare</a>
+  <a href="/benchmarks" onclick="toggleMenu()"><span class="material-symbols-outlined">bar_chart</span> Benchmarks</a>
+  <a href="/blog" onclick="toggleMenu()"><span class="material-symbols-outlined">article</span> News</a>
   <a href="https://rapidapi.com/zakmediaai/api/octopus-ai-model-intel" target="_blank" onclick="toggleMenu()"><span class="material-symbols-outlined">code</span> API</a>
   <a href="#" onclick="toggleMenu(); openPartnerModal(); return false;"><span class="material-symbols-outlined text-bloomberg-orange">handshake</span> Partner</a>
 </div>
@@ -230,7 +232,7 @@ tailwind.config = {
     </div>
     
     <!-- Card 5: Benchmarks -->
-    <div class="glass-panel p-4 rounded-lg flex flex-col gap-2 relative overflow-hidden border border-outline-variant/30 hover:border-primary transition-colors cursor-pointer h-full" onclick="window.location.href='/benchmarks.html'">
+    <div class="glass-panel p-4 rounded-lg flex flex-col gap-2 relative overflow-hidden border border-outline-variant/30 hover:border-primary transition-colors cursor-pointer h-full" onclick="window.location.href='/benchmarks'">
       <div class="font-data-label text-data-label text-text-muted uppercase">Benchmarks</div>
       <div class="font-data-tabular text-headline-md text-on-surface font-bold">4 Benchmarks</div>
       <div class="text-text-muted text-xs mt-auto">MMLU, GPQA, HumanEval & more →</div>
@@ -264,7 +266,7 @@ tailwind.config = {
 </section>
 
   <!-- Compare CTA -->
-  <a href="/compare.html" class="glass-panel rounded-lg p-5 border-2 border-dashed border-primary/30 hover:border-primary transition-all cursor-pointer flex items-center justify-between gap-4 group" style="text-decoration:none;display:flex;">
+  <a href="/compare" class="glass-panel rounded-lg p-5 border-2 border-dashed border-primary/30 hover:border-primary transition-all cursor-pointer flex items-center justify-between gap-4 group" style="text-decoration:none;display:flex;">
     <div>
       <div class="font-data-label text-data-label text-primary uppercase mb-1" style="font-family:'JetBrains Mono',monospace;font-size:12px;">New — Model Comparison Tool</div>
       <div class="text-on-surface font-bold text-lg" style="transition:color 0.2s;">Compare AI Models Side-by-Side</div>
@@ -361,7 +363,9 @@ tailwind.config = {
     © 2026 AI MODEL RANKS | INSTITUTIONAL DATA STREAM ACTIVE
   </div>
   <nav class="flex gap-4 items-center">
-    <a class="font-data-tabular text-data-tabular text-text-muted hover:text-on-surface hover:text-primary transition-colors" href="/blog.html">News</a>
+    <a class="font-data-tabular text-data-tabular text-text-muted hover:text-on-surface hover:text-primary transition-colors" href="/compare">Compare</a>
+    <a class="font-data-tabular text-data-tabular text-text-muted hover:text-on-surface hover:text-primary transition-colors" href="/benchmarks">Benchmarks</a>
+    <a class="font-data-tabular text-data-tabular text-text-muted hover:text-on-surface hover:text-primary transition-colors" href="/blog">News</a>
     <a class="font-data-tabular text-data-tabular text-text-muted hover:text-on-surface hover:text-primary transition-colors" href="https://rapidapi.com/zakmediaai/api/octopus-ai-model-intel" target="_blank">API Docs</a>
     <a class="font-data-tabular text-data-tabular text-text-muted hover:text-on-surface hover:text-primary transition-colors cursor-pointer" onclick="openPartnerModal()">Partners</a>
     <a href="https://x.com/ZakBuildsAi" target="_blank" rel="noopener" title="@ZakBuildsAi on X" class="text-text-muted hover:text-primary transition-colors">

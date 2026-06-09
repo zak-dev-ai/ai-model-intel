@@ -71,6 +71,12 @@ tailwind.config = {
   .carousel-slide { will-change: transform, opacity; backface-visibility: hidden; }
   .carousel-slide-active { opacity: 1 !important; transform: scale(1) translateY(0) !important; pointer-events: auto !important; }
   .carousel-slide-inactive { opacity: 0 !important; transform: scale(0.96) translateY(4px) !important; pointer-events: none !important; }
+  /* Mobile menu */
+  .mobile-menu { position: fixed; top: 0; right: -100%; width: 80%; max-width: 320px; height: 100vh; background: rgba(19,19,19,0.98); backdrop-filter: blur(20px); z-index: 200; transition: right 0.3s ease; padding: 5rem 2rem; display: flex; flex-direction: column; gap: 0.5rem; box-shadow: -10px 0 30px rgba(0,0,0,0.5); }
+  .mobile-menu.open { right: 0; }
+  .mobile-menu a { color: #e5e2e1; text-decoration: none; font-size: 1.125rem; font-weight: 500; padding: 1rem 0; border-bottom: 1px solid #1A1A1A; display: flex; align-items: center; gap: 0.75rem; }
+  .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 150; display: none; }
+  .overlay.show { display: block; }
 </style>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -82,13 +88,30 @@ tailwind.config = {
     <a href="/" class="font-headline-md font-bold tracking-tight text-primary" style="font-size:24px;font-weight:700;">AI Model Ranks</a>
     <span class="text-text-muted hidden md:inline ml-2" style="font-family:'JetBrains Mono',monospace;">— Compare</span>
   </div>
-  <nav class="flex gap-5">
+  <nav class="hidden md:flex gap-5">
     <a class="text-on-surface-variant hover:text-primary transition-colors" href="/">Terminal</a>
-    <a class="text-on-surface-variant hover:text-primary transition-colors" href="/benchmarks.html">Benchmarks</a>
-    <a class="text-primary border-b-2 border-primary pb-1" href="/compare.html">Compare</a>
-    <a class="text-on-surface-variant hover:text-primary transition-colors" href="/blog.html">News</a>
+    <a class="text-primary border-b-2 border-primary pb-1" href="/compare">Compare</a>
+    <a class="text-on-surface-variant hover:text-primary transition-colors" href="/benchmarks">Benchmarks</a>
+    <a class="text-on-surface-variant hover:text-primary transition-colors" href="/blog">News</a>
+    <a class="text-on-surface-variant hover:text-primary transition-colors" href="https://rapidapi.com/zakmediaai/api/octopus-ai-model-intel" target="_blank">API</a>
+    <span class="text-on-surface-variant hover:text-primary transition-colors cursor-pointer" onclick="openPartnerModal()">Partner</span>
   </nav>
+  <button class="md:hidden text-on-surface-variant" onclick="toggleMenu()" aria-label="Menu">
+    <span class="material-symbols-outlined text-2xl">menu</span>
+  </button>
 </header>
+<div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+<div class="mobile-menu" id="mobileMenu">
+  <button class="absolute top-6 right-6 text-on-surface-variant" onclick="toggleMenu()">
+    <span class="material-symbols-outlined text-2xl">close</span>
+  </button>
+  <a href="/" onclick="toggleMenu()"><span class="material-symbols-outlined">dashboard</span> Terminal</a>
+  <a href="/compare" onclick="toggleMenu()"><span class="material-symbols-outlined">compare_arrows</span> Compare</a>
+  <a href="/benchmarks" onclick="toggleMenu()"><span class="material-symbols-outlined">bar_chart</span> Benchmarks</a>
+  <a href="/blog" onclick="toggleMenu()"><span class="material-symbols-outlined">article</span> News</a>
+  <a href="https://rapidapi.com/zakmediaai/api/octopus-ai-model-intel" target="_blank" onclick="toggleMenu()"><span class="material-symbols-outlined">code</span> API</a>
+  <a href="#" onclick="toggleMenu();openPartnerModal();return false;"><span class="material-symbols-outlined text-bloomberg-orange">handshake</span> Partner</a>
+</div>
 
 <!-- AI News Ticker -->
 <div id="ai-ticker" class="relative w-full overflow-hidden border-y border-outline-variant/20 bg-surface/80 backdrop-blur-md" style="display:none;">
@@ -629,6 +652,7 @@ function renderMetricsTable(data) {
 // ==================== INIT ====================
 loadData();
 </script>
+<script src="/static/nav.js"></script>
 <script src="/static/feedback-widget.js"></script>
 <script src="/static/sponsor-carousel.js"></script>
 <script src="/static/ai-feed.js"></script>
