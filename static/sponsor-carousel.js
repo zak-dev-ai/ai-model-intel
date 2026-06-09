@@ -1,87 +1,86 @@
 // Sponsor Carousel — shared across all pages
 // Rotates 3 sponsor slots every 20s. Loads live data from /api/sponsorship/active.
 (function initSponsorCarousel() {
-  const SLIDE_INTERVAL = 20000;
-  let sponsorSlots = [null, null, null];
-  let currentSlide = 0;
-  let carouselTimer = null;
-  let carouselPaused = false;
+  var SLIDE_INTERVAL = 20000;
+  var sponsorSlots = [null, null, null];
+  var currentSlide = 0;
+  var carouselTimer = null;
+  var carouselPaused = false;
 
-  function getSponsorUrl(index) {
-    const s = sponsorSlots[index];
-    if (s && s.website_url) return s.website_url;
-    return '/sponsor';
+  function loadSponsors() {
+    fetch('/api/sponsorship/active')
+      .then(function(r) { return r.ok ? r.json() : null; })
+      .then(function(data) {
+        var arr = (data && Array.isArray(data.sponsorships)) ? data.sponsorships : [];
+        sponsorSlots = [arr[0] || null, arr[1] || null, arr[2] || null];
+        renderCarousel();
+        startCarousel();
+      })
+      .catch(function() {
+        renderCarousel();
+        startCarousel();
+      });
   }
 
-  async function loadSponsors() {
-    try {
-      const res = await fetch('/api/sponsorship/active');
-      if (!res.ok) { renderCarousel(); startCarousel(); return; }
-      const data = await res.json();
-      const arr = Array.isArray(data.sponsorships) ? data.sponsorships : [];
-      sponsorSlots = [arr[0] || null, arr[1] || null, arr[2] || null];
-      renderCarousel();
-      startCarousel();
-    } catch(e) {
-      renderCarousel();
-      startCarousel();
-    }
+  function esc(str) {
+    return (str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 
   function renderCarousel() {
-    const container = document.getElementById('sponsorCarousel');
+    var container = document.getElementById('sponsorCarousel');
     if (!container) return;
 
-    container.innerHTML = sponsorSlots.map((s, i) => {
-      const url = s && s.website_url ? s.website_url : '/sponsor';
-      if (s) {
-        const logoUrl = s.logo_url || ('https://www.google.com/s2/favicons?domain=' + (s.website_url||'').replace(/https?:\/\//,'').replace(/\/.*$/,'') + '&sz=64');
-        return `<div class="carousel-slide absolute inset-0 p-3 flex flex-col justify-between transition-all duration-700 ease-out cursor-pointer carousel-slide-inactive" data-slide="${i}" onclick="window.open('${url}','_blank')">
-          <div class="absolute top-0 right-0 bg-matrix-green text-deep-charcoal text-[8px] font-bold px-1.5 py-0.5 rounded-bl font-data-label tracking-wider">SPONSORED</div>
-          <div>
-            <div class="font-data-label text-data-label text-primary uppercase">Featured</div>
-            <div class="font-data-tabular text-body-lg text-on-surface font-bold leading-tight mt-1 truncate">${s.model_name || ''}</div>
-            <div class="text-text-muted text-[10px] mt-0.5 truncate">${s.company_name || ''}</div>
-          </div>
-          <div class="flex items-center justify-between w-full mt-1">
-            <span class="font-data-tabular text-[10px] text-text-muted">${s.company_name || ''}</span>
-            <span class="text-matrix-green font-bold text-[10px]">Learn More →</span>
-          </div>
-        </div>`;
-      } else {
-        const copies = [
-          { badge:'SLOT 1', h:'Advertise Here', s:'Reach 10K+ AI engineers daily', cta:'Claim Slot →' },
-          { badge:'SLOT 2', h:'Get Featured', s:'Prime placement for 30 days', cta:'Go Live →' },
-          { badge:'SLOT 3', h:'Your Brand Here', s:'CTOs, devs & founders see this', cta:'Sponsor Now →' }
-        ];
-        const c = copies[i % 3];
-        return `<div class="carousel-slide absolute inset-0 p-3 flex flex-col justify-between transition-all duration-700 ease-out cursor-pointer carousel-slide-inactive" data-slide="${i}" onclick="window.location.href='/sponsor'">
-          <div class="absolute top-0 right-0 bg-primary/20 text-on-surface text-[8px] font-bold px-1.5 py-0.5 rounded-bl font-data-label tracking-wider">${c.badge}</div>
-          <div>
-            <div class="font-data-label text-data-label text-primary uppercase">Featured</div>
-            <div class="font-data-tabular text-body-lg text-on-surface font-bold leading-tight mt-1 truncate">${c.h}</div>
-            <div class="text-text-muted text-[10px] mt-0.5">${c.s}</div>
-          </div>
-          <div class="flex items-center justify-between w-full mt-1">
-            <span class="font-data-tabular font-bold text-on-surface text-[11px]">$99/30d</span>
-            <span class="text-primary font-bold text-[10px]">${c.cta}</span>
-          </div>
-        </div>`;
-      }
-    }).join('');
+    var html = '';
+    var copies = [
+      { badge: 'SLOT 1', h: 'Advertise Here', s: 'Reach 10K+ AI engineers daily', cta: 'Claim Slot' },
+      { badge: 'SLOT 2', h: 'Get Featured', s: 'Prime placement for 30 days', cta: 'Go Live' },
+      { badge: 'SLOT 3', h: 'Your Brand Here', s: 'CTOs, devs &amp; founders see this', cta: 'Sponsor Now' }
+    ];
 
+    for (var i = 0; i < 3; i++) {
+      var s = sponsorSlots[i];
+      if (s) {
+        var url = s.website_url || '/sponsor';
+        html += '<div class="carousel-slide absolute inset-0 p-3 flex flex-col justify-between transition-all duration-700 ease-out cursor-pointer carousel-slide-inactive" data-slide="' + i + '" onclick="window.open(\'' + esc(url) + '\',\'_blank\')">';
+        html += '<div class="absolute top-0 right-0 bg-matrix-green text-deep-charcoal text-[8px] font-bold px-1.5 py-0.5 rounded-bl font-data-label tracking-wider">SPONSORED</div>';
+        html += '<div>';
+        html += '<div class="font-data-label text-data-label text-primary uppercase">Featured</div>';
+        html += '<div class="font-data-tabular text-body-lg text-on-surface font-bold leading-tight mt-1 truncate">' + esc(s.model_name || '') + '</div>';
+        html += '<div class="text-text-muted text-[10px] mt-0.5 truncate">' + esc(s.company_name || '') + '</div>';
+        html += '</div>';
+        html += '<div class="flex items-center justify-between w-full mt-1">';
+        html += '<span class="font-data-tabular text-[10px] text-text-muted">' + esc(s.company_name || '') + '</span>';
+        html += '<span class="text-matrix-green font-bold text-[10px]">Learn More &rarr;</span>';
+        html += '</div></div>';
+      } else {
+        var c = copies[i];
+        html += '<div class="carousel-slide absolute inset-0 p-3 flex flex-col justify-between transition-all duration-700 ease-out cursor-pointer carousel-slide-inactive" data-slide="' + i + '" onclick="window.location.href=\'/sponsor\'">';
+        html += '<div class="absolute top-0 right-0 bg-primary/20 text-on-surface text-[8px] font-bold px-1.5 py-0.5 rounded-bl font-data-label tracking-wider">' + c.badge + '</div>';
+        html += '<div>';
+        html += '<div class="font-data-label text-data-label text-primary uppercase">Featured</div>';
+        html += '<div class="font-data-tabular text-body-lg text-on-surface font-bold leading-tight mt-1 truncate">' + c.h + '</div>';
+        html += '<div class="text-text-muted text-[10px] mt-0.5">' + c.s + '</div>';
+        html += '</div>';
+        html += '<div class="flex items-center justify-between w-full mt-1">';
+        html += '<span class="font-data-tabular font-bold text-on-surface text-[11px]">$99/30d</span>';
+        html += '<span class="text-primary font-bold text-[10px]">' + c.cta + ' &rarr;</span>';
+        html += '</div></div>';
+      }
+    }
+    container.innerHTML = html;
     showSlide(0, false);
   }
 
-  function showSlide(index, animate = true) {
-    const slides = document.querySelectorAll('#sponsorCarousel .carousel-slide');
+  function showSlide(index, animate) {
+    animate = animate !== false;
+    var slides = document.querySelectorAll('#sponsorCarousel .carousel-slide');
     if (!slides.length) return;
-    slides.forEach((el, i) => {
-      el.classList.remove('carousel-slide-active', 'carousel-slide-inactive');
-      if (!animate) el.style.transition = 'none';
-      el.classList.add(i === index ? 'carousel-slide-active' : 'carousel-slide-inactive');
-      if (!animate) setTimeout(() => el.style.transition = '', 50);
-    });
+    for (var i = 0; i < slides.length; i++) {
+      slides[i].classList.remove('carousel-slide-active', 'carousel-slide-inactive');
+      if (!animate) slides[i].style.transition = 'none';
+      slides[i].classList.add(i === index ? 'carousel-slide-active' : 'carousel-slide-inactive');
+      if (!animate) setTimeout(function(el) { el.style.transition = ''; }, 50, slides[i]);
+    }
     currentSlide = index;
     updateDots(index);
     updateLabel(index);
@@ -89,20 +88,19 @@
   }
 
   function nextSlide() {
-    let next = (currentSlide + 1) % 3;
-    const start = next;
-    while (!sponsorSlots[next] && (next = (next + 1) % 3) !== start) {}
-    showSlide(next);
+    // Always advance, even when all slots are empty
+    showSlide((currentSlide + 1) % 3);
   }
 
   function updateDots(index) {
-    document.querySelectorAll('.carousel-dot').forEach((dot, i) => {
-      dot.classList.toggle('active', i === index);
-    });
+    var dots = document.querySelectorAll('.carousel-dot');
+    for (var i = 0; i < dots.length; i++) {
+      dots[i].classList.toggle('active', i === index);
+    }
   }
 
   function updateLabel(index) {
-    const label = document.getElementById('carouselLabel');
+    var label = document.getElementById('carouselLabel');
     if (!label) return;
     if (sponsorSlots[index]) {
       label.textContent = 'SPONSORED';
@@ -114,12 +112,12 @@
   }
 
   function resetProgress() {
-    const bar = document.getElementById('carouselProgress');
+    var bar = document.getElementById('carouselProgress');
     if (!bar) return;
     bar.style.transition = 'none';
     bar.style.width = '0%';
-    requestAnimationFrame(() => {
-      bar.style.transition = `width ${SLIDE_INTERVAL}ms linear`;
+    requestAnimationFrame(function() {
+      bar.style.transition = 'width ' + SLIDE_INTERVAL + 'ms linear';
       bar.style.width = '100%';
     });
   }
@@ -127,17 +125,18 @@
   function startCarousel() {
     if (carouselTimer) clearInterval(carouselTimer);
     resetProgress();
-    carouselTimer = setInterval(() => {
+    carouselTimer = setInterval(function() {
       if (!carouselPaused) nextSlide();
     }, SLIDE_INTERVAL);
   }
 
   function pauseCarousel() {
     carouselPaused = true;
-    const bar = document.getElementById('carouselProgress');
-    if (!bar) return;
-    bar.style.transition = 'none';
-    bar.style.width = getComputedStyle(bar).width;
+    var bar = document.getElementById('carouselProgress');
+    if (bar) {
+      bar.style.transition = 'none';
+      bar.style.width = getComputedStyle(bar).width;
+    }
   }
 
   function resumeCarousel() {
@@ -145,42 +144,39 @@
     resetProgress();
   }
 
-  // Pause/resume on hover
-  setTimeout(() => {
-    const card = document.getElementById('sponsorCarouselCard');
+  // Hover pause/resume
+  setTimeout(function() {
+    var card = document.getElementById('sponsorCarouselCard');
     if (card) {
       card.addEventListener('mouseenter', pauseCarousel);
       card.addEventListener('mouseleave', resumeCarousel);
     }
   }, 200);
 
-  // Dot clicks
-  document.addEventListener('click', (e) => {
-    const dot = e.target.closest('.carousel-dot');
+  // Dot click navigation
+  document.addEventListener('click', function(e) {
+    var dot = e.target.closest('.carousel-dot');
     if (dot) {
-      const idx = parseInt(dot.dataset.dot);
+      var idx = parseInt(dot.dataset.dot);
       if (!isNaN(idx)) showSlide(idx);
     }
   });
 
-  // Wait for DOM to be fully ready, then start
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', start);
-  } else {
-    start();
-  }
-
+  // Start when DOM ready
   function start() {
     var el = document.getElementById('sponsorCarousel');
     if (!el) {
-      console.warn('Sponsor carousel: #sponsorCarousel not found, retrying...');
-      // Retry once after a short delay (pages with async content may need it)
       setTimeout(function() {
-        el = document.getElementById('sponsorCarousel');
-        if (el) { loadSponsors(); }
+        if (document.getElementById('sponsorCarousel')) loadSponsors();
       }, 500);
       return;
     }
     loadSponsors();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', start);
+  } else {
+    start();
   }
 })();
