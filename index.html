@@ -89,9 +89,11 @@ tailwind.config = {
   .vote-btn:hover { transform: scale(1.15); }
   .vote-btn.voted { color: #00ff41; }
   .vote-btn.voted svg { fill: #00ff41; }
-  ::-webkit-scrollbar { width: 8px; height: 8px; }
-  ::-webkit-scrollbar-track { background: #131313; }
-  ::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 4px; }
+  ::-webkit-scrollbar { width: 12px; height: 12px; }
+  ::-webkit-scrollbar-track { background: #0f0f0f; border-left: 1px solid rgba(255,255,255,0.04); }
+  ::-webkit-scrollbar-thumb { background: rgba(255,183,129,0.25); border-radius: 8px; border: 2px solid #0f0f0f; transition: background 0.2s; }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(255,183,129,0.5); }
+  html { scrollbar-color: rgba(255,183,129,0.25) #0f0f0f; scrollbar-width: auto; }
   .carousel-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(136,136,136,0.3); transition: all 0.35s cubic-bezier(0.4,0,0.2,1); cursor: pointer; }
   .carousel-dot.active { background: #ffb781; width: 20px; border-radius: 3px; box-shadow: 0 0 8px rgba(255,183,129,0.6); }
   .carousel-slide { will-change: transform, opacity; backface-visibility: hidden; }
