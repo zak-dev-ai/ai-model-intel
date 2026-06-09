@@ -599,25 +599,43 @@ loadData();
 </script>
 <script src="/static/feedback-widget.js"></script>
 <script>
-// AI News Ticker (same as index)
+// AI News Ticker — client-side via rss2json.com
 (async function initTicker() {
-  const API = '/api/ai-ticker';
   const ticker = document.getElementById('ai-ticker');
   const track = document.getElementById('tickerTrack');
   if (!ticker || !track) return;
+  const A = [
+    ['OpenAI','OpenAI','#00a67e'],['AnthropicAI','Anthropic','#d4a574'],
+    ['GoogleDeepMind','Google DeepMind','#4285f4'],['Grok','Grok','#ff6b35'],
+    ['MistralAI','Mistral','#f97316'],['cohere','Cohere','#8b5cf6'],
+    ['AIatMeta','Meta AI','#0064e0'],['deepseek_ai','DeepSeek','#4ade80'],
+    ['Alibaba_Qwen','Qwen','#f43f5e']
+  ];
   try {
-    const res = await fetch(API, { cache: 'no-store' });
-    if (!res.ok) throw new Error('API error');
-    const data = await res.json();
-    if (!data.posts || data.posts.length < 2) return;
-    const colors = {
-      OpenAI:'#00a67e',Anthropic:'#d4a574','Google DeepMind':'#4285f4',Grok:'#ff6b35',Mistral:'#f97316',Cohere:'#8b5cf6','Meta AI':'#0064e0',DeepSeek:'#4ade80',Qwen:'#f43f5e'
-    };
-    const html = data.posts.map(p => {
-      const c = colors[p.account]||'#888';
-      return '<span class="ticker-item" onclick="window.open(\''+p.url.replace(/'/g,'')+'\',\'_blank\')"><span class="badge" style="color:'+c+';background:'+c+'15;border:1px solid '+c+'30">'+p.account+'</span><span class="text">'+p.text.replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</span><span class="sep">•</span></span>';
-    }).join('');
-    track.innerHTML = html + html;
+    const r = await Promise.allSettled(A.map(([h]) =>
+      fetch('https://api.rss2json.com/v1/api.json?rss_url='+encodeURIComponent('https://nitter.net/'+h+'/rss'),{signal:AbortSignal.timeout(5000)}).then(x=>x.ok?x.json():null)
+    ));
+    const posts = [];
+    for (let i=0;i<r.length;i++) {
+      if (r[i].status!=='fulfilled'||!r[i].value||r[i].value.status!=='ok') continue;
+      const [h,l,c]=A[i];
+      for (const item of (r[i].value.items||[]).slice(0,2)) {
+        if (!item.title) continue;
+        const t = item.title.replace(/<[^>]*>/g,'').replace(/&apos;/g,"'");
+        posts.push({text:t.length>180?t.slice(0,177)+'...':t,account:l,url:item.link,color:c});
+      }
+    }
+    if (posts.length<3) return;
+    for (let i=posts.length-1;i>0;i--) { const j=Math.random()*(i+1)|0; [posts[i],posts[j]]=[posts[j],posts[i]]; }
+    track.innerHTML = posts.map(p=>
+      '<span class="ticker-item" onclick="window.open(\''+p.url.replace(/'/g,'')+'\',\'_blank\')">'+
+      '<span class="badge" style="color:'+p.color+';background:'+p.color+'15;border:1px solid '+p.color+'30">'+p.account+'</span>'+
+      '<span class="text">'+p.text.replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</span><span class="sep">•</span></span>'
+    ).join('') + posts.map(p=>
+      '<span class="ticker-item" onclick="window.open(\''+p.url.replace(/'/g,'')+'\',\'_blank\')">'+
+      '<span class="badge" style="color:'+p.color+';background:'+p.color+'15;border:1px solid '+p.color+'30">'+p.account+'</span>'+
+      '<span class="text">'+p.text.replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</span><span class="sep">•</span></span>'
+    ).join('');
     ticker.style.display = 'block';
   } catch(e) { console.warn('Ticker:',e.message); }
 })();

@@ -991,49 +991,69 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 <script src="/static/feedback-widget.js"></script>
 <script>
-// AI News Ticker
+// AI News Ticker — uses rss2json.com as free RSS-to-JSON proxy (no API key)
 (async function initTicker() {
-  const API = '/api/ai-ticker';
   const ticker = document.getElementById('ai-ticker');
   const track = document.getElementById('tickerTrack');
   if (!ticker || !track) return;
 
-  try {
-    const res = await fetch(API, { cache: 'no-store' });
-    if (!res.ok) throw new Error('API error');
-    const data = await res.json();
-    if (!data.posts || data.posts.length < 2) { return; }
+  const ACCOUNTS = [
+    ['OpenAI','OpenAI','#00a67e'],
+    ['AnthropicAI','Anthropic','#d4a574'],
+    ['GoogleDeepMind','Google DeepMind','#4285f4'],
+    ['Grok','Grok','#ff6b35'],
+    ['MistralAI','Mistral','#f97316'],
+    ['cohere','Cohere','#8b5cf6'],
+    ['AIatMeta','Meta AI','#0064e0'],
+    ['deepseek_ai','DeepSeek','#4ade80'],
+    ['Alibaba_Qwen','Qwen','#f43f5e']
+  ];
 
-    // Build items HTML
-    function buildItems(posts) {
-      return posts.map(p => {
-        const accountColors = {
-          'OpenAI': '#00a67e',
-          'Anthropic': '#d4a574',
-          'Google DeepMind': '#4285f4',
-          'Grok': '#ff6b35',
-          'Mistral': '#f97316',
-          'Cohere': '#8b5cf6',
-          'Meta AI': '#0064e0',
-          'DeepSeek': '#4ade80',
-          'Qwen': '#f43f5e'
-        };
-        const color = accountColors[p.account] || '#888';
-        return `<span class="ticker-item" onclick="window.open('${p.url.replace(/'/g, '')}','_blank')">
-          <span class="badge" style="color:${color};background:${color}15;border:1px solid ${color}30">${p.account}</span>
-          <span class="text">${p.text.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</span>
-          <span class="sep">•</span>
-        </span>`;
-      }).join('');
+  try {
+    const results = await Promise.allSettled(
+      ACCOUNTS.map(([handle]) =>
+        fetch('https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent('https://nitter.net/' + handle + '/rss'), { signal: AbortSignal.timeout(5000) })
+          .then(r => r.ok ? r.json() : null)
+      )
+    );
+
+    const posts = [];
+    for (let i = 0; i < results.length; i++) {
+      if (results[i].status !== 'fulfilled' || !results[i].value || results[i].value.status !== 'ok') continue;
+      const feed = results[i].value;
+      const [handle, label, color] = ACCOUNTS[i];
+      for (const item of (feed.items || []).slice(0, 2)) {
+        if (!item.title) continue;
+        const text = item.title.replace(/<[^>]*>/g,'').replace(/&apos;/g,"'")
+          .replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').trim();
+        posts.push({
+          text: text.length > 180 ? text.slice(0,177)+'...' : text,
+          account: label,
+          url: item.link,
+          color: color
+        });
+      }
     }
 
-    const html = buildItems(data.posts);
-    // Double it for seamless infinite scroll
+    if (posts.length < 3) { return; }
+
+    // Shuffle
+    for (let i = posts.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [posts[i], posts[j]] = [posts[j], posts[i]];
+    }
+
+    const html = posts.map(p => 
+      '<span class="ticker-item" onclick="window.open(\''+p.url.replace(/'/g,'')+'\',\'_blank\')">' +
+      '<span class="badge" style="color:'+p.color+';background:'+p.color+'15;border:1px solid '+p.color+'30">'+p.account+'</span>' +
+      '<span class="text">'+p.text.replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</span>' +
+      '<span class="sep">•</span></span>'
+    ).join('');
+
     track.innerHTML = html + html;
     ticker.style.display = 'block';
   } catch (e) {
-    // Silent fail — ticker just won't show
-    console.warn('Ticker unavailable:', e.message);
+    console.warn('Ticker:', e.message);
   }
 })();
 </script>
