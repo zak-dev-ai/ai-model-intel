@@ -255,7 +255,7 @@ tailwind.config = {
 
 <script>
 // ==================== DATA LOADING ====================
-const API_URL = 'https://ai-model-intel.zak-media-ai.workers.dev/pricing';
+const API_URL = '/api/models';
 const BENCHMARKS_URL = '/benchmarks.json';
 
 let allPricing = [];
@@ -305,7 +305,7 @@ async function loadData() {
 
     if (pRes.ok) {
       const pData = await pRes.json();
-      allPricing = pData.pricing || [];
+      allPricing = pData.models || [];
     }
 
     if (bRes.ok) {
