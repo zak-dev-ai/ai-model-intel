@@ -491,7 +491,7 @@ loadData();
       for (const item of (r[i].value.items||[]).slice(0,2)) {
         if (!item.title) continue;
         const t = item.title.replace(/<[^>]*>/g,'').replace(/&apos;/g,"'");
-        posts.push({text:t.length>180?t.slice(0,177)+'...':t,account:l,url:item.link,color:c});
+        posts.push({text:t.length>180?t.slice(0,177)+'...':t,account:l,url:item.link.replace('nitter.net/','x.com/').replace(/#m$/,''),color:c});
       }
     }
     if (posts.length<3) return;

@@ -1029,7 +1029,8 @@ document.addEventListener('DOMContentLoaded', () => {
         posts.push({
           text: text.length > 180 ? text.slice(0,177)+'...' : text,
           account: label,
-          url: item.link,
+          // Convert nitter link to x.com link
+          url: item.link.replace('nitter.net/','x.com/').replace(/#m$/,''),
           color: color
         });
       }
