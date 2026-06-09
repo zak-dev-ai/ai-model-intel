@@ -135,7 +135,7 @@ export default async function handler(req) {
 
     // Enrich and transform
     const models = rawModels
-      .filter(m => m.id && !m.id.includes('deprecated') && !m.id.includes('expired'))
+      .filter(m => m.id && !m.id.includes('deprecated') && !m.id.includes('expired') && !m.id.startsWith('openrouter/'))
       .map(m => {
         const promptPrice = parseFloat(m.pricing?.prompt || '0');
         const completionPrice = parseFloat(m.pricing?.completion || '0');
