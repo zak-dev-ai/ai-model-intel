@@ -583,7 +583,7 @@ setInterval(updateTimer, 1000);
 function renderAll() {
   const total = allModels.length;
   const avg = allModels.reduce((s, m) => s + (m.input_cost_per_mtok || 0), 0) / (total || 1);
-  const cheapest = allModels[0];
+  const cheapest = allModels.reduce((min, m) => (m.input_cost_per_mtok || 999) < (min.input_cost_per_mtok || 999) ? m : min, allModels[0]);
   const maxCtx = allModels.reduce((max, m) => (m.context_window || 0) > (max.context_window || 0) ? m : max, allModels[0] || {});
 
   document.getElementById('stat-total').textContent = total;
