@@ -71,6 +71,9 @@ tailwind.config = {
   .ticker-track { display: flex; width: max-content; animation: price-scroll 45s linear infinite; will-change: transform; font-size: 12px; }
   .table-row-hover { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   .table-row-hover:hover { background-color: rgba(255, 183, 129, 0.08) !important; transform: translateX(4px); box-shadow: -4px 0 0 0 #ffb781; }
+  .fable5-row { background: linear-gradient(135deg, rgba(255, 136, 0, 0.06), rgba(255, 183, 129, 0.03)) !important; border-left: 3px solid #ff8800; animation: fable5-glow 2s ease-in-out infinite; }
+  .fable5-row:hover { background: linear-gradient(135deg, rgba(255, 136, 0, 0.12), rgba(255, 183, 129, 0.06)) !important; }
+  @keyframes fable5-glow { 0%, 100% { box-shadow: inset 3px 0 0 0 rgba(255,136,0,0.3); } 50% { box-shadow: inset 3px 0 0 0 rgba(255,136,0,0.7), inset 0 0 15px rgba(255,136,0,0.08); } }
   .card-hover { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   .card-hover:hover { transform: translateY(-4px); border-color: #ffb781 !important; box-shadow: 0 10px 40px -5px rgba(255, 183, 129, 0.25), 0 0 15px -2px rgba(255, 183, 129, 0.15); }
   .mobile-menu { position: fixed; top: 0; right: -100%; width: 80%; max-width: 320px; height: 100vh; background: rgba(19, 19, 19, 0.98); backdrop-filter: blur(20px); z-index: 200; transition: right 0.3s ease; padding: 5rem 2rem; display: flex; flex-direction: column; gap: 0.5rem; box-shadow: -10px 0 30px rgba(0,0,0,0.5); }
@@ -552,6 +555,12 @@ async function fetchData() {
     const data = await res.json();
     allModels = data.models || [];
     allModels.sort((a, b) => (a.input_cost_per_mtok || 999) - (b.input_cost_per_mtok || 999));
+    // Pin Claude Fable 5 to the top
+    const fableIdx = allModels.findIndex(m => m.id && (m.id.includes('claude-fable-5') || m.name?.includes('Claude Fable 5')));
+    if (fableIdx > -1) {
+      const fable = allModels.splice(fableIdx, 1)[0];
+      allModels.unshift(fable);
+    }
     lastUpdate = Date.now();
     renderAll();
     addTerminalLog(`> Data stream synced. [${allModels.length} models]`);
@@ -663,11 +672,14 @@ function renderTable() {
     const voteCount = getVoteCount(m.model);
     const hasVoted = userVotes[m.model];
 
-    return `<tr class="table-row-hover">
+    const isFable5 = (m.model || '').includes('Claude Fable 5') || (m.id || '').includes('claude-fable-5');
+    const rowClass = isFable5 ? 'table-row-hover fable5-row' : 'table-row-hover';
+    const rankBadge = isFable5 ? '<span class="ml-2 text-[10px] font-bold text-bloomberg-orange">🔥 NEW</span>' : '';
+    return `<tr class="${rowClass}">
       <td class="px-4 py-4 text-text-muted text-center">${i+1}</td>
       <td class="px-4 py-4 flex items-center gap-3">
         <img src="${getLogo(provider)}" class="provider-logo" onerror="this.style.display='none'">
-        <span class="text-on-surface group-hover:text-primary transition-colors font-medium">${m.model}</span>
+        <span class="text-on-surface group-hover:text-primary transition-colors font-medium">${m.model}${rankBadge}</span>
       </td>
       <td class="px-4 py-4 text-right ${inCost < 1 ? 'text-alert-up' : 'text-on-surface'} font-medium">$${inCost.toFixed(2)}</td>
       <td class="px-4 py-4 text-right text-on-surface font-medium">$${outCost.toFixed(2)}</td>
