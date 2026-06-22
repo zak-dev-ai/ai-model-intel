@@ -32,7 +32,7 @@
 
     var html = '';
     var copies = [
-      { badge: 'HOT', h: 'Claude Fable 5', s: 'Anthropic\'s most capable model — just dropped June 9', cta: 'Try Now' },
+      { badge: 'HOT', h: 'GLM 5.2', s: 'Z.ai\'s top reasoning model — 1M context, ultra-budget pricing', cta: 'Try Now' },
       { badge: 'SLOT 2', h: 'Get Featured', s: 'Prime placement for 30 days', cta: 'Go Live' },
       { badge: 'SLOT 3', h: 'Your Brand Here', s: 'CTOs, devs &amp; founders see this', cta: 'Sponsor Now' }
     ];
