@@ -512,12 +512,18 @@ function getBenchmarkData(modelName) {
   if (colon > -1) {
     const afterColon = clean(modelName.slice(colon + 1));
     if (benchmarks[afterColon]) return benchmarks[afterColon];
+    // Try matching after stripping parenthetical suffixes like (free), (Fast)
+    const stripped = afterColon.replace(/\([^)]*\)/g, '').trim();
+    const cleanStripped = clean(stripped);
+    if (benchmarks[cleanStripped]) return benchmarks[cleanStripped];
+    // Try exact benchmark key match against the model name after colon
     for (const bk in benchmarks) {
-      if (afterColon.includes(bk) || bk.includes(afterColon)) return benchmarks[bk];
+      if (afterColon === bk || cleanStripped === bk) return benchmarks[bk];
     }
-  }
-  for (const bk in benchmarks) {
-    if (bk.length > 4 && key.includes(bk)) return benchmarks[bk];
+    // Try the most specific match: benchmark key fully contained in the model name after colon
+    for (const bk in benchmarks) {
+      if (bk.length > 4 && cleanStripped.includes(bk) && !cleanStripped.endsWith(bk + 'fast')) return benchmarks[bk];
+    }
   }
   return null;
 }
@@ -607,15 +613,16 @@ function renderAll() {
 function getBenchmarkScore(modelName) {
   const bench = getBenchmarkData(modelName);
   if (!bench) return null;
-  // Composite score: avg of available benchmarks (normalized)
+  // Composite score: weighted avg of available benchmarks (0-100 scale)
   const scores = [];
   if (bench.mmlu) scores.push(bench.mmlu);
   if (bench.humaneval) scores.push(bench.humaneval);
   if (bench.gpqa) scores.push(bench.gpqa);
   // Arena elo normalized to ~0-100 scale (1400 = ~100)
   if (bench.arena_elo) scores.push(bench.arena_elo / 14);
-  if (scores.length === 0) return null;
-  return scores.reduce((a, b) => a + b, 0) / scores.length;
+  if (scores.length === 0) return 0;
+  const avg = scores.reduce((a, b) => a + b, 0) / scores.length;
+  return Math.round(avg * 10) / 10;
 }
 
 function getCostPerMTok(model) {
@@ -643,9 +650,17 @@ function getFilteredModels() {
 function sortModels(models) {
   if (currentSort === 'top_rated') {
     return models.sort((a, b) => {
-      const aScore = getBenchmarkScore(a.model) || 0;
-      const bScore = getBenchmarkScore(b.model) || 0;
-      if (bScore !== aScore) return bScore - aScore;
+      // Primary: benchmark score
+      const aBench = getBenchmarkScore(a.model);
+      const bBench = getBenchmarkScore(b.model);
+      if (aBench != null && bBench != null && aBench !== bBench) return bBench - aBench;
+      if (aBench != null && bBench == null) return -1;
+      if (aBench == null && bBench != null) return 1;
+      // Fallback: use API value_score (already 0-100, cost-adjusted)
+      const aFallback = (a.value_score != null ? a.value_score : 0);
+      const bFallback = (b.value_score != null ? b.value_score : 0);
+      if (bFallback !== aFallback) return bFallback - aFallback;
+      // Last resort: cheaper first
       return (a.input_cost_per_mtok || 999) - (b.input_cost_per_mtok || 999);
     });
   }
@@ -655,9 +670,10 @@ function sortModels(models) {
       const bCost = getCostPerMTok(b);
       if (aCost !== bCost) return aCost - bCost;
       // Tie-break by benchmark score
-      const aScore = getBenchmarkScore(a.model) || 0;
-      const bScore = getBenchmarkScore(b.model) || 0;
-      return bScore - aScore;
+      const aScore = getBenchmarkScore(a.model);
+      const bScore = getBenchmarkScore(b.model);
+      if (aScore != null && bScore != null && aScore !== bScore) return bScore - aScore;
+      return (a.trend_score || 0) - (b.trend_score || 0);
     });
   }
   // Default: 'value' - Best Value

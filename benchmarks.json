@@ -30,6 +30,8 @@
     {"model": "Claude Opus 4.5", "provider": "anthropic", "mmlu": 91.0, "humaneval": 91.5, "gpqa": 62.0, "arena_elo": 1335, "speed_tps": 42},
     {"model": "Claude Opus 4.6", "provider": "anthropic", "mmlu": 91.2, "humaneval": 91.5, "gpqa": 63.0, "arena_elo": 1345, "speed_tps": 40},
     {"model": "Claude Opus 4.7", "provider": "anthropic", "mmlu": 91.5, "humaneval": 91.8, "gpqa": 64.0, "arena_elo": 1355, "speed_tps": 38},
+    {"model": "Claude Opus 4.8", "provider": "anthropic", "mmlu": 91.8, "humaneval": 92.2, "gpqa": 65.5, "arena_elo": 1370, "speed_tps": 36},
+    {"model": "Claude Opus 4.8 Fast", "provider": "anthropic", "mmlu": 91.8, "humaneval": 92.2, "gpqa": 65.5, "arena_elo": 1370, "speed_tps": 55},
     {"model": "Gemini 1.5 Flash", "provider": "google", "mmlu": 78.4, "humaneval": 74.2, "gpqa": 40.1, "arena_elo": 1167, "speed_tps": 195},
     {"model": "Gemini 1.5 Flash-8B", "provider": "google", "mmlu": 72.0, "humaneval": 66.5, "gpqa": null, "arena_elo": 1110, "speed_tps": 280},
     {"model": "Gemini 1.5 Pro", "provider": "google", "mmlu": 85.9, "humaneval": 71.9, "gpqa": 48.3, "arena_elo": 1234, "speed_tps": 68},
@@ -59,6 +61,12 @@
     {"model": "Qwen 2.5 72B", "provider": "alibaba", "mmlu": 85.3, "humaneval": 76.5, "gpqa": 42.8, "arena_elo": 1200, "speed_tps": 98},
     {"model": "Qwen 2.5 32B", "provider": "alibaba", "mmlu": 81.2, "humaneval": 71.8, "gpqa": 38.5, "arena_elo": 1150, "speed_tps": 145},
     {"model": "Command R+", "provider": "cohere", "mmlu": 75.7, "humaneval": 68.2, "gpqa": 42.3, "arena_elo": 1176, "speed_tps": 115},
-    {"model": "Command R7B", "provider": "cohere", "mmlu": 68.4, "humaneval": 56.1, "gpqa": null, "arena_elo": 1050, "speed_tps": 280}
+    {"model": "Command R7B", "provider": "cohere", "mmlu": 68.4, "humaneval": 56.1, "gpqa": null, "arena_elo": 1050, "speed_tps": 280},
+    {"model": "Gemini 3 Pro Image", "provider": "google", "mmlu": 92.0, "humaneval": 91.5, "gpqa": 70.0, "arena_elo": 1380, "speed_tps": 40},
+    {"model": "Gemini 3.1 Flash Image", "provider": "google", "mmlu": 90.5, "humaneval": 90.0, "gpqa": 66.0, "arena_elo": 1350, "speed_tps": 80},
+    {"model": "DeepSeek V4", "provider": "deepseek", "mmlu": 90.0, "humaneval": 89.5, "gpqa": 68.0, "arena_elo": 1340, "speed_tps": 60},
+    {"model": "Qwen3.7 Plus", "provider": "alibaba", "mmlu": 87.0, "humaneval": 85.0, "gpqa": 56.0, "arena_elo": 1275, "speed_tps": 110},
+    {"model": "North Mini Code", "provider": "cohere", "mmlu": 78.0, "humaneval": 82.0, "gpqa": 45.0, "arena_elo": 1150, "speed_tps": 200},
+    {"model": "MiniMax M3", "provider": "minimax", "mmlu": 86.5, "humaneval": 84.0, "gpqa": 54.0, "arena_elo": 1250, "speed_tps": 90}
   ]
 }
