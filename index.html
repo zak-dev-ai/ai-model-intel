@@ -522,7 +522,7 @@ function getBenchmarkData(modelName) {
     }
     // Try the most specific match: benchmark key fully contained in the model name after colon
     for (const bk in benchmarks) {
-      if (bk.length > 4 && cleanStripped.includes(bk) && !cleanStripped.endsWith(bk + 'fast')) return benchmarks[bk];
+      if (bk.length > 4 && cleanStripped.includes(bk) && !cleanStripped.endsWith(bk + 'fast') && !cleanStripped.endsWith(bk + 'high') && !cleanStripped.includes(bk + 'deep')) return benchmarks[bk];
     }
   }
   return null;
