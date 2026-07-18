@@ -330,13 +330,14 @@ tailwind.config = {
             <th class="px-4 py-3 font-normal text-center" title="Code Generation Ability">HumanEval</th>
             <th class="px-4 py-3 font-normal text-center" title="Graduate-Level Reasoning">GPQA</th>
             <th class="px-4 py-3 font-normal text-center" title="LMSYS Arena User Preference">Arena Elo</th>
+            <th class="px-4 py-3 font-normal text-center" title="Arena.AI Frontend Code Arena">Frontend</th>
             <th class="px-4 py-3 font-normal text-center">Votes</th>
             <th class="px-4 py-3 font-normal text-center w-32">7D Trend</th>
             <th class="px-4 py-3 font-normal text-right w-32">Action</th>
           </tr>
         </thead>
         <tbody id="table-body" class="font-data-tabular text-data-tabular divide-y divide-border-slate/50">
-          <tr><td colspan="12" class="px-4 py-12 text-center text-text-muted"><div class="inline-flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-matrix-green pulse-green"></div>Connecting to data fabric...</div></td></tr>
+          <tr><td colspan="13" class="px-4 py-12 text-center text-text-muted"><div class="inline-flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-matrix-green pulse-green"></div>Connecting to data fabric...</div></td></tr>
         </tbody>
       </table>
     </div>
@@ -501,6 +502,11 @@ function getBenchmarkClass(value, type) {
     if (value >= 1100) return 'benchmark-mid';
     return 'benchmark-low';
   }
+  if (type === 'frontend_code_arena') {
+    if (value >= 1600) return 'benchmark-high';
+    if (value >= 1500) return 'benchmark-mid';
+    return 'benchmark-low';
+  }
   return '';
 }
 
@@ -620,8 +626,15 @@ function getBenchmarkScore(modelName) {
   if (bench.gpqa) scores.push(bench.gpqa);
   // Arena elo normalized to ~0-100 scale (1400 = ~100)
   if (bench.arena_elo) scores.push(bench.arena_elo / 14);
+  // Frontend Code Arena (specialized benchmark — weight 0.6x)
+  // Normalized: max observed ~1680 / 17 ≈ 99 on 0-100 scale
+  if (bench.frontend_code_arena) scores.push((bench.frontend_code_arena / 17) * 0.6);
   if (scores.length === 0) return 0;
-  const avg = scores.reduce((a, b) => a + b, 0) / scores.length;
+  const sum = scores.reduce((a, b) => a + b, 0);
+  // Denom: count general benchmarks + 0.6 for frontend if present
+  let count = (bench.mmlu ? 1 : 0) + (bench.humaneval ? 1 : 0) + (bench.gpqa ? 1 : 0) + (bench.arena_elo ? 1 : 0);
+  count += bench.frontend_code_arena ? 0.6 : 0;
+  const avg = sum / count;
   return Math.round(avg * 10) / 10;
 }
 
@@ -772,6 +785,9 @@ function renderTable() {
         ${bench?.arena_elo ? `<span class="benchmark-badge ${getBenchmarkClass(bench.arena_elo, 'arena_elo')}">${bench.arena_elo}</span>` : '<span class="text-text-muted">—</span>'}
       </td>
       <td class="px-4 py-4 text-center">
+        ${bench?.frontend_code_arena ? `<span class="benchmark-badge ${getBenchmarkClass(bench.frontend_code_arena, 'frontend_code_arena')}">${bench.frontend_code_arena}</span>` : '<span class="text-text-muted">—</span>'}
+      </td>
+      <td class="px-4 py-4 text-center">
         <button class="vote-btn ${hasVoted ? 'voted' : ''} text-text-muted hover:text-primary transition-colors" onclick="handleVote('${m.model.replace(/'/g, "\\'")}')">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline" viewBox="0 0 20 20" fill="${hasVoted ? '#00ff41' : 'currentColor'}">
             <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z"/>
@@ -826,11 +842,12 @@ function renderTable() {
         <div class="bg-surface-container-high rounded p-2"><div class="text-text-muted text-[10px] uppercase font-data-label">Context</div><div class="font-data-tabular text-on-surface">${formatContext(m.context_window)}</div></div>
       </div>
       ${bench ? `
-      <div class="grid grid-cols-2 gap-2 mb-3 text-xs">
-        <div class="bg-surface-container-high rounded p-2"><div class="text-text-muted text-[10px] uppercase font-data-label">MMLU</div><div class="font-data-tabular"><span class="benchmark-badge ${getBenchmarkClass(bench.mmlu, 'mmlu')}">${bench.mmlu?.toFixed(1) || '—'}</span></div></div>
-        <div class="bg-surface-container-high rounded p-2"><div class="text-text-muted text-[10px] uppercase font-data-label">HumanEval</div><div class="font-data-tabular"><span class="benchmark-badge ${getBenchmarkClass(bench.humaneval, 'humaneval')}">${bench.humaneval ? bench.humaneval.toFixed(1) + '%' : '—'}</span></div></div>
-        <div class="bg-surface-container-high rounded p-2"><div class="text-text-muted text-[10px] uppercase font-data-label">GPQA</div><div class="font-data-tabular"><span class="benchmark-badge ${getBenchmarkClass(bench.gpqa, 'gpqa')}">${bench.gpqa?.toFixed(1) || '—'}</span></div></div>
-        <div class="bg-surface-container-high rounded p-2"><div class="text-text-muted text-[10px] uppercase font-data-label">Arena Elo</div><div class="font-data-tabular"><span class="benchmark-badge ${getBenchmarkClass(bench.arena_elo, 'arena_elo')}">${bench.arena_elo || '—'}</span></div></div>
+      <div class="grid grid-cols-4 gap-1.5 mb-3 text-xs">
+        <div class="bg-surface-container-high rounded p-1.5"><div class="text-text-muted text-[9px] uppercase font-data-label">MMLU</div><div class="font-data-tabular"><span class="benchmark-badge ${getBenchmarkClass(bench.mmlu, 'mmlu')}">${bench.mmlu?.toFixed(1) || '—'}</span></div></div>
+        <div class="bg-surface-container-high rounded p-1.5"><div class="text-text-muted text-[9px] uppercase font-data-label">HumanEval</div><div class="font-data-tabular"><span class="benchmark-badge ${getBenchmarkClass(bench.humaneval, 'humaneval')}">${bench.humaneval ? bench.humaneval.toFixed(1) + '%' : '—'}</span></div></div>
+        <div class="bg-surface-container-high rounded p-1.5"><div class="text-text-muted text-[9px] uppercase font-data-label">GPQA</div><div class="font-data-tabular"><span class="benchmark-badge ${getBenchmarkClass(bench.gpqa, 'gpqa')}">${bench.gpqa?.toFixed(1) || '—'}</span></div></div>
+        <div class="bg-surface-container-high rounded p-1.5"><div class="text-text-muted text-[9px] uppercase font-data-label">Arena Elo</div><div class="font-data-tabular"><span class="benchmark-badge ${getBenchmarkClass(bench.arena_elo, 'arena_elo')}">${bench.arena_elo || '—'}</span></div></div>
+        ${bench.frontend_code_arena ? `<div class="bg-surface-container-high rounded p-1.5 col-span-2"><div class="text-text-muted text-[9px] uppercase font-data-label">Frontend Code Arena</div><div class="font-data-tabular"><span class="benchmark-badge ${getBenchmarkClass(bench.frontend_code_arena, 'frontend_code_arena')}">${bench.frontend_code_arena}</span></div></div>` : ''}
       </div>` : ''}
       <div class="flex items-center justify-between mb-3">
         <button class="vote-btn ${hasVoted ? 'voted' : ''} text-text-muted hover:text-primary transition-colors flex items-center gap-1" onclick="handleVote('${m.model.replace(/'/g, "\\'")}')">
