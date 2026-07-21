@@ -10,6 +10,7 @@
     { "source": "/compare.html", "destination": "/compare", "permanent": true },
     { "source": "/tools.html", "destination": "/tools", "permanent": true },
     { "source": "/blog.html", "destination": "/blog", "permanent": true },
+    { "source": "/projects.html", "destination": "/projects", "permanent": true },
     { "source": "/admin.html", "destination": "/admin", "permanent": true },
     { "source": "/index.html", "destination": "/", "permanent": true }
   ],
