@@ -124,10 +124,9 @@ tailwind.config = {
     </div>
     <nav class="flex gap-4 border-l border-border-slate pl-4">
       <a class="text-on-surface-variant hover:text-on-surface transition-colors px-2 rounded font-body-sm text-body-sm" href="/">Terminal</a>
-      <a class="text-on-surface-variant hover:text-on-surface transition-colors px-2 rounded font-body-sm text-body-sm" href="/blog">News</a>
-      <a class="text-primary border-b-2 border-primary pb-1 font-body-sm text-body-sm" href="/projects">Projects</a>
+      <a class="text-on-surface-variant hover:text-on-surface transition-colors px-2 rounded font-body-sm text-body-sm" href="/blog.html">News</a>
+      <a class="text-primary border-b-2 border-primary pb-1 font-body-sm text-body-sm" href="/projects.html">Projects</a>
       <a class="text-on-surface-variant hover:text-on-surface transition-colors px-2 rounded font-body-sm text-body-sm" href="https://rapidapi.com/zakmediaai/api/octopus-ai-model-intel" target="_blank">API</a>
-      <a class="text-on-surface-variant hover:text-on-surface transition-colors px-2 rounded font-body-sm text-body-sm cursor-pointer" onclick="openPartnerModal()">Partner</a>
     </nav>
   </div>
   <div class="flex items-center gap-4">
@@ -143,10 +142,9 @@ tailwind.config = {
     <span class="material-symbols-outlined text-2xl">close</span>
   </button>
   <a href="/" onclick="toggleMenu()"><span class="material-symbols-outlined">dashboard</span> Terminal</a>
-  <a href="/blog" onclick="toggleMenu()"><span class="material-symbols-outlined">article</span> News</a>
-  <a href="/projects" onclick="toggleMenu()"><span class="material-symbols-outlined text-bloomberg-orange">rocket_launch</span> Projects</a>
+  <a href="/blog.html" onclick="toggleMenu()"><span class="material-symbols-outlined">article</span> News</a>
+  <a href="/projects.html" onclick="toggleMenu()"><span class="material-symbols-outlined text-bloomberg-orange">rocket_launch</span> Projects</a>
   <a href="https://rapidapi.com/zakmediaai/api/octopus-ai-model-intel" target="_blank" onclick="toggleMenu()"><span class="material-symbols-outlined">code</span> API</a>
-  <a href="#" onclick="toggleMenu(); openPartnerModal(); return false;"><span class="material-symbols-outlined text-bloomberg-orange">handshake</span> Partner</a>
 </div>
 
 <main class="flex-grow w-full max-w-container-max mx-auto px-margin-edge py-10 flex flex-col gap-10">
@@ -182,7 +180,6 @@ tailwind.config = {
   <section id="support" class="glass-panel rounded-lg border border-primary/30 p-8 relative overflow-hidden">
     <div class="absolute top-0 right-0 bg-primary text-deep-charcoal text-[10px] font-bold px-3 py-1 rounded-bl font-data-label tracking-wider">SOLANA</div>
     <div class="flex flex-col md:flex-row items-center gap-8">
-      <!-- QR -->
       <div class="flex-shrink-0 bg-white p-3 rounded-lg">
         <img id="wallet-qr" alt="Solana wallet QR" class="w-32 h-32" onerror="this.style.display='none'"/>
       </div>
@@ -213,29 +210,10 @@ tailwind.config = {
   </div>
   <nav class="flex gap-4">
     <a class="font-data-tabular text-data-tabular text-text-muted hover:text-on-surface hover:text-primary transition-colors" href="/">Terminal</a>
-    <a class="font-data-tabular text-data-tabular text-text-muted hover:text-on-surface hover:text-primary transition-colors" href="/blog">News</a>
-    <a class="font-data-tabular text-data-tabular text-text-muted hover:text-on-surface hover:text-primary transition-colors" href="/projects">Projects</a>
+    <a class="font-data-tabular text-data-tabular text-text-muted hover:text-on-surface hover:text-primary transition-colors" href="/blog.html">News</a>
     <a class="font-data-tabular text-data-tabular text-text-muted hover:text-on-surface hover:text-primary transition-colors" href="https://rapidapi.com/zakmediaai/api/octopus-ai-model-intel" target="_blank">API Docs</a>
-    <a class="font-data-tabular text-data-tabular text-text-muted hover:text-on-surface hover:text-primary transition-colors cursor-pointer" onclick="openPartnerModal()">Partners</a>
   </nav>
 </footer>
-
-<!-- Partner Modal -->
-<div id="partnerModal" class="modal hidden" style="z-index:300;">
-  <div class="glass-panel p-6 w-full max-w-md mx-4 relative">
-    <button onclick="closePartnerModal()" class="absolute top-4 right-4 text-text-muted hover:text-on-surface">
-      <span class="material-symbols-outlined">close</span>
-    </button>
-    <h2 class="text-headline-md font-bold text-on-surface mb-4">Partner Application</h2>
-    <form id="partnerForm" onsubmit="submitPartner(event)" class="flex flex-col gap-3">
-      <input id="p-company" placeholder="Company name" required class="field">
-      <input id="p-website" placeholder="Website URL" required class="field">
-      <input id="p-email" type="email" placeholder="Email" required class="field">
-      <textarea id="p-proposal" placeholder="What's your proposal?" rows="3" class="field"></textarea>
-      <button type="submit" id="p-submit-btn" class="w-full bg-bloomberg-orange text-deep-charcoal font-bold py-2.5 rounded font-data-tabular hover:opacity-90 transition-opacity">Submit</button>
-    </form>
-  </div>
-</div>
 
 <!-- COMMENTS MODAL -->
 <div id="commentsModal" class="modal">
@@ -253,13 +231,13 @@ tailwind.config = {
   </div>
 </div>
 
-<!-- ADD PROJECT MODAL -->
+<!-- ADD / EDIT PROJECT MODAL -->
 <div id="addModal" class="modal">
   <div class="glass-panel rounded-lg border border-primary/30 max-w-lg w-full p-6 relative max-h-[90vh] overflow-y-auto">
     <button onclick="closeModal('addModal')" class="absolute top-4 right-4 text-text-muted hover:text-on-surface"><span class="material-symbols-outlined">close</span></button>
     <div class="flex items-center gap-3 mb-4">
       <span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings: 'FILL' 1;">rocket_launch</span>
-      <h2 class="font-headline-md text-on-surface">Add New Project</h2>
+      <h2 class="font-headline-md text-on-surface" id="addModalTitle">Add New Project</h2>
     </div>
     <form id="addForm" onsubmit="submitProject(event)" class="space-y-4">
       <div>
@@ -282,7 +260,7 @@ tailwind.config = {
         </div>
         <div id="logo-preview-wrap" class="mt-2 hidden"><img id="logo-preview" class="w-12 h-12 rounded bg-white p-1 object-contain" alt="logo preview"></div>
       </div>
-      <button type="submit" class="w-full bg-bloomberg-orange text-deep-charcoal px-4 py-2.5 rounded font-data-tabular text-data-tabular font-bold hover:bg-primary transition-colors">Publish Project</button>
+      <button type="submit" id="addModalBtn" class="w-full bg-bloomberg-orange text-deep-charcoal px-4 py-2.5 rounded font-data-tabular text-data-tabular font-bold hover:bg-primary transition-colors">Publish Project</button>
     </form>
   </div>
 </div>
@@ -294,7 +272,7 @@ tailwind.config = {
     <div class="text-center mb-4">
       <span class="material-symbols-outlined text-primary text-4xl" style="font-variation-settings: 'FILL' 1;">lock</span>
       <h2 class="font-headline-md text-on-surface mt-2">Owner Access</h2>
-      <p class="text-text-muted text-xs mt-1">Enter your admin key to add projects.</p>
+      <p class="text-text-muted text-xs mt-1">Enter your admin key to manage projects.</p>
     </div>
     <input type="password" id="owner-pass" placeholder="Access Key" class="field text-center font-data-tabular tracking-widest mb-3" onkeydown="if(event.key==='Enter'){checkOwnerPass();}">
     <p id="pass-error" class="text-alert-down text-xs text-center mb-3 hidden">❌ Invalid key.</p>
@@ -319,6 +297,7 @@ let commentsByProject = {};
 let activeProjectId = null;
 let ownerUnlocked = false;
 let logoBase64 = null;
+let editingId = null;
 
 /* ===== HELPERS ===== */
 function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
@@ -356,6 +335,11 @@ async function loadAll(){
   }
 }
 
+function monoHTML(name, cls){
+  const c = monoColor(name); const ini = esc(initials(name));
+  return `<div class="${cls} flex items-center justify-center font-bold font-data-tabular text-deep-charcoal" style="background:${c};">${ini}</div>`;
+}
+
 function renderProjects(){
   const grid = document.getElementById('projects-grid');
   if(!projects.length){
@@ -368,6 +352,15 @@ function renderProjects(){
     const cCount = (commentsByProject[p.id]||[]).length;
     const logo = p.logo_url ? `<img src="${esc(p.logo_url)}" class="w-14 h-14 rounded-lg bg-white p-1 object-contain" onerror="this.outerHTML=monoHTML('${esc(p.name)}','w-14 h-14 rounded-lg')">` : monoHTML(p.name,'w-14 h-14 rounded-lg');
     const visitBtn = p.website_url ? `<a href="${esc(p.website_url)}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 bg-primary text-deep-charcoal px-3 py-1.5 rounded font-data-tabular text-xs font-bold hover:bg-bloomberg-orange transition-colors">Visit <span class="material-symbols-outlined text-[14px]">open_in_new</span></a>` : `<span class="text-text-muted font-data-tabular text-xs">No live link yet</span>`;
+    const ownerTools = ownerUnlocked ? `
+      <div class="flex items-center gap-2 pt-3 mt-3 border-t border-dashed border-border-slate">
+        <button onclick="startEdit('${p.id}')" class="flex-1 inline-flex items-center justify-center gap-1 text-text-muted hover:text-primary border border-border-slate hover:border-primary rounded px-2 py-1.5 font-data-tabular text-xs transition-colors">
+          <span class="material-symbols-outlined text-[14px]">edit</span> Edit
+        </button>
+        <button onclick="deleteProject('${p.id}')" class="flex-1 inline-flex items-center justify-center gap-1 text-text-muted hover:text-alert-down border border-border-slate hover:border-alert-down rounded px-2 py-1.5 font-data-tabular text-xs transition-colors">
+          <span class="material-symbols-outlined text-[14px]">delete</span> Delete
+        </button>
+      </div>` : '';
     return `<article class="project-card glass-panel rounded-lg border border-outline-variant/30 p-5 flex flex-col gap-4">
       <div class="flex items-start gap-4">
         ${logo}
@@ -390,13 +383,9 @@ function renderProjects(){
         </div>
         ${visitBtn}
       </div>
+      ${ownerTools}
     </article>`;
   }).join('');
-}
-
-function monoHTML(name, cls){
-  const c = monoColor(name); const ini = esc(initials(name));
-  return `<div class="${cls} flex items-center justify-center font-bold font-data-tabular text-deep-charcoal" style="background:${c};">${ini}</div>`;
 }
 
 /* ===== LIKES ===== */
@@ -458,22 +447,37 @@ async function submitComment(e){
   btn.innerHTML=orig; btn.disabled=false;
 }
 
-/* ===== ADD PROJECT (owner gated) ===== */
+/* ===== ADD / EDIT / DELETE PROJECT (owner gated) ===== */
+function resetAddModal(){
+  editingId = null;
+  document.getElementById('addModalTitle').textContent = 'Add New Project';
+  document.getElementById('addModalBtn').textContent = 'Publish Project';
+  logoBase64 = null;
+  document.getElementById('logo-preview-wrap').classList.add('hidden');
+  document.getElementById('addForm').reset();
+}
+
 function openAddProject(){
-  if(ownerUnlocked){ logoBase64=null; document.getElementById('logo-preview-wrap').classList.add('hidden'); document.getElementById('addForm').reset(); openModal('addModal'); }
+  if(ownerUnlocked){ resetAddModal(); openModal('addModal'); }
   else { document.getElementById('pass-error').classList.add('hidden'); document.getElementById('owner-pass').value=''; openModal('passModal'); setTimeout(()=>document.getElementById('owner-pass').focus(),100); }
 }
+
 async function checkOwnerPass(){
   const input = document.getElementById('owner-pass').value;
   const inputHash = await sha256(input);
   const customHash = localStorage.getItem('amr_admin_hash');
   const defaultHash = await sha256('ZakAdmin2026');
   if((customHash && inputHash===customHash) || (!customHash && inputHash===defaultHash)){
-    ownerUnlocked = true; closeModal('passModal');
-    logoBase64=null; document.getElementById('logo-preview-wrap').classList.add('hidden'); document.getElementById('addForm').reset(); openModal('addModal');
+    ownerUnlocked = true;
+    closeModal('passModal');
+    renderProjects(); // reveal Edit/Delete buttons immediately
+    resetAddModal();
+    openModal('addModal');
   }else{ document.getElementById('pass-error').classList.remove('hidden'); }
 }
+
 async function sha256(m){ const b=await crypto.subtle.digest('SHA-256', new TextEncoder().encode(m)); return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join(''); }
+
 function handleLogoFile(input){
   const f = input.files[0]; if(!f) return;
   if(f.size > 1.5*1024*1024){ alert('Logo must be under 1.5MB'); input.value=''; return; }
@@ -481,6 +485,33 @@ function handleLogoFile(input){
   reader.onload = e=>{ logoBase64 = e.target.result; document.getElementById('logo-preview').src = logoBase64; document.getElementById('logo-preview-wrap').classList.remove('hidden'); };
   reader.readAsDataURL(f);
 }
+
+function startEdit(id){
+  const p = projects.find(x=>x.id===id); if(!p) return;
+  editingId = id;
+  document.getElementById('addModalTitle').textContent = 'Edit Project';
+  document.getElementById('addModalBtn').textContent = 'Save Changes';
+  document.getElementById('p-name').value = p.name || '';
+  document.getElementById('p-desc').value = p.description || '';
+  document.getElementById('p-url').value = p.website_url || '';
+  const hasDataLogo = p.logo_url && p.logo_url.startsWith('data:');
+  document.getElementById('p-logo-url').value = (p.logo_url && !hasDataLogo) ? p.logo_url : '';
+  logoBase64 = hasDataLogo ? p.logo_url : null;
+  if(logoBase64){ document.getElementById('logo-preview').src = logoBase64; document.getElementById('logo-preview-wrap').classList.remove('hidden'); }
+  else { document.getElementById('logo-preview-wrap').classList.add('hidden'); }
+  openModal('addModal');
+}
+
+async function deleteProject(id){
+  const p = projects.find(x=>x.id===id);
+  if(!confirm('Delete "'+(p?p.name:'this project')+'" permanently? This cannot be undone.')) return;
+  try{
+    const r = await fetch(SUPABASE_URL+'/rest/v1/projects?id=eq.'+id, {method:'DELETE', headers:H});
+    if(r.ok){ await loadAll(); }
+    else throw new Error('fail');
+  }catch(e){ alert('Could not delete project. Check your connection.'); }
+}
+
 async function submitProject(e){
   e.preventDefault();
   const name = document.getElementById('p-name').value.trim();
@@ -489,13 +520,20 @@ async function submitProject(e){
   const logoUrlInput = document.getElementById('p-logo-url').value.trim();
   const logo = logoBase64 || logoUrlInput || '';
   if(!name||!desc) return;
-  const btn = e.target.querySelector('button[type="submit"]'); const orig=btn.innerHTML; btn.innerHTML='Publishing...'; btn.disabled=true;
+  const btn = e.target.querySelector('button[type="submit"]'); const orig=btn.innerHTML; btn.innerHTML='Saving...'; btn.disabled=true;
   try{
-    const r = await fetch(SUPABASE_URL+'/rest/v1/projects', {method:'POST', headers:{...H,'Prefer':'return=representation'}, body:JSON.stringify({name, description:desc, website_url:url, logo_url:logo, status:'active'})});
-    const data = await r.json();
-    if(r.ok && Array.isArray(data) && data[0]){ closeModal('addModal'); await loadAll(); }
-    else throw new Error('fail');
-  }catch(err){ alert('Could not publish project. Try again.'); }
+    if(editingId){
+      const r = await fetch(SUPABASE_URL+'/rest/v1/projects?id=eq.'+editingId, {method:'PATCH', headers:H, body:JSON.stringify({name, description:desc, website_url:url, logo_url:logo})});
+      if(!r.ok) throw new Error('fail');
+    }else{
+      const r = await fetch(SUPABASE_URL+'/rest/v1/projects', {method:'POST', headers:{...H,'Prefer':'return=representation'}, body:JSON.stringify({name, description:desc, website_url:url, logo_url:logo, status:'active'})});
+      const data = await r.json();
+      if(!(r.ok && Array.isArray(data) && data[0])) throw new Error('fail');
+    }
+    editingId = null;
+    closeModal('addModal');
+    await loadAll();
+  }catch(err){ alert('Could not save project. Try again.'); }
   btn.innerHTML=orig; btn.disabled=false;
 }
 
@@ -513,11 +551,6 @@ function closeModal(id){ document.getElementById(id).classList.remove('show'); }
 function toggleMenu(){ document.getElementById('mobileMenu').classList.toggle('open'); document.getElementById('overlay').classList.toggle('show'); }
 document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ ['commentsModal','addModal','passModal'].forEach(closeModal); } });
 document.querySelectorAll('.modal').forEach(m=>{ m.addEventListener('click', e=>{ if(e.target===m) m.classList.remove('show'); }); });
-
-/* ===== PARTNER MODAL ===== */
-function openPartnerModal(){ document.getElementById('partnerModal').classList.remove('hidden'); setTimeout(()=>{ document.getElementById('partnerModal').classList.add('show'); },10); }
-function closePartnerModal(){ document.getElementById('partnerModal').classList.remove('show'); setTimeout(()=>{ document.getElementById('partnerModal').classList.add('hidden'); },200); }
-async function submitPartner(e){ e.preventDefault(); const btn=document.getElementById('p-submit-btn'), orig=btn.innerHTML; btn.innerHTML='Sending...'; btn.disabled=true; const data={access_key:'206ea04f-da37-40ea-994d-29b8967177bf',subject:'New Partner App: '+document.getElementById('p-company').value,from_name:'AI Model Ranks Terminal',company:document.getElementById('p-company').value,website:document.getElementById('p-website').value,email:document.getElementById('p-email').value,proposal:document.getElementById('p-proposal').value,botcheck:''}; try{ const r=await fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)}); const j=await r.json(); btn.innerHTML=j.success?'✓ Submitted!':'Error - try again'; }catch(e){ btn.innerHTML='Error - try again'; } setTimeout(()=>{ closePartnerModal(); e.target.reset(); btn.innerHTML=orig; btn.disabled=false; },2000); }
 
 /* ===== INIT ===== */
 document.getElementById('wallet-qr').src = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&margin=0&data=' + encodeURIComponent('solana:'+WALLET);
